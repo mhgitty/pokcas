@@ -1,0 +1,331 @@
+import { createClient } from 'next-sanity'
+import { cache } from 'react'
+
+export const client = createClient({
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
+  apiVersion: '2026-04-22',
+  useCdn: true,
+})
+
+// ─── Posts ────────────────────────────────────────────────────────────────────
+
+export async function getPosts(limit = 20, categorySlug?: string) {
+  const filter = categorySlug
+    ? `*[_type == "post" && defined(publishedAt) && category->slug.current == $categorySlug]`
+    : `*[_type == "post" && defined(publishedAt)]`
+
+  return client.fetch(
+    `${filter} | order(publishedAt desc) [0...$limit] {
+      _id, title, slug, excerpt, publishedAt, readingTime, featuredImage,
+      category-> { name, slug, emoji }
+    }`,
+    { limit, categorySlug: categorySlug ?? '' }
+  )
+}
+
+export async function getPostBySlug(slug: string) {
+  return client.fetch(
+    `*[_type == "post" && slug.current == $slug][0] {
+      _id, title, slug, excerpt, publishedAt, lastUpdated, readingTime,
+      "body": body[] {
+        ...,
+        _type == "casinoKortBlock" => {
+          ...,
+          customTitle, customBody, pros, cons,
+          "imageUrl": image.asset->url,
+          "bookmaker": bookmaker-> {
+            name, score, url,
+            "logoUrl": logo.asset->url,
+            "logoAlt": logo.alt,
+          }
+        },
+        _type == "bonusKortBlock" => {
+          ...,
+          customTitle, customBody,
+          "imageUrl": image.asset->url,
+          "bonus": bonus-> {
+            "name": coalesce(bookmaker->name, casinoNavn, title),
+            "bonusText": title,
+            "logoUrl": coalesce(casinoLogo.asset->url, bookmaker->logo.asset->url),
+            "logoAlt": coalesce(casinoLogo.alt, bookmaker->logo.alt),
+            "score": bookmaker->score,
+            "offerUrl": offerUrl,
+            "terms": terms,
+          }
+        }
+      },
+      "featuredImage": featuredImage { "url": asset->url, alt },
+      "ogImage": ogImage { "url": asset->url, alt },
+      metaTitle, metaDescription,
+      category-> { name, slug, emoji },
+      author-> { name, bio, linkedin, "imageUrl": image.asset->url }
+    }`,
+    { slug }
+  )
+}
+
+// ─── Comparison table fragment ─────────────────────────────────────────────────
+// Pages store showComparisonTable (bool) + comparisonTemplate (reference).
+// We expand the reference inline so the frontend gets the same data shape.
+const COMPARISON_TABLE_FRAGMENT = `
+  showComparisonTable, comparisonTableTitle,
+  "comparisonTable": comparisonTemplate-> {
+    tableType,
+    bonuses[]-> {
+      _id, title, slug, active,
+      oddsBonusTitel, minimumOdds, minimumIndbetaling, gennemspilskrav,
+      offerUrl, terms, casinoNavn,
+      "casinoLogo":      casinoLogo      { "url": asset->url, alt },
+      "kampagneBillede": kampagneBillede { "url": asset->url, alt },
+      "bookmaker": bookmaker-> { name, slug }
+    },
+    bookmakers[]-> {
+      _id, name, slug, usp, score, trustpilot,
+      indbetalingsbonus, freeSpinsBonus, minIndbetaling, gennemspilskrav,
+      url, terms,
+      "logo": logo { "url": asset->url, alt }
+    }
+  }
+`
+
+// ─── Pages ────────────────────────────────────────────────────────────────────
+
+// Page fields shared by single and nested lookups
+const PAGE_FIELDS = `
+  _id, title, slug, intro, metaTitle, metaDescription,
+  "body": body[] {
+    ...,
+    _type == "casinoKortBlock" => {
+      ...,
+      customTitle, customBody, pros, cons,
+      "imageUrl": image.asset->url,
+      "bookmaker": bookmaker-> {
+        name, score, url,
+        "logoUrl": logo.asset->url,
+        "logoAlt": logo.alt,
+      }
+    },
+    _type == "bonusKortBlock" => {
+      ...,
+      customTitle, customBody,
+      "imageUrl": image.asset->url,
+      "bonus": bonus-> {
+        "name": coalesce(bookmaker->name, casinoNavn, title),
+        "bonusText": coalesce(velkomstbonusTitel, oddsBonusTitel, indbetalingsbonusTitel, title),
+        "logoUrl": coalesce(casinoLogo.asset->url, bookmaker->logo.asset->url),
+        "logoAlt": coalesce(casinoLogo.alt, bookmaker->logo.alt),
+        "score": bookmaker->score,
+        "offerUrl": offerUrl,
+        "terms": terms,
+      }
+    }
+  },
+  "parentSlug": parent->slug.current,
+  "parentTitle": parent->title,
+  "featuredImage": featuredImage { "url": asset->url, alt },
+  lastUpdated,
+  "author": author-> {
+    name, bio, linkedin, x, facebook,
+    "imageUrl": image.asset->url
+  },
+  "factChecker": factChecker-> {
+    name, linkedin,
+    "imageUrl": image.asset->url
+  },
+  ${COMPARISON_TABLE_FRAGMENT}
+`
+
+export async function getPageBySlug(slug: string) {
+  return client.fetch(
+    `*[_type == "page" && slug.current == $slug && !defined(parent)][0] { ${PAGE_FIELDS} }`,
+    { slug }
+  )
+}
+
+/** Resolve a page by its full URL path (supports 1 or 2 segments) */
+export async function getPageByPath(segments: string[]) {
+  if (segments.length === 1) {
+    return getPageBySlug(segments[0])
+  }
+  // Two-segment path: /parent/child
+  const [parentSlug, childSlug] = segments
+  return client.fetch(
+    `*[_type == "page" && slug.current == $childSlug && parent->slug.current == $parentSlug][0] { ${PAGE_FIELDS} }`,
+    { parentSlug, childSlug }
+  )
+}
+
+// ─── Categories ───────────────────────────────────────────────────────────────
+
+export async function getCategories() {
+  return client.fetch(
+    `*[_type == "category"] | order(name asc) { _id, name, slug, emoji, description }`
+  )
+}
+
+// ─── Bookmakers ───────────────────────────────────────────────────────────────
+
+export async function getBookmakers() {
+  return client.fetch(
+    `*[_type == "bookmaker"] | order(score desc) {
+      _id, name, slug, usp, score, trustpilot,
+      indbetalingsbonus, freeSpinsBonus, minIndbetaling,
+      gennemspilskrav, url, terms,
+      "logo": logo { "url": asset->url, alt }
+    }`
+  )
+}
+
+export async function getBookmakerBySlug(slug: string) {
+  return client.fetch(
+    `*[_type == "bookmaker" && slug.current == $slug][0] {
+      _id, titel, name, slug, usp, score, trustpilot,
+      indbetalingsbonus, freeSpinsBonus, minIndbetaling, gennemspilskrav,
+      url, terms, lanceringsdato, intro, body,
+      "logo": logo { "url": asset->url, alt },
+      "ogImage": ogImage { "url": asset->url, alt },
+      metaTitle, metaDescription
+    }`,
+    { slug }
+  )
+}
+
+// ─── Bonusser ─────────────────────────────────────────────────────────────────
+
+export async function getBonuses(limit = 50) {
+  return client.fetch(
+    `*[_type == "bonus" && active == true] | order(_createdAt desc) [0...$limit] {
+      _id, title, slug,
+      oddsBonusTitel, minimumOdds, minimumIndbetaling, gennemspilskrav,
+      offerUrl, terms, casinoNavn,
+      "casinoLogo":    casinoLogo    { "url": asset->url, alt },
+      "kampagneBillede": kampagneBillede { "url": asset->url, alt },
+      "bookmaker": bookmaker-> { name, slug }
+    }`,
+    { limit }
+  )
+}
+
+// Keep old name as alias for any existing usage
+export const getBonusser = getBonuses
+
+export async function getBonusBySlug(slug: string) {
+  return client.fetch(
+    `*[_type == "bonus" && slug.current == $slug][0] {
+      _id, title, slug, body, metaTitle, metaDescription,
+      minimumOdds, minimumIndbetaling, gennemspilskrav,
+      maksGevinst, bonuskode, spinVaerdi,
+      offerUrl, terms, casinoNavn,
+      "casinoLogo":      casinoLogo      { "url": asset->url, alt },
+      "kampagneBillede": kampagneBillede { "url": asset->url, alt },
+      "ogImage":         ogImage         { "url": asset->url, alt },
+      "bookmaker": bookmaker-> {
+        name, slug,
+        "logo": logo { "url": asset->url, alt }
+      }
+    }`,
+    { slug }
+  )
+}
+
+// ─── Site settings (menus) ────────────────────────────────────────────────────
+// Wrapped in React cache() so Navbar + Footer share one fetch per page render.
+
+export const getSiteSettings = cache(async () => {
+  return client.fetch(
+    `*[_type == "siteSettings"][0] {
+      "defaultAuthor": defaultAuthor-> {
+        name, bio, linkedin, x, facebook,
+        "imageUrl": image.asset->url
+      },
+      headerNav[] {
+        label, url, isHighlighted,
+        "pageSlug": pageRef->slug.current,
+        "pageParentSlug": pageRef->parent->slug.current,
+        "bookmakerSlug": bookmakerRef->slug.current,
+        children[] {
+          label, url,
+          "pageSlug": pageRef->slug.current,
+          "pageParentSlug": pageRef->parent->slug.current,
+          "bookmakerSlug": bookmakerRef->slug.current,
+        }
+      },
+      footerTagline,
+      footerColumns[] {
+        title,
+        items[] {
+          label, url,
+          "pageSlug": pageRef->slug.current,
+          "pageParentSlug": pageRef->parent->slug.current,
+          "bookmakerSlug": bookmakerRef->slug.current,
+        }
+      },
+      footerNote,
+      footerDisclaimer
+    }`,
+    {},
+    { next: { revalidate: 3600 } }
+  )
+})
+
+// ─── Homepage ─────────────────────────────────────────────────────────────────
+
+export async function getHomepage() {
+  return client.fetch(
+    `*[_type == "homepage" && _id == "homepage"][0] {
+      heroHeading, heroGreenText, intro,
+      "body": body[] {
+        ...,
+        _type == "casinoKortBlock" => {
+          ...,
+          customTitle, customBody, pros, cons,
+          "imageUrl": image.asset->url,
+          "bookmaker": bookmaker-> {
+            name, score, url,
+            "logoUrl": logo.asset->url,
+            "logoAlt": logo.alt,
+          }
+        },
+        _type == "bonusKortBlock" => {
+          ...,
+          customTitle, customBody,
+          "imageUrl": image.asset->url,
+          "bonus": bonus-> {
+            "name": coalesce(bookmaker->name, casinoNavn, title),
+            "bonusText": title,
+            "logoUrl": coalesce(casinoLogo.asset->url, bookmaker->logo.asset->url),
+            "logoAlt": coalesce(casinoLogo.alt, bookmaker->logo.alt),
+            "score": bookmaker->score,
+            "offerUrl": offerUrl,
+            "terms": terms,
+          }
+        }
+      },
+      howItWorksTitle, showHowItWorks, howItWorksItems,
+      metaTitle, metaDescription,
+      "featuredImage": featuredImage { "url": asset->url, alt },
+      ${COMPARISON_TABLE_FRAGMENT}
+    }`
+  )
+}
+
+// ─── Liga stillinger ──────────────────────────────────────────────────────────
+
+export async function getLigaStillingerBySlug(slug: string) {
+  return client.fetch(
+    `*[_type == "ligaStillinger" && slug.current == $slug][0] {
+      _id, title, leagueName, intro, slug, leagueId, seasonId,
+      "logo": logo { "url": asset->url, alt },
+      metaTitle, metaDescription, lastUpdated,
+      body[] { ..., _type == "image" => { ..., "url": asset->url } }
+    }`,
+    { slug }
+  )
+}
+
+export async function getLigaStillingerPaths() {
+  return client.fetch<Array<{ slug: { current: string } }>>(
+    `*[_type == "ligaStillinger" && defined(slug.current)] { slug }`
+  ).catch(() => [])
+}
