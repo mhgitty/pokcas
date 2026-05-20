@@ -5,28 +5,76 @@ interface FaqBlockProps { value: { title?: string; items?: { question: string; a
 
 export function FaqBlock({ value }: FaqBlockProps) {
   const { title = 'Frequently Asked Questions', items = [] } = value
-  const [open, setOpen] = useState<number | null>(null)
+  const [open, setOpen] = useState<number | null>(0)
 
   return (
     <div style={{ margin: '32px 0' }}>
       <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 700, color: 'var(--text)', marginBottom: '16px' }}>{title}</h2>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        {items.map((item, i) => (
-          <div key={i} style={{ border: '1px solid var(--border)', borderRadius: '8px', overflow: 'hidden' }}>
-            <button onClick={() => setOpen(open === i ? null : i)} style={{
-              width: '100%', textAlign: 'left', padding: '16px 20px',
-              background: open === i ? 'var(--bg-raised)' : 'var(--bg-card)', border: 'none', cursor: 'pointer',
-              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-              fontSize: '14.5px', fontWeight: 600, color: 'var(--text)',
-            }}>
-              {item.question}
-              <span style={{ color: 'var(--text-faint)', fontSize: '18px', fontWeight: 300 }}>{open === i ? '−' : '+'}</span>
-            </button>
-            {open === i && (
-              <div style={{ padding: '0 20px 16px', fontSize: '14px', color: 'var(--text-muted)', lineHeight: 1.65 }}>{item.answer}</div>
-            )}
-          </div>
-        ))}
+
+      <div style={{ border: '1px solid var(--border)', borderRadius: '12px', overflow: 'hidden' }}>
+        {items.map((item, i) => {
+          const isOpen = open === i
+          return (
+            <div key={i} style={{ borderBottom: i < items.length - 1 ? '1px solid var(--border)' : 'none' }}>
+              <button
+                onClick={() => setOpen(isOpen ? null : i)}
+                style={{
+                  width: '100%',
+                  textAlign: 'left',
+                  padding: '20px 24px',
+                  background: isOpen ? '#fff' : '#fff',
+                  border: 'none',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  gap: '16px',
+                  fontSize: '15px',
+                  fontWeight: 600,
+                  color: 'var(--text)',
+                  lineHeight: 1.4,
+                }}
+              >
+                <span>{item.question}</span>
+
+                {/* ? icon circle */}
+                <span style={{
+                  flexShrink: 0,
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '50%',
+                  background: isOpen ? 'var(--green)' : 'var(--border)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'background 0.2s',
+                }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                    <path
+                      d="M12 17v-1M12 13c0-2 2-2 2-4a2 2 0 1 0-4 0"
+                      stroke={isOpen ? '#fff' : '#9CA3AF'}
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+              </button>
+
+              {isOpen && (
+                <div style={{
+                  padding: '0 24px 20px',
+                  fontSize: '14.5px',
+                  color: 'var(--text-muted)',
+                  lineHeight: 1.7,
+                  background: '#fff',
+                }}>
+                  {item.answer}
+                </div>
+              )}
+            </div>
+          )
+        })}
       </div>
     </div>
   )
