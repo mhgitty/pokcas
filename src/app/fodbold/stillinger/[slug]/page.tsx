@@ -189,7 +189,7 @@ export default async function LigaStillingerPage({ params }: Props) {
 
       {/* Hero */}
       <section className="hero-section" style={{ background: 'var(--bg-hero)', borderBottom: '1px solid var(--border)' }}>
-        <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '1220px', margin: '0 auto' }}>
           <Breadcrumbs crumbs={[
             { label: 'Hjem', href: '/' },
             { label: 'Fodbold', href: '/fodbold' },
@@ -227,7 +227,7 @@ export default async function LigaStillingerPage({ params }: Props) {
       </section>
 
       {/* Standings table — full width */}
-      <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '40px 24px 0' }}>
+      <div style={{ maxWidth: '1220px', margin: '0 auto', padding: '40px 15px 0' }}>
         <StandingsTable rows={standings} leagueName={page.leagueName} logoUrl={page.logo?.url ?? null} logoAlt={page.logo?.alt ?? null} />
       </div>
 

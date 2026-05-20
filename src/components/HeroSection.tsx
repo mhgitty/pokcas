@@ -16,7 +16,7 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ title, intro, eyebrow, updatedAt, narrow = false, author, factChecker, breadcrumbs }: HeroSectionProps) {
-  const maxWidth = narrow ? '760px' : '1080px'
+  const maxWidth = narrow ? '760px' : '1220px'
   const hasAuthorBar = author || factChecker || updatedAt
 
   return (

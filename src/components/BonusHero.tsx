@@ -62,7 +62,7 @@ export function BonusHero({
       background: 'var(--bg-hero)',
       borderBottom: '1px solid var(--border)',
     }}>
-      <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '1220px', margin: '0 auto' }}>
 
         <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Bonuses', href: '/kampagner' }, { label: title }]} />
 

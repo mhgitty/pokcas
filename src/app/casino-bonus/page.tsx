@@ -33,8 +33,8 @@ export default async function BonusserPage() {
       <JsonLd data={breadcrumb} />
       <Navbar />
 
-      <div style={{ background: 'var(--bg-hero)', borderBottom: '1px solid var(--border)', padding: '40px 24px 32px' }}>
-        <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
+      <div style={{ background: 'var(--bg-hero)', borderBottom: '1px solid var(--border)', padding: '40px 15px 32px' }}>
+        <div style={{ maxWidth: '1220px', margin: '0 auto' }}>
           <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Bonuses' }]} />
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '36px', fontWeight: 800, color: 'var(--text)', marginBottom: '8px', letterSpacing: '-0.03em' }}>
             Casino Bonuses

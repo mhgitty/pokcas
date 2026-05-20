@@ -79,7 +79,7 @@ export default async function AuthorPage({ params }: Props) {
         background: 'var(--bg-footer)',
         padding: '56px 24px',
       }}>
-        <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '1220px', margin: '0 auto' }}>
           {/* Breadcrumb */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '32px', fontSize: '13px', color: 'rgba(255,255,255,0.4)' }}>
             <Link href="/" style={{ color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}>Home</Link>

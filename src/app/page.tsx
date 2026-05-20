@@ -97,7 +97,7 @@ export default async function HomePage() {
 
       {/* Hero */}
       <section className="hero-section">
-        <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '1220px', margin: '0 auto' }}>
           <h1 className="hero-heading">
             {heroHeading}
           </h1>
@@ -105,7 +105,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 24px' }}>
+      <div style={{ maxWidth: '1220px', margin: '0 auto', padding: '0 24px' }}>
 
         {/* ── 1. LATEST SECTION ───────────────────────────────────────────── */}
         {postList.length > 0 && (
