@@ -12,18 +12,18 @@
   --green-light:  #C8E6CA;
   --gold:         #C9A84C;
 
-  /* Light green palette */
-  --bg:           #F7F8F7;
-  --bg-raised:    #FFFFFF;
+  /* Palette */
+  --bg:           #FFFFFF;
+  --bg-raised:    #F9FAFB;
   --bg-card:      #FFFFFF;
   --bg-navbar:    #FFFFFF;
   --bg-footer:    #0D2414;
   --bg-hero:      #FFFFFF;
   --border:       #C8E6CA;
-  --border-faint: #E0EEE0;
-  --text:         #0D2414;
-  --text-muted:   #6A8C6E;
-  --text-faint:   #B8CCB8;
+  --border-faint: #E5E7EB;
+  --text:         #111827;
+  --text-muted:   #6B7280;
+  --text-faint:   #9CA3AF;
 }
 
 /* ─── Reset ──────────────────────────────────────────────────────────────── */
