@@ -3,7 +3,7 @@ import { bodyField } from './page'
 
 export const bookmakerType = defineType({
   name: 'bookmaker',
-  title: 'Bookmakers',
+  title: 'Casino Reviews',
   type: 'document',
   groups: [
     { name: 'info', title: 'Info & bonus' },
@@ -50,7 +50,7 @@ export const bookmakerType = defineType({
       title: 'Score (0–10)',
       type: 'number',
       group: 'info',
-      description: 'Vores samlede vurdering af bookmaker',
+      description: 'Vores samlede vurdering af casinoet',
       validation: (r) => r.min(0).max(10),
     }),
     defineField({

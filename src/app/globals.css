@@ -1,27 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* ─── Variables ──────────────────────────────────────────────────────────── */
 :root {
-  --green: #22c55e;
-  --green-dark: #16a34a;
-  --font-display: 'Plus Jakarta Sans', sans-serif;
+  --font-display: var(--font-figtree), sans-serif;
 
-  /* Dark palette */
-  --bg:          #202d34;
-  --bg-raised:   #283640;
-  --bg-card:     #283640;
-  --bg-navbar:   #182229;
-  --bg-footer:   #182229;
-  --bg-hero:     #1b2a31;
-  --border:      #2e3e4a;
-  --border-faint:#243039;
-  --text:        #f0f4f7;
-  --text-muted:  #8ba5b5;
-  --text-faint:  #5a7585;
+  /* Accent colours */
+  --green:        #1A7A3C;
+  --green-dark:   #145E2E;
+  --green-light:  #C8E6CA;
+  --gold:         #C9A84C;
+
+  /* Light green palette */
+  --bg:           #F2F8F3;
+  --bg-raised:    #FFFFFF;
+  --bg-card:      #FFFFFF;
+  --bg-navbar:    #FFFFFF;
+  --bg-footer:    #0D2414;
+  --bg-hero:      #FFFFFF;
+  --border:       #C8E6CA;
+  --border-faint: #E0EEE0;
+  --text:         #0D2414;
+  --text-muted:   #6A8C6E;
+  --text-faint:   #B8CCB8;
 }
 
 /* ─── Reset ──────────────────────────────────────────────────────────────── */
@@ -31,7 +33,7 @@ html, body { overflow-x: clip; }
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-display);
   -webkit-font-smoothing: antialiased;
   font-size: 15px;
 }
@@ -67,7 +69,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ─── Scrollbar ──────────────────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: var(--bg-navbar); }
+::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
 /* ─── Navbar ─────────────────────────────────────────────────────────────── */
@@ -101,13 +103,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 .nav-link:hover { color: var(--text); }
 .nav-link-cta {
-  background: var(--green-dark);
+  background: var(--green);
   color: #fff !important;
-  font-weight: 500;
+  font-weight: 600;
   padding: 8px 14px;
   margin-left: 4px;
 }
-.nav-link-cta:hover { background: var(--green); color: #fff !important; }
+.nav-link-cta:hover { background: var(--green-dark); color: #fff !important; }
 
 /* ─── Dropdown nav ───────────────────────────────────────────────────────── */
 .nav-item-dropdown { position: relative; }
