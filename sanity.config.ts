@@ -39,9 +39,9 @@ export default defineConfig({
               ),
             S.divider(),
             S.listItem()
-              .title('🎰 Bookmakers')
+              .title('🎰 Casino Reviews')
               .schemaType('bookmaker')
-              .child(S.documentTypeList('bookmaker').title('Alle bookmakers')),
+              .child(S.documentTypeList('bookmaker').title('Casino Reviews')),
             S.listItem()
               .title('🎁 Bonusser')
               .schemaType('bonus')
@@ -59,10 +59,6 @@ export default defineConfig({
               .title('📄 Sider')
               .schemaType('page')
               .child(S.documentTypeList('page').title('Alle sider')),
-            S.listItem()
-              .title('🏆 Liga stillinger')
-              .schemaType('ligaStillinger')
-              .child(S.documentTypeList('ligaStillinger').title('Liga stillinger')),
             S.divider(),
             S.listItem()
               .title('🔗 Redirects / Go-links')
@@ -89,7 +85,7 @@ export default defineConfig({
 
   document: {
     actions: (prev, ctx) => {
-      const PREVIEW_TYPES = ['homepage', 'post', 'page', 'bookmaker', 'bonus', 'ligaStillinger']
+      const PREVIEW_TYPES = ['homepage', 'post', 'page', 'bookmaker', 'bonus']
       if (PREVIEW_TYPES.includes(ctx.schemaType)) {
         return [previewAction, ...prev]
       }
