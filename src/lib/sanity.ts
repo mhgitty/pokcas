@@ -17,7 +17,8 @@ export async function getPosts(limit = 20, categorySlug?: string) {
 
   return client.fetch(
     `${filter} | order(publishedAt desc) [0...$limit] {
-      _id, title, slug, excerpt, publishedAt, readingTime, featuredImage,
+      _id, title, slug, excerpt, publishedAt, readingTime,
+      "featuredImage": featuredImage { "url": asset->url, alt },
       category-> { name, slug, emoji }
     }`,
     { limit, categorySlug: categorySlug ?? '' }

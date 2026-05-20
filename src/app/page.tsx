@@ -133,7 +133,7 @@ export default async function HomePage() {
               >
                 {/* Featured post */}
                 {featuredPost && (
-                  <a href={`/post/${featuredPost.slug?.current ?? ''}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                  <a href={`/${featuredPost.slug?.current ?? ''}/`} style={{ textDecoration: 'none', color: 'inherit' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                       {featuredPost.featuredImage?.url && (
                         <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', borderRadius: '8px', overflow: 'hidden', marginBottom: '16px' }}>
@@ -188,7 +188,7 @@ export default async function HomePage() {
                 {/* Sidebar posts */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                   {sidebarPosts.map((post: any) => (
-                    <a key={post._id} href={`/post/${post.slug?.current ?? ''}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <a key={post._id} href={`/${post.slug?.current ?? ''}/`} style={{ textDecoration: 'none', color: 'inherit' }}>
                       <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
                         {post.featuredImage?.url && (
                           <div style={{ position: 'relative', width: '80px', minWidth: '80px', height: '56px', borderRadius: '6px', overflow: 'hidden' }}>
@@ -317,7 +317,7 @@ export default async function HomePage() {
                         ) : (
                           <div style={{ width: '48px', height: '32px', background: 'var(--border)', borderRadius: '4px', flexShrink: 0 }} />
                         )}
-                        <span style={{ flex: 1, fontSize: '13px', fontWeight: 600, color: 'var(--text)', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{bm.name}</span>
+                        <span style={{ flex: 1, fontSize: '12px', fontWeight: 600, color: 'var(--text)', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '140px' }}>{bm.name}</span>
                         <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
                           {bm.url && (
                             <a href={bm.url} target="_blank" rel="noopener noreferrer nofollow" style={{
@@ -393,7 +393,7 @@ export default async function HomePage() {
                         ) : (
                           <div style={{ width: '48px', height: '32px', background: 'var(--border)', borderRadius: '4px', flexShrink: 0 }} />
                         )}
-                        <span style={{ flex: 1, fontSize: '13px', fontWeight: 600, color: 'var(--text)', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{bm.name}</span>
+                        <span style={{ flex: 1, fontSize: '12px', fontWeight: 600, color: 'var(--text)', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '140px' }}>{bm.name}</span>
                         <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
                           {bm.url && (
                             <a href={bm.url} target="_blank" rel="noopener noreferrer nofollow" style={{
@@ -490,7 +490,7 @@ export default async function HomePage() {
                       className="featured-cat-grid"
                     >
                       {cat.posts.map((post: any) => (
-                        <a key={post._id} href={`/post/${post.slug?.current ?? ''}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                        <a key={post._id} href={`/${post.slug?.current ?? ''}/`} style={{ textDecoration: 'none', color: 'inherit' }}>
                           <div>
                             {post.featuredImage?.url && (
                               <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', borderRadius: '8px', overflow: 'hidden', marginBottom: '10px' }}>
