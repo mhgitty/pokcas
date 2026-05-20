@@ -6,7 +6,7 @@ export const revalidate = 86400
 const BASE = 'https://pokcas.com'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [posts, pages, bookmakers, bonusser] = await Promise.all([
+  const [posts, pages, bookmakers, bonusser, paymentMethods, software] = await Promise.all([
     client.fetch<Array<{ slug: { current: string }; publishedAt?: string; lastUpdated?: string }>>(
       `*[_type == "post" && defined(slug.current) && defined(publishedAt)] | order(publishedAt desc) { slug, publishedAt, lastUpdated }`
     ).catch(() => []),
@@ -19,23 +19,41 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     client.fetch<Array<{ slug: { current: string }; _updatedAt?: string }>>(
       `*[_type == "bonus" && active == true && defined(slug.current)] { slug, _updatedAt }`
     ).catch(() => []),
+    client.fetch<Array<{ slug: { current: string }; _updatedAt?: string }>>(
+      `*[_type == "paymentMethod" && defined(slug.current)] { slug, _updatedAt }`
+    ).catch(() => []),
+    client.fetch<Array<{ slug: { current: string }; _updatedAt?: string }>>(
+      `*[_type == "software" && defined(slug.current)] { slug, _updatedAt }`
+    ).catch(() => []),
   ])
 
   return [
     { url: BASE + '/', lastModified: new Date(), changeFrequency: 'daily', priority: 1.0 },
-    { url: `${BASE}/betting-sider/`, changeFrequency: 'daily', priority: 0.9 },
-    { url: `${BASE}/kampagner/`, changeFrequency: 'daily', priority: 0.9 },
+    { url: `${BASE}/review/`, changeFrequency: 'daily', priority: 0.9 },
+    { url: `${BASE}/casino-bonus/`, changeFrequency: 'daily', priority: 0.9 },
     ...bookmakers.map((b) => ({
-      url: `${BASE}/betting-sider/${b.slug.current}/`,
+      url: `${BASE}/review/${b.slug.current}/`,
       lastModified: b._updatedAt ? new Date(b._updatedAt) : undefined,
       changeFrequency: 'weekly' as const,
       priority: 0.85,
     })),
     ...bonusser.map((b) => ({
-      url: `${BASE}/kampagner/${b.slug.current}/`,
+      url: `${BASE}/casino-bonus/${b.slug.current}/`,
       lastModified: b._updatedAt ? new Date(b._updatedAt) : undefined,
       changeFrequency: 'weekly' as const,
       priority: 0.8,
+    })),
+    ...paymentMethods.map((m) => ({
+      url: `${BASE}/online-casino/payment/${m.slug.current}/`,
+      lastModified: m._updatedAt ? new Date(m._updatedAt) : undefined,
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    })),
+    ...software.map((s) => ({
+      url: `${BASE}/online-casino/software/${s.slug.current}/`,
+      lastModified: s._updatedAt ? new Date(s._updatedAt) : undefined,
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
     })),
     ...posts.map((p) => ({
       url: `${BASE}/${p.slug.current}/`,

@@ -310,6 +310,56 @@ export async function getHomepage() {
   )
 }
 
+// ─── Payment Methods ──────────────────────────────────────────────────────────
+
+export async function getPaymentMethods() {
+  return client.fetch(
+    `*[_type == "paymentMethod"] | order(name asc) {
+      _id, name, slug,
+      "logo": logo { "url": asset->url, alt }
+    }`
+  )
+}
+
+export async function getPaymentMethodBySlug(slug: string) {
+  return client.fetch(
+    `*[_type == "paymentMethod" && slug.current == $slug][0] {
+      _id, name, titel, slug, withdrawalTime, withdrawalFee,
+      "logo": logo { "url": asset->url, alt },
+      "casinos": *[_type == "bookmaker" && references(^._id)] | order(score desc) {
+        _id, name, slug, score, usp, url,
+        "logo": logo { "url": asset->url, alt }
+      }
+    }`,
+    { slug }
+  )
+}
+
+// ─── Software ─────────────────────────────────────────────────────────────────
+
+export async function getSoftwareProviders() {
+  return client.fetch(
+    `*[_type == "software"] | order(name asc) {
+      _id, name, slug,
+      "logo": logo { "url": asset->url, alt }
+    }`
+  )
+}
+
+export async function getSoftwareBySlug(slug: string) {
+  return client.fetch(
+    `*[_type == "software" && slug.current == $slug][0] {
+      _id, name, titel, slug,
+      "logo": logo { "url": asset->url, alt },
+      "casinos": *[_type == "bookmaker" && references(^._id)] | order(score desc) {
+        _id, name, slug, score, usp, url,
+        "logo": logo { "url": asset->url, alt }
+      }
+    }`,
+    { slug }
+  )
+}
+
 // ─── Liga stillinger ──────────────────────────────────────────────────────────
 
 export async function getLigaStillingerBySlug(slug: string) {
