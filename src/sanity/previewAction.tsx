@@ -10,7 +10,7 @@ function resolveUrl(type: string, doc: Record<string, any>): string | null {
     case 'homepage':
       return `${BASE}/`
     case 'post':
-      return slug ? `${BASE}/blog/${slug}/` : `${BASE}/blog/`
+      return slug ? `${BASE}/${slug}/` : `${BASE}/`
     case 'page': {
       if (!slug) return null
       const parentSlug = doc?.parent?.slug?.current as string | undefined
@@ -19,9 +19,9 @@ function resolveUrl(type: string, doc: Record<string, any>): string | null {
         : `${BASE}/${slug}/`
     }
     case 'bookmaker':
-      return slug ? `${BASE}/betting-sider/${slug}/` : `${BASE}/betting-sider/`
+      return slug ? `${BASE}/review/${slug}/` : `${BASE}/review/`
     case 'bonus':
-      return slug ? `${BASE}/kampagner/${slug}/` : `${BASE}/kampagner/`
+      return slug ? `${BASE}/casino-bonus/${slug}/` : `${BASE}/casino-bonus/`
     case 'ligaStillinger':
       return slug ? `${BASE}/fodbold/stillinger/${slug}/` : `${BASE}/fodbold/stillinger/`
     default:
