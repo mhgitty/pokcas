@@ -105,7 +105,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <div style={{ maxWidth: '1220px', margin: '0 auto', padding: '0 15px' }}>
+      <div style={{ maxWidth: '1250px', margin: '0 auto', padding: '0 15px' }}>
 
         {/* ── 1. LATEST SECTION ───────────────────────────────────────────── */}
         {postList.length > 0 && (

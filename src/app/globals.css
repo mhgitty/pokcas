@@ -46,12 +46,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ─── Layout helpers ─────────────────────────────────────────────────────── */
-.section         { max-width: 1220px; margin: 0 auto; padding: 48px 15px; }
+.section         { max-width: 1250px; margin: 0 auto; padding: 48px 15px; }
 .section-narrow  { max-width: 760px;  margin: 0 auto; padding: 48px 15px; }
 
 /* ─── Article layout: content + sticky TOC sidebar ──────────────────────── */
 .article-layout {
-  max-width: 1220px;
+  max-width: 1250px;
   margin: 0 auto;
   padding: 40px 15px 80px;
   display: grid;
@@ -394,7 +394,7 @@ h1, h2, h3, h4, h5, h6 {
   .nav-link { font-size: 13.5px; padding: 6px 8px; }
   .blog-grid { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr; gap: 28px; }
-  .article-layout { grid-template-columns: 1fr; gap: 0; padding: 28px 16px 60px; }
+  .article-layout { grid-template-columns: 1fr; gap: 0; padding: 28px 15px 60px; }
   .toc-sidebar { display: none; }
 
   /* Hide desktop nav, show burger */
