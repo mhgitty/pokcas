@@ -522,6 +522,7 @@ export default async function HomePage() {
           </section>
         )}
 
+
         {/* ── 4. TRUST SECTION ────────────────────────────────────────────── */}
         <section style={{ marginTop: '48px', marginBottom: '64px' }}>
           <div style={{

@@ -68,7 +68,7 @@ export async function getPostBySlug(slug: string) {
       "ogImage": ogImage { "url": asset->url, alt },
       metaTitle, metaDescription,
       category-> { name, slug, emoji },
-      author-> { name, bio, linkedin, "imageUrl": image.asset->url }
+      author-> { name, slug, bio, linkedin, "imageUrl": image.asset->url }
     }`,
     { slug }
   )
@@ -135,7 +135,7 @@ const PAGE_FIELDS = `
   "featuredImage": featuredImage { "url": asset->url, alt },
   lastUpdated,
   "author": author-> {
-    name, bio, linkedin, x, facebook,
+    name, slug, bio, linkedin, x, facebook,
     "imageUrl": image.asset->url
   },
   "factChecker": factChecker-> {
@@ -245,7 +245,7 @@ export const getSiteSettings = cache(async () => {
   return client.fetch(
     `*[_type == "siteSettings"][0] {
       "defaultAuthor": defaultAuthor-> {
-        name, bio, linkedin, x, facebook,
+        name, slug, bio, linkedin, x, facebook,
         "imageUrl": image.asset->url
       },
       headerNav[] {
@@ -386,5 +386,35 @@ export async function getLigaStillingerBySlug(slug: string) {
 export async function getLigaStillingerPaths() {
   return client.fetch<Array<{ slug: { current: string } }>>(
     `*[_type == "ligaStillinger" && defined(slug.current)] { slug }`
+  ).catch(() => [])
+}
+
+// ─── Authors ──────────────────────────────────────────────────────────────────
+
+export async function getAuthorBySlug(slug: string) {
+  return clientNoCdn.fetch(
+    `*[_type == "author" && slug.current == $slug][0] {
+      _id, name, slug, role, bio, linkedin, x, facebook,
+      "imageUrl": image.asset->url
+    }`,
+    { slug }
+  )
+}
+
+export async function getPostsByAuthor(authorId: string, limit = 20) {
+  return client.fetch(
+    `*[_type == "post" && defined(publishedAt) && author._ref == $authorId]
+     | order(publishedAt desc) [0...$limit] {
+      _id, title, slug, excerpt, publishedAt, readingTime,
+      "featuredImage": featuredImage { "url": asset->url, alt },
+      category-> { name, slug, emoji }
+    }`,
+    { authorId, limit }
+  )
+}
+
+export async function getAuthorPaths() {
+  return clientNoCdn.fetch<Array<{ slug: { current: string } }>>(
+    `*[_type == "author" && defined(slug.current)] { slug }`
   ).catch(() => [])
 }

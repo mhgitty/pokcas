@@ -232,6 +232,41 @@ export const bodyField = defineField({
           return { title: title || 'Tabel', subtitle: `${(headers || []).length} kolonner · ${(rows || []).length} rækker` }
         },
       },
+    {
+      type: 'object',
+      name: 'howToBlock',
+      title: '🔢 How-to',
+      fields: [
+        {
+          name: 'title',
+          title: 'Section title',
+          type: 'string',
+          initialValue: 'How It Works',
+        },
+        {
+          name: 'items',
+          title: 'Steps',
+          type: 'array',
+          of: [{
+            type: 'object',
+            name: 'howToItem',
+            title: 'Step',
+            fields: [
+              { name: 'title', title: 'Step title', type: 'string' },
+              { name: 'body',  title: 'Body text',  type: 'text', rows: 3 },
+            ],
+            preview: {
+              select: { title: 'title', subtitle: 'body' },
+            },
+          }],
+        },
+      ],
+      preview: {
+        select: { title: 'title', items: 'items' },
+        prepare({ title, items }: any) {
+          return { title: title || 'How-to', subtitle: `${(items || []).length} steps` }
+        },
+      },
     },
   ],
 })

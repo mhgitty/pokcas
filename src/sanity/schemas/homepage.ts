@@ -36,6 +36,32 @@ export const homepageType = defineType({
     // Body content
     { ...bodyField, group: 'content' } as any,
 
+    defineField({
+      name: 'howItWorksTitle',
+      title: 'Section title',
+      type: 'string',
+      group: 'content',
+      initialValue: 'How It Works',
+    }),
+    defineField({
+      name: 'howItWorksItems',
+      title: 'Steps',
+      type: 'array',
+      group: 'content',
+      of: [{
+        type: 'object',
+        name: 'howItWorksItem',
+        title: 'Step',
+        fields: [
+          { name: 'title', title: 'Title', type: 'string' },
+          { name: 'body',  title: 'Body text', type: 'text', rows: 4 },
+        ],
+        preview: {
+          select: { title: 'title', subtitle: 'body' },
+        },
+      }],
+    }),
+
     // SEO
     defineField({ name: 'metaTitle', title: 'Meta titel', type: 'string', group: 'seo', initialValue: 'Sammenlign betting sider — find den bedste bonus i Danmark' }),
     defineField({ name: 'metaDescription', title: 'Meta beskrivelse', type: 'text', rows: 3, group: 'seo', initialValue: 'Find og sammenlign de bedste betting bonusser fra alle store danske bookmakers.' }),

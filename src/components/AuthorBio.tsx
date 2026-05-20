@@ -1,7 +1,9 @@
 import { Icon } from '@/components/Icon'
+import Link from 'next/link'
 interface AuthorBioProps {
   author: {
     name: string
+    slug?: { current: string }
     bio?: string
     imageUrl?: string
     linkedin?: string
@@ -90,7 +92,11 @@ export function AuthorBio({ author, compact = false }: AuthorBioProps) {
           </span>
         </div>
         <div style={{ fontFamily: 'var(--font-display)', fontSize: compact ? '18px' : '17px', fontWeight: 700, color: 'var(--text)', marginBottom: hasSocials ? '12px' : '0' }}>
-          {author.name}
+          {author.slug?.current ? (
+            <Link href={`/author/${author.slug.current}/`} style={{ color: 'var(--text)', textDecoration: 'none' }}>
+              {author.name}
+            </Link>
+          ) : author.name}
         </div>
 
         {author.bio && (

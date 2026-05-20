@@ -9,6 +9,7 @@ import { TableBlock } from './TableBlock'
 import { headingId } from '@/lib/headingId'
 import { CasinoKort } from './CasinoKort'
 import { BonusKort } from './BonusKort'
+import { HowToBlock } from './HowToBlock'
 
 type Post = {
   _id: string
@@ -121,6 +122,7 @@ export function PortableTextRenderer({ value, posts }: { value: any[]; posts?: P
       tableBlock: ({ value }: any) => <TableBlock value={value} />,
       casinoKortBlock: ({ value }: any) => <CasinoKort value={value} />,
       bonusKortBlock: ({ value }: any) => <BonusKort value={value} />,
+      howToBlock: ({ value }: any) => <HowToBlock value={value} />,
       latestPostsBlock: ({ value: blockValue }: any) =>
         posts ? <LatestPostsBlock value={blockValue} posts={posts} /> : null,
       image: ({ value }: any) => {
