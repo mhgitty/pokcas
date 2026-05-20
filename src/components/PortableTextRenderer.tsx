@@ -1,4 +1,5 @@
 import { PortableText } from '@portabletext/react'
+import { Icon } from '@/components/Icon'
 import { replaceDateVarsInBlocks } from '@/lib/dateVars'
 import { CalloutBlock } from './CalloutBlock'
 import { FaqBlock } from './FaqBlock'
@@ -70,12 +71,15 @@ export function PortableTextRenderer({ value, posts }: { value: any[]; posts?: P
       ),
     },
     list: {
-      bullet: ({ children }: any) => <ul style={{ paddingLeft: '24px', margin: '16px 0 20px', display: 'flex', flexDirection: 'column', gap: '6px' }}>{children}</ul>,
+      bullet: ({ children }: any) => <ul style={{ listStyle: 'none', padding: 0, margin: '16px 0 20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>{children}</ul>,
       number: ({ children }: any) => <ol style={{ paddingLeft: '24px', margin: '16px 0 20px', display: 'flex', flexDirection: 'column', gap: '6px' }}>{children}</ol>,
     },
     listItem: {
       bullet: ({ children }: any) => (
-        <li style={{ fontSize: '15px', color: 'var(--text-muted)', lineHeight: 1.65 }}>{children}</li>
+        <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '15px', color: 'var(--text-muted)', lineHeight: 1.65 }}>
+          <Icon name="check-circle" size={20} color="var(--green)" style={{ flexShrink: 0, marginTop: '2px' }} />
+          <span>{children}</span>
+        </li>
       ),
       number: ({ children }: any) => (
         <li style={{ fontSize: '15px', color: 'var(--text-muted)', lineHeight: 1.65 }}>{children}</li>

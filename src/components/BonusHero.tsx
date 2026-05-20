@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { Icon } from '@/components/Icon'
 import { Breadcrumbs } from './Breadcrumbs'
 
 interface BonusHeroProps {
@@ -17,11 +18,6 @@ interface BonusHeroProps {
   spinVaerdi?: string | null
 }
 
-const svgProps = {
-  width: 18, height: 18, viewBox: '0 0 24 24', fill: 'none',
-  strokeWidth: 2, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const,
-  style: { flexShrink: 0 },
-}
 
 function StatBox({ label, value, icon }: { label: string; value: string | null; icon: React.ReactNode }) {
   const empty = !value
@@ -99,40 +95,23 @@ export function BonusHero({
 
           <StatBox label="Min. odds" value={minimumOdds ?? null} icon={
 
-            <svg {...svgProps} stroke={minimumOdds ? 'var(--green)' : 'var(--text-faint)'}>
-              {/* bar chart */}
-              <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
-            </svg>
+            <Icon name="chart-2" size={22} color={minimumOdds ? 'var(--green)' : 'var(--text-faint)'} style={{ flexShrink: 0 }} />
           } />
 
           <StatBox label="Min. deposit" value={minimumIndbetaling != null ? `${minimumIndbetaling} kr.` : null} icon={
-            <svg {...svgProps} stroke={minimumIndbetaling != null ? 'var(--green)' : 'var(--text-faint)'}>
-              {/* credit card */}
-              <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
-            </svg>
+            <Icon name="card-2" size={22} color={minimumIndbetaling != null ? 'var(--green)' : 'var(--text-faint)'} style={{ flexShrink: 0 }} />
           } />
 
           <StatBox label="Wagering requirement" value={gennemspilskrav ?? null} icon={
-            <svg {...svgProps} stroke={gennemspilskrav ? 'var(--green)' : 'var(--text-faint)'}>
-              {/* refresh */}
-              <path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/>
-              <path d="M21 3v5h-5"/><path d="M3 21v-5h5"/>
-            </svg>
+            <Icon name="refresh-circle" size={22} color={gennemspilskrav ? 'var(--green)' : 'var(--text-faint)'} style={{ flexShrink: 0 }} />
           } />
 
           <StatBox label="Max. winnings" value={maksGevinst ?? null} icon={
-            <svg {...svgProps} stroke={maksGevinst ? 'var(--green)' : 'var(--text-faint)'}>
-              {/* trophy */}
-              <path d="M6 9H4a2 2 0 0 1-2-2V5h4"/><path d="M18 9h2a2 2 0 0 0 2-2V5h-4"/>
-              <path d="M6 9a6 6 0 0 0 12 0"/><line x1="12" y1="15" x2="12" y2="19"/><line x1="8" y1="19" x2="16" y2="19"/>
-            </svg>
+            <Icon name="cup-star" size={22} color={maksGevinst ? 'var(--green)' : 'var(--text-faint)'} style={{ flexShrink: 0 }} />
           } />
 
           <StatBox label="Spin value" value={spinVaerdi ?? null} icon={
-            <svg {...svgProps} stroke={spinVaerdi ? 'var(--green)' : 'var(--text-faint)'}>
-              {/* zap / spin */}
-              <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
-            </svg>
+            <Icon name="wheel" size={22} color={spinVaerdi ? 'var(--green)' : 'var(--text-faint)'} style={{ flexShrink: 0 }} />
           } />
 
           {/* Bonuskode — spans full width if present, otherwise a normal greyed box */}
@@ -144,11 +123,7 @@ export function BonusHero({
               display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px',
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
-                <svg {...svgProps} stroke="var(--green)">
-                  {/* tag */}
-                  <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
-                  <line x1="7" y1="7" x2="7.01" y2="7"/>
-                </svg>
+                <Icon name="tag-price" size={22} color="var(--green)" style={{ flexShrink: 0 }} />
                 <div style={{ minWidth: 0 }}>
                   <div style={{ fontSize: '10px', color: 'var(--green)', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '1px' }}>Bonus code</div>
                   <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', letterSpacing: '0.06em' }}>{bonuskode}</div>
@@ -166,10 +141,7 @@ export function BonusHero({
             </div>
           ) : (
             <StatBox label="Bonus code" value={null} icon={
-              <svg {...svgProps} stroke="var(--text-faint)">
-                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
-                <line x1="7" y1="7" x2="7.01" y2="7"/>
-              </svg>
+              <Icon name="tag-price" size={22} color="var(--text-faint)" style={{ flexShrink: 0 }} />
             } />
           )}
 

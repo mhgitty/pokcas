@@ -10,6 +10,7 @@ import { getBookmakerBySlug, getPosts, getSiteSettings, clientNoCdn } from '@/li
 import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
+import { Icon } from '@/components/Icon'
 import { AuthorBio } from '@/components/AuthorBio'
 import type { Metadata } from 'next'
 
@@ -155,9 +156,7 @@ export default async function ReviewPage({ params }: Props) {
               <div className="bm-hero-stats">
                 {bm.minIndbetaling != null && (
                   <div style={{ background: 'var(--bg-raised)', border: '1px solid var(--border)', borderRadius: '10px', padding: '10px 14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-                      <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
-                    </svg>
+                    <Icon name="card-2" size={22} color="var(--green)" style={{ flexShrink: 0 }} />
                     <div>
                       <div style={{ fontSize: '10px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '1px' }}>Minimum deposit</div>
                       <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>{bm.minIndbetaling} kr.</div>
@@ -166,9 +165,7 @@ export default async function ReviewPage({ params }: Props) {
                 )}
                 {bm.gennemspilskrav && (
                   <div style={{ background: 'var(--bg-raised)', border: '1px solid var(--border)', borderRadius: '10px', padding: '10px 14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-                      <path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M21 3v5h-5"/><path d="M3 21v-5h5"/>
-                    </svg>
+                    <Icon name="refresh-circle" size={22} color="var(--green)" style={{ flexShrink: 0 }} />
                     <div>
                       <div style={{ fontSize: '10px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '1px' }}>Wager</div>
                       <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>{bm.gennemspilskrav}</div>
@@ -177,9 +174,7 @@ export default async function ReviewPage({ params }: Props) {
                 )}
                 {bm.lanceringsdato && (
                   <div style={{ background: 'var(--bg-raised)', border: '1px solid var(--border)', borderRadius: '10px', padding: '10px 14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-                      <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-                    </svg>
+                    <Icon name="calendar" size={22} color="var(--green)" style={{ flexShrink: 0 }} />
                     <div>
                       <div style={{ fontSize: '10px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '1px' }}>Established</div>
                       <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>{bm.lanceringsdato}</div>

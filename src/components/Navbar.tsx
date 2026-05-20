@@ -69,9 +69,7 @@ export async function Navbar() {
               <div key={item.href + item.label} className="nav-item-dropdown">
                 <Link href={item.href} className={`nav-link nav-link-has-children${item.isHighlighted ? ' nav-link-cta' : ''}`}>
                   {item.label}
-                  <svg width="10" height="6" viewBox="0 0 10 6" fill="none" style={{ marginLeft: '4px', flexShrink: 0 }}>
-                    <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
+                  <Icon name="alt-arrow-down" size={14} style={{ marginLeft: '3px', flexShrink: 0 }} />
                 </Link>
                 <div className="nav-dropdown">
                   {item.children.map((child: { href: string; label: string }) => (

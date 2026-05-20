@@ -1,4 +1,6 @@
 'use client'
+
+import { Icon } from '@/components/Icon'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -60,12 +62,7 @@ export function MobileMenu({ items }: { items: NavItem[] }) {
                     aria-expanded={isExpanded}
                     aria-label={isExpanded ? 'Close submenu' : 'Open submenu'}
                   >
-                    <svg
-                      width="12" height="8" viewBox="0 0 12 8" fill="none"
-                      className={`mobile-menu-chevron${isExpanded ? ' open' : ''}`}
-                    >
-                      <path d="M1 1l5 5 5-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
+                    <Icon name="alt-arrow-down" size={16} className={`mobile-menu-chevron${isExpanded ? ' open' : ''}`} />
                   </button>
                 </div>
               ) : (

@@ -1,5 +1,7 @@
 'use client'
 
+import { Icon } from '@/components/Icon'
+
 import { useState } from 'react'
 import { headingId } from '@/lib/headingId'
 
@@ -57,20 +59,7 @@ export function MobileToc({ body }: { body: any[] }) {
         }}>
           Table of Contents
         </span>
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
-          style={{
-            flexShrink: 0,
-            color: 'var(--text-muted)',
-            transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
-            transition: 'transform 0.2s ease',
-          }}
-        >
-          <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        <Icon name="alt-arrow-down" size={16} style={{ flexShrink: 0, color: 'var(--text-muted)', transform: open ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s ease' }} />
       </button>
 
       {/* Collapsible list */}
