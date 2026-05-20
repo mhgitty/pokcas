@@ -59,6 +59,14 @@ export default defineConfig({
               .title('📄 Sider')
               .schemaType('page')
               .child(S.documentTypeList('page').title('Alle sider')),
+            S.listItem()
+              .title('💳 Payment Methods')
+              .schemaType('paymentMethod')
+              .child(S.documentTypeList('paymentMethod').title('Payment Methods')),
+            S.listItem()
+              .title('🎮 Software')
+              .schemaType('software')
+              .child(S.documentTypeList('software').title('Software Providers')),
             S.divider(),
             S.listItem()
               .title('🔗 Redirects / Go-links')

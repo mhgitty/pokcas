@@ -8,6 +8,8 @@ import { bonusType } from './bonus'
 import { comparisonTableTemplateType } from './comparisonTableTemplate'
 import { siteSettingsType } from './siteSettings'
 import { redirectType } from './redirect'
+import { paymentMethodType } from './paymentMethod'
+import { softwareType } from './software'
 
 export const schemaTypes = [
   siteSettingsType,
@@ -20,4 +22,6 @@ export const schemaTypes = [
   authorType,
   categoryType,
   redirectType,
+  paymentMethodType,
+  softwareType,
 ]
