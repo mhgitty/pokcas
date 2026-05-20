@@ -232,6 +232,7 @@ export const bodyField = defineField({
           return { title: title || 'Tabel', subtitle: `${(headers || []).length} kolonner · ${(rows || []).length} rækker` }
         },
       },
+    },
     {
       type: 'object',
       name: 'howToBlock',
