@@ -22,8 +22,8 @@ export async function POST(req: NextRequest) {
       revalidatePath('/blog/[slug]', 'page')
       if (slug) { revalidatePath(`/blog/${slug}/`, 'page'); specific.push(`/blog/${slug}/`) }
     } else if (type === 'bookmaker') {
-      revalidatePath('/betting-sider/[slug]', 'page')
-      if (slug) { revalidatePath(`/betting-sider/${slug}/`, 'page'); specific.push(`/betting-sider/${slug}/`) }
+      revalidatePath('/review/[slug]', 'page')
+      if (slug) { revalidatePath(`/review/${slug}/`, 'page'); specific.push(`/review/${slug}/`) }
     } else if (type === 'bonus') {
       revalidatePath('/kampagner/[slug]', 'page')
       if (slug) { revalidatePath(`/kampagner/${slug}/`, 'page'); specific.push(`/kampagner/${slug}/`) }

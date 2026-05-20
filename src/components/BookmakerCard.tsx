@@ -7,9 +7,7 @@ interface BookmakerCardProps {
   slug: { current: string }
   usp?: string
   score?: number
-  trustpilot?: number
   indbetalingsbonus?: string
-  freeSpinsBonus?: string
   minIndbetaling?: number
   gennemspilskrav?: string
   url?: string
@@ -33,8 +31,8 @@ function ScoreBadge({ score }: { score: number }) {
 }
 
 export function BookmakerCard({
-  name, slug, usp, score, trustpilot,
-  indbetalingsbonus, freeSpinsBonus, minIndbetaling, gennemspilskrav,
+  name, slug, usp, score,
+  indbetalingsbonus, minIndbetaling, gennemspilskrav,
   url, terms, logo, rank,
 }: BookmakerCardProps) {
   return (
@@ -91,7 +89,7 @@ export function BookmakerCard({
         {/* Info */}
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
-            <Link href={`/betting-sider/${slug.current}`} style={{ textDecoration: 'none' }}>
+            <Link href={`/review/${slug.current}`} style={{ textDecoration: 'none' }}>
               <span style={{ fontFamily: 'var(--font-display)', fontSize: '17px', fontWeight: 700, color: 'var(--text)' }}>
                 {name}
               </span>
@@ -108,14 +106,8 @@ export function BookmakerCard({
           <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
             {indbetalingsbonus && (
               <div>
-                <div style={{ fontSize: '10.5px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '2px' }}>Deposit bonus</div>
+                <div style={{ fontSize: '10.5px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '2px' }}>Welcome bonus</div>
                 <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)' }}>💰 {indbetalingsbonus}</div>
-              </div>
-            )}
-            {freeSpinsBonus && (
-              <div>
-                <div style={{ fontSize: '10.5px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '2px' }}>Free spins</div>
-                <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)' }}>🎰 {freeSpinsBonus}</div>
               </div>
             )}
             {minIndbetaling != null && (
@@ -126,14 +118,8 @@ export function BookmakerCard({
             )}
             {gennemspilskrav && (
               <div>
-                <div style={{ fontSize: '10.5px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '2px' }}>Wagering requirement</div>
+                <div style={{ fontSize: '10.5px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '2px' }}>Wagering</div>
                 <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)' }}>🔄 {gennemspilskrav}</div>
-              </div>
-            )}
-            {trustpilot != null && (
-              <div>
-                <div style={{ fontSize: '10.5px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '2px' }}>Trustpilot</div>
-                <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)' }}>⭐ {trustpilot.toFixed(1)}</div>
               </div>
             )}
           </div>
@@ -157,7 +143,7 @@ export function BookmakerCard({
               Get bonus →
             </a>
           )}
-          <Link href={`/betting-sider/${slug.current}`} style={{ fontSize: '12.5px', color: 'var(--text-muted)', textDecoration: 'none' }}>
+          <Link href={`/review/${slug.current}`} style={{ fontSize: '12.5px', color: 'var(--text-muted)', textDecoration: 'none' }}>
             Read review
           </Link>
         </div>

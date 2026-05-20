@@ -22,7 +22,7 @@ const linkFields = [
     name: 'url',
     title: 'URL (tilpasset / ekstern)',
     type: 'string',
-    description: 'Bruges kun hvis du ikke vælger en side eller bookmaker ovenfor. F.eks. /betting-sider/ eller https://...',
+    description: 'Bruges kun hvis du ikke vælger en side eller bookmaker ovenfor. F.eks. /review/ eller https://...',
   }),
 ]
 
@@ -45,7 +45,7 @@ const navItemFields = [
       preview: {
         select: { title: 'label', pageRef: 'pageRef.slug.current', bookmakerRef: 'bookmakerRef.slug.current', url: 'url' },
         prepare({ title, pageRef, bookmakerRef, url }: any) {
-          return { title, subtitle: pageRef ? `/${pageRef}/` : bookmakerRef ? `/betting-sider/${bookmakerRef}/` : url }
+          return { title, subtitle: pageRef ? `/${pageRef}/` : bookmakerRef ? `/review/${bookmakerRef}/` : url }
         },
       },
     }],
@@ -96,7 +96,7 @@ export const siteSettingsType = defineType({
             children: 'children',
           },
           prepare({ title, isHighlighted, pageRef, bookmakerRef, url, children }: any) {
-            const resolvedUrl = pageRef ? `/${pageRef}/` : bookmakerRef ? `/betting-sider/${bookmakerRef}/` : url
+            const resolvedUrl = pageRef ? `/${pageRef}/` : bookmakerRef ? `/review/${bookmakerRef}/` : url
             const hasChildren = children?.length > 0
             return {
               title: `${isHighlighted ? '⚡ ' : ''}${hasChildren ? '▾ ' : ''}${title}`,
@@ -144,7 +144,7 @@ export const siteSettingsType = defineType({
                   url: 'url',
                 },
                 prepare({ title, pageRef, bookmakerRef, url }: any) {
-                  return { title, subtitle: pageRef ? `/${pageRef}/` : bookmakerRef ? `/betting-sider/${bookmakerRef}/` : url }
+                  return { title, subtitle: pageRef ? `/${pageRef}/` : bookmakerRef ? `/review/${bookmakerRef}/` : url }
                 },
               },
             }],

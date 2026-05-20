@@ -4,7 +4,7 @@ import { getSiteSettings } from '@/lib/sanity'
 
 function resolveUrl(item: { url?: string; pageSlug?: string; pageParentSlug?: string; bookmakerSlug?: string }): string {
   if (item.pageSlug) return item.pageParentSlug ? `/${item.pageParentSlug}/${item.pageSlug}/` : `/${item.pageSlug}/`
-  if (item.bookmakerSlug) return `/betting-sider/${item.bookmakerSlug}/`
+  if (item.bookmakerSlug) return `/review/${item.bookmakerSlug}/`
   return item.url || '/'
 }
 
@@ -13,7 +13,7 @@ const DEFAULT_COLUMNS = [
     title: 'Pages',
     items: [
       { label: 'Home',               url: '/' },
-      { label: 'Casino Reviews',     url: '/betting-sider' },
+      { label: 'Casino Reviews',     url: '/review' },
       { label: 'Bonuses',            url: '/kampagner' },
       { label: 'Guides & Articles',  url: '/blog' },
     ],

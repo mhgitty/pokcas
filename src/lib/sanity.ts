@@ -8,6 +8,14 @@ export const client = createClient({
   useCdn: true,
 })
 
+// Bypasses CDN — use for queries that need fresh/uncached data
+export const clientNoCdn = createClient({
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
+  apiVersion: '2026-04-22',
+  useCdn: false,
+})
+
 // ─── Posts ────────────────────────────────────────────────────────────────────
 
 export async function getPosts(limit = 20, categorySlug?: string) {
@@ -82,8 +90,8 @@ const COMPARISON_TABLE_FRAGMENT = `
       "bookmaker": bookmaker-> { name, slug }
     },
     bookmakers[]-> {
-      _id, name, slug, usp, score, trustpilot,
-      indbetalingsbonus, freeSpinsBonus, minIndbetaling, gennemspilskrav,
+      _id, name, slug, usp, score,
+      indbetalingsbonus, minIndbetaling, gennemspilskrav,
       url, terms,
       "logo": logo { "url": asset->url, alt }
     }
@@ -168,10 +176,10 @@ export async function getCategories() {
 // ─── Bookmakers ───────────────────────────────────────────────────────────────
 
 export async function getBookmakers() {
-  return client.fetch(
-    `*[_type == "bookmaker"] | order(score desc) {
-      _id, name, slug, usp, score, trustpilot,
-      indbetalingsbonus, freeSpinsBonus, minIndbetaling,
+  return clientNoCdn.fetch(
+    `*[_type == "bookmaker"] | order(score desc, name asc) {
+      _id, name, slug, usp, score,
+      indbetalingsbonus, minIndbetaling,
       gennemspilskrav, url, terms,
       "logo": logo { "url": asset->url, alt }
     }`
@@ -179,11 +187,11 @@ export async function getBookmakers() {
 }
 
 export async function getBookmakerBySlug(slug: string) {
-  return client.fetch(
+  return clientNoCdn.fetch(
     `*[_type == "bookmaker" && slug.current == $slug][0] {
-      _id, titel, name, slug, usp, score, trustpilot,
-      indbetalingsbonus, freeSpinsBonus, minIndbetaling, gennemspilskrav,
-      url, terms, lanceringsdato, intro, body,
+      _id, titel, name, slug, usp, score,
+      indbetalingsbonus, minIndbetaling, gennemspilskrav,
+      url, terms, lanceringsdato, body,
       "logo": logo { "url": asset->url, alt },
       "ogImage": ogImage { "url": asset->url, alt },
       metaTitle, metaDescription

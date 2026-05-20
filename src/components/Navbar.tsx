@@ -5,7 +5,7 @@ import { MobileMenu } from './MobileMenu'
 
 const DEFAULT_NAV = [
   { label: 'Home',             url: '/',               isHighlighted: false, children: [] },
-  { label: 'Casino Reviews',   url: '/betting-sider/', isHighlighted: false, children: [] },
+  { label: 'Casino Reviews',   url: '/review/', isHighlighted: false, children: [] },
   { label: 'Bonuses',          url: '/kampagner/',     isHighlighted: false, children: [] },
   { label: 'Guides & Articles', url: '/blog/',         isHighlighted: false, children: [] },
 ]
@@ -18,7 +18,7 @@ function resolveUrl(item: {
       ? `/${item.pageParentSlug}/${item.pageSlug}/`
       : `/${item.pageSlug}/`
   }
-  if (item.bookmakerSlug) return `/betting-sider/${item.bookmakerSlug}/`
+  if (item.bookmakerSlug) return `/review/${item.bookmakerSlug}/`
   return item.url || '/'
 }
 
