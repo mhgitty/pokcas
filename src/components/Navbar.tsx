@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getSiteSettings } from '@/lib/sanity'
 import { MobileMenu } from './MobileMenu'
+import { Icon } from './Icon'
 
 const DEFAULT_NAV = [
   { label: 'Home',             url: '/',               isHighlighted: false, children: [] },
