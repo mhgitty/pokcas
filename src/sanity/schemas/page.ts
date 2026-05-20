@@ -235,7 +235,7 @@ export const bodyField = defineField({
     {
       type: 'object',
       name: 'howToBlock',
-      title: '🔢 How-to',
+      title: 'How-to',
       fields: [
         {
           name: 'title',
