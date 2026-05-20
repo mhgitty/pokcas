@@ -152,7 +152,7 @@ h1, h2, h3, h4, h5, h6 {
 .hero-section {
   background: var(--bg-hero);
   border-bottom: 1px solid var(--border);
-  padding: 48px 24px 40px;
+  padding: 48px 15px 40px;
 }
 .hero-heading {
   font-family: var(--font-display);
