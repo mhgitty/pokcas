@@ -14,7 +14,7 @@ interface PostCardProps {
 
 export function PostCard({ title, slug, excerpt, publishedAt, readingTime, category, featured }: PostCardProps) {
   const date = publishedAt
-    ? new Date(publishedAt).toLocaleDateString('da-DK', { day: 'numeric', month: 'long', year: 'numeric' })
+    ? new Date(publishedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
     : null
 
   return (
@@ -45,7 +45,7 @@ export function PostCard({ title, slug, excerpt, publishedAt, readingTime, categ
         )}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '12px', color: 'var(--text-faint)' }}>
           {date && <span>{date}</span>}
-          {readingTime && <><span>·</span><span>{readingTime} min læsning</span></>}
+          {readingTime && <><span>·</span><span>{readingTime} min read</span></>}
         </div>
       </article>
     </Link>

@@ -21,7 +21,7 @@ type LatestPostsBlockProps = {
 }
 
 export function LatestPostsBlock({ value, posts }: LatestPostsBlockProps) {
-  const { title = 'Seneste guides & artikler', count = 4, showViewAll = true } = value
+  const { title = 'Latest guides & articles', count = 4, showViewAll = true } = value
 
   const visiblePosts = posts.slice(0, count)
 
@@ -51,7 +51,7 @@ export function LatestPostsBlock({ value, posts }: LatestPostsBlockProps) {
         </h2>
         {showViewAll && (
           <Link href="/blog" style={{ fontSize: '13px', color: 'var(--green)', textDecoration: 'none', fontWeight: 500 }}>
-            Se alle →
+            See all →
           </Link>
         )}
       </div>

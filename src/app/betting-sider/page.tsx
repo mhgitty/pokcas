@@ -18,8 +18,8 @@ const CANONICAL = `${BASE}/betting-sider/`
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getPageBySlug('betting-sider').catch(() => null)
-  const title = replaceDateVars(page?.metaTitle || page?.title || 'Bedste betting sider i Danmark')
-  const description = replaceDateVars(page?.metaDescription || page?.intro || 'Sammenlign de bedste danske betting sider.')
+  const title = replaceDateVars(page?.metaTitle || page?.title || 'Best Casino Reviews')
+  const description = replaceDateVars(page?.metaDescription || page?.intro || 'Compare the best online casinos.')
   return { title, description, alternates: { canonical: CANONICAL } }
 }
 
@@ -36,17 +36,17 @@ export default async function BettingSiderPage() {
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Hjem', item: BASE },
-          { '@type': 'ListItem', position: 2, name: page?.title || 'Betting sider', item: CANONICAL },
+          { '@type': 'ListItem', position: 1, name: 'Home', item: BASE },
+          { '@type': 'ListItem', position: 2, name: page?.title || 'Casino Reviews', item: CANONICAL },
         ],
       },
       {
         '@type': 'WebPage',
         '@id': `${CANONICAL}#webpage`,
         url: CANONICAL,
-        name: page?.title || 'Betting sider',
+        name: page?.title || 'Casino Reviews',
         description: page?.intro || '',
-        inLanguage: 'da-DK',
+        inLanguage: 'en-GB',
         publisher: { '@type': 'Organization', name: 'Pokcas', url: BASE },
       },
     ],
@@ -57,9 +57,9 @@ export default async function BettingSiderPage() {
       <>
         <Navbar />
         <HeroSection
-        title="Betting sider"
-        intro="Oversigt over alle danske bookmakers."
-        breadcrumbs={[{ label: 'Hjem', href: '/' }, { label: 'Betting sider' }]}
+        title="Casino Reviews"
+        intro="Overview of all casino reviews."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Casino Reviews' }]}
       />
         {author && (
           <div className="section" style={{ paddingTop: '0' }}>
@@ -81,7 +81,7 @@ export default async function BettingSiderPage() {
         author={author}
         updatedAt={(page as any).lastUpdated ?? null}
         factChecker={(page as any).factChecker ?? null}
-        breadcrumbs={[{ label: 'Hjem', href: '/' }, { label: page.title }]}
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: page.title }]}
       />
 
       {page.showComparisonTable && page.comparisonTable && (

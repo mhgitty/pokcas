@@ -30,8 +30,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const bm = await getBookmakerBySlug(slug).catch(() => null)
   if (!bm) return {}
-  const title = replaceDateVars(bm.metaTitle || `${bm.name} anmeldelse — bonus & odds`)
-  const description = replaceDateVars(bm.metaDescription || bm.intro || `Læs vores anmeldelse af ${bm.name}. Se bonus, gennemspilskrav og vores vurdering.`)
+  const title = replaceDateVars(bm.metaTitle || `${bm.name} Review — bonus & offers`)
+  const description = replaceDateVars(bm.metaDescription || bm.intro || `Read our review of ${bm.name}. See bonus, wagering requirements and our rating.`)
   const canonical = `${BASE}/betting-sider/${slug}/`
   const img = bm.ogImage?.url ? bm.ogImage : bm.logo?.url ? bm.logo : null
   return {
@@ -60,7 +60,7 @@ function ScoreMeter({ score }: { score: number }) {
         {score.toFixed(1)}
       </div>
       <div>
-        <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '4px' }}>ud af 10</div>
+        <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '4px' }}>out of 10</div>
         <div style={{ display: 'flex', gap: '3px' }}>
           {[...Array(10)].map((_, i) => (
             <div key={i} style={{
@@ -97,8 +97,8 @@ export default async function BookmakerPage({ params }: Props) {
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Hjem', item: BASE },
-          { '@type': 'ListItem', position: 2, name: 'Betting sider', item: `${BASE}/betting-sider/` },
+          { '@type': 'ListItem', position: 1, name: 'Home', item: BASE },
+          { '@type': 'ListItem', position: 2, name: 'Casino Reviews', item: `${BASE}/betting-sider/` },
           { '@type': 'ListItem', position: 3, name: bm.name, item: canonical },
         ],
       },
@@ -129,8 +129,8 @@ export default async function BookmakerPage({ params }: Props) {
       <div style={{ background: 'var(--bg-hero)', borderBottom: '1px solid var(--border)', padding: '40px 24px 32px' }}>
         <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
           <Breadcrumbs crumbs={[
-            { label: 'Hjem', href: '/' },
-            { label: 'Betting sider', href: '/betting-sider' },
+            { label: 'Home', href: '/' },
+            { label: 'Casino Reviews', href: '/betting-sider' },
             { label: bm.name },
           ]} />
 
@@ -146,7 +146,7 @@ export default async function BookmakerPage({ params }: Props) {
             {/* Title + USP */}
             <div className="bm-hero-title" style={{ minWidth: 0, alignSelf: 'center' }}>
               <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(20px, 4vw, 34px)', fontWeight: 800, color: 'var(--text)', marginBottom: '4px' }}>
-                {replaceDateVars(bm.titel || `${bm.name} anmeldelse`)}
+                {replaceDateVars(bm.titel || `${bm.name} Review`)}
               </h1>
               {bm.usp && <p style={{ fontSize: '14px', color: 'var(--text-muted)', margin: 0, lineHeight: 1.5 }}>{replaceDateVars(bm.usp)}</p>}
             </div>
@@ -167,7 +167,7 @@ export default async function BookmakerPage({ params }: Props) {
                       <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
                     </svg>
                     <div style={{ minWidth: 0 }}>
-                      <div style={{ fontSize: '10px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '1px' }}>Min. indbetaling</div>
+                      <div style={{ fontSize: '10px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '1px' }}>Min. deposit</div>
                       <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>{bm.minIndbetaling} kr.</div>
                     </div>
                   </div>
@@ -178,7 +178,7 @@ export default async function BookmakerPage({ params }: Props) {
                       <path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M21 3v5h-5"/><path d="M3 21v-5h5"/>
                     </svg>
                     <div style={{ minWidth: 0 }}>
-                      <div style={{ fontSize: '10px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '1px' }}>Gennemspilskrav</div>
+                      <div style={{ fontSize: '10px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '1px' }}>Wagering requirement</div>
                       <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>{bm.gennemspilskrav}</div>
                     </div>
                   </div>
@@ -200,9 +200,9 @@ export default async function BookmakerPage({ params }: Props) {
                       <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
                     </svg>
                     <div style={{ minWidth: 0 }}>
-                      <div style={{ fontSize: '10px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '1px' }}>Lanceret</div>
+                      <div style={{ fontSize: '10px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '1px' }}>Launched</div>
                       <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                        {new Date(bm.lanceringsdato).toLocaleDateString('da-DK', { year: 'numeric', month: 'long' })}
+                        {new Date(bm.lanceringsdato).toLocaleDateString('en-GB', { year: 'numeric', month: 'long' })}
                       </div>
                     </div>
                   </div>
@@ -219,7 +219,7 @@ export default async function BookmakerPage({ params }: Props) {
                 <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap', justifyContent: 'center' }}>
                   {bm.indbetalingsbonus && (
                     <div style={{ textAlign: 'center' }}>
-                      <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Indbetalingsbonus</div>
+                      <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Deposit bonus</div>
                       <div style={{ fontSize: '26px', fontWeight: 800, color: 'var(--green)', fontFamily: 'var(--font-display)', letterSpacing: '-0.02em' }}>{bm.indbetalingsbonus}</div>
                     </div>
                   )}
@@ -235,7 +235,7 @@ export default async function BookmakerPage({ params }: Props) {
               {bm.url && (
                 <a href={bm.url} target="_blank" rel="noopener noreferrer sponsored"
                   style={{ display: 'block', background: 'var(--green-dark)', color: '#fff', padding: '13px 24px', borderRadius: '8px', fontSize: '15px', fontWeight: 600, textDecoration: 'none', textAlign: 'center' }}>
-                  Hent bonus →
+                  Get bonus →
                 </a>
               )}
               {/* Terms */}

@@ -4,10 +4,10 @@ import { getSiteSettings } from '@/lib/sanity'
 import { MobileMenu } from './MobileMenu'
 
 const DEFAULT_NAV = [
-  { label: 'Sammenlign',    url: '/',               isHighlighted: false, children: [] },
-  { label: 'Betting sider', url: '/betting-sider/', isHighlighted: false, children: [] },
-  { label: 'Bonusser',      url: '/kampagner/',       isHighlighted: false, children: [] },
-  { label: 'Guides',        url: '/blog/',           isHighlighted: false, children: [] },
+  { label: 'Home',             url: '/',               isHighlighted: false, children: [] },
+  { label: 'Casino Reviews',   url: '/betting-sider/', isHighlighted: false, children: [] },
+  { label: 'Bonuses',          url: '/kampagner/',     isHighlighted: false, children: [] },
+  { label: 'Guides & Articles', url: '/blog/',         isHighlighted: false, children: [] },
 ]
 
 function resolveUrl(item: {

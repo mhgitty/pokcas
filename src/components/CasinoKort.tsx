@@ -78,7 +78,7 @@ export function CasinoKort({ value }: { value: CasinoKortData }) {
               <div style={{ flex: 1, minWidth: '140px', border: '1px solid rgba(34,197,94,0.35)', borderRadius: '8px', padding: '12px 14px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '10px' }}>
                   <span>✅</span>
-                  <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--green)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Fordele</span>
+                  <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--green)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Pros</span>
                 </div>
                 {value.pros!.map((pro, i) => (
                   <div key={i} style={{ display: 'flex', gap: '8px', alignItems: 'flex-start', fontSize: '13px', color: 'var(--text-muted)', marginBottom: '6px', lineHeight: 1.5 }}>
@@ -91,7 +91,7 @@ export function CasinoKort({ value }: { value: CasinoKortData }) {
               <div style={{ flex: 1, minWidth: '140px', border: '1px solid rgba(239,68,68,0.35)', borderRadius: '8px', padding: '12px 14px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '10px' }}>
                   <span>❌</span>
-                  <span style={{ fontSize: '12px', fontWeight: 700, color: '#ef4444', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Ulemper</span>
+                  <span style={{ fontSize: '12px', fontWeight: 700, color: '#ef4444', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Cons</span>
                 </div>
                 {value.cons!.map((con, i) => (
                   <div key={i} style={{ display: 'flex', gap: '8px', alignItems: 'flex-start', fontSize: '13px', color: 'var(--text-muted)', marginBottom: '6px', lineHeight: 1.5 }}>
@@ -107,7 +107,7 @@ export function CasinoKort({ value }: { value: CasinoKortData }) {
         {bm.url && (
           <a href={bm.url} target="_blank" rel="nofollow noopener noreferrer sponsored"
             style={{ display: 'block', background: 'var(--green-dark)', color: '#fff', padding: '13px 24px', borderRadius: '8px', fontSize: '15px', fontWeight: 600, textDecoration: 'none', textAlign: 'center' }}>
-            Besøg bookmaker →
+            Visit casino →
           </a>
         )}
 

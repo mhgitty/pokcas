@@ -7,7 +7,7 @@ interface Crumb {
 
 export function Breadcrumbs({ crumbs }: { crumbs: Crumb[] }) {
   return (
-    <nav aria-label="Brødkrumme" style={{ fontSize: '13px', color: 'var(--text-faint)', marginBottom: '20px', display: 'flex', alignItems: 'baseline', flexWrap: 'wrap', rowGap: '2px' }}>
+    <nav aria-label="Breadcrumb" style={{ fontSize: '13px', color: 'var(--text-faint)', marginBottom: '20px', display: 'flex', alignItems: 'baseline', flexWrap: 'wrap', rowGap: '2px' }}>
       {crumbs.map((crumb, i) => {
         const isLast = i === crumbs.length - 1
         return (

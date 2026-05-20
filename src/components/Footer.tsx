@@ -10,21 +10,21 @@ function resolveUrl(item: { url?: string; pageSlug?: string; pageParentSlug?: st
 
 const DEFAULT_COLUMNS = [
   {
-    title: 'Sider',
+    title: 'Pages',
     items: [
-      { label: 'Forside',           url: '/' },
-      { label: 'Betting sider',     url: '/betting-sider' },
-      { label: 'Bonusser',          url: '/kampagner' },
-      { label: 'Guides & artikler', url: '/blog' },
+      { label: 'Home',               url: '/' },
+      { label: 'Casino Reviews',     url: '/betting-sider' },
+      { label: 'Bonuses',            url: '/kampagner' },
+      { label: 'Guides & Articles',  url: '/blog' },
     ],
   },
   {
     title: 'Information',
     items: [
-      { label: 'Om os',              url: '/om-os' },
-      { label: 'Ansvarligt spil',    url: '/ansvarligt-spil' },
-      { label: 'Cookiepolitik',      url: '/cookie-politik' },
-      { label: 'Privatlivspolitik',  url: '/privatlivspolitik' },
+      { label: 'About Us',           url: '/om-os' },
+      { label: 'Responsible Gaming', url: '/ansvarligt-spil' },
+      { label: 'Cookie Policy',      url: '/cookie-politik' },
+      { label: 'Privacy Policy',     url: '/privatlivspolitik' },
     ],
   },
 ]
@@ -33,10 +33,10 @@ export async function Footer() {
   const settings = await getSiteSettings().catch(() => null)
   const year = new Date().getFullYear()
 
-  const tagline    = settings?.footerTagline    ?? 'Danmarks uafhængige guide til betting bonusser og bookmakers. Vi sammenligner de bedste tilbud.'
+  const tagline    = settings?.footerTagline    ?? 'Your independent international guide to online casinos and casino bonuses. We compare the best offers.'
   const columns    = settings?.footerColumns?.length ? settings.footerColumns : DEFAULT_COLUMNS
-  const note       = settings?.footerNote       ?? `© ${year} Pokcas.dk · Spil ansvarligt · 18+`
-  const disclaimer = settings?.footerDisclaimer ?? 'Affiliatelinks kan forekomme · Se vilkår hos bookmaker'
+  const note       = settings?.footerNote       ?? `© ${year} Pokcas.com · Play responsibly · 18+`
+  const disclaimer = settings?.footerDisclaimer ?? 'Affiliate links may be present · See terms at the casino'
 
   return (
     <footer style={{ borderTop: '1px solid var(--border)', background: 'var(--bg-footer)', marginTop: '80px', padding: '48px 24px 32px' }}>

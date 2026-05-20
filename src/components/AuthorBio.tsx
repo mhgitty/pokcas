@@ -97,7 +97,7 @@ export function AuthorBio({ author, compact = false }: AuthorBioProps) {
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ marginBottom: '3px' }}>
           <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.7px' }}>
-            Skrevet af
+            Written by
           </span>
         </div>
         <div style={{ fontFamily: 'var(--font-display)', fontSize: compact ? '18px' : '17px', fontWeight: 700, color: 'var(--text)', marginBottom: hasSocials ? '12px' : '0' }}>

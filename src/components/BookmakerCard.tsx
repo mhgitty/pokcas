@@ -52,7 +52,7 @@ export function BookmakerCard({
           fontSize: '11px', fontWeight: 700,
           padding: '2px 12px', borderRadius: '20px',
         }}>
-          🏆 Bedst vurderet
+          🏆 Top rated
         </div>
       )}
 
@@ -108,7 +108,7 @@ export function BookmakerCard({
           <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
             {indbetalingsbonus && (
               <div>
-                <div style={{ fontSize: '10.5px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '2px' }}>Indbetalingsbonus</div>
+                <div style={{ fontSize: '10.5px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '2px' }}>Deposit bonus</div>
                 <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)' }}>💰 {indbetalingsbonus}</div>
               </div>
             )}
@@ -120,13 +120,13 @@ export function BookmakerCard({
             )}
             {minIndbetaling != null && (
               <div>
-                <div style={{ fontSize: '10.5px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '2px' }}>Min. indbetaling</div>
+                <div style={{ fontSize: '10.5px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '2px' }}>Min. deposit</div>
                 <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)' }}>{minIndbetaling} kr.</div>
               </div>
             )}
             {gennemspilskrav && (
               <div>
-                <div style={{ fontSize: '10.5px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '2px' }}>Gennemspilskrav</div>
+                <div style={{ fontSize: '10.5px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '2px' }}>Wagering requirement</div>
                 <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)' }}>🔄 {gennemspilskrav}</div>
               </div>
             )}
@@ -154,11 +154,11 @@ export function BookmakerCard({
                 textDecoration: 'none', whiteSpace: 'nowrap',
               }}
             >
-              Hent bonus →
+              Get bonus →
             </a>
           )}
           <Link href={`/betting-sider/${slug.current}`} style={{ fontSize: '12.5px', color: 'var(--text-muted)', textDecoration: 'none' }}>
-            Læs anmeldelse
+            Read review
           </Link>
         </div>
       </div>

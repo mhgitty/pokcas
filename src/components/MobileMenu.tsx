@@ -25,7 +25,7 @@ export function MobileMenu({ items }: { items: NavItem[] }) {
       <button
         className="mobile-menu-btn"
         onClick={() => setOpen(o => !o)}
-        aria-label={open ? 'Luk menu' : 'Åbn menu'}
+        aria-label={open ? 'Close menu' : 'Open menu'}
         aria-expanded={open}
       >
         <span className={`burger-icon${open ? ' open' : ''}`}>
@@ -58,7 +58,7 @@ export function MobileMenu({ items }: { items: NavItem[] }) {
                     className="mobile-menu-chevron-btn"
                     onClick={() => setExpanded(isExpanded ? null : item.href + item.label)}
                     aria-expanded={isExpanded}
-                    aria-label={isExpanded ? 'Luk undermenu' : 'Åbn undermenu'}
+                    aria-label={isExpanded ? 'Close submenu' : 'Open submenu'}
                   >
                     <svg
                       width="12" height="8" viewBox="0 0 12 8" fill="none"

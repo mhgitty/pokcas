@@ -68,7 +68,7 @@ export function StickyCtaBar({ url, name, logoUrl, logoAlt }: StickyCtaBarProps)
             whiteSpace: 'nowrap',
           }}
         >
-          Besøg casino nu →
+          Visit casino →
         </a>
       </div>
     </>

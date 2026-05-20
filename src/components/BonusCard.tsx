@@ -54,7 +54,7 @@ export function BonusCard({
           padding: '3px 12px', borderRadius: '0 0 8px 8px',
           zIndex: 1,
         }}>
-          🏆 Bedst vurderet
+          🏆 Top rated
         </div>
       )}
 
@@ -99,9 +99,9 @@ export function BonusCard({
             padding: '20px 28px',
             display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '10px',
           }}>
-            <StatRow label="Omsætningskrav"  value={gennemspilskrav} />
-            <StatRow label="Min. indbetaling" value={minimumIndbetaling != null ? `${minimumIndbetaling} kr.` : undefined} />
-            <StatRow label="Min. Odds"        value={minimumOdds} />
+            <StatRow label="Wagering requirement" value={gennemspilskrav} />
+            <StatRow label="Min. deposit"          value={minimumIndbetaling != null ? `${minimumIndbetaling} kr.` : undefined} />
+            <StatRow label="Min. odds"             value={minimumOdds} />
           </div>
 
           {/* Vertical divider — hidden on mobile */}
@@ -149,7 +149,7 @@ export function BonusCard({
                 whiteSpace: 'nowrap',
               }}
             >
-              FÅ BONUS
+              GET BONUS
             </a>
           )}
           {reviewUrl && (
@@ -165,7 +165,7 @@ export function BonusCard({
                 whiteSpace: 'nowrap',
               }}
             >
-              LÆS ANMELDELSE
+              READ REVIEW
             </Link>
           )}
         </div>

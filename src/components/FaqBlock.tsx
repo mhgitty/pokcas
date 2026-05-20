@@ -4,7 +4,7 @@ import { useState } from 'react'
 interface FaqBlockProps { value: { title?: string; items?: { question: string; answer: string }[] } }
 
 export function FaqBlock({ value }: FaqBlockProps) {
-  const { title = 'Ofte stillede spørgsmål', items = [] } = value
+  const { title = 'Frequently Asked Questions', items = [] } = value
   const [open, setOpen] = useState<number | null>(null)
 
   return (

@@ -101,7 +101,7 @@ export default async function SlugPage({ params }: Props) {
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Hjem', item: BASE },
+          { '@type': 'ListItem', position: 1, name: 'Home', item: BASE },
           { '@type': 'ListItem', position: 2, name: post.title, item: canonical },
         ],
       },
@@ -113,7 +113,7 @@ export default async function SlugPage({ params }: Props) {
         url: canonical,
         datePublished: post.publishedAt,
         dateModified: post.lastUpdated || post.publishedAt,
-        inLanguage: 'da-DK',
+        inLanguage: 'en-GB',
         author: author
           ? {
               '@type': 'Person',
@@ -153,7 +153,7 @@ export default async function SlugPage({ params }: Props) {
         <div style={{ background: 'var(--bg-hero)', borderBottom: '1px solid var(--border)', padding: '40px 24px 32px' }}>
           <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
             <Breadcrumbs crumbs={[
-              { label: 'Hjem', href: '/' },
+              { label: 'Home', href: '/' },
               { label: post.title },
             ]} />
             {post.category && (
@@ -194,7 +194,7 @@ export default async function SlugPage({ params }: Props) {
   const author = page.author ?? settings?.defaultAuthor ?? null
   const canonical = `${BASE}/${slug}/`
 
-  const breadcrumbItems = [{ name: 'Hjem', item: BASE }]
+  const breadcrumbItems = [{ name: 'Home', item: BASE }]
   if (page.parentSlug && page.parentTitle) {
     breadcrumbItems.push({ name: page.parentTitle, item: `${BASE}/${page.parentSlug}/` })
   }
@@ -215,7 +215,7 @@ export default async function SlugPage({ params }: Props) {
         url: canonical,
         name: page.title,
         description: page.intro || '',
-        inLanguage: 'da-DK',
+        inLanguage: 'en-GB',
         publisher: { '@type': 'Organization', name: 'Pokcas', url: BASE },
       },
     ],
@@ -232,7 +232,7 @@ export default async function SlugPage({ params }: Props) {
         factChecker={page.factChecker}
         updatedAt={page.lastUpdated}
         breadcrumbs={[
-          { label: 'Hjem', href: '/' },
+          { label: 'Home', href: '/' },
           ...(page.parentSlug && page.parentTitle
             ? [{ label: page.parentTitle, href: `/${page.parentSlug}` }]
             : []),

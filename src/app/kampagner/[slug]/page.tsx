@@ -69,8 +69,8 @@ export default async function BonusPage({ params }: Props) {
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Hjem', item: BASE },
-          { '@type': 'ListItem', position: 2, name: 'Bonusser', item: `${BASE}/kampagner/` },
+          { '@type': 'ListItem', position: 1, name: 'Home', item: BASE },
+          { '@type': 'ListItem', position: 2, name: 'Bonuses', item: `${BASE}/kampagner/` },
           { '@type': 'ListItem', position: 3, name: bonus.title, item: canonical },
         ],
       },
@@ -80,7 +80,7 @@ export default async function BonusPage({ params }: Props) {
         url: canonical,
         name: bonus.title,
         description: bonus.metaDescription || bonus.intro || '',
-        inLanguage: 'da-DK',
+        inLanguage: 'en-GB',
         publisher: { '@type': 'Organization', name: 'Pokcas', url: BASE },
       },
     ],

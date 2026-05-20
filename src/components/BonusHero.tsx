@@ -68,7 +68,7 @@ export function BonusHero({
     }}>
       <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
 
-        <Breadcrumbs crumbs={[{ label: 'Hjem', href: '/' }, { label: 'Bonusser', href: '/kampagner' }, { label: title }]} />
+        <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Bonuses', href: '/kampagner' }, { label: title }]} />
 
         {/* Logo + title */}
         <div style={{ display: 'flex', gap: '18px', alignItems: 'center', marginBottom: '28px' }}>
@@ -98,20 +98,21 @@ export function BonusHero({
         <div className="bonus-stats-grid">
 
           <StatBox label="Min. odds" value={minimumOdds ?? null} icon={
+
             <svg {...svgProps} stroke={minimumOdds ? 'var(--green)' : 'var(--text-faint)'}>
               {/* bar chart */}
               <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
             </svg>
           } />
 
-          <StatBox label="Min. indbetaling" value={minimumIndbetaling != null ? `${minimumIndbetaling} kr.` : null} icon={
+          <StatBox label="Min. deposit" value={minimumIndbetaling != null ? `${minimumIndbetaling} kr.` : null} icon={
             <svg {...svgProps} stroke={minimumIndbetaling != null ? 'var(--green)' : 'var(--text-faint)'}>
               {/* credit card */}
               <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
             </svg>
           } />
 
-          <StatBox label="Gennemspilskrav" value={gennemspilskrav ?? null} icon={
+          <StatBox label="Wagering requirement" value={gennemspilskrav ?? null} icon={
             <svg {...svgProps} stroke={gennemspilskrav ? 'var(--green)' : 'var(--text-faint)'}>
               {/* refresh */}
               <path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/>
@@ -119,7 +120,7 @@ export function BonusHero({
             </svg>
           } />
 
-          <StatBox label="Maks gevinst" value={maksGevinst ?? null} icon={
+          <StatBox label="Max. winnings" value={maksGevinst ?? null} icon={
             <svg {...svgProps} stroke={maksGevinst ? 'var(--green)' : 'var(--text-faint)'}>
               {/* trophy */}
               <path d="M6 9H4a2 2 0 0 1-2-2V5h4"/><path d="M18 9h2a2 2 0 0 0 2-2V5h-4"/>
@@ -127,7 +128,7 @@ export function BonusHero({
             </svg>
           } />
 
-          <StatBox label="Spinværdi" value={spinVaerdi ?? null} icon={
+          <StatBox label="Spin value" value={spinVaerdi ?? null} icon={
             <svg {...svgProps} stroke={spinVaerdi ? 'var(--green)' : 'var(--text-faint)'}>
               {/* zap / spin */}
               <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
@@ -149,7 +150,7 @@ export function BonusHero({
                   <line x1="7" y1="7" x2="7.01" y2="7"/>
                 </svg>
                 <div style={{ minWidth: 0 }}>
-                  <div style={{ fontSize: '10px', color: 'var(--green)', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '1px' }}>Bonuskode</div>
+                  <div style={{ fontSize: '10px', color: 'var(--green)', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '1px' }}>Bonus code</div>
                   <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', letterSpacing: '0.06em' }}>{bonuskode}</div>
                 </div>
               </div>
@@ -160,11 +161,11 @@ export function BonusHero({
                 color: copied ? '#fff' : 'var(--text-muted)',
                 cursor: 'pointer', transition: 'all .15s', flexShrink: 0,
               }}>
-                {copied ? '✓ Kopieret' : 'Kopiér'}
+                {copied ? '✓ Copied' : 'Copy'}
               </button>
             </div>
           ) : (
-            <StatBox label="Bonuskode" value={null} icon={
+            <StatBox label="Bonus code" value={null} icon={
               <svg {...svgProps} stroke="var(--text-faint)">
                 <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
                 <line x1="7" y1="7" x2="7.01" y2="7"/>
@@ -190,7 +191,7 @@ export function BonusHero({
                 letterSpacing: '-0.01em', boxSizing: 'border-box',
               }}
             >
-              Hent bonus nu →
+              Get bonus now →
             </a>
             {terms && (
               <p style={{ fontSize: '10px', color: 'var(--text-faint)', margin: '10px 0 0', lineHeight: 1.5 }}>

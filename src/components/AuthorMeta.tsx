@@ -10,7 +10,7 @@ interface AuthorMetaProps {
 export function AuthorMeta({ author, lastUpdated, publishedAt }: AuthorMetaProps) {
   const dateStr = lastUpdated || publishedAt
   const date = dateStr
-    ? new Date(dateStr).toLocaleDateString('da-DK', { day: 'numeric', month: 'long', year: 'numeric' })
+    ? new Date(dateStr).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
     : null
 
   return (
@@ -47,7 +47,7 @@ export function AuthorMeta({ author, lastUpdated, publishedAt }: AuthorMetaProps
         </div>
         {date && (
           <div style={{ fontSize: '12px', color: 'var(--text-faint)', marginTop: '1px' }}>
-            Sidst opdateret: {date}
+            Last updated: {date}
           </div>
         )}
       </div>

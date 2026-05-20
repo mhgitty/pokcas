@@ -14,19 +14,19 @@ const BASE = 'https://pokcas.com'
 export const metadata: Metadata = {
   metadataBase: new URL(BASE),
   title: {
-    default: 'Pokcas — Danmarks bedste casino guide',
+    default: 'Pokcas — Your International Casino Guide',
     template: '%s | Pokcas.com',
   },
-  description: 'Find de bedste online casinoer og casino bonusser i Danmark. Vi tester, anmelder og sammenligner alle store casinoer.',
-  keywords: ['casino bonus', 'online casino', 'gratis spins', 'velkomstbonus', 'casino anmeldelse', 'bedste casino Danmark'],
+  description: 'Find the best online casinos and casino bonuses. We test, review and compare all the top casinos.',
+  keywords: ['casino bonus', 'online casino', 'free spins', 'welcome bonus', 'casino review', 'best casino'],
   alternates: { canonical: BASE + '/' },
   openGraph: {
     siteName: 'Pokcas.com',
-    locale: 'da_DK',
+    locale: 'en_US',
     type: 'website',
     url: BASE,
-    title: 'Pokcas — Danmarks bedste casino guide',
-    description: 'Find de bedste online casinoer og casino bonusser i Danmark.',
+    title: 'Pokcas — Your International Casino Guide',
+    description: 'Find the best online casinos and casino bonuses.',
   },
   twitter: { card: 'summary_large_image' },
   robots: {
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="da" className={figtree.variable}>
+    <html lang="en" className={figtree.variable}>
       <body>{children}</body>
     </html>
   )

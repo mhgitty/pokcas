@@ -15,8 +15,8 @@ const BASE = 'https://pokcas.com'
 
 export async function generateMetadata(): Promise<Metadata> {
   const hp = await getHomepage().catch(() => null)
-  const title = replaceDateVars(hp?.metaTitle || 'Sammenlign betting bonusser — find de bedste tilbud i Danmark')
-  const description = replaceDateVars(hp?.metaDescription || 'Danmarks uafhængige guide til betting bonusser. Vi sammenligner og anmelder alle store bookmakers.')
+  const title = replaceDateVars(hp?.metaTitle || 'Best Online Casino Bonuses — Compare Top Offers')
+  const description = replaceDateVars(hp?.metaDescription || 'Your independent international guide to online casino bonuses. We compare and review all the top casinos.')
   return {
     title,
     description,
@@ -32,8 +32,8 @@ export default async function HomePage() {
     getHomepage().catch(() => null),
   ])
 
-  const heroHeading = replaceDateVars(hp?.heroHeading || 'Find de bedste betting bonusser i Danmark')
-  const heroSubtext = replaceDateVars(hp?.intro || 'Vi sammenligner og anmelder alle store bookmakers i Danmark. Find den bedste velkomstbonus og kom godt i gang.')
+  const heroHeading = replaceDateVars(hp?.heroHeading || 'Find the Best Online Casino Bonuses')
+  const heroSubtext = replaceDateVars(hp?.intro || 'We compare and review all the top online casinos. Find the best welcome bonus and get started today.')
 
   const faqs = (hp?.body ?? [])
     .filter((b: any) => b._type === 'faqBlock')
@@ -48,7 +48,7 @@ export default async function HomePage() {
         '@id': `${BASE}/#website`,
         url: BASE,
         name: 'Pokcas.dk',
-        inLanguage: 'da-DK',
+        inLanguage: 'en-GB',
       },
       {
         '@type': 'Organization',
@@ -112,8 +112,8 @@ export default async function HomePage() {
         <section style={{ padding: '48px 24px' }}>
           <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '24px' }}>
-              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 700, color: 'var(--text)' }}>Seneste guides & artikler</h2>
-              <a href="/blog" style={{ fontSize: '13.5px', color: 'var(--green)', textDecoration: 'none', fontWeight: 500 }}>Se alle →</a>
+              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 700, color: 'var(--text)' }}>Latest guides & articles</h2>
+              <a href="/blog" style={{ fontSize: '13.5px', color: 'var(--green)', textDecoration: 'none', fontWeight: 500 }}>See all →</a>
             </div>
             <div className="blog-grid">
               {(posts as any[]).map((post: any) => <PostCard key={post._id} {...post} />)}

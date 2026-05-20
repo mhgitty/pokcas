@@ -9,8 +9,8 @@ import type { Metadata } from 'next'
 const BASE = 'https://pokcas.com'
 
 export const metadata: Metadata = {
-  title: `Betting bonusser i Danmark ${new Date().getFullYear()}`,
-  description: 'Oversigt over de bedste betting bonusser i Danmark. Find velkomstbonusser, free spins og eksklusive tilbud.',
+  title: `Best Casino Bonuses ${new Date().getFullYear()}`,
+  description: 'Overview of the best casino bonuses. Find welcome bonuses, free spins and exclusive offers.',
   alternates: { canonical: `${BASE}/kampagner/` },
 }
 
@@ -23,8 +23,8 @@ export default async function BonusserPage() {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Hjem', item: BASE },
-      { '@type': 'ListItem', position: 2, name: 'Bonusser', item: `${BASE}/kampagner/` },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: BASE },
+      { '@type': 'ListItem', position: 2, name: 'Bonuses', item: `${BASE}/kampagner/` },
     ],
   }
 
@@ -35,18 +35,18 @@ export default async function BonusserPage() {
 
       <div style={{ background: 'var(--bg-hero)', borderBottom: '1px solid var(--border)', padding: '40px 24px 32px' }}>
         <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
-          <Breadcrumbs crumbs={[{ label: 'Hjem', href: '/' }, { label: 'Bonusser' }]} />
+          <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Bonuses' }]} />
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '36px', fontWeight: 800, color: 'var(--text)', marginBottom: '8px', letterSpacing: '-0.03em' }}>
-            Betting bonusser
+            Casino Bonuses
           </h1>
-          <p style={{ fontSize: '15px', color: 'var(--text-muted)' }}>Oversigt over de bedste aktuelle bonusser fra danske bookmakers.</p>
+          <p style={{ fontSize: '15px', color: 'var(--text-muted)' }}>Overview of the best current bonuses from top online casinos.</p>
         </div>
       </div>
 
       <div className="section">
         {(bonusser as any[]).length === 0 ? (
           <div style={{ textAlign: 'center', padding: '64px', color: 'var(--text-faint)' }}>
-            <p>Ingen bonusser endnu — tilføj dem i Sanity Studio.</p>
+            <p>No bonuses yet — add them in Sanity Studio.</p>
           </div>
         ) : (
           <div className="blog-grid">

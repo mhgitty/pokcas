@@ -79,7 +79,7 @@ export function TableOfContents({ body }: { body: any[] }) {
         letterSpacing: '0.8px',
         marginBottom: '14px',
       }}>
-        Indholdsfortegnelse
+        Table of Contents
       </h4>
 
       <nav ref={navRef} style={{ overflowY: 'auto', maxHeight: '60vh' }}>

@@ -55,7 +55,7 @@ export function MobileToc({ body }: { body: any[] }) {
           color: 'var(--text)',
           letterSpacing: '-0.01em',
         }}>
-          Indholdsfortegnelse
+          Table of Contents
         </span>
         <svg
           width="16"

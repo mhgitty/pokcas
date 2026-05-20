@@ -44,7 +44,7 @@ export default async function DynamicPage({ params }: Props) {
   const canonical = `${BASE}${buildPath(slug)}`
 
   // Build breadcrumb — include parent if present
-  const breadcrumbItems = [{ name: 'Hjem', item: BASE }]
+  const breadcrumbItems = [{ name: 'Home', item: BASE }]
   if (page.parentSlug && page.parentTitle) {
     breadcrumbItems.push({ name: page.parentTitle, item: `${BASE}/${page.parentSlug}/` })
   }
@@ -65,7 +65,7 @@ export default async function DynamicPage({ params }: Props) {
         url: canonical,
         name: page.title,
         description: page.intro || '',
-        inLanguage: 'da-DK',
+        inLanguage: 'en-GB',
         publisher: { '@type': 'Organization', name: 'Pokcas', url: BASE },
       },
     ],
@@ -82,7 +82,7 @@ export default async function DynamicPage({ params }: Props) {
         factChecker={page.factChecker}
         updatedAt={page.lastUpdated}
         breadcrumbs={[
-          { label: 'Hjem', href: '/' },
+          { label: 'Home', href: '/' },
           ...(page.parentSlug && page.parentTitle
             ? [{ label: page.parentTitle, href: `/${page.parentSlug}` }]
             : []),

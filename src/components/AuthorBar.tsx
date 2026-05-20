@@ -14,7 +14,7 @@ export function AuthorBar({ author, factChecker, updatedAt }: AuthorBarProps) {
   if (!author && !factChecker && !updatedAt) return null
 
   const dateStr = updatedAt
-    ? new Date(updatedAt).toLocaleDateString('da-DK', { day: 'numeric', month: 'long', year: 'numeric' })
+    ? new Date(updatedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
     : null
 
   if (!author && !factChecker && !dateStr) return null
@@ -33,7 +33,7 @@ export function AuthorBar({ author, factChecker, updatedAt }: AuthorBarProps) {
           )}
           <div>
             <div style={{ fontSize: '12px', color: 'var(--text-faint)', lineHeight: 1.3 }}>
-              Forfatter:{' '}
+              Author:{' '}
               {author.linkedin
                 ? <a href={author.linkedin} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--green)', fontWeight: 600, textDecoration: 'none' }}>{author.name}</a>
                 : <span style={{ color: 'var(--text)', fontWeight: 600 }}>{author.name}</span>
@@ -41,7 +41,7 @@ export function AuthorBar({ author, factChecker, updatedAt }: AuthorBarProps) {
             </div>
             {dateStr && (
               <div style={{ fontSize: '12px', color: 'var(--text-faint)', lineHeight: 1.3 }}>
-                Sidst opdateret: <span style={{ color: 'var(--text-muted)' }}>{dateStr}</span>
+                Last updated: <span style={{ color: 'var(--text-muted)' }}>{dateStr}</span>
               </div>
             )}
           </div>
@@ -60,7 +60,7 @@ export function AuthorBar({ author, factChecker, updatedAt }: AuthorBarProps) {
             </div>
           )}
           <div style={{ fontSize: '12px', color: 'var(--text-faint)', lineHeight: 1.3 }}>
-            Faktatjekker:{' '}
+            Fact checked by:{' '}
             {factChecker.linkedin
               ? <a href={factChecker.linkedin} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--green)', fontWeight: 600, textDecoration: 'none' }}>{factChecker.name}</a>
               : <span style={{ color: 'var(--text)', fontWeight: 600 }}>{factChecker.name}</span>
