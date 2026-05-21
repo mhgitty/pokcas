@@ -53,7 +53,36 @@ export const bodyField = defineField({
           initialValue: 'info',
         },
         { name: 'title', title: 'Overskrift', type: 'string' },
-        { name: 'body', title: 'Indhold', type: 'text', rows: 4 },
+        {
+          name: 'body',
+          title: 'Indhold',
+          type: 'array',
+          of: [{
+            type: 'block',
+            styles: [{ title: 'Normal', value: 'normal' }],
+            lists: [
+              { title: 'Bullet list', value: 'bullet' },
+              { title: 'Numbered list', value: 'number' },
+            ],
+            marks: {
+              decorators: [
+                { title: 'Bold', value: 'strong' },
+                { title: 'Italic', value: 'em' },
+              ],
+              annotations: [
+                {
+                  name: 'link',
+                  type: 'object',
+                  title: 'Link',
+                  fields: [
+                    { name: 'href', type: 'url', title: 'URL' },
+                    { name: 'blank', type: 'boolean', title: 'Open in new tab' },
+                  ],
+                },
+              ],
+            },
+          }],
+        },
       ],
       preview: {
         select: { title: 'title', variant: 'variant' },

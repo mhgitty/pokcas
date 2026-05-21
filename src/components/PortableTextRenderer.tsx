@@ -78,7 +78,7 @@ export function PortableTextRenderer({ value, posts }: { value: any[]; posts?: P
     listItem: {
       bullet: ({ children }: any) => (
         <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '15px', color: 'var(--text-muted)', lineHeight: 1.65 }}>
-          <Icon name="check-circle" size={20} color="var(--green)" style={{ flexShrink: 0, marginTop: '2px' }} />
+          <Icon name="alt-arrow-right" size={16} color="var(--green)" style={{ flexShrink: 0, marginTop: '4px' }} />
           <span>{children}</span>
         </li>
       ),
