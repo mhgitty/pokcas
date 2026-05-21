@@ -28,6 +28,21 @@ export const bonusType = defineType({
       options: { source: 'title' },
       validation: (r) => r.required(),
     }),
+    defineField({
+      name: 'market',
+      title: 'Market',
+      type: 'string',
+      group: 'info',
+      options: {
+        list: [
+          { title: '🌍 Global', value: 'global' },
+          { title: '🇨🇦 Canada', value: 'ca' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'global',
+      validation: (r) => r.required(),
+    }),
 
     // ── Active ────────────────────────────────────────────────────────────────
     defineField({

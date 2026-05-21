@@ -36,6 +36,21 @@ export const bookmakerType = defineType({
       validation: (r) => r.required(),
     }),
     defineField({
+      name: 'market',
+      title: 'Market',
+      type: 'string',
+      group: 'info',
+      options: {
+        list: [
+          { title: '🌍 Global', value: 'global' },
+          { title: '🇨🇦 Canada', value: 'ca' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'global',
+      validation: (r) => r.required(),
+    }),
+    defineField({
       name: 'logo',
       title: 'Logo',
       type: 'image',
@@ -88,6 +103,13 @@ export const bookmakerType = defineType({
       type: 'string',
       group: 'info',
       description: 'E.g. "2012" or "2005"',
+    }),
+    defineField({
+      name: 'license',
+      title: 'License',
+      type: 'string',
+      group: 'info',
+      description: 'E.g. "Curacao", "MGA", "UKGC"',
     }),
     defineField({
       name: 'url',

@@ -284,6 +284,21 @@ export const pageType = defineType({
     defineField({ name: 'title', title: 'Titel', type: 'string', group: 'content', validation: (r) => r.required() }),
     defineField({ name: 'slug',  title: 'Slug',  type: 'slug',   group: 'content', options: { source: 'title' }, validation: (r) => r.required() }),
     defineField({
+      name: 'market',
+      title: 'Market',
+      type: 'string',
+      group: 'content',
+      options: {
+        list: [
+          { title: '🌍 Global', value: 'global' },
+          { title: '🇨🇦 Canada', value: 'ca' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'global',
+      validation: (r) => r.required(),
+    }),
+    defineField({
       name: 'parent',
       title: 'Forældreside',
       type: 'reference',

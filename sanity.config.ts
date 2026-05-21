@@ -20,9 +20,9 @@ export default defineConfig({
         S.list()
           .title('Indhold')
           .items([
-            // Singletons
+            // ── Singletons ──────────────────────────────────────────────────
             S.listItem()
-              .title('🏠 Forside')
+              .title('🏠 Homepage')
               .id('homepage')
               .child(
                 S.document()
@@ -30,7 +30,7 @@ export default defineConfig({
                   .documentId('homepage')
               ),
             S.listItem()
-              .title('⚙️ Siteindstillinger')
+              .title('⚙️ Site Settings')
               .id('siteSettings')
               .child(
                 S.document()
@@ -38,49 +38,141 @@ export default defineConfig({
                   .documentId('siteSettings')
               ),
             S.divider(),
+
+            // ── 🌍 Global ────────────────────────────────────────────────────
             S.listItem()
-              .title('🎰 Casino Reviews')
-              .schemaType('bookmaker')
-              .child(S.documentTypeList('bookmaker').title('Casino Reviews')),
+              .title('🌍 Global')
+              .child(
+                S.list()
+                  .title('🌍 Global')
+                  .items([
+                    S.listItem()
+                      .title('🎰 Casino Reviews')
+                      .schemaType('bookmaker')
+                      .child(
+                        S.documentTypeList('bookmaker')
+                          .title('Casino Reviews — Global')
+                          .filter('_type == "bookmaker" && market == $market')
+                          .params({ market: 'global' })
+                      ),
+                    S.listItem()
+                      .title('🎁 Bonuses')
+                      .schemaType('bonus')
+                      .child(
+                        S.documentTypeList('bonus')
+                          .title('Bonuses — Global')
+                          .filter('_type == "bonus" && market == $market')
+                          .params({ market: 'global' })
+                      ),
+                    S.listItem()
+                      .title('📄 Pages')
+                      .schemaType('page')
+                      .child(
+                        S.documentTypeList('page')
+                          .title('Pages — Global')
+                          .filter('_type == "page" && market == $market')
+                          .params({ market: 'global' })
+                      ),
+                    S.listItem()
+                      .title('💳 Payment Methods')
+                      .schemaType('paymentMethod')
+                      .child(
+                        S.documentTypeList('paymentMethod')
+                          .title('Payment Methods — Global')
+                          .filter('_type == "paymentMethod" && market == $market')
+                          .params({ market: 'global' })
+                      ),
+                    S.listItem()
+                      .title('🎮 Software')
+                      .schemaType('software')
+                      .child(
+                        S.documentTypeList('software')
+                          .title('Software — Global')
+                          .filter('_type == "software" && market == $market')
+                          .params({ market: 'global' })
+                      ),
+                  ])
+              ),
+
+            // ── 🇨🇦 Canada ───────────────────────────────────────────────────
             S.listItem()
-              .title('🎁 Bonusser')
-              .schemaType('bonus')
-              .child(S.documentTypeList('bonus').title('Alle bonusser')),
-            S.listItem()
-              .title('📊 Sammenligningsskabeloner')
-              .schemaType('comparisonTableTemplate')
-              .child(S.documentTypeList('comparisonTableTemplate').title('Skabeloner')),
+              .title('🇨🇦 Canada')
+              .child(
+                S.list()
+                  .title('🇨🇦 Canada')
+                  .items([
+                    S.listItem()
+                      .title('🎰 Casino Reviews')
+                      .schemaType('bookmaker')
+                      .child(
+                        S.documentTypeList('bookmaker')
+                          .title('Casino Reviews — Canada')
+                          .filter('_type == "bookmaker" && market == $market')
+                          .params({ market: 'ca' })
+                      ),
+                    S.listItem()
+                      .title('🎁 Bonuses')
+                      .schemaType('bonus')
+                      .child(
+                        S.documentTypeList('bonus')
+                          .title('Bonuses — Canada')
+                          .filter('_type == "bonus" && market == $market')
+                          .params({ market: 'ca' })
+                      ),
+                    S.listItem()
+                      .title('📄 Pages')
+                      .schemaType('page')
+                      .child(
+                        S.documentTypeList('page')
+                          .title('Pages — Canada')
+                          .filter('_type == "page" && market == $market')
+                          .params({ market: 'ca' })
+                      ),
+                    S.listItem()
+                      .title('💳 Payment Methods')
+                      .schemaType('paymentMethod')
+                      .child(
+                        S.documentTypeList('paymentMethod')
+                          .title('Payment Methods — Canada')
+                          .filter('_type == "paymentMethod" && market == $market')
+                          .params({ market: 'ca' })
+                      ),
+                    S.listItem()
+                      .title('🎮 Software')
+                      .schemaType('software')
+                      .child(
+                        S.documentTypeList('software')
+                          .title('Software — Canada')
+                          .filter('_type == "software" && market == $market')
+                          .params({ market: 'ca' })
+                      ),
+                  ])
+              ),
+
             S.divider(),
+
+            // ── Shared / global content ──────────────────────────────────────
             S.listItem()
-              .title('📝 Indlæg')
+              .title('📝 Posts')
               .schemaType('post')
-              .child(S.documentTypeList('post').title('Alle indlæg')),
+              .child(S.documentTypeList('post').title('All Posts')),
             S.listItem()
-              .title('📄 Sider')
-              .schemaType('page')
-              .child(S.documentTypeList('page').title('Alle sider')),
+              .title('📊 Comparison Templates')
+              .schemaType('comparisonTableTemplate')
+              .child(S.documentTypeList('comparisonTableTemplate').title('Templates')),
             S.listItem()
-              .title('💳 Payment Methods')
-              .schemaType('paymentMethod')
-              .child(S.documentTypeList('paymentMethod').title('Payment Methods')),
-            S.listItem()
-              .title('🎮 Software')
-              .schemaType('software')
-              .child(S.documentTypeList('software').title('Software Providers')),
-            S.divider(),
-            S.listItem()
-              .title('🔗 Redirects / Go-links')
+              .title('🔗 Redirects')
               .schemaType('redirect')
-              .child(S.documentTypeList('redirect').title('Alle redirects')),
+              .child(S.documentTypeList('redirect').title('All Redirects')),
             S.divider(),
             S.listItem()
-              .title('👤 Forfattere')
+              .title('👤 Authors')
               .schemaType('author')
-              .child(S.documentTypeList('author').title('Forfattere')),
+              .child(S.documentTypeList('author').title('Authors')),
             S.listItem()
-              .title('🏷️ Kategorier')
+              .title('🏷️ Categories')
               .schemaType('category')
-              .child(S.documentTypeList('category').title('Kategorier')),
+              .child(S.documentTypeList('category').title('Categories')),
           ]),
     }),
     visionTool(),

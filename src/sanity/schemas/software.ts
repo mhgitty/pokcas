@@ -25,6 +25,20 @@ export const softwareType = defineType({
       validation: (r) => r.required(),
     }),
     defineField({
+      name: 'market',
+      title: 'Market',
+      type: 'string',
+      options: {
+        list: [
+          { title: '🌍 Global', value: 'global' },
+          { title: '🇨🇦 Canada', value: 'ca' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'global',
+      validation: (r) => r.required(),
+    }),
+    defineField({
       name: 'logo',
       title: 'Logo',
       type: 'image',

@@ -191,7 +191,7 @@ export async function getBookmakerBySlug(slug: string) {
     `*[_type == "bookmaker" && slug.current == $slug][0] {
       _id, titel, name, slug, usp, score,
       indbetalingsbonus, minIndbetaling, gennemspilskrav,
-      url, terms, lanceringsdato, body,
+      url, terms, lanceringsdato, license, body,
       "logo": logo { "url": asset->url, alt },
       "ogImage": ogImage { "url": asset->url, alt },
       metaTitle, metaDescription
@@ -417,4 +417,136 @@ export async function getAuthorPaths() {
   return clientNoCdn.fetch<Array<{ slug: { current: string } }>>(
     `*[_type == "author" && defined(slug.current)] { slug }`
   ).catch(() => [])
+}
+
+// ─── Canada (market == 'ca') ──────────────────────────────────────────────────
+
+export async function getBookmakersCa() {
+  return clientNoCdn.fetch(
+    `*[_type == "bookmaker" && market == "ca"] | order(score desc, name asc) {
+      _id, name, slug, usp, score,
+      indbetalingsbonus, minIndbetaling,
+      gennemspilskrav, url, terms,
+      "logo": logo { "url": asset->url, alt }
+    }`
+  )
+}
+
+export async function getBookmakerBySlugCa(slug: string) {
+  return clientNoCdn.fetch(
+    `*[_type == "bookmaker" && slug.current == $slug && market == "ca"][0] {
+      _id, titel, name, slug, usp, score,
+      indbetalingsbonus, minIndbetaling, gennemspilskrav,
+      url, terms, lanceringsdato, license, body,
+      "logo": logo { "url": asset->url, alt },
+      "ogImage": ogImage { "url": asset->url, alt },
+      metaTitle, metaDescription,
+      "paymentMethods": paymentMethods[]-> {
+        _id, name, slug,
+        "logo": logo { "url": asset->url, alt }
+      },
+      "software": software[]-> {
+        _id, name, slug,
+        "logo": logo { "url": asset->url, alt }
+      }
+    }`,
+    { slug }
+  )
+}
+
+export async function getBonusesCa(limit = 50) {
+  return client.fetch(
+    `*[_type == "bonus" && active == true && market == "ca"] | order(_createdAt desc) [0...$limit] {
+      _id, title, slug,
+      oddsBonusTitel, minimumOdds, minimumIndbetaling, gennemspilskrav,
+      offerUrl, terms, casinoNavn,
+      "casinoLogo":    casinoLogo    { "url": asset->url, alt },
+      "kampagneBillede": kampagneBillede { "url": asset->url, alt },
+      "bookmaker": bookmaker-> { name, slug }
+    }`,
+    { limit }
+  )
+}
+
+export async function getBonusBySlugCa(slug: string) {
+  return client.fetch(
+    `*[_type == "bonus" && slug.current == $slug && market == "ca"][0] {
+      _id, title, slug, body, metaTitle, metaDescription,
+      minimumOdds, minimumIndbetaling, gennemspilskrav,
+      maksGevinst, bonuskode, spinVaerdi,
+      offerUrl, terms, casinoNavn,
+      "casinoLogo":      casinoLogo      { "url": asset->url, alt },
+      "kampagneBillede": kampagneBillede { "url": asset->url, alt },
+      "ogImage":         ogImage         { "url": asset->url, alt },
+      "bookmaker": bookmaker-> {
+        name, slug,
+        "logo": logo { "url": asset->url, alt }
+      }
+    }`,
+    { slug }
+  )
+}
+
+export async function getPaymentMethodsCa() {
+  return client.fetch(
+    `*[_type == "paymentMethod" && market == "ca"] | order(name asc) {
+      _id, name, slug,
+      "logo": logo { "url": asset->url, alt }
+    }`
+  )
+}
+
+export async function getPaymentMethodBySlugCa(slug: string) {
+  return client.fetch(
+    `*[_type == "paymentMethod" && slug.current == $slug && market == "ca"][0] {
+      _id, name, titel, slug, withdrawalTime, withdrawalFee,
+      "logo": logo { "url": asset->url, alt },
+      "casinos": *[_type == "bookmaker" && market == "ca" && references(^._id)] | order(score desc) {
+        _id, name, slug, score, usp, url,
+        "logo": logo { "url": asset->url, alt }
+      }
+    }`,
+    { slug }
+  )
+}
+
+export async function getSoftwareProvidersCa() {
+  return client.fetch(
+    `*[_type == "software" && market == "ca"] | order(name asc) {
+      _id, name, slug,
+      "logo": logo { "url": asset->url, alt }
+    }`
+  )
+}
+
+export async function getSoftwareBySlugCa(slug: string) {
+  return client.fetch(
+    `*[_type == "software" && slug.current == $slug && market == "ca"][0] {
+      _id, name, titel, slug,
+      "logo": logo { "url": asset->url, alt },
+      "casinos": *[_type == "bookmaker" && market == "ca" && references(^._id)] | order(score desc) {
+        _id, name, slug, score, usp, url,
+        "logo": logo { "url": asset->url, alt }
+      }
+    }`,
+    { slug }
+  )
+}
+
+export async function getPageBySlugCa(slug: string) {
+  return client.fetch(
+    `*[_type == "page" && slug.current == $slug && market == "ca" && !defined(parent)][0] { ${PAGE_FIELDS} }`,
+    { slug }
+  )
+}
+
+export async function getPageByPathCa(segments: string[]) {
+  if (segments.length === 1) {
+    return getPageBySlugCa(segments[0])
+  }
+  const [parentSlug, childSlug] = segments
+  return client.fetch(
+    `*[_type == "page" && slug.current == $childSlug && market == "ca" && parent->slug.current == $parentSlug][0] { ${PAGE_FIELDS} }`,
+    { parentSlug, childSlug }
+  )
 }
