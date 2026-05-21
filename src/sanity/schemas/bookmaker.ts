@@ -44,6 +44,7 @@ export const bookmakerType = defineType({
         list: [
           { title: '🌍 Global', value: 'global' },
           { title: '🇨🇦 Canada', value: 'ca' },
+          { title: '🇦🇺 Australia', value: 'au' },
         ],
         layout: 'radio',
       },

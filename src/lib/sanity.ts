@@ -540,6 +540,138 @@ export async function getPageBySlugCa(slug: string) {
   )
 }
 
+// ─── Australia (market == 'au') ───────────────────────────────────────────────
+
+export async function getBookmarkersAu() {
+  return clientNoCdn.fetch(
+    `*[_type == "bookmaker" && market == "au"] | order(score desc, name asc) {
+      _id, name, slug, usp, score,
+      indbetalingsbonus, minIndbetaling,
+      gennemspilskrav, url, terms,
+      "logo": logo { "url": asset->url, alt }
+    }`
+  )
+}
+
+export async function getBookmakerBySlugAu(slug: string) {
+  return clientNoCdn.fetch(
+    `*[_type == "bookmaker" && slug.current == $slug && market == "au"][0] {
+      _id, titel, name, slug, usp, score,
+      indbetalingsbonus, minIndbetaling, gennemspilskrav,
+      url, terms, lanceringsdato, license, body,
+      "logo": logo { "url": asset->url, alt },
+      "ogImage": ogImage { "url": asset->url, alt },
+      metaTitle, metaDescription,
+      "paymentMethods": paymentMethods[]-> {
+        _id, name, slug,
+        "logo": logo { "url": asset->url, alt }
+      },
+      "software": software[]-> {
+        _id, name, slug,
+        "logo": logo { "url": asset->url, alt }
+      }
+    }`,
+    { slug }
+  )
+}
+
+export async function getBonusesAu(limit = 50) {
+  return client.fetch(
+    `*[_type == "bonus" && active == true && market == "au"] | order(_createdAt desc) [0...$limit] {
+      _id, title, slug,
+      oddsBonusTitel, minimumOdds, minimumIndbetaling, gennemspilskrav,
+      offerUrl, terms, casinoNavn,
+      "casinoLogo":    casinoLogo    { "url": asset->url, alt },
+      "kampagneBillede": kampagneBillede { "url": asset->url, alt },
+      "bookmaker": bookmaker-> { name, slug }
+    }`,
+    { limit }
+  )
+}
+
+export async function getBonusBySlugAu(slug: string) {
+  return client.fetch(
+    `*[_type == "bonus" && slug.current == $slug && market == "au"][0] {
+      _id, title, slug, body, metaTitle, metaDescription,
+      minimumOdds, minimumIndbetaling, gennemspilskrav,
+      maksGevinst, bonuskode, spinVaerdi,
+      offerUrl, terms, casinoNavn,
+      "casinoLogo":      casinoLogo      { "url": asset->url, alt },
+      "kampagneBillede": kampagneBillede { "url": asset->url, alt },
+      "ogImage":         ogImage         { "url": asset->url, alt },
+      "bookmaker": bookmaker-> {
+        name, slug,
+        "logo": logo { "url": asset->url, alt }
+      }
+    }`,
+    { slug }
+  )
+}
+
+export async function getPaymentMethodsAu() {
+  return client.fetch(
+    `*[_type == "paymentMethod" && market == "au"] | order(name asc) {
+      _id, name, slug,
+      "logo": logo { "url": asset->url, alt }
+    }`
+  )
+}
+
+export async function getPaymentMethodBySlugAu(slug: string) {
+  return client.fetch(
+    `*[_type == "paymentMethod" && slug.current == $slug && market == "au"][0] {
+      _id, name, titel, slug, withdrawalTime, withdrawalFee,
+      "logo": logo { "url": asset->url, alt },
+      "casinos": *[_type == "bookmaker" && market == "au" && references(^._id)] | order(score desc) {
+        _id, name, slug, score, usp, url,
+        "logo": logo { "url": asset->url, alt }
+      }
+    }`,
+    { slug }
+  )
+}
+
+export async function getSoftwareProvidersAu() {
+  return client.fetch(
+    `*[_type == "software" && market == "au"] | order(name asc) {
+      _id, name, slug,
+      "logo": logo { "url": asset->url, alt }
+    }`
+  )
+}
+
+export async function getSoftwareBySlugAu(slug: string) {
+  return client.fetch(
+    `*[_type == "software" && slug.current == $slug && market == "au"][0] {
+      _id, name, titel, slug,
+      "logo": logo { "url": asset->url, alt },
+      "casinos": *[_type == "bookmaker" && market == "au" && references(^._id)] | order(score desc) {
+        _id, name, slug, score, usp, url,
+        "logo": logo { "url": asset->url, alt }
+      }
+    }`,
+    { slug }
+  )
+}
+
+export async function getPageBySlugAu(slug: string) {
+  return client.fetch(
+    `*[_type == "page" && slug.current == $slug && market == "au" && !defined(parent)][0] { ${PAGE_FIELDS} }`,
+    { slug }
+  )
+}
+
+export async function getPageByPathAu(segments: string[]) {
+  if (segments.length === 1) {
+    return getPageBySlugAu(segments[0])
+  }
+  const [parentSlug, childSlug] = segments
+  return client.fetch(
+    `*[_type == "page" && slug.current == $childSlug && market == "au" && parent->slug.current == $parentSlug][0] { ${PAGE_FIELDS} }`,
+    { parentSlug, childSlug }
+  )
+}
+
 export async function getPageByPathCa(segments: string[]) {
   if (segments.length === 1) {
     return getPageBySlugCa(segments[0])

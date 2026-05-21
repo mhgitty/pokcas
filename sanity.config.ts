@@ -149,6 +149,61 @@ export default defineConfig({
                   ])
               ),
 
+            // ── 🇦🇺 Australia ────────────────────────────────────────────────
+            S.listItem()
+              .title('🇦🇺 Australia')
+              .child(
+                S.list()
+                  .title('🇦🇺 Australia')
+                  .items([
+                    S.listItem()
+                      .title('🎰 Casino Reviews')
+                      .schemaType('bookmaker')
+                      .child(
+                        S.documentTypeList('bookmaker')
+                          .title('Casino Reviews — Australia')
+                          .filter('_type == "bookmaker" && market == $market')
+                          .params({ market: 'au' })
+                      ),
+                    S.listItem()
+                      .title('🎁 Bonuses')
+                      .schemaType('bonus')
+                      .child(
+                        S.documentTypeList('bonus')
+                          .title('Bonuses — Australia')
+                          .filter('_type == "bonus" && market == $market')
+                          .params({ market: 'au' })
+                      ),
+                    S.listItem()
+                      .title('📄 Pages')
+                      .schemaType('page')
+                      .child(
+                        S.documentTypeList('page')
+                          .title('Pages — Australia')
+                          .filter('_type == "page" && market == $market')
+                          .params({ market: 'au' })
+                      ),
+                    S.listItem()
+                      .title('💳 Payment Methods')
+                      .schemaType('paymentMethod')
+                      .child(
+                        S.documentTypeList('paymentMethod')
+                          .title('Payment Methods — Australia')
+                          .filter('_type == "paymentMethod" && market == $market')
+                          .params({ market: 'au' })
+                      ),
+                    S.listItem()
+                      .title('🎮 Software')
+                      .schemaType('software')
+                      .child(
+                        S.documentTypeList('software')
+                          .title('Software — Australia')
+                          .filter('_type == "software" && market == $market')
+                          .params({ market: 'au' })
+                      ),
+                  ])
+              ),
+
             S.divider(),
 
             // ── Shared / global content ──────────────────────────────────────
