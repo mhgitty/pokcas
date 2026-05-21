@@ -56,8 +56,34 @@ export function PortableTextRenderer({ value, posts }: { value: any[]; posts?: P
         </p>
       ),
       blockquote: ({ children }: any) => (
-        <blockquote style={{ borderLeft: '3px solid var(--green-dark)', paddingLeft: '18px', margin: '24px 0', color: 'var(--text-muted)', fontStyle: 'italic' }}>
-          {children}
+        <blockquote style={{ margin: '28px 0', padding: 0, border: 'none' }}>
+          <div style={{
+            position: 'relative',
+            background: 'rgba(26,122,60,0.06)',
+            border: '1px solid rgba(26,122,60,0.18)',
+            borderRadius: '10px',
+            padding: '20px 22px 18px 52px',
+          }}>
+            <span style={{
+              position: 'absolute',
+              top: '10px',
+              left: '18px',
+              fontFamily: 'Georgia, serif',
+              fontSize: '44px',
+              lineHeight: 1,
+              color: 'var(--green)',
+              opacity: 0.4,
+              userSelect: 'none',
+            }}>&ldquo;</span>
+            <div style={{
+              fontSize: '15px',
+              fontStyle: 'italic',
+              color: 'var(--text)',
+              lineHeight: 1.75,
+            }}>
+              {children}
+            </div>
+          </div>
         </blockquote>
       ),
     },
