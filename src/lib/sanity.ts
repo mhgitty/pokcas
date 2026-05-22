@@ -253,11 +253,17 @@ export const getSiteSettings = cache(async () => {
         "pageSlug": pageRef->slug.current,
         "pageParentSlug": pageRef->parent->slug.current,
         "bookmakerSlug": bookmakerRef->slug.current,
+        "softwareSlug": softwareRef->slug.current,
+        "paymentMethodSlug": paymentMethodRef->slug.current,
+        "postSlug": postRef->slug.current,
         children[] {
           label, url,
           "pageSlug": pageRef->slug.current,
           "pageParentSlug": pageRef->parent->slug.current,
           "bookmakerSlug": bookmakerRef->slug.current,
+          "softwareSlug": softwareRef->slug.current,
+          "paymentMethodSlug": paymentMethodRef->slug.current,
+          "postSlug": postRef->slug.current,
         }
       },
       footerTagline,
@@ -268,6 +274,9 @@ export const getSiteSettings = cache(async () => {
           "pageSlug": pageRef->slug.current,
           "pageParentSlug": pageRef->parent->slug.current,
           "bookmakerSlug": bookmakerRef->slug.current,
+          "softwareSlug": softwareRef->slug.current,
+          "paymentMethodSlug": paymentMethodRef->slug.current,
+          "postSlug": postRef->slug.current,
         }
       },
       footerNote,
@@ -424,7 +433,37 @@ export async function getAuthorPaths() {
 export async function getMarketSettings(market: 'ca' | 'au') {
   return client.fetch(
     `*[_type == "marketSettings" && _id == $id][0] {
-      market, headerNav, footerTagline, footerColumns, footerNote, footerDisclaimer
+      market, footerTagline, footerNote, footerDisclaimer,
+      headerNav[] {
+        label, url, isHighlighted,
+        "pageSlug": pageRef->slug.current,
+        "pageParentSlug": pageRef->parent->slug.current,
+        "bookmakerSlug": bookmakerRef->slug.current,
+        "softwareSlug": softwareRef->slug.current,
+        "paymentMethodSlug": paymentMethodRef->slug.current,
+        "postSlug": postRef->slug.current,
+        children[] {
+          label, url,
+          "pageSlug": pageRef->slug.current,
+          "pageParentSlug": pageRef->parent->slug.current,
+          "bookmakerSlug": bookmakerRef->slug.current,
+          "softwareSlug": softwareRef->slug.current,
+          "paymentMethodSlug": paymentMethodRef->slug.current,
+          "postSlug": postRef->slug.current,
+        }
+      },
+      footerColumns[] {
+        title,
+        items[] {
+          label, url,
+          "pageSlug": pageRef->slug.current,
+          "pageParentSlug": pageRef->parent->slug.current,
+          "bookmakerSlug": bookmakerRef->slug.current,
+          "softwareSlug": softwareRef->slug.current,
+          "paymentMethodSlug": paymentMethodRef->slug.current,
+          "postSlug": postRef->slug.current,
+        }
+      }
     }`,
     { id: `${market}-settings` },
     { next: { revalidate: 3600 } }

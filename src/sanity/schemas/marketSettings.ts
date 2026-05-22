@@ -2,7 +2,47 @@ import { defineField, defineType } from 'sanity'
 
 const linkFields = [
   defineField({ name: 'label', title: 'Label', type: 'string', validation: (r) => r.required() }),
-  defineField({ name: 'url', title: 'URL', type: 'string', description: 'E.g. /ca/reviews/ or https://...' }),
+  defineField({
+    name: 'pageRef',
+    title: 'Page (select from CMS)',
+    type: 'reference',
+    to: [{ type: 'page' }],
+    description: 'Select a page — URL is auto-filled',
+  }),
+  defineField({
+    name: 'bookmakerRef',
+    title: 'Casino (select from CMS)',
+    type: 'reference',
+    to: [{ type: 'bookmaker' }],
+    description: 'Select a casino — URL is auto-filled',
+  }),
+  defineField({
+    name: 'softwareRef',
+    title: 'Software provider (select from CMS)',
+    type: 'reference',
+    to: [{ type: 'software' }],
+    description: 'Select a software provider — URL is auto-filled',
+  }),
+  defineField({
+    name: 'paymentMethodRef',
+    title: 'Payment method (select from CMS)',
+    type: 'reference',
+    to: [{ type: 'paymentMethod' }],
+    description: 'Select a payment method — URL is auto-filled',
+  }),
+  defineField({
+    name: 'postRef',
+    title: 'Blog post (select from CMS)',
+    type: 'reference',
+    to: [{ type: 'post' }],
+    description: 'Select a blog post — URL is auto-filled',
+  }),
+  defineField({
+    name: 'url',
+    title: 'URL (custom / external)',
+    type: 'string',
+    description: 'Only used if you don\'t select a reference above. E.g. /ca/reviews/ or https://...',
+  }),
 ]
 
 const navItemFields = [
@@ -17,7 +57,24 @@ const navItemFields = [
       name: 'subNavItem',
       fields: linkFields,
       preview: {
-        select: { title: 'label', subtitle: 'url' },
+        select: {
+          title: 'label',
+          pageRef: 'pageRef.slug.current',
+          bookmakerRef: 'bookmakerRef.slug.current',
+          softwareRef: 'softwareRef.slug.current',
+          paymentMethodRef: 'paymentMethodRef.slug.current',
+          postRef: 'postRef.slug.current',
+          url: 'url',
+        },
+        prepare({ title, pageRef, bookmakerRef, softwareRef, paymentMethodRef, postRef, url }: any) {
+          const resolved = pageRef ? `/${pageRef}/`
+            : bookmakerRef ? `/review/${bookmakerRef}/`
+            : softwareRef ? `/software/${softwareRef}/`
+            : paymentMethodRef ? `/payments/${paymentMethodRef}/`
+            : postRef ? `/${postRef}/`
+            : url
+          return { title, subtitle: resolved }
+        },
       },
     }],
   }),
@@ -57,9 +114,24 @@ export const marketSettingsType = defineType({
         name: 'navItem',
         fields: navItemFields,
         preview: {
-          select: { title: 'label', subtitle: 'url', isHighlighted: 'isHighlighted' },
-          prepare({ title, subtitle, isHighlighted }: any) {
-            return { title: `${isHighlighted ? '⚡ ' : ''}${title}`, subtitle }
+          select: {
+            title: 'label',
+            isHighlighted: 'isHighlighted',
+            pageRef: 'pageRef.slug.current',
+            bookmakerRef: 'bookmakerRef.slug.current',
+            softwareRef: 'softwareRef.slug.current',
+            paymentMethodRef: 'paymentMethodRef.slug.current',
+            postRef: 'postRef.slug.current',
+            url: 'url',
+          },
+          prepare({ title, isHighlighted, pageRef, bookmakerRef, softwareRef, paymentMethodRef, postRef, url }: any) {
+            const resolved = pageRef ? `/${pageRef}/`
+              : bookmakerRef ? `/review/${bookmakerRef}/`
+              : softwareRef ? `/software/${softwareRef}/`
+              : paymentMethodRef ? `/payments/${paymentMethodRef}/`
+              : postRef ? `/${postRef}/`
+              : url
+            return { title: `${isHighlighted ? '⚡ ' : ''}${title}`, subtitle: resolved }
           },
         },
       }],
@@ -92,7 +164,26 @@ export const marketSettingsType = defineType({
               type: 'object',
               name: 'footerLink',
               fields: linkFields,
-              preview: { select: { title: 'label', subtitle: 'url' } },
+              preview: {
+                select: {
+                  title: 'label',
+                  pageRef: 'pageRef.slug.current',
+                  bookmakerRef: 'bookmakerRef.slug.current',
+                  softwareRef: 'softwareRef.slug.current',
+                  paymentMethodRef: 'paymentMethodRef.slug.current',
+                  postRef: 'postRef.slug.current',
+                  url: 'url',
+                },
+                prepare({ title, pageRef, bookmakerRef, softwareRef, paymentMethodRef, postRef, url }: any) {
+                  const resolved = pageRef ? `/${pageRef}/`
+                    : bookmakerRef ? `/review/${bookmakerRef}/`
+                    : softwareRef ? `/software/${softwareRef}/`
+                    : paymentMethodRef ? `/payments/${paymentMethodRef}/`
+                    : postRef ? `/${postRef}/`
+                    : url
+                  return { title, subtitle: resolved }
+                },
+              },
             }],
           }),
         ],

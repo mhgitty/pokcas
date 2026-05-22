@@ -4,21 +4,21 @@ import { comparisonTableFields } from './comparisonTable'
 
 export const homepageType = defineType({
   name: 'homepage',
-  title: '🏠 Forside',
+  title: '🏠 Homepage',
   type: 'document',
   groups: [
     { name: 'hero',    title: 'Hero' },
-    { name: 'content', title: 'Indhold' },
+    { name: 'content', title: 'Content' },
     { name: 'seo',     title: 'SEO' },
   ],
   fields: [
     // Hero
     defineField({
       name: 'heroHeading',
-      title: 'Hero overskrift',
+      title: 'Hero heading',
       type: 'string',
       group: 'hero',
-      initialValue: 'Find den bedste betting bonus i Danmark',
+      initialValue: 'Find the best online casino bonus',
     }),
     defineField({
       name: 'intro',
@@ -26,8 +26,8 @@ export const homepageType = defineType({
       type: 'text',
       rows: 3,
       group: 'hero',
-      description: 'Kort tekst under overskriften i hero-sektionen',
-      initialValue: 'Vi sammenligner og anmelder alle store bookmakers i Danmark. Find den bedste velkomstbonus og kom godt i gang.',
+      description: 'Short text below the heading in the hero section',
+      initialValue: 'We compare and review the top online casinos. Find the best welcome bonus and get started.',
     }),
 
     // Comparison table (renders above body text)
@@ -63,21 +63,21 @@ export const homepageType = defineType({
     }),
 
     // SEO
-    defineField({ name: 'metaTitle', title: 'Meta titel', type: 'string', group: 'seo', initialValue: 'Sammenlign betting sider — find den bedste bonus i Danmark' }),
-    defineField({ name: 'metaDescription', title: 'Meta beskrivelse', type: 'text', rows: 3, group: 'seo', initialValue: 'Find og sammenlign de bedste betting bonusser fra alle store danske bookmakers.' }),
+    defineField({ name: 'metaTitle', title: 'Meta title', type: 'string', group: 'seo', initialValue: 'Best Online Casinos — Compare bonuses and reviews' }),
+    defineField({ name: 'metaDescription', title: 'Meta description', type: 'text', rows: 3, group: 'seo', initialValue: 'Find and compare the best casino bonuses from all major online casinos.' }),
     defineField({
-      name: 'featuredImage', title: 'OG-billede', type: 'image', group: 'seo',
-      description: 'Billede der vises når siden deles på sociale medier',
+      name: 'featuredImage', title: 'OG image', type: 'image', group: 'seo',
+      description: 'Image shown when the page is shared on social media',
       options: { hotspot: true },
       fields: [
-        defineField({ name: 'alt', title: 'Alt-tekst', type: 'string' }),
+        defineField({ name: 'alt', title: 'Alt text', type: 'string' }),
       ],
     }),
   ],
   preview: {
     select: { title: 'heroHeading' },
     prepare({ title }) {
-      return { title: title || 'Forside' }
+      return { title: title || 'Homepage' }
     },
   },
 })

@@ -3,19 +3,19 @@ import { bodyField } from './page'
 
 export const bonusType = defineType({
   name: 'bonus',
-  title: 'Bonusser',
+  title: 'Bonuses',
   type: 'document',
   groups: [
     { name: 'info',    title: '🎁 Bonus info' },
-    { name: 'details', title: '📋 Detaljer' },
-    { name: 'content', title: '📝 Indhold' },
+    { name: 'details', title: '📋 Details' },
+    { name: 'content', title: '📝 Content' },
     { name: 'seo',     title: '🔍 SEO' },
   ],
   fields: [
     // ── Identity ─────────────────────────────────────────────────────────────
     defineField({
       name: 'title',
-      title: 'Titel',
+      title: 'Title',
       type: 'string',
       group: 'info',
       validation: (r) => r.required(),
@@ -48,27 +48,27 @@ export const bonusType = defineType({
     // ── Active ────────────────────────────────────────────────────────────────
     defineField({
       name: 'active',
-      title: 'Aktiv',
+      title: 'Active',
       type: 'boolean',
       group: 'info',
-      description: 'Kun aktive bonusser vises i sammenligningslister',
+      description: 'Only active bonuses are shown in comparison lists',
       initialValue: false,
     }),
 
     // ── Bookmaker relation ────────────────────────────────────────────────────
     defineField({
       name: 'bookmaker',
-      title: 'Bookmaker',
+      title: 'Casino',
       type: 'reference',
       group: 'info',
       to: [{ type: 'bookmaker' }],
-      description: 'Hvilken bookmaker hører denne bonus til?',
+      description: 'Which casino does this bonus belong to?',
     }),
 
     // ── Core bonus fields ─────────────────────────────────────────────────────
     defineField({
       name: 'casinoNavn',
-      title: 'Casino navn',
+      title: 'Casino name',
       type: 'string',
       group: 'info',
     }),
@@ -78,68 +78,68 @@ export const bonusType = defineType({
       type: 'image',
       group: 'info',
       options: { hotspot: true },
-      fields: [defineField({ name: 'alt', title: 'Alt-tekst', type: 'string' })],
+      fields: [defineField({ name: 'alt', title: 'Alt text', type: 'string' })],
     }),
     defineField({
       name: 'oddsBonusTitel',
-      title: 'Odds bonus titel',
+      title: 'Bonus title',
       type: 'string',
       group: 'info',
-      description: 'F.eks. "Få 500 kr. i freebet" — vises i sammenligningskortet',
+      description: 'E.g. "Get $500 free bet" — shown on the comparison card',
     }),
     defineField({
       name: 'offerUrl',
       title: 'Offer URL',
       type: 'url',
       group: 'info',
-      description: 'Affiliate link til bonustilbuddet',
+      description: 'Affiliate link to the bonus offer',
     }),
     defineField({
       name: 'minimumOdds',
       title: 'Minimum odds',
       type: 'string',
       group: 'info',
-      description: 'F.eks. "1.70"',
+      description: 'E.g. "1.70"',
     }),
 
     // ── Bonus details ─────────────────────────────────────────────────────────
     defineField({
       name: 'minimumIndbetaling',
-      title: 'Minimum indbetaling (kr.)',
+      title: 'Minimum deposit',
       type: 'number',
       group: 'details',
     }),
     defineField({
       name: 'gennemspilskrav',
-      title: 'Gennemspilskrav',
+      title: 'Wager requirement',
       type: 'string',
       group: 'details',
-      description: 'F.eks. "x10" eller "Ingen"',
+      description: 'E.g. "x10" or "None"',
     }),
     defineField({
       name: 'spinVaerdi',
-      title: 'Spin værdi',
+      title: 'Spin value',
       type: 'string',
       group: 'details',
-      description: 'F.eks. "1 kr. pr. spin"',
+      description: 'E.g. "$0.10 per spin"',
     }),
     defineField({
       name: 'maksGevinst',
-      title: 'Maks gevinst',
+      title: 'Max winnings',
       type: 'string',
       group: 'details',
-      description: 'F.eks. "500 kr." eller "Ubegrænset"',
+      description: 'E.g. "$500" or "Unlimited"',
     }),
     defineField({
       name: 'terms',
-      title: 'Vilkår og betingelser',
+      title: 'Terms and conditions',
       type: 'text',
       rows: 3,
       group: 'details',
     }),
     defineField({
       name: 'bonuskode',
-      title: 'Bonuskode',
+      title: 'Bonus code',
       type: 'string',
       group: 'details',
     }),
@@ -147,21 +147,21 @@ export const bonusType = defineType({
     // ── Campaign ──────────────────────────────────────────────────────────────
     defineField({
       name: 'kampagneBillede',
-      title: 'Kampagne billede',
+      title: 'Campaign image',
       type: 'image',
       group: 'details',
       options: { hotspot: true },
-      fields: [defineField({ name: 'alt', title: 'Alt-tekst', type: 'string' })],
+      fields: [defineField({ name: 'alt', title: 'Alt text', type: 'string' })],
     }),
     defineField({
       name: 'kampagneStart',
-      title: 'Kampagne start',
+      title: 'Campaign start',
       type: 'datetime',
       group: 'details',
     }),
     defineField({
       name: 'kampagneSlut',
-      title: 'Kampagne slut',
+      title: 'Campaign end',
       type: 'datetime',
       group: 'details',
     }),
@@ -170,15 +170,15 @@ export const bonusType = defineType({
     { ...bodyField, group: 'content' } as any,
 
     // ── SEO ───────────────────────────────────────────────────────────────────
-    defineField({ name: 'metaTitle',       title: 'Meta titel',      type: 'string',                    group: 'seo' }),
-    defineField({ name: 'metaDescription', title: 'Meta beskrivelse', type: 'text', rows: 3,            group: 'seo' }),
+    defineField({ name: 'metaTitle',       title: 'Meta title',       type: 'string',             group: 'seo' }),
+    defineField({ name: 'metaDescription', title: 'Meta description', type: 'text', rows: 3,      group: 'seo' }),
     defineField({
       name: 'ogImage',
-      title: 'OG-billede',
+      title: 'OG image',
       type: 'image',
       group: 'seo',
       options: { hotspot: true },
-      fields: [defineField({ name: 'alt', title: 'Alt-tekst', type: 'string' })],
+      fields: [defineField({ name: 'alt', title: 'Alt text', type: 'string' })],
     }),
   ],
   preview: {

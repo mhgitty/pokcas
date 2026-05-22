@@ -1,66 +1,101 @@
 import { defineField, defineType } from 'sanity'
 
-// ── Shared link fields (used in both top-level and sub-menu items) ─────────────
-// Pick a page OR a bookmaker OR type a custom URL — whichever is set wins (in that order).
+// ── Shared link fields ────────────────────────────────────────────────────────
+// Pick a page, bookmaker, software provider, payment method, or blog post — or type a custom URL.
 const linkFields = [
-  defineField({ name: 'label', title: 'Tekst', type: 'string', validation: (r) => r.required() }),
+  defineField({ name: 'label', title: 'Label', type: 'string', validation: (r) => r.required() }),
   defineField({
     name: 'pageRef',
-    title: 'Side (vælg fra CMS)',
+    title: 'Page (select from CMS)',
     type: 'reference',
     to: [{ type: 'page' }],
-    description: 'Vælg en side automatisk — URL udfyldes selv',
+    description: 'Select a page — URL is auto-filled',
   }),
   defineField({
     name: 'bookmakerRef',
-    title: 'Bookmaker (vælg fra CMS)',
+    title: 'Casino (select from CMS)',
     type: 'reference',
     to: [{ type: 'bookmaker' }],
-    description: 'Vælg en bookmaker — URL udfyldes selv',
+    description: 'Select a casino — URL is auto-filled',
+  }),
+  defineField({
+    name: 'softwareRef',
+    title: 'Software provider (select from CMS)',
+    type: 'reference',
+    to: [{ type: 'software' }],
+    description: 'Select a software provider — URL is auto-filled',
+  }),
+  defineField({
+    name: 'paymentMethodRef',
+    title: 'Payment method (select from CMS)',
+    type: 'reference',
+    to: [{ type: 'paymentMethod' }],
+    description: 'Select a payment method — URL is auto-filled',
+  }),
+  defineField({
+    name: 'postRef',
+    title: 'Blog post (select from CMS)',
+    type: 'reference',
+    to: [{ type: 'post' }],
+    description: 'Select a blog post — URL is auto-filled',
   }),
   defineField({
     name: 'url',
-    title: 'URL (tilpasset / ekstern)',
+    title: 'URL (custom / external)',
     type: 'string',
-    description: 'Bruges kun hvis du ikke vælger en side eller bookmaker ovenfor. F.eks. /review/ eller https://...',
+    description: 'Only used if you don\'t select a reference above. E.g. /review/ or https://...',
   }),
 ]
 
-// ── Sub-menu item (no nesting, no CTA highlight) ───────────────────────────────
+// ── Sub-menu item ─────────────────────────────────────────────────────────────
 const subNavItemFields = [...linkFields]
 
 // ── Top-level nav item ─────────────────────────────────────────────────────────
 const navItemFields = [
   ...linkFields,
-  defineField({ name: 'isHighlighted', title: 'Fremhævet (CTA-knap)', type: 'boolean', initialValue: false }),
+  defineField({ name: 'isHighlighted', title: 'Highlighted (CTA button)', type: 'boolean', initialValue: false }),
   defineField({
     name: 'children',
-    title: 'Undermenu',
+    title: 'Dropdown',
     type: 'array',
-    description: 'Tilføj underpunkter for at skabe en dropdown-menu',
+    description: 'Add sub-items to create a dropdown menu',
     of: [{
       type: 'object',
       name: 'subNavItem',
       fields: subNavItemFields,
       preview: {
-        select: { title: 'label', pageRef: 'pageRef.slug.current', bookmakerRef: 'bookmakerRef.slug.current', url: 'url' },
-        prepare({ title, pageRef, bookmakerRef, url }: any) {
-          return { title, subtitle: pageRef ? `/${pageRef}/` : bookmakerRef ? `/review/${bookmakerRef}/` : url }
+        select: {
+          title: 'label',
+          pageRef: 'pageRef.slug.current',
+          bookmakerRef: 'bookmakerRef.slug.current',
+          softwareRef: 'softwareRef.slug.current',
+          paymentMethodRef: 'paymentMethodRef.slug.current',
+          postRef: 'postRef.slug.current',
+          url: 'url',
+        },
+        prepare({ title, pageRef, bookmakerRef, softwareRef, paymentMethodRef, postRef, url }: any) {
+          const resolved = pageRef ? `/${pageRef}/`
+            : bookmakerRef ? `/review/${bookmakerRef}/`
+            : softwareRef ? `/software/${softwareRef}/`
+            : paymentMethodRef ? `/payments/${paymentMethodRef}/`
+            : postRef ? `/${postRef}/`
+            : url
+          return { title, subtitle: resolved }
         },
       },
     }],
   }),
 ]
 
-// ── Footer link fields (same as linkFields, no children/CTA) ──────────────────
+// ── Footer link fields ────────────────────────────────────────────────────────
 const footerLinkFields = [...linkFields]
 
 export const siteSettingsType = defineType({
   name: 'siteSettings',
-  title: '⚙️ Siteindstillinger',
+  title: '⚙️ Site Settings',
   type: 'document',
   groups: [
-    { name: 'general', title: '⚙️ Generelt' },
+    { name: 'general', title: '⚙️ General' },
     { name: 'header',  title: '🔝 Header' },
     { name: 'footer',  title: '🔻 Footer' },
   ],
@@ -68,11 +103,11 @@ export const siteSettingsType = defineType({
     // ── Default author ──────────────────────────────────────────────────────────
     defineField({
       name: 'defaultAuthor',
-      title: 'Standard forfatter',
+      title: 'Default author',
       type: 'reference',
       to: [{ type: 'author' }],
       group: 'general',
-      description: 'Vises som forfatter-kort nederst på alle sider, bookmaker- og bonussider',
+      description: 'Shown as author card at the bottom of all pages, casino and bonus pages',
     }),
 
     // ── Header ──────────────────────────────────────────────────────────────────
@@ -81,7 +116,7 @@ export const siteSettingsType = defineType({
       title: 'Header navigation',
       type: 'array',
       group: 'header',
-      description: 'Elementer i topmenuen. Træk for at ændre rækkefølge.',
+      description: 'Items in the top menu. Drag to reorder.',
       of: [{
         type: 'object',
         name: 'navItem',
@@ -92,11 +127,19 @@ export const siteSettingsType = defineType({
             isHighlighted: 'isHighlighted',
             pageRef: 'pageRef.slug.current',
             bookmakerRef: 'bookmakerRef.slug.current',
+            softwareRef: 'softwareRef.slug.current',
+            paymentMethodRef: 'paymentMethodRef.slug.current',
+            postRef: 'postRef.slug.current',
             url: 'url',
             children: 'children',
           },
-          prepare({ title, isHighlighted, pageRef, bookmakerRef, url, children }: any) {
-            const resolvedUrl = pageRef ? `/${pageRef}/` : bookmakerRef ? `/review/${bookmakerRef}/` : url
+          prepare({ title, isHighlighted, pageRef, bookmakerRef, softwareRef, paymentMethodRef, postRef, url, children }: any) {
+            const resolvedUrl = pageRef ? `/${pageRef}/`
+              : bookmakerRef ? `/review/${bookmakerRef}/`
+              : softwareRef ? `/software/${softwareRef}/`
+              : paymentMethodRef ? `/payments/${paymentMethodRef}/`
+              : postRef ? `/${postRef}/`
+              : url
             const hasChildren = children?.length > 0
             return {
               title: `${isHighlighted ? '⚡ ' : ''}${hasChildren ? '▾ ' : ''}${title}`,
@@ -114,20 +157,20 @@ export const siteSettingsType = defineType({
       type: 'text',
       rows: 2,
       group: 'footer',
-      initialValue: 'Danmarks uafhængige guide til betting bonusser og bookmakers. Vi sammenligner de bedste tilbud.',
+      initialValue: 'Your independent international guide to online casinos and casino bonuses. We compare the best offers.',
     }),
     defineField({
       name: 'footerColumns',
-      title: 'Footer kolonner',
+      title: 'Footer columns',
       type: 'array',
       group: 'footer',
-      description: 'Op til 2 kolonner med links.',
+      description: 'Up to 2 columns with links.',
       validation: (r) => r.max(2),
       of: [{
         type: 'object',
         name: 'footerColumn',
         fields: [
-          defineField({ name: 'title', title: 'Kolonnetitel', type: 'string', validation: (r) => r.required() }),
+          defineField({ name: 'title', title: 'Column title', type: 'string', validation: (r) => r.required() }),
           defineField({
             name: 'items',
             title: 'Links',
@@ -141,10 +184,19 @@ export const siteSettingsType = defineType({
                   title: 'label',
                   pageRef: 'pageRef.slug.current',
                   bookmakerRef: 'bookmakerRef.slug.current',
+                  softwareRef: 'softwareRef.slug.current',
+                  paymentMethodRef: 'paymentMethodRef.slug.current',
+                  postRef: 'postRef.slug.current',
                   url: 'url',
                 },
-                prepare({ title, pageRef, bookmakerRef, url }: any) {
-                  return { title, subtitle: pageRef ? `/${pageRef}/` : bookmakerRef ? `/review/${bookmakerRef}/` : url }
+                prepare({ title, pageRef, bookmakerRef, softwareRef, paymentMethodRef, postRef, url }: any) {
+                  const resolved = pageRef ? `/${pageRef}/`
+                    : bookmakerRef ? `/review/${bookmakerRef}/`
+                    : softwareRef ? `/software/${softwareRef}/`
+                    : paymentMethodRef ? `/payments/${paymentMethodRef}/`
+                    : postRef ? `/${postRef}/`
+                    : url
+                  return { title, subtitle: resolved }
                 },
               },
             }],
@@ -160,20 +212,20 @@ export const siteSettingsType = defineType({
     }),
     defineField({
       name: 'footerNote',
-      title: 'Footer bundtekst (venstre)',
+      title: 'Footer bottom left',
       type: 'string',
       group: 'footer',
-      initialValue: '© 2025 Pokcas.dk · Spil ansvarligt · 18+',
+      initialValue: '© 2025 Pokcas.com · Play responsibly · 18+',
     }),
     defineField({
       name: 'footerDisclaimer',
-      title: 'Footer bundtekst (højre)',
+      title: 'Footer bottom right',
       type: 'string',
       group: 'footer',
-      initialValue: 'Affiliatelinks kan forekomme · Se vilkår hos bookmaker',
+      initialValue: 'Affiliate links may be present · See terms at the casino',
     }),
   ],
   preview: {
-    prepare() { return { title: 'Siteindstillinger' } },
+    prepare() { return { title: 'Site Settings' } },
   },
 })

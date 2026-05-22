@@ -4,7 +4,7 @@ import { comparisonTableFields } from './comparisonTable'
 
 export const bodyField = defineField({
   name: 'body',
-  title: 'Indhold',
+  title: 'Content',
   type: 'array',
   of: [
     {
@@ -14,12 +14,12 @@ export const bodyField = defineField({
         { title: 'H2', value: 'h2' },
         { title: 'H3', value: 'h3' },
         { title: 'H4', value: 'h4' },
-        { title: 'Citat', value: 'blockquote' },
+        { title: 'Quote', value: 'blockquote' },
       ],
       marks: {
         decorators: [
-          { title: 'Fed', value: 'strong' },
-          { title: 'Kursiv', value: 'em' },
+          { title: 'Bold', value: 'strong' },
+          { title: 'Italic', value: 'em' },
         ],
         annotations: [
           {
@@ -28,7 +28,7 @@ export const bodyField = defineField({
             title: 'Link',
             fields: [
               { name: 'href', type: 'url', title: 'URL' },
-              { name: 'blank', type: 'boolean', title: 'Åbn i nyt vindue' },
+              { name: 'blank', type: 'boolean', title: 'Open in new tab' },
             ],
           },
         ],
@@ -38,7 +38,7 @@ export const bodyField = defineField({
     {
       type: 'object',
       name: 'calloutBlock',
-      title: 'Info / Tip boks',
+      title: 'Info / Tip box',
       fields: [
         {
           name: 'variant', title: 'Type', type: 'string',
@@ -46,16 +46,16 @@ export const bodyField = defineField({
             list: [
               { title: 'ℹ️ Info', value: 'info' },
               { title: '💡 Tip', value: 'tip' },
-              { title: '⚠️ Advarsel', value: 'warning' },
+              { title: '⚠️ Warning', value: 'warning' },
             ],
             layout: 'radio', direction: 'horizontal',
           },
           initialValue: 'info',
         },
-        { name: 'title', title: 'Overskrift', type: 'string' },
+        { name: 'title', title: 'Heading', type: 'string' },
         {
           name: 'body',
-          title: 'Indhold',
+          title: 'Content',
           type: 'array',
           of: [{
             type: 'block',
@@ -97,14 +97,14 @@ export const bodyField = defineField({
       name: 'faqBlock',
       title: 'FAQ',
       fields: [
-        { name: 'title', title: 'Overskrift', type: 'string', initialValue: 'Ofte stillede spørgsmål' },
+        { name: 'title', title: 'Heading', type: 'string', initialValue: 'Frequently Asked Questions' },
         {
-          name: 'items', title: 'Spørgsmål & svar', type: 'array',
+          name: 'items', title: 'Questions & answers', type: 'array',
           of: [{
             type: 'object', name: 'faqItem',
             fields: [
-              { name: 'question', title: 'Spørgsmål', type: 'string' },
-              { name: 'answer', title: 'Svar', type: 'text', rows: 3 },
+              { name: 'question', title: 'Question', type: 'string' },
+              { name: 'answer', title: 'Answer', type: 'text', rows: 3 },
             ],
             preview: { select: { title: 'question', subtitle: 'answer' } },
           }],
@@ -113,144 +113,144 @@ export const bodyField = defineField({
       preview: {
         select: { title: 'title', items: 'items' },
         prepare({ title, items }: any) {
-          return { title: title || 'FAQ', subtitle: `${(items || []).length} spørgsmål` }
+          return { title: title || 'FAQ', subtitle: `${(items || []).length} questions` }
         },
       },
     },
     {
       type: 'object',
       name: 'prosConsBlock',
-      title: 'Fordele & Ulemper',
+      title: 'Pros & Cons',
       fields: [
-        { name: 'title', title: 'Overskrift (valgfri)', type: 'string' },
-        { name: 'pros', title: 'Fordele ✅', type: 'array', of: [{ type: 'string' }] },
-        { name: 'cons', title: 'Ulemper ❌', type: 'array', of: [{ type: 'string' }] },
+        { name: 'title', title: 'Heading (optional)', type: 'string' },
+        { name: 'pros', title: 'Pros ✅', type: 'array', of: [{ type: 'string' }] },
+        { name: 'cons', title: 'Cons ❌', type: 'array', of: [{ type: 'string' }] },
       ],
       preview: {
         select: { title: 'title', pros: 'pros', cons: 'cons' },
         prepare({ title, pros, cons }: any) {
-          return { title: title || 'Fordele & Ulemper', subtitle: `✅ ${(pros || []).length}  ❌ ${(cons || []).length}` }
+          return { title: title || 'Pros & Cons', subtitle: `✅ ${(pros || []).length}  ❌ ${(cons || []).length}` }
         },
       },
     },
     {
       type: 'object',
       name: 'latestPostsBlock',
-      title: 'Seneste artikler',
+      title: 'Latest articles',
       fields: [
-        { name: 'title', title: 'Overskrift', type: 'string', initialValue: 'Seneste guides & artikler' },
+        { name: 'title', title: 'Heading', type: 'string', initialValue: 'Latest guides & articles' },
         {
-          name: 'count', title: 'Antal artikler', type: 'number',
+          name: 'count', title: 'Number of articles', type: 'number',
           options: { list: [2, 3, 4, 6], layout: 'radio', direction: 'horizontal' },
           initialValue: 4,
         },
-        { name: 'showViewAll', title: 'Vis "Se alle" link', type: 'boolean', initialValue: true },
+        { name: 'showViewAll', title: 'Show "View all" link', type: 'boolean', initialValue: true },
       ],
       preview: {
         select: { title: 'title', count: 'count' },
         prepare({ title, count }: any) {
-          return { title: title || 'Seneste artikler', subtitle: `${count || 4} artikler` }
+          return { title: title || 'Latest articles', subtitle: `${count || 4} articles` }
         },
       },
     },
     {
       type: 'object',
       name: 'ctaButton',
-      title: 'CTA Knap',
+      title: 'CTA Button',
       fields: [
-        { name: 'text', title: 'Knaptekst', type: 'string' },
-        { name: 'url',  title: 'URL',       type: 'url' },
+        { name: 'text', title: 'Button text', type: 'string' },
+        { name: 'url',  title: 'URL',         type: 'url' },
       ],
       preview: {
         select: { title: 'text', subtitle: 'url' },
         prepare({ title, subtitle }: any) {
-          return { title: title || 'CTA Knap', subtitle: subtitle || '' }
+          return { title: title || 'CTA Button', subtitle: subtitle || '' }
         },
       },
     },
-    // ── Casino kort (bookmaker) ──────────────────────────────────────────────
+    // ── Casino card (bookmaker) ─────────────────────────────────────────────
     {
       type: 'object',
       name: 'casinoKortBlock',
-      title: '🎰 Casino kort',
+      title: '🎰 Casino card',
       fields: [
         {
           name: 'bookmaker',
-          title: 'Vælg bookmaker',
+          title: 'Select casino',
           type: 'reference',
           to: [{ type: 'bookmaker' }],
         },
-        { name: 'customTitle', title: 'Titel', type: 'string' },
-        { name: 'image', title: 'Billede', type: 'image', options: { hotspot: true } },
+        { name: 'customTitle', title: 'Title', type: 'string' },
+        { name: 'image', title: 'Image', type: 'image', options: { hotspot: true } },
         {
           name: 'customBody',
-          title: 'Brødtekst',
+          title: 'Body text',
           type: 'array',
-          of: [{ type: 'block', styles: [{ title: 'Normal', value: 'normal' }], lists: [{ title: 'Punktliste', value: 'bullet' }, { title: 'Nummerliste', value: 'number' }], marks: { decorators: [{ title: 'Fed', value: 'strong' }, { title: 'Kursiv', value: 'em' }] } }],
+          of: [{ type: 'block', styles: [{ title: 'Normal', value: 'normal' }], lists: [{ title: 'Bullet list', value: 'bullet' }, { title: 'Numbered list', value: 'number' }], marks: { decorators: [{ title: 'Bold', value: 'strong' }, { title: 'Italic', value: 'em' }] } }],
         },
-        { name: 'pros', title: '✅ Fordele', type: 'array', of: [{ type: 'string' }] },
-        { name: 'cons', title: '❌ Ulemper', type: 'array', of: [{ type: 'string' }] },
+        { name: 'pros', title: '✅ Pros', type: 'array', of: [{ type: 'string' }] },
+        { name: 'cons', title: '❌ Cons', type: 'array', of: [{ type: 'string' }] },
       ],
       preview: {
         select: { customTitle: 'customTitle', name: 'bookmaker.name', logo: 'bookmaker.logo' },
         prepare({ customTitle, name, logo }: any) {
-          return { title: customTitle || name || 'Casino kort', subtitle: name, media: logo }
+          return { title: customTitle || name || 'Casino card', subtitle: name, media: logo }
         },
       },
     },
-    // ── Bonus kort ───────────────────────────────────────────────────────────
+    // ── Bonus card ───────────────────────────────────────────────────────────
     {
       type: 'object',
       name: 'bonusKortBlock',
-      title: '🎁 Bonus kort',
+      title: '🎁 Bonus card',
       fields: [
         {
           name: 'bonus',
-          title: 'Vælg bonus',
+          title: 'Select bonus',
           type: 'reference',
           to: [{ type: 'bonus' }],
         },
-        { name: 'customTitle', title: 'Titel', type: 'string' },
-        { name: 'image', title: 'Billede', type: 'image', options: { hotspot: true } },
+        { name: 'customTitle', title: 'Title', type: 'string' },
+        { name: 'image', title: 'Image', type: 'image', options: { hotspot: true } },
         {
           name: 'customBody',
-          title: 'Brødtekst',
+          title: 'Body text',
           type: 'array',
-          of: [{ type: 'block', styles: [{ title: 'Normal', value: 'normal' }], lists: [{ title: 'Punktliste', value: 'bullet' }, { title: 'Nummerliste', value: 'number' }], marks: { decorators: [{ title: 'Fed', value: 'strong' }, { title: 'Kursiv', value: 'em' }] } }],
+          of: [{ type: 'block', styles: [{ title: 'Normal', value: 'normal' }], lists: [{ title: 'Bullet list', value: 'bullet' }, { title: 'Numbered list', value: 'number' }], marks: { decorators: [{ title: 'Bold', value: 'strong' }, { title: 'Italic', value: 'em' }] } }],
         },
       ],
       preview: {
         select: { customTitle: 'customTitle', bonusTitle: 'bonus.title', bmName: 'bonus.bookmaker.name', logo: 'bonus.casinoLogo' },
         prepare({ customTitle, bonusTitle, bmName, logo }: any) {
-          return { title: customTitle || bmName || bonusTitle || 'Bonus kort', subtitle: bonusTitle, media: logo }
+          return { title: customTitle || bmName || bonusTitle || 'Bonus card', subtitle: bonusTitle, media: logo }
         },
       },
     },
     {
       type: 'object',
       name: 'tableBlock',
-      title: 'Tabel',
+      title: 'Table',
       components: { input: TableBlockInput },
       fields: [
-        { name: 'title', title: 'Overskrift (valgfri)', type: 'string' },
+        { name: 'title', title: 'Heading (optional)', type: 'string' },
         {
           name: 'headers',
-          title: 'Kolonneoverskrifter',
+          title: 'Column headers',
           type: 'array',
           of: [{ type: 'string' }],
         },
         {
           name: 'rows',
-          title: 'Rækker',
+          title: 'Rows',
           type: 'array',
           of: [{
             type: 'object',
             name: 'tableRow',
-            title: 'Række',
-            fields: [{ name: 'cells', title: 'Celler', type: 'array', of: [{ type: 'string' }] }],
+            title: 'Row',
+            fields: [{ name: 'cells', title: 'Cells', type: 'array', of: [{ type: 'string' }] }],
             preview: {
               select: { cells: 'cells' },
-              prepare({ cells }: any) { return { title: (cells || []).join(' | ') || '(tom række)' } },
+              prepare({ cells }: any) { return { title: (cells || []).join(' | ') || '(empty row)' } },
             },
           }],
         },
@@ -258,7 +258,7 @@ export const bodyField = defineField({
       preview: {
         select: { title: 'title', headers: 'headers', rows: 'rows' },
         prepare({ title, headers, rows }: any) {
-          return { title: title || 'Tabel', subtitle: `${(headers || []).length} kolonner · ${(rows || []).length} rækker` }
+          return { title: title || 'Table', subtitle: `${(headers || []).length} columns · ${(rows || []).length} rows` }
         },
       },
     },
@@ -303,14 +303,14 @@ export const bodyField = defineField({
 
 export const pageType = defineType({
   name: 'page',
-  title: 'Sider',
+  title: 'Pages',
   type: 'document',
   groups: [
-    { name: 'content', title: 'Indhold' },
+    { name: 'content', title: 'Content' },
     { name: 'seo',     title: 'SEO' },
   ],
   fields: [
-    defineField({ name: 'title', title: 'Titel', type: 'string', group: 'content', validation: (r) => r.required() }),
+    defineField({ name: 'title', title: 'Title', type: 'string', group: 'content', validation: (r) => r.required() }),
     defineField({ name: 'slug',  title: 'Slug',  type: 'slug',   group: 'content', options: { source: 'title' }, validation: (r) => r.required() }),
     defineField({
       name: 'market',
@@ -330,45 +330,45 @@ export const pageType = defineType({
     }),
     defineField({
       name: 'parent',
-      title: 'Forældreside',
+      title: 'Parent page',
       type: 'reference',
       to: [{ type: 'page' }],
       group: 'content',
       options: { disableNew: true },
-      description: 'Valgfri — genererer URL som /forælder/denne-side og tilføjer brødkrumme',
+      description: 'Optional — generates URL as /parent/this-page and adds breadcrumb',
     }),
-    defineField({ name: 'intro', title: 'Intro', type: 'text',   rows: 3, group: 'content' }),
+    defineField({ name: 'intro', title: 'Intro', type: 'text', rows: 3, group: 'content' }),
     ...comparisonTableFields.map(f => ({ ...f, group: 'content' })) as any,
     { ...bodyField, group: 'content' } as any,
     defineField({
       name: 'author',
-      title: 'Forfatter',
+      title: 'Author',
       type: 'reference',
       to: [{ type: 'author' }],
       group: 'content',
-      description: 'Vises i hero og som forfatter-kort nederst på siden',
+      description: 'Shown in hero and as author card at the bottom of the page',
     }),
     defineField({
       name: 'factChecker',
-      title: 'Faktatjekker',
+      title: 'Fact checker',
       type: 'reference',
       to: [{ type: 'author' }],
       group: 'content',
-      description: 'Vises ved siden af forfatteren i hero-sektionen',
+      description: 'Shown next to the author in the hero section',
     }),
     defineField({
       name: 'lastUpdated',
-      title: 'Sidst opdateret',
+      title: 'Last updated',
       type: 'date',
       group: 'content',
-      description: 'Vises under forfatternavn i hero',
+      description: 'Shown below the author name in hero',
     }),
-    defineField({ name: 'metaTitle', title: 'Meta titel', type: 'string', group: 'seo' }),
-    defineField({ name: 'metaDescription', title: 'Meta beskrivelse', type: 'text', rows: 3, group: 'seo' }),
+    defineField({ name: 'metaTitle', title: 'Meta title', type: 'string', group: 'seo' }),
+    defineField({ name: 'metaDescription', title: 'Meta description', type: 'text', rows: 3, group: 'seo' }),
     defineField({
-      name: 'featuredImage', title: 'OG-billede', type: 'image', group: 'seo',
+      name: 'featuredImage', title: 'OG image', type: 'image', group: 'seo',
       options: { hotspot: true },
-      fields: [defineField({ name: 'alt', title: 'Alt-tekst', type: 'string' })],
+      fields: [defineField({ name: 'alt', title: 'Alt text', type: 'string' })],
     }),
   ],
   preview: {

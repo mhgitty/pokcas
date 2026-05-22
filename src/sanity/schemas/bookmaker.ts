@@ -7,21 +7,21 @@ export const bookmakerType = defineType({
   type: 'document',
   groups: [
     { name: 'info', title: 'Info & bonus' },
-    { name: 'content', title: 'Indhold' },
+    { name: 'content', title: 'Content' },
     { name: 'seo', title: 'SEO' },
   ],
   fields: [
     // ── Identity ─────────────────────────────────────────────────────────────
     defineField({
       name: 'titel',
-      title: 'Titel (H1)',
+      title: 'Title (H1)',
       type: 'string',
       group: 'info',
-      description: 'Vises som H1 på anmeldelsessiden. Hvis tom bruges "Navn anmeldelse".',
+      description: 'Displayed as the H1 on the review page. Falls back to "Name Review" if empty.',
     }),
     defineField({
       name: 'name',
-      title: 'Navn',
+      title: 'Name',
       type: 'string',
       group: 'info',
       validation: (r) => r.required(),
@@ -32,7 +32,7 @@ export const bookmakerType = defineType({
       type: 'slug',
       group: 'info',
       options: { source: 'name' },
-      description: 'Bruges i URL: /betting-sider/[slug]',
+      description: 'Used in URL: /review/[slug]',
       validation: (r) => r.required(),
     }),
     defineField({
@@ -58,7 +58,7 @@ export const bookmakerType = defineType({
       group: 'info',
       options: { hotspot: true },
       fields: [
-        defineField({ name: 'alt', title: 'Alt-tekst', type: 'string' }),
+        defineField({ name: 'alt', title: 'Alt text', type: 'string' }),
       ],
     }),
     defineField({
@@ -66,7 +66,7 @@ export const bookmakerType = defineType({
       title: 'Score (0–10)',
       type: 'number',
       group: 'info',
-      description: 'Vores samlede vurdering af casinoet',
+      description: 'Our overall rating of the casino',
       validation: (r) => r.min(0).max(10),
     }),
     defineField({
@@ -74,7 +74,7 @@ export const bookmakerType = defineType({
       title: 'USP',
       type: 'string',
       group: 'info',
-      description: 'Kort salgsargument — vises på kortet, f.eks. "Markedets bedste velkomstbonus"',
+      description: 'Short selling point — shown on the card, e.g. "Best welcome bonus on the market"',
     }),
 
     // ── Bonus info ────────────────────────────────────────────────────────────
@@ -151,15 +151,15 @@ export const bookmakerType = defineType({
     }),
 
     // ── SEO ───────────────────────────────────────────────────────────────────
-    defineField({ name: 'metaTitle', title: 'Meta titel', type: 'string', group: 'seo' }),
-    defineField({ name: 'metaDescription', title: 'Meta beskrivelse', type: 'text', rows: 3, group: 'seo' }),
+    defineField({ name: 'metaTitle', title: 'Meta title', type: 'string', group: 'seo' }),
+    defineField({ name: 'metaDescription', title: 'Meta description', type: 'text', rows: 3, group: 'seo' }),
     defineField({
       name: 'ogImage',
-      title: 'OG-billede',
+      title: 'OG image',
       type: 'image',
       group: 'seo',
       options: { hotspot: true },
-      fields: [defineField({ name: 'alt', title: 'Alt-tekst', type: 'string' })],
+      fields: [defineField({ name: 'alt', title: 'Alt text', type: 'string' })],
     }),
   ],
   preview: {

@@ -12,14 +12,14 @@ const DEFAULT_NAV = [
 ]
 
 function resolveUrl(item: {
-  url?: string; pageSlug?: string; pageParentSlug?: string; bookmakerSlug?: string
+  url?: string; pageSlug?: string; pageParentSlug?: string; bookmakerSlug?: string;
+  softwareSlug?: string; paymentMethodSlug?: string; postSlug?: string;
 }): string {
-  if (item.pageSlug) {
-    return item.pageParentSlug
-      ? `/${item.pageParentSlug}/${item.pageSlug}/`
-      : `/${item.pageSlug}/`
-  }
+  if (item.pageSlug) return item.pageParentSlug ? `/${item.pageParentSlug}/${item.pageSlug}/` : `/${item.pageSlug}/`
   if (item.bookmakerSlug) return `/review/${item.bookmakerSlug}/`
+  if (item.softwareSlug) return `/software/${item.softwareSlug}/`
+  if (item.paymentMethodSlug) return `/payments/${item.paymentMethodSlug}/`
+  if (item.postSlug) return `/${item.postSlug}/`
   return item.url || '/'
 }
 
