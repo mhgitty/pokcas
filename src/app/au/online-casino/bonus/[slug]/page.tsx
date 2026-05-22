@@ -1,5 +1,3 @@
-import { Navbar } from '@/components/Navbar'
-import { Footer } from '@/components/Footer'
 import { BonusHero } from '@/components/BonusHero'
 import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { TableOfContents } from '@/components/TableOfContents'
@@ -85,7 +83,6 @@ export default async function CaBonusSlugPage({ params }: Props) {
   return (
     <>
       <JsonLd data={jsonLd} />
-      <Navbar />
       <BonusHero
         title={bonus.title}
         casinoNavn={bonus.casinoNavn}
@@ -115,7 +112,6 @@ export default async function CaBonusSlugPage({ params }: Props) {
           <AuthorBio author={author} compact />
         </div>
       )}
-      <Footer />
     </>
   )
 }

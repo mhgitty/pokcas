@@ -1,11 +1,11 @@
 import { HeroSection } from '@/components/HeroSection'
-import { AuthorBio } from '@/components/AuthorBio'
 import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { TableOfContents } from '@/components/TableOfContents'
 import { MobileToc } from '@/components/MobileToc'
 import { JsonLd } from '@/components/JsonLd'
-import { getPageBySlugAu, getBookmarkersAu, getSiteSettings } from '@/lib/sanity'
+import { getCountryHomepage, getBookmakersCa, getSiteSettings } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
+import { AuthorBio } from '@/components/AuthorBio'
 import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
@@ -13,13 +13,19 @@ import type { Metadata } from 'next'
 export const revalidate = 3600
 
 const BASE = 'https://pokcas.com'
-const CANONICAL = `${BASE}/au/reviews/`
+const CANONICAL = `${BASE}/ca/`
 
 export async function generateMetadata(): Promise<Metadata> {
-  const page = await getPageBySlugAu('au-reviews').catch(() => null)
-  const title = replaceDateVars(page?.metaTitle || page?.title || 'Best Online Casinos Australia')
-  const description = replaceDateVars(page?.metaDescription || page?.intro || 'Compare the best online casinos in Australia. Expert reviews, bonus info and ratings.')
-  return { title, description, alternates: { canonical: CANONICAL } }
+  const hp = await getCountryHomepage('ca').catch(() => null)
+  const title = replaceDateVars(hp?.metaTitle || hp?.heroHeading || 'Best Online Casinos Canada')
+  const description = replaceDateVars(hp?.metaDescription || hp?.intro || 'Find the best online casinos and bonuses for Canadian players.')
+  const img = hp?.ogImage?.url
+  return {
+    title,
+    description,
+    alternates: { canonical: CANONICAL },
+    openGraph: { title, description, url: CANONICAL, ...(img ? { images: [{ url: img }] } : {}) },
+  }
 }
 
 function ScoreBadge({ score }: { score: number }) {
@@ -31,15 +37,16 @@ function ScoreBadge({ score }: { score: number }) {
   )
 }
 
-export default async function CaReviewsPage() {
-  const [page, bookmakers, settings] = await Promise.all([
-    getPageBySlugAu('au-reviews').catch(() => null),
-    getBookmarkersAu().catch(() => []),
+export default async function CaHomePage() {
+  const [hp, bookmakers, settings] = await Promise.all([
+    getCountryHomepage('ca').catch(() => null),
+    getBookmakersCa().catch(() => []),
     getSiteSettings().catch(() => null),
   ])
-  const author = (page as any)?.author ?? settings?.defaultAuthor ?? null
-  const title = page?.title || 'Best Online Casinos Australia'
-  const intro = page?.intro || 'We have reviewed and ranked the best online casinos for Australian players. Compare welcome bonuses, wagering requirements and expert ratings.'
+
+  const title = hp?.heroHeading || 'Best Online Casinos in Canada'
+  const intro = hp?.intro || 'Expert reviews of the top Canadian online casinos. Compare welcome bonuses, wagering requirements and ratings.'
+  const author = settings?.defaultAuthor ?? null
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -48,8 +55,7 @@ export default async function CaReviewsPage() {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Home', item: BASE },
-          { '@type': 'ListItem', position: 2, name: 'Australia', item: `${BASE}/au/` },
-          { '@type': 'ListItem', position: 3, name: title, item: CANONICAL },
+          { '@type': 'ListItem', position: 2, name: 'Canada', item: CANONICAL },
         ],
       },
       {
@@ -58,7 +64,7 @@ export default async function CaReviewsPage() {
         url: CANONICAL,
         name: title,
         description: intro,
-        inLanguage: 'en-AU',
+        inLanguage: 'en-CA',
         publisher: { '@type': 'Organization', name: 'Pokcas', url: BASE },
       },
     ],
@@ -71,15 +77,16 @@ export default async function CaReviewsPage() {
         title={title}
         intro={intro}
         author={author}
-        updatedAt={(page as any)?.lastUpdated ?? null}
-        factChecker={(page as any)?.factChecker ?? null}
-        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Australia', href: '/au/' }, { label: title }]}
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Canada' }]}
       />
 
-      {bookmakers.length > 0 && (
-        <div className="section" style={{ paddingBottom: page?.body ? '0' : undefined }}>
+      {(bookmakers as any[]).length > 0 && (
+        <div className="section" style={{ paddingBottom: hp?.body ? '0' : undefined }}>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 700, marginBottom: '16px', color: 'var(--text)' }}>
+            Top Rated Canadian Casinos
+          </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {(bookmakers as any[]).map((bm: any, i: number) => (
+            {(bookmakers as any[]).slice(0, 5).map((bm: any, i: number) => (
               <div key={bm._id} style={{
                 background: 'var(--bg-card)',
                 border: i === 0 ? '2px solid var(--green)' : '1px solid var(--border)',
@@ -93,26 +100,16 @@ export default async function CaReviewsPage() {
                     background: 'var(--green)', color: '#fff',
                     fontSize: '11px', fontWeight: 700, textAlign: 'center',
                     padding: '3px 0', letterSpacing: '0.5px',
-                  }}>
-                    🏆 TOP RATED
-                  </div>
+                  }}>🏆 TOP RATED</div>
                 )}
                 <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: '40px 100px 1fr auto',
-                  gap: '16px',
-                  padding: i === 0 ? '32px 24px 20px' : '20px 24px',
+                  display: 'grid', gridTemplateColumns: '40px 100px 1fr auto',
+                  gap: '16px', padding: i === 0 ? '32px 24px 20px' : '20px 24px',
                   alignItems: 'center',
                 }} className="bookmaker-card-inner">
-
-                  <div style={{
-                    fontSize: '18px', fontWeight: 800,
-                    color: i < 3 ? 'var(--green)' : 'var(--text-faint)',
-                    textAlign: 'center',
-                  }}>
+                  <div style={{ fontSize: '18px', fontWeight: 800, color: i < 3 ? 'var(--green)' : 'var(--text-faint)', textAlign: 'center' }}>
                     #{i + 1}
                   </div>
-
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     {bm.logo?.url ? (
                       <div style={{ background: '#fff', borderRadius: '8px', padding: '6px 10px', border: '1px solid var(--border-faint)' }}>
@@ -125,38 +122,19 @@ export default async function CaReviewsPage() {
                       </div>
                     )}
                   </div>
-
                   <div style={{ minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', flexWrap: 'wrap' }}>
                       <span style={{ fontFamily: 'var(--font-display)', fontSize: '16px', fontWeight: 700, color: 'var(--text)' }}>{bm.name}</span>
                       {bm.score != null && <ScoreBadge score={bm.score} />}
                     </div>
-                    {bm.usp && <p style={{ fontSize: '13px', color: 'var(--text-muted)', margin: '0 0 8px', lineHeight: 1.5 }}>{bm.usp}</p>}
-                    <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-                      {bm.indbetalingsbonus && (
-                        <div>
-                          <div style={{ fontSize: '10px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.4px' }}>Welcome bonus</div>
-                          <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--green)' }}>{bm.indbetalingsbonus}</div>
-                        </div>
-                      )}
-                      {bm.gennemspilskrav && (
-                        <div>
-                          <div style={{ fontSize: '10px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.4px' }}>Wager</div>
-                          <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)' }}>{bm.gennemspilskrav}</div>
-                        </div>
-                      )}
-                      {bm.minIndbetaling != null && (
-                        <div>
-                          <div style={{ fontSize: '10px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.4px' }}>Min. deposit</div>
-                          <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)' }}>AUD {bm.minIndbetaling}</div>
-                        </div>
-                      )}
-                    </div>
+                    {bm.usp && <p style={{ fontSize: '13px', color: 'var(--text-muted)', margin: '0 0 6px', lineHeight: 1.5 }}>{bm.usp}</p>}
+                    {bm.indbetalingsbonus && (
+                      <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--green)' }}>{bm.indbetalingsbonus}</div>
+                    )}
                     {bm.terms && (
-                      <div style={{ fontSize: '10px', color: 'var(--text-faint)', marginTop: '6px', lineHeight: 1.4 }}>{bm.terms}</div>
+                      <div style={{ fontSize: '10px', color: 'var(--text-faint)', marginTop: '4px', lineHeight: 1.4 }}>{bm.terms}</div>
                     )}
                   </div>
-
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-end', flexShrink: 0 }}>
                     {bm.url && (
                       <a href={bm.url} target="_blank" rel="noopener noreferrer sponsored"
@@ -164,7 +142,7 @@ export default async function CaReviewsPage() {
                         Sign up →
                       </a>
                     )}
-                    <Link href={`/au/reviews/${bm.slug.current}`}
+                    <Link href={`/ca/reviews/${bm.slug.current}`}
                       style={{ fontSize: '12px', color: 'var(--text-muted)', textDecoration: 'none', whiteSpace: 'nowrap' }}>
                       Read review
                     </Link>
@@ -173,17 +151,25 @@ export default async function CaReviewsPage() {
               </div>
             ))}
           </div>
+          {(bookmakers as any[]).length > 5 && (
+            <div style={{ textAlign: 'center', marginTop: '20px' }}>
+              <Link href="/ca/reviews/"
+                style={{ display: 'inline-block', border: '1px solid var(--border)', borderRadius: '8px', padding: '10px 24px', fontSize: '14px', fontWeight: 600, color: 'var(--text)', textDecoration: 'none' }}>
+                See all {(bookmakers as any[]).length} casinos →
+              </Link>
+            </div>
+          )}
         </div>
       )}
 
-      {page?.body && (
+      {hp?.body && (
         <div className="article-layout">
           <article className="article-content">
-            <MobileToc body={page.body} />
-            <PortableTextRenderer value={page.body} />
+            <MobileToc body={hp.body} />
+            <PortableTextRenderer value={hp.body} />
           </article>
           <aside className="toc-sidebar">
-            <TableOfContents body={page.body} />
+            <TableOfContents body={hp.body} />
           </aside>
         </div>
       )}
@@ -193,7 +179,6 @@ export default async function CaReviewsPage() {
           <AuthorBio author={author} compact />
         </div>
       )}
-
     </>
   )
 }

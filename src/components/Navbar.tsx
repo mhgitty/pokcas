@@ -23,20 +23,23 @@ function resolveUrl(item: {
   return item.url || '/'
 }
 
-export async function Navbar() {
-  const settings = await getSiteSettings().catch(() => null)
-  const raw: any[] = settings?.headerNav?.length ? settings.headerNav : DEFAULT_NAV
+interface ResolvedNavItem { label: string; href: string; isHighlighted: boolean; children: { label: string; href: string }[] }
 
-  // Resolve all URLs server-side so MobileMenu (client) gets plain strings
-  const nav = raw.map((item: any) => ({
-    label: item.label,
-    href: resolveUrl(item),
-    isHighlighted: item.isHighlighted ?? false,
-    children: (item.children || []).map((c: any) => ({
-      label: c.label,
-      href: resolveUrl(c),
-    })),
-  }))
+export async function Navbar({ navItems }: { navItems?: ResolvedNavItem[] } = {}) {
+  let nav = navItems
+  if (!nav) {
+    const settings = await getSiteSettings().catch(() => null)
+    const raw: any[] = settings?.headerNav?.length ? settings.headerNav : DEFAULT_NAV
+    nav = raw.map((item: any) => ({
+      label: item.label,
+      href: resolveUrl(item),
+      isHighlighted: item.isHighlighted ?? false,
+      children: (item.children || []).map((c: any) => ({
+        label: c.label,
+        href: resolveUrl(c),
+      })),
+    }))
+  }
 
   return (
     <header className="navbar">

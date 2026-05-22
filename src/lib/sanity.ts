@@ -419,6 +419,42 @@ export async function getAuthorPaths() {
   ).catch(() => [])
 }
 
+// ─── Market settings & country homepage ──────────────────────────────────────
+
+export async function getMarketSettings(market: 'ca' | 'au') {
+  return client.fetch(
+    `*[_type == "marketSettings" && _id == $id][0] {
+      market, headerNav, footerTagline, footerColumns, footerNote, footerDisclaimer
+    }`,
+    { id: `${market}-settings` },
+    { next: { revalidate: 3600 } }
+  )
+}
+
+export async function getCountryHomepage(market: 'ca' | 'au') {
+  return client.fetch(
+    `*[_type == "countryHomepage" && _id == $id][0] {
+      market, heroHeading, intro,
+      "body": body[] {
+        ...,
+        _type == "casinoKortBlock" => {
+          ...,
+          customTitle, customBody, pros, cons,
+          "imageUrl": image.asset->url,
+          "bookmaker": bookmaker-> {
+            name, score, url,
+            "logoUrl": logo.asset->url,
+            "logoAlt": logo.alt,
+          }
+        }
+      },
+      metaTitle, metaDescription,
+      "ogImage": ogImage { "url": asset->url, alt }
+    }`,
+    { id: `${market}-homepage` }
+  )
+}
+
 // ─── Canada (market == 'ca') ──────────────────────────────────────────────────
 
 export async function getBookmakersCa() {

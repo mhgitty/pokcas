@@ -1,5 +1,3 @@
-import { Navbar } from '@/components/Navbar'
-import { Footer } from '@/components/Footer'
 import { StickyCtaBar } from '@/components/StickyCtaBar'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { PortableTextRenderer } from '@/components/PortableTextRenderer'
@@ -121,7 +119,6 @@ export default async function CaReviewSlugPage({ params }: Props) {
   return (
     <>
       <JsonLd data={jsonLd} />
-      <Navbar />
 
       {/* Hero */}
       <div style={{ background: 'var(--bg-hero)', borderBottom: '1px solid var(--border)', padding: '40px 15px 32px' }}>
@@ -240,7 +237,6 @@ export default async function CaReviewSlugPage({ params }: Props) {
         </div>
       )}
 
-      <Footer />
     </>
   )
 }

@@ -1,5 +1,3 @@
-import { Navbar } from '@/components/Navbar'
-import { Footer } from '@/components/Footer'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { JsonLd } from '@/components/JsonLd'
 import { getSoftwareBySlugCa, client } from '@/lib/sanity'
@@ -52,7 +50,6 @@ export default async function CaSoftwareSlugPage({ params }: Props) {
   return (
     <>
       <JsonLd data={jsonLd} />
-      <Navbar />
 
       <div style={{ background: 'var(--bg-hero)', borderBottom: '1px solid var(--border)', padding: '40px 15px 32px' }}>
         <div style={{ maxWidth: '1220px', margin: '0 auto' }}>
@@ -110,7 +107,6 @@ export default async function CaSoftwareSlugPage({ params }: Props) {
         </div>
       )}
 
-      <Footer />
     </>
   )
 }

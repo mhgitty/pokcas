@@ -29,14 +29,24 @@ const DEFAULT_COLUMNS = [
   },
 ]
 
-export async function Footer() {
-  const settings = await getSiteSettings().catch(() => null)
-  const year = new Date().getFullYear()
+interface FooterProps {
+  tagline?: string
+  columns?: any[]
+  note?: string
+  disclaimer?: string
+}
 
-  const tagline    = settings?.footerTagline    ?? 'Your independent international guide to online casinos and casino bonuses. We compare the best offers.'
-  const columns    = settings?.footerColumns?.length ? settings.footerColumns : DEFAULT_COLUMNS
-  const note       = settings?.footerNote       ?? `© ${year} Pokcas.com · Play responsibly · 18+`
-  const disclaimer = settings?.footerDisclaimer ?? 'Affiliate links may be present · See terms at the casino'
+export async function Footer({ tagline: taglineProp, columns: columnsProp, note: noteProp, disclaimer: disclaimerProp }: FooterProps = {}) {
+  const year = new Date().getFullYear()
+  let tagline = taglineProp, columns = columnsProp, note = noteProp, disclaimer = disclaimerProp
+
+  if (!tagline || !columns || !note || !disclaimer) {
+    const settings = await getSiteSettings().catch(() => null)
+    tagline    = tagline    ?? settings?.footerTagline    ?? 'Your independent international guide to online casinos and casino bonuses. We compare the best offers.'
+    columns    = columns    ?? (settings?.footerColumns?.length ? settings.footerColumns : DEFAULT_COLUMNS)
+    note       = note       ?? settings?.footerNote       ?? `© ${year} Pokcas.com · Play responsibly · 18+`
+    disclaimer = disclaimer ?? settings?.footerDisclaimer ?? 'Affiliate links may be present · See terms at the casino'
+  }
 
   return (
     <footer style={{ borderTop: '1px solid var(--border)', background: 'var(--bg-footer)', marginTop: '80px', padding: '48px 24px 32px' }}>
@@ -60,7 +70,7 @@ export async function Footer() {
           </div>
 
           {/* Configurable columns */}
-          {columns.map((col: any) => (
+          {(columns || []).map((col: any) => (
             <div key={col.title}>
               <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '12px' }}>
                 {col.title}

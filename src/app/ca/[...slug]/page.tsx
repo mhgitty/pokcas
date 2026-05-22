@@ -1,5 +1,3 @@
-import { Navbar } from '@/components/Navbar'
-import { Footer } from '@/components/Footer'
 import { HeroSection } from '@/components/HeroSection'
 import { AuthorBio } from '@/components/AuthorBio'
 import { PortableTextRenderer } from '@/components/PortableTextRenderer'
@@ -89,7 +87,6 @@ export default async function CaSlugPage({ params }: Props) {
   return (
     <>
       <JsonLd data={jsonLd} />
-      <Navbar />
       <HeroSection
         title={page.title}
         intro={page.intro ?? undefined}
@@ -118,7 +115,6 @@ export default async function CaSlugPage({ params }: Props) {
         </div>
       )}
 
-      <Footer />
     </>
   )
 }

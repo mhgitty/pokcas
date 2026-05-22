@@ -48,6 +48,7 @@ export default defineConfig({
                   .items([
                     S.listItem()
                       .title('🎰 Casino Reviews')
+
                       .schemaType('bookmaker')
                       .child(
                         S.documentTypeList('bookmaker')
@@ -101,6 +102,23 @@ export default defineConfig({
                 S.list()
                   .title('🇨🇦 Canada')
                   .items([
+                    S.listItem()
+                      .title('🏠 Homepage')
+                      .id('ca-homepage')
+                      .child(
+                        S.document()
+                          .schemaType('countryHomepage')
+                          .documentId('ca-homepage')
+                      ),
+                    S.listItem()
+                      .title('⚙️ Menu Settings')
+                      .id('ca-settings')
+                      .child(
+                        S.document()
+                          .schemaType('marketSettings')
+                          .documentId('ca-settings')
+                      ),
+                    S.divider(),
                     S.listItem()
                       .title('🎰 Casino Reviews')
                       .schemaType('bookmaker')
@@ -156,6 +174,23 @@ export default defineConfig({
                 S.list()
                   .title('🇦🇺 Australia')
                   .items([
+                    S.listItem()
+                      .title('🏠 Homepage')
+                      .id('au-homepage')
+                      .child(
+                        S.document()
+                          .schemaType('countryHomepage')
+                          .documentId('au-homepage')
+                      ),
+                    S.listItem()
+                      .title('⚙️ Menu Settings')
+                      .id('au-settings')
+                      .child(
+                        S.document()
+                          .schemaType('marketSettings')
+                          .documentId('au-settings')
+                      ),
+                    S.divider(),
                     S.listItem()
                       .title('🎰 Casino Reviews')
                       .schemaType('bookmaker')

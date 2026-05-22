@@ -10,10 +10,14 @@ import { siteSettingsType } from './siteSettings'
 import { redirectType } from './redirect'
 import { paymentMethodType } from './paymentMethod'
 import { softwareType } from './software'
+import { marketSettingsType } from './marketSettings'
+import { countryHomepageType } from './countryHomepage'
 
 export const schemaTypes = [
   siteSettingsType,
   homepageType,
+  marketSettingsType,
+  countryHomepageType,
   bookmakerType,
   bonusType,
   comparisonTableTemplateType,

@@ -1,5 +1,3 @@
-import { Navbar } from '@/components/Navbar'
-import { Footer } from '@/components/Footer'
 import { HeroSection } from '@/components/HeroSection'
 import { AuthorBio } from '@/components/AuthorBio'
 import { PortableTextRenderer } from '@/components/PortableTextRenderer'
@@ -69,7 +67,6 @@ export default async function CaReviewsPage() {
   return (
     <>
       <JsonLd data={jsonLd} />
-      <Navbar />
       <HeroSection
         title={title}
         intro={intro}
@@ -197,7 +194,6 @@ export default async function CaReviewsPage() {
         </div>
       )}
 
-      <Footer />
     </>
   )
 }
