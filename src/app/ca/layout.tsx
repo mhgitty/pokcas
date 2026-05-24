@@ -26,6 +26,7 @@ export default async function CaLayout({ children }: { children: React.ReactNode
     label: item.label,
     href: resolveUrl(item),
     isHighlighted: item.isHighlighted ?? false,
+    icon: item.icon ?? undefined,
     children: (item.children || []).map((c: any) => ({ label: c.label, href: resolveUrl(c) })),
   }))
 

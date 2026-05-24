@@ -2,6 +2,8 @@ import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { JsonLd } from '@/components/JsonLd'
 import { SoftwareHero } from '@/components/SoftwareHero'
 import { PortableTextRenderer } from '@/components/PortableTextRenderer'
+import { TableOfContents } from '@/components/TableOfContents'
+import { MobileToc } from '@/components/MobileToc'
 import { getSoftwareBySlugAu, client } from '@/lib/sanity'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -79,8 +81,14 @@ export default async function AuSoftwareSlugPage({ params }: Props) {
 
       {/* Body content */}
       {provider.body && provider.body.length > 0 && (
-        <div className="section" style={{ maxWidth: '860px', margin: '0 auto' }}>
-          <PortableTextRenderer value={provider.body} />
+        <div className="article-layout">
+          <article className="article-content">
+            <MobileToc body={provider.body} />
+            <PortableTextRenderer value={provider.body} />
+          </article>
+          <aside className="toc-sidebar">
+            <TableOfContents body={provider.body} />
+          </aside>
         </div>
       )}
 
