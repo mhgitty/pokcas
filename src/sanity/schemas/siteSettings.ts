@@ -100,6 +100,24 @@ export const siteSettingsType = defineType({
     { name: 'footer',  title: '🔻 Footer' },
   ],
   fields: [
+    // ── Logos ───────────────────────────────────────────────────────────────────
+    defineField({
+      name: 'logo',
+      title: 'Logo (default — dark)',
+      type: 'image',
+      group: 'general',
+      description: 'Used in the header on light backgrounds.',
+      options: { hotspot: false },
+    }),
+    defineField({
+      name: 'logoWhite',
+      title: 'Logo (white — for dark backgrounds)',
+      type: 'image',
+      group: 'general',
+      description: 'Used in the footer and any dark-background areas.',
+      options: { hotspot: false },
+    }),
+
     // ── Default author ──────────────────────────────────────────────────────────
     defineField({
       name: 'defaultAuthor',

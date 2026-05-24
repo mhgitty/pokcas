@@ -66,6 +66,7 @@ export async function Footer({
   const year = new Date().getFullYear()
 
   const settings = await getSiteSettings().catch(() => null)
+  const logoWhiteUrl = settings?.logoWhiteUrl ?? settings?.logoUrl ?? '/logo.webp'
   const tagline      = taglineProp      ?? settings?.footerTagline      ?? 'Your independent international guide to online casinos and casino bonuses. We compare the best offers.'
   const columns      = columnsProp      ?? (settings?.footerColumns?.length ? settings.footerColumns : DEFAULT_COLUMNS)
   const longDisclaimer = longDisclaimerProp ?? settings?.footerLongDisclaimer ?? null
@@ -91,11 +92,12 @@ export async function Footer({
           <div className="footer-col-logo">
             <div style={{ marginBottom: '14px' }}>
               <Image
-                src="/logo.webp"
+                src={logoWhiteUrl}
                 alt="Pokcas"
                 height={32}
                 width={180}
                 style={{ height: '32px', width: 'auto', display: 'block' }}
+                unoptimized={logoWhiteUrl.startsWith('http')}
               />
             </div>
             <p style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.6, margin: 0 }}>

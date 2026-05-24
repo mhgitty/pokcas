@@ -244,6 +244,8 @@ export async function getBonusBySlug(slug: string) {
 export const getSiteSettings = cache(async () => {
   return client.fetch(
     `*[_type == "siteSettings"][0] {
+      "logoUrl": logo.asset->url,
+      "logoWhiteUrl": logoWhite.asset->url,
       "defaultAuthor": defaultAuthor-> {
         name, slug, bio, linkedin, x, facebook,
         "imageUrl": image.asset->url
