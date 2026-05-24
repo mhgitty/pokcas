@@ -360,7 +360,9 @@ export async function getPaymentMethods() {
 export async function getPaymentMethodBySlug(slug: string) {
   return client.fetch(
     `*[_type == "paymentMethod" && slug.current == $slug][0] {
-      _id, name, titel, slug, withdrawalTime, withdrawalFee,
+      _id, name, titel, slug, withdrawalTime,
+      paymentCategory, transactionFees, eligibleForBonuses,
+      "intro": intro[] { ..., _type == "image" => { ..., "url": asset->url } },
       "logo": logo { "url": asset->url, alt },
       "casinos": *[_type == "bookmaker" && references(^._id)] | order(score desc) {
         _id, name, slug, score, usp, url,
@@ -607,7 +609,9 @@ export async function getPaymentMethodsCa() {
 export async function getPaymentMethodBySlugCa(slug: string) {
   return client.fetch(
     `*[_type == "paymentMethod" && slug.current == $slug && market == "ca"][0] {
-      _id, name, titel, slug, withdrawalTime, withdrawalFee,
+      _id, name, titel, slug, withdrawalTime,
+      paymentCategory, transactionFees, eligibleForBonuses,
+      "intro": intro[] { ..., _type == "image" => { ..., "url": asset->url } },
       "logo": logo { "url": asset->url, alt },
       "casinos": *[_type == "bookmaker" && market == "ca" && references(^._id)] | order(score desc) {
         _id, name, slug, score, usp, url,
@@ -728,7 +732,9 @@ export async function getPaymentMethodsAu() {
 export async function getPaymentMethodBySlugAu(slug: string) {
   return client.fetch(
     `*[_type == "paymentMethod" && slug.current == $slug && market == "au"][0] {
-      _id, name, titel, slug, withdrawalTime, withdrawalFee,
+      _id, name, titel, slug, withdrawalTime,
+      paymentCategory, transactionFees, eligibleForBonuses,
+      "intro": intro[] { ..., _type == "image" => { ..., "url": asset->url } },
       "logo": logo { "url": asset->url, alt },
       "casinos": *[_type == "bookmaker" && market == "au" && references(^._id)] | order(score desc) {
         _id, name, slug, score, usp, url,

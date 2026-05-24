@@ -3,25 +3,41 @@ import type { DocumentActionComponent, DocumentActionProps } from 'sanity'
 
 const BASE = 'https://pokcas.com'
 
+function marketPrefix(doc: Record<string, any>): string {
+  const market = doc?.market as string | undefined
+  if (market === 'ca') return '/ca'
+  if (market === 'au') return '/au'
+  return ''
+}
+
 function resolveUrl(type: string, doc: Record<string, any>): string | null {
   const slug = doc?.slug?.current as string | undefined
+  const mp = marketPrefix(doc)
 
   switch (type) {
     case 'homepage':
       return `${BASE}/`
+    case 'countryHomepage':
+      return doc?.market === 'ca' ? `${BASE}/ca/` : doc?.market === 'au' ? `${BASE}/au/` : `${BASE}/`
     case 'post':
       return slug ? `${BASE}/${slug}/` : `${BASE}/`
     case 'page': {
       if (!slug) return null
       const parentSlug = doc?.parent?.slug?.current as string | undefined
       return parentSlug
-        ? `${BASE}/${parentSlug}/${slug}/`
-        : `${BASE}/${slug}/`
+        ? `${BASE}${mp}/${parentSlug}/${slug}/`
+        : `${BASE}${mp}/${slug}/`
     }
     case 'bookmaker':
-      return slug ? `${BASE}/review/${slug}/` : `${BASE}/review/`
+      return slug
+        ? mp ? `${BASE}${mp}/reviews/${slug}/` : `${BASE}/review/${slug}/`
+        : `${BASE}/review/`
     case 'bonus':
       return slug ? `${BASE}/casino-bonus/${slug}/` : `${BASE}/casino-bonus/`
+    case 'paymentMethod':
+      return slug ? `${BASE}${mp}/payments/${slug}/` : `${BASE}${mp}/payments/`
+    case 'software':
+      return slug ? `${BASE}${mp}/software/${slug}/` : `${BASE}${mp}/software/`
     case 'ligaStillinger':
       return slug ? `${BASE}/fodbold/stillinger/${slug}/` : `${BASE}/fodbold/stillinger/`
     default:
