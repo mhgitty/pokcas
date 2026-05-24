@@ -5,6 +5,7 @@ import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { TableOfContents } from '@/components/TableOfContents'
 import { MobileToc } from '@/components/MobileToc'
 import { getSoftwareBySlugCa, client } from '@/lib/sanity'
+import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -68,7 +69,7 @@ export default async function CaSoftwareSlugPage({ params }: Props) {
       {/* Hero */}
       <SoftwareHero
         name={provider.name}
-        titel={provider.titel}
+        titel={replaceDateVars(provider.titel)}
         logo={provider.logo}
         rtp={provider.rtp}
         amountOfSlots={provider.amountOfSlots}

@@ -1,16 +1,14 @@
 'use client'
 import { useState } from 'react'
 
-interface FaqBlockProps { value: { title?: string; items?: { question: string; answer: string }[] } }
+interface FaqBlockProps { value: { items?: { question: string; answer: string }[] } }
 
 export function FaqBlock({ value }: FaqBlockProps) {
-  const { title = 'Frequently Asked Questions', items = [] } = value
+  const { items = [] } = value
   const [open, setOpen] = useState<number | null>(0)
 
   return (
     <div style={{ margin: '32px 0' }}>
-      <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 700, color: 'var(--text)', marginBottom: '16px' }}>{title}</h2>
-
       <div style={{ border: '1px solid var(--border)', borderRadius: '12px', overflow: 'hidden' }}>
         {items.map((item, i) => {
           const isOpen = open === i

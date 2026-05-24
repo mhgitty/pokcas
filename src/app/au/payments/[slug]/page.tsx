@@ -2,7 +2,10 @@ import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { JsonLd } from '@/components/JsonLd'
 import { PaymentMethodHero } from '@/components/PaymentMethodHero'
 import { PortableTextRenderer } from '@/components/PortableTextRenderer'
+import { TableOfContents } from '@/components/TableOfContents'
+import { MobileToc } from '@/components/MobileToc'
 import { getPaymentMethodBySlugAu, client } from '@/lib/sanity'
+import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -25,8 +28,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const method = await getPaymentMethodBySlugAu(slug).catch(() => null)
   if (!method) return {}
-  const title = method.metaTitle || `${method.name} Casinos Australia — pay with ${method.name}`
-  const description = method.metaDescription || `Find the best Australian online casinos that accept ${method.name}. Compare withdrawal times, fees and bonuses.`
+  const title = replaceDateVars(method.metaTitle || `${method.name} Casinos Australia — pay with ${method.name}`)
+  const description = replaceDateVars(method.metaDescription || `Find the best Australian online casinos that accept ${method.name}. Compare withdrawal times, fees and bonuses.`)
   const canonical = `${BASE}/au/payments/${slug}/`
   return { title, description, alternates: { canonical } }
 }
@@ -66,7 +69,7 @@ export default async function AuPaymentSlugPage({ params }: Props) {
       {/* Hero card */}
       <PaymentMethodHero
         name={method.name}
-        titel={method.titel}
+        titel={replaceDateVars(method.titel)}
         logo={method.logo}
         paymentCategory={method.paymentCategory}
         withdrawalTime={method.withdrawalTime}
@@ -77,8 +80,14 @@ export default async function AuPaymentSlugPage({ params }: Props) {
 
       {/* Body content */}
       {method.body && method.body.length > 0 && (
-        <div className="section" style={{ maxWidth: '860px', margin: '0 auto' }}>
-          <PortableTextRenderer value={method.body} />
+        <div className="article-layout">
+          <article className="article-content">
+            <MobileToc body={method.body} />
+            <PortableTextRenderer value={method.body} />
+          </article>
+          <aside className="toc-sidebar">
+            <TableOfContents body={method.body} />
+          </aside>
         </div>
       )}
 

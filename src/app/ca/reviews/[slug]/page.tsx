@@ -163,7 +163,7 @@ export default async function CaReviewSlugPage({ params }: Props) {
                 )}
                 {bm.license && (
                   <div style={{ background: 'var(--bg-raised)', border: '1px solid var(--border)', borderRadius: '10px', padding: '10px 14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <Icon name="shield-checkmark" size={22} color="var(--green)" style={{ flexShrink: 0 }} />
+                    <Icon name="shield-check" size={22} color="var(--green)" style={{ flexShrink: 0 }} />
                     <div>
                       <div style={{ fontSize: '10px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '1px' }}>License</div>
                       <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>{bm.license}</div>
