@@ -57,7 +57,7 @@ const navItemFields = [
     name: 'icon',
     title: 'Icon',
     type: 'string',
-    description: 'Solar icon name, e.g. "home-2", "gift", "cards", "star", "crown". Browse at icon-sets.iconify.design/solar',
+    description: 'Solar icon name — renders in green duotone. Good picks: gift, crown, star, diamond, cup-star, shield-star, card, wallet, book-2, chart-2, joystick, cpu. Browse all at icon-sets.iconify.design/solar',
   }),
   defineField({ name: 'isHighlighted', title: 'Highlighted (CTA button)', type: 'boolean', initialValue: false }),
   defineField({

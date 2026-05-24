@@ -62,7 +62,7 @@ export async function Navbar({ navItems }: { navItems?: ResolvedNavItem[] } = {}
           {nav.map((item) => {
             const inner = (
               <>
-                {item.icon && <Icon name={item.icon} size={16} style={{ flexShrink: 0, opacity: 0.75 }} />}
+                {item.icon && <Icon name={item.icon} size={16} style={{ flexShrink: 0, opacity: 0.8 }} />}
                 {item.label}
               </>
             )
