@@ -90,7 +90,6 @@ export default async function CaSlugPage({ params }: Props) {
       <HeroSection
         title={page.title}
         intro={page.intro ?? undefined}
-        narrow
         author={author}
         factChecker={factChecker}
         updatedAt={(page as any).lastUpdated ?? null}
