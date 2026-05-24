@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity'
+import { bodyField } from './page'
 
 export const paymentMethodType = defineType({
   name: 'paymentMethod',
@@ -49,19 +50,32 @@ export const paymentMethodType = defineType({
       ],
     }),
     defineField({
+      name: 'paymentCategory',
+      title: 'Payment Category',
+      type: 'string',
+      description: 'e.g. "E-wallet", "Bank Transfer", "Cryptocurrency"',
+    }),
+    { ...bodyField, title: 'Intro', name: 'intro' } as any,
+    defineField({
       name: 'withdrawalTime',
       title: 'Withdrawal Time',
       type: 'string',
       description: 'e.g. "Instant", "1–3 business days"',
     }),
     defineField({
-      name: 'withdrawalFee',
-      title: 'Withdrawal Fee',
+      name: 'transactionFees',
+      title: 'Transaction Fees',
       type: 'string',
-      description: 'e.g. "Free", "$2.50 per transaction"',
+      description: 'e.g. "Free", "1.5% per transaction"',
+    }),
+    defineField({
+      name: 'eligibleForBonuses',
+      title: 'Eligible for Bonuses',
+      type: 'string',
+      description: 'e.g. "Yes", "No", "Depends on the casino"',
     }),
   ],
   preview: {
-    select: { title: 'name', subtitle: 'withdrawalTime', media: 'logo' },
+    select: { title: 'name', subtitle: 'paymentCategory', media: 'logo' },
   },
 })
