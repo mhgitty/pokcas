@@ -147,7 +147,7 @@ const PAGE_FIELDS = `
 
 export async function getPageBySlug(slug: string) {
   return client.fetch(
-    `*[_type == "page" && slug.current == $slug && !defined(parent)][0] { ${PAGE_FIELDS} }`,
+    `*[_type == "page" && slug.current == $slug && !defined(parent) && (market == "global" || !defined(market))][0] { ${PAGE_FIELDS} }`,
     { slug }
   )
 }
@@ -160,7 +160,7 @@ export async function getPageByPath(segments: string[]) {
   // Two-segment path: /parent/child
   const [parentSlug, childSlug] = segments
   return client.fetch(
-    `*[_type == "page" && slug.current == $childSlug && parent->slug.current == $parentSlug][0] { ${PAGE_FIELDS} }`,
+    `*[_type == "page" && slug.current == $childSlug && parent->slug.current == $parentSlug && (market == "global" || !defined(market))][0] { ${PAGE_FIELDS} }`,
     { parentSlug, childSlug }
   )
 }
