@@ -1,10 +1,5 @@
 import Image from 'next/image'
-
-interface Stat {
-  label: string
-  value: string | null | undefined
-  icon: React.ReactNode
-}
+import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 
 function StatBox({ label, value }: { label: string; value: string }) {
   return (
@@ -37,6 +32,7 @@ interface PaymentMethodHeroProps {
   withdrawalTime?: string | null
   transactionFees?: string | null
   eligibleForBonuses?: string | null
+  intro?: any[] | null
 }
 
 export function PaymentMethodHero({
@@ -47,6 +43,7 @@ export function PaymentMethodHero({
   withdrawalTime,
   transactionFees,
   eligibleForBonuses,
+  intro,
 }: PaymentMethodHeroProps) {
   const title = titel || name
 
@@ -126,10 +123,17 @@ export function PaymentMethodHero({
               color: 'var(--text)',
               letterSpacing: '-0.03em',
               lineHeight: 1.1,
-              marginBottom: activeStats.length > 0 ? '24px' : '0',
+              marginBottom: intro?.length ? '16px' : activeStats.length > 0 ? '24px' : '0',
             }}>
               {title}
             </h1>
+
+            {/* Intro text */}
+            {intro && intro.length > 0 && (
+              <div style={{ marginBottom: activeStats.length > 0 ? '24px' : '0', color: 'var(--text-muted)', fontSize: '15px', lineHeight: 1.7 }}>
+                <PortableTextRenderer value={intro} />
+              </div>
+            )}
 
             {/* Stats row */}
             {activeStats.length > 0 && (

@@ -1,7 +1,6 @@
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { JsonLd } from '@/components/JsonLd'
 import { PaymentMethodHero } from '@/components/PaymentMethodHero'
-import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { getPaymentMethodBySlugCa, client } from '@/lib/sanity'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -72,14 +71,8 @@ export default async function CaPaymentSlugPage({ params }: Props) {
         withdrawalTime={method.withdrawalTime}
         transactionFees={method.transactionFees}
         eligibleForBonuses={method.eligibleForBonuses}
+        intro={method.intro}
       />
-
-      {/* Intro rich text */}
-      {method.intro && method.intro.length > 0 && (
-        <div className="section-narrow" style={{ paddingBottom: '0' }}>
-          <PortableTextRenderer value={method.intro} />
-        </div>
-      )}
 
       {/* Casino list */}
       {method.casinos && method.casinos.length > 0 && (
