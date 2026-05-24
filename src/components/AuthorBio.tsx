@@ -63,8 +63,8 @@ export function AuthorBio({ author, compact = false }: AuthorBioProps) {
           src={author.imageUrl}
           alt={author.name}
           style={{
-            width: compact ? '64px' : '72px',
-            height: compact ? '64px' : '72px',
+            width: '175px',
+            height: '175px',
             borderRadius: '50%',
             objectFit: 'cover',
             flexShrink: 0,
@@ -72,13 +72,13 @@ export function AuthorBio({ author, compact = false }: AuthorBioProps) {
         />
       ) : (
         <div style={{
-          width: compact ? '64px' : '72px',
-          height: compact ? '64px' : '72px',
+          width: '150px',
+          height: '150px',
           borderRadius: '50%', flexShrink: 0,
           background: 'rgba(34,197,94,0.12)',
           border: '2px solid rgba(34,197,94,0.3)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: '26px', fontWeight: 800, color: 'var(--green)',
+          fontSize: '52px', fontWeight: 800, color: 'var(--green)',
           fontFamily: 'var(--font-display)',
         }}>
           {author.name.charAt(0)}

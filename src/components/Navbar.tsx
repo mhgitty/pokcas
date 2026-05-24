@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getSiteSettings } from '@/lib/sanity'
 import { MobileMenu } from './MobileMenu'
+import { MarketSelector } from './MarketSelector'
 import { Icon } from './Icon'
 
 const DEFAULT_NAV = [
@@ -86,6 +87,11 @@ export async function Navbar({ navItems }: { navItems?: ResolvedNavItem[] } = {}
             )
           })}
         </nav>
+
+        {/* Market selector — desktop (hidden on mobile via CSS) */}
+        <div className="navbar-market-selector">
+          <MarketSelector variant="navbar" />
+        </div>
 
         {/* Mobile burger — client component */}
         <MobileMenu items={nav} />

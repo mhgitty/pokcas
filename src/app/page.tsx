@@ -97,7 +97,7 @@ export default async function HomePage() {
 
       {/* Hero */}
       <section className="hero-section">
-        <div style={{ maxWidth: '1220px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '1250px', margin: '0 auto' }}>
           <h1 className="hero-heading">
             {heroHeading}
           </h1>

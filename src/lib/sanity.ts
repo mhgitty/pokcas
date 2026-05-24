@@ -279,8 +279,26 @@ export const getSiteSettings = cache(async () => {
           "postSlug": postRef->slug.current,
         }
       },
+      footerLongDisclaimer,
+      footerMediaLogos[] {
+        alt,
+        url,
+        "imageUrl": image.asset->url
+      },
+      footerTrustIcons[] {
+        alt,
+        url,
+        "imageUrl": image.asset->url
+      },
       footerNote,
-      footerDisclaimer
+      footerDisclaimer,
+      footerBottomNav[] {
+        label, url,
+        "pageSlug": pageRef->slug.current,
+        "pageParentSlug": pageRef->parent->slug.current,
+        "bookmakerSlug": bookmakerRef->slug.current,
+        "postSlug": postRef->slug.current,
+      }
     }`,
     {},
     { next: { revalidate: 3600 } }

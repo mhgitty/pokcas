@@ -82,7 +82,7 @@ export default async function AuthorPage({ params }: Props) {
 
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
       <div style={{ background: 'var(--bg-footer)', padding: '48px 24px 56px' }}>
-        <div style={{ maxWidth: '1220px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '1250px', margin: '0 auto' }}>
 
           {/* Breadcrumb */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '36px', fontSize: '13px' }}>

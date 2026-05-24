@@ -4,6 +4,7 @@ import { Icon } from '@/components/Icon'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { MarketSelector } from './MarketSelector'
 
 interface NavChild { label: string; href: string }
 interface NavItem  { label: string; href: string; isHighlighted?: boolean; children?: NavChild[] }
@@ -40,6 +41,10 @@ export function MobileMenu({ items }: { items: NavItem[] }) {
 
       {/* Drawer */}
       <nav className={`mobile-menu-drawer${open ? ' open' : ''}`} aria-hidden={!open}>
+        {/* Market switcher at the top of the drawer */}
+        <div style={{ padding: '4px 0 16px', borderBottom: '1px solid var(--border)', marginBottom: '8px' }}>
+          <MarketSelector variant="navbar" />
+        </div>
         {items.map((item) => {
           const hasChildren = item.children && item.children.length > 0
           const isExpanded = expanded === item.href + item.label

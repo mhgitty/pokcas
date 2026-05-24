@@ -151,7 +151,7 @@ export default async function SlugPage({ params }: Props) {
         <Navbar />
 
         <div style={{ background: 'var(--bg-hero)', borderBottom: '1px solid var(--border)', padding: '40px 15px 32px' }}>
-          <div style={{ maxWidth: '1220px', margin: '0 auto' }}>
+          <div style={{ maxWidth: '1250px', margin: '0 auto' }}>
             <Breadcrumbs crumbs={[
               { label: 'Home', href: '/' },
               { label: post.title },
