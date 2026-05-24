@@ -97,7 +97,6 @@ export const bodyField = defineField({
       name: 'faqBlock',
       title: 'FAQ',
       fields: [
-        { name: 'title', title: 'Heading', type: 'string', initialValue: 'Frequently Asked Questions' },
         {
           name: 'items', title: 'Questions & answers', type: 'array',
           of: [{
@@ -111,9 +110,9 @@ export const bodyField = defineField({
         },
       ],
       preview: {
-        select: { title: 'title', items: 'items' },
-        prepare({ title, items }: any) {
-          return { title: title || 'FAQ', subtitle: `${(items || []).length} questions` }
+        select: { items: 'items' },
+        prepare({ items }: any) {
+          return { title: 'FAQ', subtitle: `${(items || []).length} questions` }
         },
       },
     },
