@@ -1,5 +1,6 @@
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { JsonLd } from '@/components/JsonLd'
+import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { getSoftwareBySlugCa, client } from '@/lib/sanity'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -23,8 +24,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const provider = await getSoftwareBySlugCa(slug).catch(() => null)
   if (!provider) return {}
-  const title = `${provider.name} Casinos Canada — best ${provider.name} online casinos`
-  const description = `Find the best Canadian online casinos powered by ${provider.name}. Compare bonuses and ratings.`
+  const title = provider.metaTitle || `${provider.name} Casinos Canada — best ${provider.name} online casinos`
+  const description = provider.metaDescription || `Find the best Canadian online casinos powered by ${provider.name}. Compare bonuses and ratings.`
   const canonical = `${BASE}/ca/software/${slug}/`
   return { title, description, alternates: { canonical } }
 }
@@ -70,6 +71,13 @@ export default async function CaSoftwareSlugPage({ params }: Props) {
           </p>
         </div>
       </div>
+
+      {/* Body content */}
+      {provider.body && provider.body.length > 0 && (
+        <div className="section" style={{ maxWidth: '860px', margin: '0 auto' }}>
+          <PortableTextRenderer value={provider.body} />
+        </div>
+      )}
 
       {provider.casinos && provider.casinos.length > 0 && (
         <div className="section">

@@ -364,7 +364,9 @@ export async function getPaymentMethodBySlug(slug: string) {
     `*[_type == "paymentMethod" && slug.current == $slug][0] {
       _id, name, titel, slug, withdrawalTime,
       paymentCategory, transactionFees, eligibleForBonuses,
+      metaTitle, metaDescription,
       "intro": intro[] { ..., _type == "image" => { ..., "url": asset->url } },
+      "body": body[] { ..., _type == "image" => { ..., "url": asset->url } },
       "logo": logo { "url": asset->url, alt },
       "casinos": *[_type == "bookmaker" && references(^._id)] | order(score desc) {
         _id, name, slug, score, usp, url,
@@ -389,7 +391,8 @@ export async function getSoftwareProviders() {
 export async function getSoftwareBySlug(slug: string) {
   return client.fetch(
     `*[_type == "software" && slug.current == $slug][0] {
-      _id, name, titel, slug,
+      _id, name, titel, slug, metaTitle, metaDescription,
+      "body": body[] { ..., _type == "image" => { ..., "url": asset->url } },
       "logo": logo { "url": asset->url, alt },
       "casinos": *[_type == "bookmaker" && references(^._id)] | order(score desc) {
         _id, name, slug, score, usp, url,
@@ -613,7 +616,9 @@ export async function getPaymentMethodBySlugCa(slug: string) {
     `*[_type == "paymentMethod" && slug.current == $slug && market == "ca"][0] {
       _id, name, titel, slug, withdrawalTime,
       paymentCategory, transactionFees, eligibleForBonuses,
+      metaTitle, metaDescription,
       "intro": intro[] { ..., _type == "image" => { ..., "url": asset->url } },
+      "body": body[] { ..., _type == "image" => { ..., "url": asset->url } },
       "logo": logo { "url": asset->url, alt },
       "casinos": *[_type == "bookmaker" && market == "ca" && references(^._id)] | order(score desc) {
         _id, name, slug, score, usp, url,
@@ -636,7 +641,8 @@ export async function getSoftwareProvidersCa() {
 export async function getSoftwareBySlugCa(slug: string) {
   return client.fetch(
     `*[_type == "software" && slug.current == $slug && market == "ca"][0] {
-      _id, name, titel, slug,
+      _id, name, titel, slug, metaTitle, metaDescription,
+      "body": body[] { ..., _type == "image" => { ..., "url": asset->url } },
       "logo": logo { "url": asset->url, alt },
       "casinos": *[_type == "bookmaker" && market == "ca" && references(^._id)] | order(score desc) {
         _id, name, slug, score, usp, url,
@@ -736,7 +742,9 @@ export async function getPaymentMethodBySlugAu(slug: string) {
     `*[_type == "paymentMethod" && slug.current == $slug && market == "au"][0] {
       _id, name, titel, slug, withdrawalTime,
       paymentCategory, transactionFees, eligibleForBonuses,
+      metaTitle, metaDescription,
       "intro": intro[] { ..., _type == "image" => { ..., "url": asset->url } },
+      "body": body[] { ..., _type == "image" => { ..., "url": asset->url } },
       "logo": logo { "url": asset->url, alt },
       "casinos": *[_type == "bookmaker" && market == "au" && references(^._id)] | order(score desc) {
         _id, name, slug, score, usp, url,
@@ -759,7 +767,8 @@ export async function getSoftwareProvidersAu() {
 export async function getSoftwareBySlugAu(slug: string) {
   return client.fetch(
     `*[_type == "software" && slug.current == $slug && market == "au"][0] {
-      _id, name, titel, slug,
+      _id, name, titel, slug, metaTitle, metaDescription,
+      "body": body[] { ..., _type == "image" => { ..., "url": asset->url } },
       "logo": logo { "url": asset->url, alt },
       "casinos": *[_type == "bookmaker" && market == "au" && references(^._id)] | order(score desc) {
         _id, name, slug, score, usp, url,

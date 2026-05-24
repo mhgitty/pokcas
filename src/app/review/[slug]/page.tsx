@@ -12,6 +12,7 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { Icon } from '@/components/Icon'
 import { AuthorBio } from '@/components/AuthorBio'
+import { ScoreMeter } from '@/components/ScoreMeter'
 import type { Metadata } from 'next'
 
 export const revalidate = 3600
@@ -48,27 +49,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ...(img ? { images: [img.url] } : {}),
     },
   }
-}
-
-function ScoreMeter({ score }: { score: number }) {
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-      <div style={{ fontSize: '36px', fontWeight: 800, fontFamily: 'var(--font-display)', color: 'var(--green)' }}>
-        {score.toFixed(1)}
-      </div>
-      <div>
-        <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '4px' }}>out of 10</div>
-        <div style={{ display: 'flex', gap: '3px' }}>
-          {[...Array(10)].map((_, i) => (
-            <div key={i} style={{
-              width: '14px', height: '6px', borderRadius: '3px',
-              background: i < Math.round(score) ? 'var(--green-dark)' : 'var(--border)',
-            }} />
-          ))}
-        </div>
-      </div>
-    </div>
-  )
 }
 
 export default async function ReviewPage({ params }: Props) {
@@ -152,7 +132,7 @@ export default async function ReviewPage({ params }: Props) {
               </div>
             )}
 
-            {(bm.minIndbetaling != null || bm.gennemspilskrav || bm.lanceringsdato) && (
+            {(bm.minIndbetaling != null || bm.gennemspilskrav || bm.lanceringsdato || bm.license) && (
               <div className="bm-hero-stats">
                 {bm.minIndbetaling != null && (
                   <div style={{ background: 'var(--bg-raised)', border: '1px solid var(--border)', borderRadius: '10px', padding: '10px 14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -178,6 +158,15 @@ export default async function ReviewPage({ params }: Props) {
                     <div>
                       <div style={{ fontSize: '10px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '1px' }}>Established</div>
                       <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>{bm.lanceringsdato}</div>
+                    </div>
+                  </div>
+                )}
+                {bm.license && (
+                  <div style={{ background: 'var(--bg-raised)', border: '1px solid var(--border)', borderRadius: '10px', padding: '10px 14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <Icon name="shield-checkmark" size={22} color="var(--green)" style={{ flexShrink: 0 }} />
+                    <div>
+                      <div style={{ fontSize: '10px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '1px' }}>License</div>
+                      <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>{bm.license}</div>
                     </div>
                   </div>
                 )}

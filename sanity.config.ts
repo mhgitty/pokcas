@@ -275,7 +275,7 @@ export default defineConfig({
 
   document: {
     actions: (prev, ctx) => {
-      const PREVIEW_TYPES = ['homepage', 'post', 'page', 'bookmaker', 'bonus']
+      const PREVIEW_TYPES = ['homepage', 'post', 'page', 'bookmaker', 'bonus', 'paymentMethod', 'software', 'countryHomepage']
       if (PREVIEW_TYPES.includes(ctx.schemaType)) {
         return [previewAction, ...prev]
       }

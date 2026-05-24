@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity'
+import { bodyField } from './page'
 
 export const softwareType = defineType({
   name: 'software',
@@ -47,6 +48,19 @@ export const softwareType = defineType({
       fields: [
         defineField({ name: 'alt', title: 'Alt text', type: 'string' }),
       ],
+    }),
+    { ...bodyField } as any,
+    defineField({
+      name: 'metaTitle',
+      title: 'Meta Title',
+      type: 'string',
+      description: 'SEO title tag. Max 60 characters.',
+    }),
+    defineField({
+      name: 'metaDescription',
+      title: 'Meta Description',
+      type: 'string',
+      description: 'SEO meta description. 140–155 characters.',
     }),
   ],
   preview: {

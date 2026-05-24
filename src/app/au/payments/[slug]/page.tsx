@@ -1,5 +1,7 @@
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { JsonLd } from '@/components/JsonLd'
+import { PaymentMethodHero } from '@/components/PaymentMethodHero'
+import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { getPaymentMethodBySlugAu, client } from '@/lib/sanity'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -23,25 +25,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const method = await getPaymentMethodBySlugAu(slug).catch(() => null)
   if (!method) return {}
-  const title = `${method.name} Casinos Australia — pay with ${method.name}`
-  const description = `Find the best Australian online casinos that accept ${method.name}. Compare withdrawal times, fees and bonuses.`
+  const title = method.metaTitle || `${method.name} Casinos Australia — pay with ${method.name}`
+  const description = method.metaDescription || `Find the best Australian online casinos that accept ${method.name}. Compare withdrawal times, fees and bonuses.`
   const canonical = `${BASE}/au/payments/${slug}/`
   return { title, description, alternates: { canonical } }
 }
 
-export default async function CaPaymentSlugPage({ params }: Props) {
+export default async function AuPaymentSlugPage({ params }: Props) {
   const { slug } = await params
   const method = await getPaymentMethodBySlugAu(slug).catch(() => null)
   if (!method) notFound()
 
   const canonical = `${BASE}/au/payments/${slug}/`
-  const title = method.titel || method.name
 
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: BASE },
+      { '@type': 'ListItem', position: 1, name: 'Home',      item: BASE },
       { '@type': 'ListItem', position: 2, name: 'Australia', item: `${BASE}/au/` },
       { '@type': 'ListItem', position: 3, name: method.name, item: canonical },
     ],
@@ -51,39 +52,37 @@ export default async function CaPaymentSlugPage({ params }: Props) {
     <>
       <JsonLd data={jsonLd} />
 
-      <div style={{ background: 'var(--bg-hero)', borderBottom: '1px solid var(--border)', padding: '40px 15px 32px' }}>
-        <div style={{ maxWidth: '1250px', margin: '0 auto' }}>
-          <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Australia', href: '/au/' }, { label: method.name }]} />
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '12px' }}>
-            {method.logo?.url && (
-              <div style={{ width: '56px', height: '56px', background: '#fff', border: '1px solid var(--border)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '8px', flexShrink: 0 }}>
-                <Image src={method.logo.url} alt={method.logo.alt || method.name} width={40} height={40}
-                  style={{ objectFit: 'contain', maxWidth: '40px', maxHeight: '40px' }} />
-              </div>
-            )}
-            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(24px, 3.5vw, 40px)', fontWeight: 800, color: 'var(--text)', letterSpacing: '-0.03em' }}>
-              {title}
-            </h1>
-          </div>
-          {(method.withdrawalTime || method.withdrawalFee) && (
-            <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
-              {method.withdrawalTime && (
-                <div>
-                  <div style={{ fontSize: '10px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.4px' }}>Withdrawal time</div>
-                  <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>{method.withdrawalTime}</div>
-                </div>
-              )}
-              {method.withdrawalFee && (
-                <div>
-                  <div style={{ fontSize: '10px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.4px' }}>Withdrawal fee</div>
-                  <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>{method.withdrawalFee}</div>
-                </div>
-              )}
-            </div>
-          )}
+      {/* Breadcrumbs */}
+      <div style={{ background: 'var(--bg-hero)', paddingTop: '32px', paddingBottom: '0' }}>
+        <div style={{ maxWidth: '1250px', margin: '0 auto', padding: '0 15px' }}>
+          <Breadcrumbs crumbs={[
+            { label: 'Home',      href: '/' },
+            { label: 'Australia', href: '/au/' },
+            { label: method.name },
+          ]} />
         </div>
       </div>
 
+      {/* Hero card */}
+      <PaymentMethodHero
+        name={method.name}
+        titel={method.titel}
+        logo={method.logo}
+        paymentCategory={method.paymentCategory}
+        withdrawalTime={method.withdrawalTime}
+        transactionFees={method.transactionFees}
+        eligibleForBonuses={method.eligibleForBonuses}
+        intro={method.intro}
+      />
+
+      {/* Body content */}
+      {method.body && method.body.length > 0 && (
+        <div className="section" style={{ maxWidth: '860px', margin: '0 auto' }}>
+          <PortableTextRenderer value={method.body} />
+        </div>
+      )}
+
+      {/* Casino list */}
       {method.casinos && method.casinos.length > 0 && (
         <div className="section">
           <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', fontWeight: 700, marginBottom: '16px', color: 'var(--text)' }}>
@@ -91,10 +90,15 @@ export default async function CaPaymentSlugPage({ params }: Props) {
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {method.casinos.map((casino: any) => (
-              <div key={casino._id} style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '10px', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div key={casino._id} style={{
+                background: 'var(--bg-card)', border: '1px solid var(--border)',
+                borderRadius: '10px', padding: '16px 20px',
+                display: 'flex', alignItems: 'center', gap: '16px',
+              }}>
                 {casino.logo?.url && (
                   <div style={{ flexShrink: 0, width: '64px', height: '32px', display: 'flex', alignItems: 'center' }}>
-                    <Image src={casino.logo.url} alt={casino.logo.alt || casino.name} width={64} height={32}
+                    <Image src={casino.logo.url} alt={casino.logo.alt || casino.name}
+                      width={64} height={32}
                       style={{ objectFit: 'contain', maxHeight: '32px', width: 'auto' }} />
                   </div>
                 )}
@@ -109,7 +113,7 @@ export default async function CaPaymentSlugPage({ params }: Props) {
                       Sign up
                     </a>
                   )}
-                  <Link href={`/au/reviews/${casino.slug.current}`}
+                  <Link href={`/au/reviews/${casino.slug.current}/`}
                     style={{ background: 'var(--bg-raised)', color: 'var(--text-muted)', padding: '8px 14px', borderRadius: '6px', fontSize: '13px', fontWeight: 500, textDecoration: 'none', border: '1px solid var(--border)' }}>
                     Review
                   </Link>
@@ -119,7 +123,6 @@ export default async function CaPaymentSlugPage({ params }: Props) {
           </div>
         </div>
       )}
-
     </>
   )
 }

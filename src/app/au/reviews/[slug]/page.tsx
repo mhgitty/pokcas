@@ -10,6 +10,7 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { Icon } from '@/components/Icon'
 import { AuthorBio } from '@/components/AuthorBio'
+import { ScoreMeter } from '@/components/ScoreMeter'
 import type { Metadata } from 'next'
 
 export const revalidate = 3600
@@ -48,26 +49,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-function ScoreMeter({ score }: { score: number }) {
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-      <div style={{ fontSize: '36px', fontWeight: 800, fontFamily: 'var(--font-display)', color: 'var(--green)' }}>
-        {score.toFixed(1)}
-      </div>
-      <div>
-        <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '4px' }}>out of 10</div>
-        <div style={{ display: 'flex', gap: '3px' }}>
-          {[...Array(10)].map((_, i) => (
-            <div key={i} style={{
-              width: '14px', height: '6px', borderRadius: '3px',
-              background: i < Math.round(score) ? 'var(--green-dark)' : 'var(--border)',
-            }} />
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-}
 
 export default async function CaReviewSlugPage({ params }: Props) {
   const { slug } = await params

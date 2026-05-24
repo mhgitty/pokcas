@@ -1,6 +1,7 @@
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { JsonLd } from '@/components/JsonLd'
 import { PaymentMethodHero } from '@/components/PaymentMethodHero'
+import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { getPaymentMethodBySlugCa, client } from '@/lib/sanity'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -24,8 +25,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const method = await getPaymentMethodBySlugCa(slug).catch(() => null)
   if (!method) return {}
-  const title = `${method.name} Casinos Canada — pay with ${method.name}`
-  const description = `Find the best Canadian online casinos that accept ${method.name}. Compare withdrawal times, fees and bonuses.`
+  const title = method.metaTitle || `${method.name} Casinos Canada — pay with ${method.name}`
+  const description = method.metaDescription || `Find the best Canadian online casinos that accept ${method.name}. Compare withdrawal times, fees and bonuses.`
   const canonical = `${BASE}/ca/payments/${slug}/`
   return { title, description, alternates: { canonical } }
 }
@@ -73,6 +74,13 @@ export default async function CaPaymentSlugPage({ params }: Props) {
         eligibleForBonuses={method.eligibleForBonuses}
         intro={method.intro}
       />
+
+      {/* Body content */}
+      {method.body && method.body.length > 0 && (
+        <div className="section" style={{ maxWidth: '860px', margin: '0 auto' }}>
+          <PortableTextRenderer value={method.body} />
+        </div>
+      )}
 
       {/* Casino list */}
       {method.casinos && method.casinos.length > 0 && (
