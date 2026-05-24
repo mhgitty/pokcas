@@ -133,7 +133,7 @@ const PAGE_FIELDS = `
   "parentSlug": parent->slug.current,
   "parentTitle": parent->title,
   "featuredImage": featuredImage { "url": asset->url, alt },
-  lastUpdated,
+  lastUpdated, hideAuthor,
   "author": author-> {
     name, slug, bio, linkedin, x, facebook,
     "imageUrl": image.asset->url

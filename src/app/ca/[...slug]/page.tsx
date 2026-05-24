@@ -49,8 +49,9 @@ export default async function CaSlugPage({ params }: Props) {
   if (!page) notFound()
 
   const canonical = `${BASE}/ca/${slug.join('/')}/`
-  const author = (page as any).author ?? settings?.defaultAuthor ?? null
-  const factChecker = (page as any).factChecker ?? null
+  const hideAuthor = (page as any).hideAuthor ?? false
+  const author = hideAuthor ? null : ((page as any).author ?? settings?.defaultAuthor ?? null)
+  const factChecker = hideAuthor ? null : ((page as any).factChecker ?? null)
 
   const breadcrumbs: { label: string; href?: string }[] = [
     { label: 'Home', href: '/' },

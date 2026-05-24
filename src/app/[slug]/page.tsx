@@ -191,7 +191,8 @@ export default async function SlugPage({ params }: Props) {
   const page = await getPageByPath([slug]).catch(() => null)
   if (!page) notFound()
 
-  const author = page.author ?? settings?.defaultAuthor ?? null
+  const hideAuthor = (page as any).hideAuthor ?? false
+  const author = hideAuthor ? null : (page.author ?? settings?.defaultAuthor ?? null)
   const canonical = `${BASE}/${slug}/`
 
   const breadcrumbItems = [{ name: 'Home', item: BASE }]

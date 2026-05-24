@@ -143,7 +143,7 @@ export async function Footer({
               As mentioned in
             </div>
             <div className="footer-logos-row">
-              {mediaLogos.map((logo) => {
+              {mediaLogos.map((logo: { alt: string; imageUrl?: string; url?: string }) => {
                 const inner = (
                   <div key={logo.alt} className="footer-media-logo-card">
                     {logo.imageUrl ? (
@@ -191,7 +191,7 @@ export async function Footer({
         {/* Trust icons — spread evenly across full width */}
         {trustIcons && trustIcons.length > 0 && (
           <div className="footer-trust-row">
-            {trustIcons.map((icon) => {
+            {trustIcons.map((icon: { alt: string; imageUrl?: string; url?: string }) => {
               const inner = icon.imageUrl ? (
                 <img
                   key={icon.alt}

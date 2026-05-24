@@ -363,6 +363,14 @@ export const pageType = defineType({
       group: 'content',
       description: 'Shown below the author name in hero',
     }),
+    defineField({
+      name: 'hideAuthor',
+      title: 'Hide author',
+      type: 'boolean',
+      group: 'content',
+      initialValue: false,
+      description: 'When enabled, the author bar and author card are not shown on this page (e.g. About us, Privacy Policy)',
+    }),
     defineField({ name: 'metaTitle', title: 'Meta title', type: 'string', group: 'seo' }),
     defineField({ name: 'metaDescription', title: 'Meta description', type: 'text', rows: 3, group: 'seo' }),
     defineField({

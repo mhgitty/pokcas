@@ -181,6 +181,14 @@ h1, h2, h3, h4, h5, h6 {
   gap: 16px;
 }
 
+/* ─── Footer — override colour tokens for dark background ────────────────── */
+footer {
+  --text:       #F9FAFB;
+  --text-muted: #D1D5DB;
+  --text-faint: #9CA3AF;
+  --border:     rgba(255,255,255,0.12);
+}
+
 /* ─── Footer columns row: logo + link columns spread full width ───────────── */
 .footer-cols-row {
   display: flex;
