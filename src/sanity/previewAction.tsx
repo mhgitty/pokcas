@@ -38,6 +38,8 @@ function resolveUrl(type: string, doc: Record<string, any>): string | null {
       return slug ? `${BASE}${mp}/payments/${slug}/` : `${BASE}${mp}/payments/`
     case 'software':
       return slug ? `${BASE}${mp}/software/${slug}/` : `${BASE}${mp}/software/`
+    case 'casinoGame':
+      return slug ? `${BASE}${mp}/casino-games/${slug}/` : `${BASE}${mp}/casino-games/`
     case 'ligaStillinger':
       return slug ? `${BASE}/fodbold/stillinger/${slug}/` : `${BASE}/fodbold/stillinger/`
     default:

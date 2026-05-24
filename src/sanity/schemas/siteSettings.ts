@@ -53,6 +53,12 @@ const subNavItemFields = [...linkFields]
 // ── Top-level nav item ─────────────────────────────────────────────────────────
 const navItemFields = [
   ...linkFields,
+  defineField({
+    name: 'icon',
+    title: 'Icon',
+    type: 'string',
+    description: 'Solar icon name, e.g. "home-2", "gift", "cards", "star", "crown". Browse at icon-sets.iconify.design/solar',
+  }),
   defineField({ name: 'isHighlighted', title: 'Highlighted (CTA button)', type: 'boolean', initialValue: false }),
   defineField({
     name: 'children',

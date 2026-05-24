@@ -251,7 +251,7 @@ export const getSiteSettings = cache(async () => {
         "imageUrl": image.asset->url
       },
       headerNav[] {
-        label, url, isHighlighted,
+        label, url, isHighlighted, icon,
         "pageSlug": pageRef->slug.current,
         "pageParentSlug": pageRef->parent->slug.current,
         "bookmakerSlug": bookmakerRef->slug.current,
@@ -392,9 +392,11 @@ export async function getSoftwareBySlug(slug: string) {
   return client.fetch(
     `*[_type == "software" && slug.current == $slug][0] {
       _id, name, titel, slug, metaTitle, metaDescription,
+      rtp, amountOfSlots, licenses, gameCategories, highestRtpSlot, bonusBuys,
+      "intro": intro[] { ..., _type == "image" => { ..., "url": asset->url } },
       "body": body[] { ..., _type == "image" => { ..., "url": asset->url } },
       "logo": logo { "url": asset->url, alt },
-      "casinos": *[_type == "bookmaker" && references(^._id)] | order(score desc) {
+      "casinos": casinos[]-> {
         _id, name, slug, score, usp, url,
         "logo": logo { "url": asset->url, alt }
       }
@@ -475,7 +477,7 @@ export async function getMarketSettings(market: 'ca' | 'au') {
     `*[_type == "marketSettings" && _id == $id][0] {
       market, footerTagline, footerNote, footerDisclaimer,
       headerNav[] {
-        label, url, isHighlighted,
+        label, url, isHighlighted, icon,
         "pageSlug": pageRef->slug.current,
         "pageParentSlug": pageRef->parent->slug.current,
         "bookmakerSlug": bookmakerRef->slug.current,
@@ -642,9 +644,11 @@ export async function getSoftwareBySlugCa(slug: string) {
   return client.fetch(
     `*[_type == "software" && slug.current == $slug && market == "ca"][0] {
       _id, name, titel, slug, metaTitle, metaDescription,
+      rtp, amountOfSlots, licenses, gameCategories, highestRtpSlot, bonusBuys,
+      "intro": intro[] { ..., _type == "image" => { ..., "url": asset->url } },
       "body": body[] { ..., _type == "image" => { ..., "url": asset->url } },
       "logo": logo { "url": asset->url, alt },
-      "casinos": *[_type == "bookmaker" && market == "ca" && references(^._id)] | order(score desc) {
+      "casinos": casinos[]-> {
         _id, name, slug, score, usp, url,
         "logo": logo { "url": asset->url, alt }
       }
@@ -768,9 +772,11 @@ export async function getSoftwareBySlugAu(slug: string) {
   return client.fetch(
     `*[_type == "software" && slug.current == $slug && market == "au"][0] {
       _id, name, titel, slug, metaTitle, metaDescription,
+      rtp, amountOfSlots, licenses, gameCategories, highestRtpSlot, bonusBuys,
+      "intro": intro[] { ..., _type == "image" => { ..., "url": asset->url } },
       "body": body[] { ..., _type == "image" => { ..., "url": asset->url } },
       "logo": logo { "url": asset->url, alt },
-      "casinos": *[_type == "bookmaker" && market == "au" && references(^._id)] | order(score desc) {
+      "casinos": casinos[]-> {
         _id, name, slug, score, usp, url,
         "logo": logo { "url": asset->url, alt }
       }
@@ -805,5 +811,41 @@ export async function getPageByPathCa(segments: string[]) {
   return client.fetch(
     `*[_type == "page" && slug.current == $childSlug && market == "ca" && parent->slug.current == $parentSlug][0] { ${PAGE_FIELDS} }`,
     { parentSlug, childSlug }
+  )
+}
+
+// ─── Casino Games ─────────────────────────────────────────────────────────────
+
+const CASINO_GAME_FIELDS = `
+  _id, name, titel, slug, market,
+  "logo":    logo    { "url": asset->url, alt },
+  "ogImage": ogImage { "url": asset->url, alt },
+  "intro": intro[] { ..., _type == "image" => { ..., "url": asset->url } },
+  "body":  body[]  { ..., _type == "image" => { ..., "url": asset->url } },
+  metaTitle, metaDescription,
+  "casinos": casinos[]-> {
+    _id, name, slug, usp, url,
+    "logo": logo { "url": asset->url, alt }
+  }
+`
+
+export async function getCasinoGameBySlug(slug: string) {
+  return client.fetch(
+    `*[_type == "casinoGame" && slug.current == $slug && market == "global"][0] { ${CASINO_GAME_FIELDS} }`,
+    { slug }
+  )
+}
+
+export async function getCasinoGameBySlugCa(slug: string) {
+  return client.fetch(
+    `*[_type == "casinoGame" && slug.current == $slug && market == "ca"][0] { ${CASINO_GAME_FIELDS} }`,
+    { slug }
+  )
+}
+
+export async function getCasinoGameBySlugAu(slug: string) {
+  return client.fetch(
+    `*[_type == "casinoGame" && slug.current == $slug && market == "au"][0] { ${CASINO_GAME_FIELDS} }`,
+    { slug }
   )
 }

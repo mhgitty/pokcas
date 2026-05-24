@@ -24,7 +24,7 @@ function resolveUrl(item: {
   return item.url || '/'
 }
 
-interface ResolvedNavItem { label: string; href: string; isHighlighted: boolean; children: { label: string; href: string }[] }
+interface ResolvedNavItem { label: string; href: string; isHighlighted: boolean; icon?: string; children: { label: string; href: string }[] }
 
 export async function Navbar({ navItems }: { navItems?: ResolvedNavItem[] } = {}) {
   let nav = navItems
@@ -35,6 +35,7 @@ export async function Navbar({ navItems }: { navItems?: ResolvedNavItem[] } = {}
       label: item.label,
       href: resolveUrl(item),
       isHighlighted: item.isHighlighted ?? false,
+      icon: item.icon ?? undefined,
       children: (item.children || []).map((c: any) => ({
         label: c.label,
         href: resolveUrl(c),
@@ -59,6 +60,12 @@ export async function Navbar({ navItems }: { navItems?: ResolvedNavItem[] } = {}
         {/* Desktop nav */}
         <nav className="navbar-nav">
           {nav.map((item) => {
+            const inner = (
+              <>
+                {item.icon && <Icon name={item.icon} size={16} style={{ flexShrink: 0, opacity: 0.75 }} />}
+                {item.label}
+              </>
+            )
             if (!item.children.length) {
               return (
                 <Link
@@ -66,15 +73,15 @@ export async function Navbar({ navItems }: { navItems?: ResolvedNavItem[] } = {}
                   href={item.href}
                   className={`nav-link${item.isHighlighted ? ' nav-link-cta' : ''}`}
                 >
-                  {item.label}
+                  {inner}
                 </Link>
               )
             }
             return (
               <div key={item.href + item.label} className="nav-item-dropdown">
                 <Link href={item.href} className={`nav-link nav-link-has-children${item.isHighlighted ? ' nav-link-cta' : ''}`}>
-                  {item.label}
-                  <Icon name="alt-arrow-down" size={14} style={{ marginLeft: '3px', flexShrink: 0 }} />
+                  {inner}
+                  <Icon name="alt-arrow-down" size={14} style={{ marginLeft: '2px', flexShrink: 0, opacity: 0.5 }} />
                 </Link>
                 <div className="nav-dropdown">
                   {item.children.map((child: { href: string; label: string }) => (

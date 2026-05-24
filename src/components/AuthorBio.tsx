@@ -53,10 +53,7 @@ export function AuthorBio({ author, compact = false }: AuthorBioProps) {
       background: 'var(--bg-card)',
       border: '1px solid var(--border)',
       borderRadius: '14px',
-      display: 'flex',
-      gap: '24px',
-      alignItems: 'center',
-    }}>
+    }}><div className="author-bio-inner">
       {/* Avatar */}
       {author.imageUrl ? (
         <img
@@ -86,7 +83,7 @@ export function AuthorBio({ author, compact = false }: AuthorBioProps) {
       )}
 
       {/* Content */}
-      <div style={{ flex: 1, minWidth: 0 }}>
+      <div style={{ flex: 1, minWidth: 0, width: '100%' }}>
         <div style={{ marginBottom: '3px' }}>
           <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.7px' }}>
             Written by
@@ -114,6 +111,7 @@ export function AuthorBio({ author, compact = false }: AuthorBioProps) {
           </div>
         )}
       </div>
+    </div>{/* end author-bio-inner */}
     </div>
   )
 }

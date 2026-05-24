@@ -242,7 +242,7 @@ export async function Footer({
           </div>
 
           {/* Right: bottom nav + market selector */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '16px' }}>
+          <div className="footer-bottom-right" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '16px' }}>
             {bottomNav && bottomNav.length > 0 && (
               <nav style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
                 {bottomNav.map((item: any) => {

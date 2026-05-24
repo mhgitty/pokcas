@@ -92,6 +92,15 @@ export default defineConfig({
                           .filter('_type == "software" && market == $market')
                           .params({ market: 'global' })
                       ),
+                    S.listItem()
+                      .title('🎲 Casino Games')
+                      .schemaType('casinoGame')
+                      .child(
+                        S.documentTypeList('casinoGame')
+                          .title('Casino Games — Global')
+                          .filter('_type == "casinoGame" && market == $market')
+                          .params({ market: 'global' })
+                      ),
                   ])
               ),
 
@@ -162,6 +171,15 @@ export default defineConfig({
                         S.documentTypeList('software')
                           .title('Software — Canada')
                           .filter('_type == "software" && market == $market')
+                          .params({ market: 'ca' })
+                      ),
+                    S.listItem()
+                      .title('🎲 Casino Games')
+                      .schemaType('casinoGame')
+                      .child(
+                        S.documentTypeList('casinoGame')
+                          .title('Casino Games — Canada')
+                          .filter('_type == "casinoGame" && market == $market')
                           .params({ market: 'ca' })
                       ),
                   ])
@@ -236,6 +254,15 @@ export default defineConfig({
                           .filter('_type == "software" && market == $market')
                           .params({ market: 'au' })
                       ),
+                    S.listItem()
+                      .title('🎲 Casino Games')
+                      .schemaType('casinoGame')
+                      .child(
+                        S.documentTypeList('casinoGame')
+                          .title('Casino Games — Australia')
+                          .filter('_type == "casinoGame" && market == $market')
+                          .params({ market: 'au' })
+                      ),
                   ])
               ),
 
@@ -275,7 +302,7 @@ export default defineConfig({
 
   document: {
     actions: (prev, ctx) => {
-      const PREVIEW_TYPES = ['homepage', 'post', 'page', 'bookmaker', 'bonus', 'paymentMethod', 'software', 'countryHomepage']
+      const PREVIEW_TYPES = ['homepage', 'post', 'page', 'bookmaker', 'bonus', 'paymentMethod', 'software', 'countryHomepage', 'casinoGame']
       if (PREVIEW_TYPES.includes(ctx.schemaType)) {
         return [previewAction, ...prev]
       }
