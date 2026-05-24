@@ -74,6 +74,19 @@ export const paymentMethodType = defineType({
       type: 'string',
       description: 'e.g. "Yes", "No", "Depends on the casino"',
     }),
+    { ...bodyField } as any,
+    defineField({
+      name: 'metaTitle',
+      title: 'Meta Title',
+      type: 'string',
+      description: 'SEO title tag. Max 60 characters.',
+    }),
+    defineField({
+      name: 'metaDescription',
+      title: 'Meta Description',
+      type: 'string',
+      description: 'SEO meta description. 140–155 characters.',
+    }),
   ],
   preview: {
     select: { title: 'name', subtitle: 'paymentCategory', media: 'logo' },

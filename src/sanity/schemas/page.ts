@@ -228,6 +228,37 @@ export const bodyField = defineField({
     },
     {
       type: 'object',
+      name: 'detailsTable',
+      title: 'Details Table (Area / Details)',
+      fields: [
+        {
+          name: 'rows',
+          title: 'Rows',
+          type: 'array',
+          of: [{
+            type: 'object',
+            name: 'tableRow',
+            title: 'Row',
+            fields: [
+              { name: 'area', title: 'Area', type: 'string' },
+              { name: 'details', title: 'Details', type: 'string' },
+            ],
+            preview: {
+              select: { area: 'area', details: 'details' },
+              prepare({ area, details }: any) { return { title: area, subtitle: details } },
+            },
+          }],
+        },
+      ],
+      preview: {
+        select: { rows: 'rows' },
+        prepare({ rows }: any) {
+          return { title: 'Details Table', subtitle: `${(rows || []).length} rows` }
+        },
+      },
+    },
+    {
+      type: 'object',
       name: 'tableBlock',
       title: 'Table',
       components: { input: TableBlockInput },
