@@ -181,18 +181,60 @@ h1, h2, h3, h4, h5, h6 {
   gap: 16px;
 }
 
-/* ─── Footer grid (old, kept for compat) ─────────────────────────────────── */
+/* ─── Footer columns row: logo + link columns spread full width ───────────── */
+.footer-cols-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  align-items: flex-start;
+}
+.footer-col-logo {
+  flex: 0 0 200px;
+  min-width: 160px;
+}
+.footer-col {
+  flex: 1;
+  min-width: 100px;
+}
+
+/* ─── "As mentioned in" logos row — cards spread evenly ──────────────────── */
+.footer-logos-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 12px;
+  width: 100%;
+}
+.footer-media-logo-card {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 20px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  min-height: 56px;
+}
+
+/* ─── Trust icons row — spread evenly across full width ──────────────────── */
+.footer-trust-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+}
+
+/* ─── Footer grid (legacy, kept for safety) ──────────────────────────────── */
 .footer-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 40px;
   margin-bottom: 40px;
 }
-
-/* ─── Footer main grid: logo column + up to 4 link columns ───────────────── */
 .footer-main-grid {
   display: grid;
-  /* logo col (220px) + up to 4 equal link columns */
   grid-template-columns: 220px repeat(auto-fill, minmax(140px, 1fr));
   gap: 40px 32px;
 }
@@ -472,6 +514,12 @@ h1, h2, h3, h4, h5, h6 {
   .blog-grid { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr; gap: 28px; }
   .footer-main-grid { grid-template-columns: 1fr 1fr; gap: 32px 24px; }
+  .footer-cols-row { flex-wrap: wrap; gap: 28px; }
+  .footer-col-logo { flex: 0 0 100%; }
+  .footer-col { flex: 0 0 calc(50% - 14px); min-width: 0; }
+  .footer-logos-row { flex-wrap: wrap; gap: 10px; }
+  .footer-media-logo-card { flex: 0 0 calc(50% - 5px); }
+  .footer-trust-row { flex-wrap: wrap; justify-content: center; gap: 16px; }
   .article-layout { grid-template-columns: 1fr; gap: 0; padding: 28px 15px 60px; }
   .toc-sidebar { display: none; }
 
@@ -521,6 +569,8 @@ h1, h2, h3, h4, h5, h6 {
   .blog-grid { grid-template-columns: repeat(2, 1fr); }
   .footer-grid { grid-template-columns: 1fr 1fr; }
   .footer-main-grid { grid-template-columns: 1fr 1fr 1fr; }
+  .footer-cols-row { gap: 28px; }
+  .footer-col { min-width: 120px; }
   .nav-link-cta { display: none; }
   .article-layout { grid-template-columns: 1fr; }
   .toc-sidebar { display: none; }
