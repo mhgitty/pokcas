@@ -403,10 +403,25 @@ export async function getLigaStillingerPaths() {
 export async function getAuthorBySlug(slug: string) {
   return clientNoCdn.fetch(
     `*[_type == "author" && slug.current == $slug][0] {
-      _id, name, slug, role, bio, linkedin, x, facebook,
-      "imageUrl": image.asset->url
+      _id, name, slug, role, bio, intro, education, expertise, linkedin, x, facebook,
+      "imageUrl": image.asset->url,
+      metaTitle, metaDescription,
+      "body": body[] {
+        ...,
+        _type == "image" => { ..., "url": asset->url }
+      }
     }`,
     { slug }
+  )
+}
+
+export async function getReviewsByAuthor(authorId: string, limit = 20) {
+  return client.fetch(
+    `*[_type == "bookmaker" && defined(slug.current)] | order(_createdAt desc) [0...$limit] {
+      _id, name, slug, usp, score, market,
+      "logo": logo { "url": asset->url, alt }
+    }`,
+    { authorId, limit }
   )
 }
 
