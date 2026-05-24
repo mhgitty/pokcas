@@ -71,7 +71,7 @@ export default defineConfig({
                       .child(
                         S.documentTypeList('page')
                           .title('Pages — Global')
-                          .filter('_type == "page" && market == $market')
+                          .filter('_type == "page" && (market == $market || !defined(market))')
                           .params({ market: 'global' })
                       ),
                     S.listItem()
