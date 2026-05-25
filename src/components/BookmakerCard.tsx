@@ -131,7 +131,7 @@ export function BookmakerCard({
             <a
               href={url}
               target="_blank"
-              rel="noopener noreferrer sponsored"
+              rel="nofollow noopener noreferrer sponsored"
               style={{
                 display: 'inline-block',
                 background: '#16a34a', color: '#fff',

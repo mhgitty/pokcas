@@ -139,7 +139,7 @@ export function BonusCard({
             <a
               href={offerUrl}
               target="_blank"
-              rel="noopener noreferrer sponsored"
+              rel="nofollow noopener noreferrer sponsored"
               style={{
                 display: 'block', textAlign: 'center',
                 background: 'var(--green)',

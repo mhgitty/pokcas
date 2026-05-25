@@ -31,12 +31,15 @@ const richTextComponents = {
   marks: {
     strong: ({ children }: any) => <strong style={{ fontWeight: 600, color: 'var(--text)' }}>{children}</strong>,
     em: ({ children }: any) => <em>{children}</em>,
-    link: ({ value, children }: any) => (
-      <a href={value?.href} target={value?.blank ? '_blank' : undefined} rel={value?.blank ? 'noopener noreferrer' : undefined}
-        style={{ color: 'inherit', textDecoration: 'underline' }}>
-        {children}
-      </a>
-    ),
+    link: ({ value, children }: any) => {
+      const relParts = ['noopener', 'noreferrer', value?.nofollow ? 'nofollow' : ''].filter(Boolean)
+      return (
+        <a href={value?.href} target={value?.blank ? '_blank' : undefined} rel={relParts.join(' ')}
+          style={{ color: 'inherit', textDecoration: 'underline' }}>
+          {children}
+        </a>
+      )
+    },
   },
 }
 

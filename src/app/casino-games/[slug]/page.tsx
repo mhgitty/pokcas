@@ -111,7 +111,7 @@ export default async function CasinoGamePage({ params }: Props) {
                   </div>
                   <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
                     {casino.url && (
-                      <a href={casino.url} target="_blank" rel="noopener noreferrer sponsored"
+                      <a href={casino.url} target="_blank" rel="nofollow noopener noreferrer sponsored"
                         style={{ background: 'var(--green)', color: '#fff', padding: '8px 14px', borderRadius: '6px', fontSize: '13px', fontWeight: 600, textDecoration: 'none' }}>
                         Sign up
                       </a>

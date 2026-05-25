@@ -90,12 +90,15 @@ export function PortableTextRenderer({ value, posts }: { value: any[]; posts?: P
     marks: {
       strong: ({ children }: any) => <strong style={{ color: 'var(--text)', fontWeight: 600 }}>{children}</strong>,
       em: ({ children }: any) => <em>{children}</em>,
-      link: ({ value, children }: any) => (
-        <a href={value.href} target={value.blank ? '_blank' : '_self'} rel="noopener noreferrer"
-          style={{ color: 'var(--green)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>
-          {children}
-        </a>
-      ),
+      link: ({ value, children }: any) => {
+        const rel = ['noopener', 'noreferrer', value.nofollow ? 'nofollow' : ''].filter(Boolean).join(' ')
+        return (
+          <a href={value.href} target={value.blank ? '_blank' : '_self'} rel={rel}
+            style={{ color: 'var(--green)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>
+            {children}
+          </a>
+        )
+      },
     },
     list: {
       bullet: ({ children }: any) => <ul style={{ listStyle: 'none', padding: 0, margin: '16px 0 20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>{children}</ul>,
@@ -120,7 +123,7 @@ export function PortableTextRenderer({ value, posts }: { value: any[]; posts?: P
             <a
               href={value.url}
               target="_blank"
-              rel="noopener noreferrer nofollow"
+              rel="nofollow noopener noreferrer sponsored"
               style={{
                 display: 'block',
                 width: '100%',

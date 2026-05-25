@@ -159,7 +159,7 @@ export default async function CaReviewsPage() {
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-end', flexShrink: 0 }}>
                     {bm.url && (
-                      <a href={bm.url} target="_blank" rel="noopener noreferrer sponsored"
+                      <a href={bm.url} target="_blank" rel="nofollow noopener noreferrer sponsored"
                         style={{ display: 'inline-block', background: 'var(--green)', color: '#fff', padding: '10px 18px', borderRadius: '8px', fontSize: '14px', fontWeight: 600, textDecoration: 'none', whiteSpace: 'nowrap' }}>
                         Sign up →
                       </a>

@@ -183,7 +183,7 @@ export default async function CaReviewSlugPage({ params }: Props) {
                 </div>
               )}
               {bm.url && (
-                <a href={bm.url} target="_blank" rel="noopener noreferrer sponsored"
+                <a href={bm.url} target="_blank" rel="nofollow noopener noreferrer sponsored"
                   style={{ display: 'block', background: 'var(--green-dark)', color: '#fff', padding: '13px 24px', borderRadius: '8px', fontSize: '15px', fontWeight: 600, textDecoration: 'none', textAlign: 'center' }}>
                   Get bonus →
                 </a>

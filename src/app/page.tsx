@@ -320,7 +320,7 @@ export default async function HomePage() {
                         <span style={{ flex: 1, fontSize: '12px', fontWeight: 600, color: 'var(--text)', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '140px' }}>{bm.name}</span>
                         <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
                           {bm.url && (
-                            <a href={bm.url} target="_blank" rel="noopener noreferrer nofollow" style={{
+                            <a href={bm.url} target="_blank" rel="nofollow noopener noreferrer sponsored" style={{
                               display: 'inline-block',
                               padding: '5px 10px',
                               background: 'var(--green)',
@@ -396,7 +396,7 @@ export default async function HomePage() {
                         <span style={{ flex: 1, fontSize: '12px', fontWeight: 600, color: 'var(--text)', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '140px' }}>{bm.name}</span>
                         <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
                           {bm.url && (
-                            <a href={bm.url} target="_blank" rel="noopener noreferrer nofollow" style={{
+                            <a href={bm.url} target="_blank" rel="nofollow noopener noreferrer sponsored" style={{
                               display: 'inline-block',
                               padding: '5px 10px',
                               background: 'var(--green)',

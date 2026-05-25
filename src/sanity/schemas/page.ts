@@ -28,8 +28,9 @@ export const bodyField = defineField({
             type: 'object',
             title: 'Link',
             fields: [
-              { name: 'href', type: 'url', title: 'URL' },
-              { name: 'blank', type: 'boolean', title: 'Open in new tab' },
+              { name: 'href',     type: 'url',     title: 'URL' },
+              { name: 'blank',    type: 'boolean', title: 'Open in new tab', initialValue: false },
+              { name: 'nofollow', type: 'boolean', title: 'Nofollow (rel="nofollow")', initialValue: false },
             ],
           },
         ],
