@@ -152,7 +152,7 @@ export async function Footer({
                       <img
                         src={logo.imageUrl}
                         alt={logo.alt}
-                        style={{ height: '26px', width: 'auto', display: 'block', opacity: 0.65, filter: 'grayscale(1) brightness(2)' }}
+                        style={{ maxHeight: '28px', maxWidth: '120px', width: 'auto', height: 'auto', display: 'block', objectFit: 'contain', opacity: 0.65, filter: 'grayscale(1) brightness(2)' }}
                       />
                     ) : (
                       <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-faint)', letterSpacing: '-0.02em' }}>
