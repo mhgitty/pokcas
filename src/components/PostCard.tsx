@@ -18,7 +18,7 @@ export function PostCard({ title, slug, excerpt, publishedAt, readingTime, categ
     : null
 
   return (
-    <Link href={`/blog/${slug.current}`} style={{ textDecoration: 'none' }}>
+    <Link href={`/${slug.current}/`} style={{ textDecoration: 'none' }}>
       <article style={{
         background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '10px',
         padding: featured ? '28px' : '20px', height: '100%',

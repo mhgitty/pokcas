@@ -50,7 +50,7 @@ export function LatestPostsBlock({ value, posts }: LatestPostsBlockProps) {
           {title}
         </h2>
         {showViewAll && (
-          <Link href="/blog" style={{ fontSize: '13px', color: 'var(--green)', textDecoration: 'none', fontWeight: 500 }}>
+          <Link href="/news/" style={{ fontSize: '13px', color: 'var(--green)', textDecoration: 'none', fontWeight: 500 }}>
             See all →
           </Link>
         )}
