@@ -3,10 +3,15 @@ import { Footer } from '@/components/Footer'
 import { getMarketSettings, getSiteSettings } from '@/lib/sanity'
 
 function resolveUrl(item: {
-  url?: string; pageSlug?: string; pageParentSlug?: string; bookmakerSlug?: string;
-  softwareSlug?: string; paymentMethodSlug?: string; postSlug?: string;
+  url?: string; pageSlug?: string; pageParentSlug?: string; pageMarket?: string;
+  bookmakerSlug?: string; softwareSlug?: string; paymentMethodSlug?: string; postSlug?: string;
 }): string {
-  if (item.pageSlug) return item.pageParentSlug ? `/${item.pageParentSlug}/${item.pageSlug}/` : `/${item.pageSlug}/`
+  if (item.pageSlug) {
+    const prefix = item.pageMarket === 'au' ? '/au' : item.pageMarket === 'ca' ? '/ca' : ''
+    return item.pageParentSlug
+      ? `${prefix}/${item.pageParentSlug}/${item.pageSlug}/`
+      : `${prefix}/${item.pageSlug}/`
+  }
   if (item.bookmakerSlug) return `/au/reviews/${item.bookmakerSlug}/`
   if (item.softwareSlug) return `/au/software/${item.softwareSlug}/`
   if (item.paymentMethodSlug) return `/au/payments/${item.paymentMethodSlug}/`

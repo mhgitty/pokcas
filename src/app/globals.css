@@ -35,7 +35,7 @@ body {
   color: var(--text);
   font-family: var(--font-display);
   -webkit-font-smoothing: antialiased;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -96,7 +96,7 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   gap: 6px;
   color: var(--text-muted);
-  font-size: 14.5px;
+  font-size: 18px;
   font-weight: 600;
   text-decoration: none;
   padding: 6px 11px;

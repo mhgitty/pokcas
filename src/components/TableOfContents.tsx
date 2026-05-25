@@ -90,7 +90,7 @@ export function TableOfContents({ body }: { body: any[] }) {
                 href={`#${id}`}
                 style={{
                   display: 'block',
-                  fontSize: '13.5px',
+                  fontSize: '15px',
                   lineHeight: 1.5,
                   color: activeId === id ? 'var(--green)' : 'var(--text-muted)',
                   textDecoration: 'none',

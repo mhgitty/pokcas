@@ -29,7 +29,7 @@ export function PortableTextRenderer({ value, posts }: { value: any[]; posts?: P
       h2: ({ children, value: v }: any) => {
         const text = v?.children?.map((c: any) => c.text).join('') || ''
         return (
-          <h2 id={headingId(text)} style={{ fontFamily: 'var(--font-display)', fontSize: '26px', fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.03em', margin: '36px 0 14px', scrollMarginTop: '72px' }}>
+          <h2 id={headingId(text)} style={{ fontFamily: 'var(--font-display)', fontSize: '24px', fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.03em', margin: '36px 0 14px', scrollMarginTop: '72px' }}>
             {children}
           </h2>
         )
