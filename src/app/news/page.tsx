@@ -11,17 +11,25 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://pokcas.com/news/' },
 }
 
-interface Props {
-  searchParams: Promise<{ category?: string }>
-}
+// How many posts to show per category on the index
+const PREVIEW_COUNT = 4
 
-export default async function NewsPage({ searchParams }: Props) {
-  const { category } = await searchParams
-
-  const [posts, categories] = await Promise.all([
-    getPosts(200, category || undefined),
+export default async function NewsPage() {
+  const [allPosts, categories] = await Promise.all([
+    getPosts(500),
     getCategories(),
   ])
+
+  // Group posts by category
+  const grouped = categories.map((cat: any) => ({
+    cat,
+    posts: allPosts.filter(
+      (p: any) => p.category?.slug?.current === cat.slug.current
+    ),
+  })).filter(({ posts }: any) => posts.length > 0)
+
+  // Posts without a category
+  const uncategorised = allPosts.filter((p: any) => !p.category)
 
   return (
     <>
@@ -44,77 +52,91 @@ export default async function NewsPage({ searchParams }: Props) {
         </div>
       </div>
 
-      <div style={{ maxWidth: '1250px', margin: '0 auto', padding: '32px 15px 64px' }}>
-        {/* Category filter */}
-        {categories.length > 0 && (
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '32px' }}>
-            <Link
-              href="/news/"
-              style={{
-                padding: '6px 16px',
-                borderRadius: '20px',
-                fontSize: '13px',
-                fontWeight: 500,
-                textDecoration: 'none',
-                background: !category ? 'var(--green)' : 'var(--bg-card)',
-                color: !category ? '#fff' : 'var(--text-muted)',
-                border: `1px solid ${!category ? 'var(--green)' : 'var(--border)'}`,
-              }}
-            >
-              All
-            </Link>
-            {categories.map((cat: any) => (
-              <Link
-                key={cat._id}
-                href={`/news/?category=${cat.slug.current}`}
-                style={{
-                  padding: '6px 16px',
-                  borderRadius: '20px',
-                  fontSize: '13px',
-                  fontWeight: 500,
-                  textDecoration: 'none',
-                  background: category === cat.slug.current ? 'var(--green)' : 'var(--bg-card)',
-                  color: category === cat.slug.current ? '#fff' : 'var(--text-muted)',
-                  border: `1px solid ${category === cat.slug.current ? 'var(--green)' : 'var(--border)'}`,
-                }}
+      <div style={{ maxWidth: '1250px', margin: '0 auto', padding: '40px 15px 64px' }}>
+
+        {grouped.map(({ cat, posts }: any) => {
+          const preview = posts.slice(0, PREVIEW_COUNT)
+          return (
+            <section key={cat._id} style={{ marginBottom: '48px' }}>
+              {/* Section header */}
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '20px',
+              }}>
+                <h2 style={{
+                  fontFamily: 'var(--font-display)',
+                  fontSize: '20px',
+                  fontWeight: 700,
+                  color: 'var(--text)',
+                  letterSpacing: '-0.03em',
+                  margin: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                }}>
+                  {cat.emoji && <span>{cat.emoji}</span>}
+                  {cat.name}
+                </h2>
+                {posts.length > PREVIEW_COUNT && (
+                  <Link href={`/news/${cat.slug.current}/`} style={{
+                    fontSize: '13px',
+                    color: 'var(--green)',
+                    textDecoration: 'none',
+                    fontWeight: 500,
+                    whiteSpace: 'nowrap',
+                  }}>
+                    See All →
+                  </Link>
+                )}
+              </div>
+
+              {/* Post grid */}
+              <div
+                style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}
+                className="news-grid-4"
               >
-                {cat.emoji && `${cat.emoji} `}{cat.name}
-              </Link>
-            ))}
-          </div>
+                {preview.map((post: any) => (
+                  <PostCard key={post._id} {...post} />
+                ))}
+              </div>
+            </section>
+          )
+        })}
+
+        {/* Uncategorised fallback */}
+        {uncategorised.length > 0 && (
+          <section style={{ marginBottom: '48px' }}>
+            <div style={{
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px',
+            }}>
+              <h2 style={{
+                fontFamily: 'var(--font-display)', fontSize: '20px', fontWeight: 700,
+                color: 'var(--text)', letterSpacing: '-0.03em', margin: 0,
+              }}>
+                More Articles
+              </h2>
+            </div>
+            <div
+              style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}
+              className="news-grid-4"
+            >
+              {uncategorised.slice(0, PREVIEW_COUNT).map((post: any) => (
+                <PostCard key={post._id} {...post} />
+              ))}
+            </div>
+          </section>
         )}
 
-        {/* Post count */}
-        <p style={{ fontSize: '13px', color: 'var(--text-faint)', marginBottom: '20px' }}>
-          {posts.length} {posts.length === 1 ? 'article' : 'articles'}
-        </p>
-
-        {/* Grid */}
-        {posts.length > 0 ? (
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '16px',
-          }}
-            className="news-grid"
-          >
-            {posts.map((post: any) => (
-              <PostCard key={post._id} {...post} />
-            ))}
-          </div>
-        ) : (
-          <div style={{ textAlign: 'center', padding: '80px 0', color: 'var(--text-muted)' }}>
-            No articles found.
-          </div>
-        )}
       </div>
 
       <style>{`
         @media (max-width: 768px) {
-          .news-grid { grid-template-columns: 1fr !important; }
+          .news-grid-4 { grid-template-columns: 1fr !important; }
         }
         @media (min-width: 769px) and (max-width: 1024px) {
-          .news-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          .news-grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
         }
       `}</style>
     </>
