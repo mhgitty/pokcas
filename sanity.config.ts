@@ -1,4 +1,4 @@
-import { defineConfig } from 'sanity'
+import { defineConfig, type InitialValueTemplateItem } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { visionTool } from '@sanity/vision'
 import { media } from 'sanity-plugin-media'
@@ -16,7 +16,7 @@ export default defineConfig({
 
   // Market-aware initial value templates so new pages created inside a market
   // section automatically get the correct market pre-filled.
-  templates: (prev) => [
+  templates: (prev: InitialValueTemplateItem[]) => [
     ...prev,
     { id: 'page-global', title: '📄 Page (Global)',    schemaType: 'page', value: { market: 'global' } },
     { id: 'page-ca',     title: '📄 Page (Canada)',    schemaType: 'page', value: { market: 'ca' } },
