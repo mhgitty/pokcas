@@ -79,17 +79,15 @@ export default async function NewsPage() {
                   {cat.emoji && <span>{cat.emoji}</span>}
                   {cat.name}
                 </h2>
-                {posts.length > PREVIEW_COUNT && (
-                  <Link href={`/news/${cat.slug.current}/`} style={{
-                    fontSize: '13px',
-                    color: 'var(--green)',
-                    textDecoration: 'none',
-                    fontWeight: 500,
-                    whiteSpace: 'nowrap',
-                  }}>
-                    See All →
-                  </Link>
-                )}
+                <Link href={`/news/${cat.slug.current}/`} style={{
+                  fontSize: '13px',
+                  color: 'var(--green)',
+                  textDecoration: 'none',
+                  fontWeight: 500,
+                  whiteSpace: 'nowrap',
+                }}>
+                  See All →
+                </Link>
               </div>
 
               {/* Post grid */}
