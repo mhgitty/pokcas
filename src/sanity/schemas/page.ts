@@ -362,10 +362,20 @@ export const pageType = defineType({
       name: 'parent',
       title: 'Parent page',
       type: 'reference',
+      weak: true,
       to: [{ type: 'page' }],
       group: 'content',
-      options: { disableNew: true },
-      description: 'Optional — generates URL as /parent/this-page and adds breadcrumb',
+      options: {
+        disableNew: true,
+        filter: ({ document }: any) => ({
+          filter: '_type == "page" && market == $market && _id != $id && !(_id in path("drafts.**"))',
+          params: {
+            market: (document as any).market || 'global',
+            id: (document as any)._id?.replace(/^drafts\./, '') || '',
+          },
+        }),
+      },
+      description: 'Optional — nests this page under a parent (e.g. /parent/this-page/). Only shows pages in the same market.',
     }),
     defineField({ name: 'intro', title: 'Intro', type: 'text', rows: 3, group: 'content' }),
     ...comparisonTableFields.map(f => ({ ...f, group: 'content' })) as any,
@@ -410,6 +420,18 @@ export const pageType = defineType({
     }),
   ],
   preview: {
-    select: { title: 'title', subtitle: 'slug.current' },
+    select: {
+      title: 'title',
+      slug: 'slug.current',
+      parentSlug: 'parent.slug.current',
+      market: 'market',
+    },
+    prepare({ title, slug, parentSlug, market }: any) {
+      const prefix = market === 'ca' ? '/ca' : market === 'au' ? '/au' : ''
+      const path = parentSlug
+        ? `${prefix}/${parentSlug}/${slug}/`
+        : `${prefix}/${slug}/`
+      return { title: title || '(untitled)', subtitle: path }
+    },
   },
 })

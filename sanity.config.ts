@@ -14,6 +14,15 @@ export default defineConfig({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
 
+  // Market-aware initial value templates so new pages created inside a market
+  // section automatically get the correct market pre-filled.
+  templates: (prev) => [
+    ...prev,
+    { id: 'page-global', title: '📄 Page (Global)',    schemaType: 'page', value: { market: 'global' } },
+    { id: 'page-ca',     title: '📄 Page (Canada)',    schemaType: 'page', value: { market: 'ca' } },
+    { id: 'page-au',     title: '📄 Page (Australia)', schemaType: 'page', value: { market: 'au' } },
+  ],
+
   plugins: [
     structureTool({
       structure: (S) =>
@@ -73,6 +82,7 @@ export default defineConfig({
                           .title('Pages — Global')
                           .filter('_type == "page" && (market == $market || !defined(market))')
                           .params({ market: 'global' })
+                          .initialValueTemplates([S.initialValueTemplateItem('page-global')])
                       ),
                     S.listItem()
                       .title('💳 Payment Methods')
@@ -154,6 +164,7 @@ export default defineConfig({
                           .title('Pages — Canada')
                           .filter('_type == "page" && market == $market')
                           .params({ market: 'ca' })
+                          .initialValueTemplates([S.initialValueTemplateItem('page-ca')])
                       ),
                     S.listItem()
                       .title('💳 Payment Methods')
@@ -235,6 +246,7 @@ export default defineConfig({
                           .title('Pages — Australia')
                           .filter('_type == "page" && market == $market')
                           .params({ market: 'au' })
+                          .initialValueTemplates([S.initialValueTemplateItem('page-au')])
                       ),
                     S.listItem()
                       .title('💳 Payment Methods')
