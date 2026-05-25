@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(BASE),
   title: {
     default: 'Pokcas — Your International Casino Guide',
-    template: '%s | Pokcas.com',
+    template: '%s',
   },
   description: 'Find the best online casinos and casino bonuses. We test, review and compare all the top casinos.',
   keywords: ['casino bonus', 'online casino', 'free spins', 'welcome bonus', 'casino review', 'best casino'],
