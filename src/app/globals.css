@@ -549,7 +549,7 @@ footer {
 
   /* Footer logos — 2x2 grid on mobile */
   .footer-logos-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .footer-media-logo-card { flex: unset; min-width: 0; min-height: 72px; }
+  .footer-media-logo-card { flex: unset; min-width: 100%; min-height: 50px; }
   .footer-media-logo-card img { max-width: 110px !important; max-height: 26px !important; width: auto !important; height: auto !important; }
 
   /* Footer bottom bar — stack cleanly */
