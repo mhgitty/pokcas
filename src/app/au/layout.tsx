@@ -14,7 +14,7 @@ function resolveUrl(item: {
   }
   if (item.bookmakerSlug) return `/au/reviews/${item.bookmakerSlug}/`
   if (item.softwareSlug) return `/au/software/${item.softwareSlug}/`
-  if (item.paymentMethodSlug) return `/au/payments/${item.paymentMethodSlug}/`
+  if (item.paymentMethodSlug) return `/au/online-casino/payment/${item.paymentMethodSlug}/`
   if (item.postSlug) return `/${item.postSlug}/`
   return item.url || '/'
 }

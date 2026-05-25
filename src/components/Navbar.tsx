@@ -19,7 +19,7 @@ function resolveUrl(item: {
   if (item.pageSlug) return item.pageParentSlug ? `/${item.pageParentSlug}/${item.pageSlug}/` : `/${item.pageSlug}/`
   if (item.bookmakerSlug) return `/review/${item.bookmakerSlug}/`
   if (item.softwareSlug) return `/software/${item.softwareSlug}/`
-  if (item.paymentMethodSlug) return `/payments/${item.paymentMethodSlug}/`
+  if (item.paymentMethodSlug) return `/online-casino/payment/${item.paymentMethodSlug}/`
   if (item.postSlug) return `/${item.postSlug}/`
   return item.url || '/'
 }

@@ -515,10 +515,23 @@ async function main() {
   const subset = posts.slice(0, TEST_LIMIT)
   if (TEST_LIMIT < Infinity) console.log(`\n🧪 TEST MODE — processing first ${subset.length} posts only\n`)
 
-  let success = 0, failed = 0
+  // Fetch existing Sanity post IDs to skip already-imported posts
+  const existingIds = await sanity.fetch(`*[_type == "post"]._id`)
+  const existingSet = new Set(existingIds)
+  console.log(`\n📋 ${existingSet.size} posts already in Sanity — these will be skipped\n`)
+
+  let success = 0, skipped = 0, failed = 0
   for (const wp of subset) {
     const slug  = wp.slug
     const title = decodeEntities(wp.title?.rendered || 'Untitled')
+    const docId = `wp-post-${wp.id}`
+
+    if (existingSet.has(docId)) {
+      console.log(`\n⏭  Skipping (already imported): ${slug}`)
+      skipped++
+      continue
+    }
+
     console.log(`\n📄 ${slug}`)
     console.log(`   "${title}"`)
 
@@ -591,7 +604,7 @@ async function main() {
   }
 
   console.log(`\n${'─'.repeat(50)}`)
-  console.log(`✨ Done!  ${success} imported · ${failed} failed · ${imageCache.size} images uploaded`)
+  console.log(`✨ Done!  ${success} imported · ${skipped} skipped · ${failed} failed · ${imageCache.size} images uploaded`)
   console.log(`\n👉 Review in Studio: https://pokcas.vercel.app/studio`)
 }
 

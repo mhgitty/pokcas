@@ -76,7 +76,7 @@ const navItemFields = [
           const resolved = pageRef ? `/${pageRef}/`
             : bookmakerRef ? `/review/${bookmakerRef}/`
             : softwareRef ? `/software/${softwareRef}/`
-            : paymentMethodRef ? `/payments/${paymentMethodRef}/`
+            : paymentMethodRef ? `/online-casino/payment/${paymentMethodRef}/`
             : postRef ? `/${postRef}/`
             : url
           return { title, subtitle: resolved }
@@ -134,7 +134,7 @@ export const marketSettingsType = defineType({
             const resolved = pageRef ? `/${pageRef}/`
               : bookmakerRef ? `/review/${bookmakerRef}/`
               : softwareRef ? `/software/${softwareRef}/`
-              : paymentMethodRef ? `/payments/${paymentMethodRef}/`
+              : paymentMethodRef ? `/online-casino/payment/${paymentMethodRef}/`
               : postRef ? `/${postRef}/`
               : url
             return { title: `${isHighlighted ? '⚡ ' : ''}${title}`, subtitle: resolved }
@@ -184,7 +184,7 @@ export const marketSettingsType = defineType({
                   const resolved = pageRef ? `/${pageRef}/`
                     : bookmakerRef ? `/review/${bookmakerRef}/`
                     : softwareRef ? `/software/${softwareRef}/`
-                    : paymentMethodRef ? `/payments/${paymentMethodRef}/`
+                    : paymentMethodRef ? `/online-casino/payment/${paymentMethodRef}/`
                     : postRef ? `/${postRef}/`
                     : url
                   return { title, subtitle: resolved }
