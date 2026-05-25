@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { getPosts, getCategories } from '@/lib/sanity'
 import { PostCard } from '@/components/PostCard'
+import { Navbar } from '@/components/Navbar'
+import { Footer } from '@/components/Footer'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
@@ -42,6 +44,7 @@ export default async function CategoryArchivePage({ params }: Props) {
 
   return (
     <>
+      <Navbar />
       {/* Hero */}
       <div style={{ background: 'var(--bg-hero)', padding: '48px 0 40px' }}>
         <div style={{ maxWidth: '1250px', margin: '0 auto', padding: '0 15px' }}>
@@ -112,6 +115,8 @@ export default async function CategoryArchivePage({ params }: Props) {
           </div>
         )}
       </div>
+
+      <Footer />
 
       <style>{`
         @media (max-width: 768px) {

@@ -475,7 +475,7 @@ export default async function HomePage() {
                         color: 'var(--text)',
                         margin: 0,
                       }}>{cat.name}</h3>
-                      <a href={`/?category=${cat.slug}`} style={{
+                      <a href={`/news/${cat.slug}/`} style={{
                         fontSize: '13px',
                         color: 'var(--green)',
                         textDecoration: 'none',
