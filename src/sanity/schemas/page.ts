@@ -1,5 +1,6 @@
 import { defineField, defineType } from 'sanity'
 import { TableBlockInput } from '../components/TableBlockInput'
+import { FaqBlockInput } from '../components/FaqBlockInput'
 import { comparisonTableFields } from './comparisonTable'
 
 export const bodyField = defineField({
@@ -96,6 +97,7 @@ export const bodyField = defineField({
       type: 'object',
       name: 'faqBlock',
       title: 'FAQ',
+      components: { input: FaqBlockInput },
       fields: [
         {
           name: 'items', title: 'Questions & answers', type: 'array',
