@@ -82,7 +82,6 @@ export default defineConfig({
                           .title('Pages — Global')
                           .filter('_type == "page" && (market == $market || !defined(market))')
                           .params({ market: 'global' })
-                          .initialValueTemplates([S.initialValueTemplateItem('page-global')])
                       ),
                     S.listItem()
                       .title('💳 Payment Methods')
@@ -164,7 +163,6 @@ export default defineConfig({
                           .title('Pages — Canada')
                           .filter('_type == "page" && market == $market')
                           .params({ market: 'ca' })
-                          .initialValueTemplates([S.initialValueTemplateItem('page-ca')])
                       ),
                     S.listItem()
                       .title('💳 Payment Methods')
@@ -246,7 +244,6 @@ export default defineConfig({
                           .title('Pages — Australia')
                           .filter('_type == "page" && market == $market')
                           .params({ market: 'au' })
-                          .initialValueTemplates([S.initialValueTemplateItem('page-au')])
                       ),
                     S.listItem()
                       .title('💳 Payment Methods')
