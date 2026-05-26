@@ -71,7 +71,9 @@ export const previewAction: DocumentActionComponent = (
       url = slug ? `${BASE}${mp}/online-casino/payment/${slug}/` : `${BASE}${mp}/online-casino/payment/`
       break
     case 'software':
-      url = slug ? `${BASE}${mp}/software/${slug}/` : `${BASE}${mp}/software/`
+      url = slug
+        ? `${BASE}${mp}/online-casino/software/${slug}/`
+        : `${BASE}${mp}/online-casino/software/`
       break
     case 'casinoGame':
       url = slug ? `${BASE}${mp}/casino-games/${slug}/` : `${BASE}${mp}/casino-games/`
