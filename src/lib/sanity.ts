@@ -491,6 +491,15 @@ export async function getMarketSettings(market: 'ca' | 'au') {
   return client.fetch(
     `*[_type == "marketSettings" && _id == $id][0] {
       market, footerTagline, footerNote, footerDisclaimer,
+      footerLongDisclaimer,
+      "footerMediaLogos": footerMediaLogos[] {
+        alt, url,
+        "imageUrl": image.asset->url
+      },
+      "footerTrustIcons": footerTrustIcons[] {
+        alt, url,
+        "imageUrl": image.asset->url
+      },
       headerNav[] {
         label, url, isHighlighted, icon,
         "pageSlug": pageRef->slug.current,
@@ -523,6 +532,12 @@ export async function getMarketSettings(market: 'ca' | 'au') {
           "paymentMethodSlug": paymentMethodRef->slug.current,
           "postSlug": postRef->slug.current,
         }
+      },
+      footerBottomNav[] {
+        label, url,
+        "pageSlug": pageRef->slug.current,
+        "pageParentSlug": pageRef->parent->slug.current,
+        "pageMarket": pageRef->market,
       }
     }`,
     { id: `${market}-settings` },

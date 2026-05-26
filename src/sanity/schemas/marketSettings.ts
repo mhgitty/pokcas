@@ -156,7 +156,8 @@ export const marketSettingsType = defineType({
       title: 'Footer columns',
       type: 'array',
       group: 'footer',
-      validation: (r) => r.max(2),
+      description: 'Up to 4 link columns shown in the footer grid.',
+      validation: (r) => r.max(4),
       of: [{
         type: 'object',
         name: 'footerColumn',
@@ -201,17 +202,95 @@ export const marketSettingsType = defineType({
         },
       }],
     }),
+
+    // ── Footer — disclaimer ──────────────────────────────────────────────────────
+    defineField({
+      name: 'footerLongDisclaimer',
+      title: 'Disclaimer text (above trust icons)',
+      type: 'text',
+      rows: 4,
+      group: 'footer',
+      description: 'Longer disclaimer paragraph shown above trust icons. Leave blank to hide.',
+    }),
+
+    // ── Footer — media logos ─────────────────────────────────────────────────────
+    defineField({
+      name: 'footerMediaLogos',
+      title: 'Media logos ("As seen in")',
+      type: 'array',
+      group: 'footer',
+      description: 'Upload logos of media outlets. Each can have an optional link.',
+      of: [{
+        type: 'object',
+        name: 'mediaLogo',
+        fields: [
+          defineField({ name: 'alt', title: 'Name / alt text', type: 'string', validation: r => r.required() }),
+          defineField({ name: 'image', title: 'Logo image', type: 'image', options: { hotspot: false } }),
+          defineField({ name: 'url', title: 'Link URL (optional)', type: 'string' }),
+        ],
+        preview: {
+          select: { title: 'alt', media: 'image' },
+          prepare({ title, media }: any) { return { title, media } },
+        },
+      }],
+    }),
+
+    // ── Footer — trust icons ─────────────────────────────────────────────────────
+    defineField({
+      name: 'footerTrustIcons',
+      title: 'Trust icons (DMCA, GPWA, 18+, etc.)',
+      type: 'array',
+      group: 'footer',
+      description: 'Small badge images shown in the trust strip. Each can have an optional link.',
+      of: [{
+        type: 'object',
+        name: 'trustIcon',
+        fields: [
+          defineField({ name: 'alt', title: 'Name / alt text', type: 'string', validation: r => r.required() }),
+          defineField({ name: 'image', title: 'Icon image', type: 'image', options: { hotspot: false } }),
+          defineField({ name: 'url', title: 'Link URL (optional)', type: 'string' }),
+        ],
+        preview: {
+          select: { title: 'alt', media: 'image' },
+          prepare({ title, media }: any) { return { title, media } },
+        },
+      }],
+    }),
+
+    // ── Footer — bottom bar ──────────────────────────────────────────────────────
     defineField({
       name: 'footerNote',
-      title: 'Footer bottom left',
+      title: 'Footer bottom bar — left text',
       type: 'string',
       group: 'footer',
     }),
     defineField({
       name: 'footerDisclaimer',
-      title: 'Footer bottom right',
+      title: 'Footer bottom bar — right text',
       type: 'string',
       group: 'footer',
+    }),
+    defineField({
+      name: 'footerBottomNav',
+      title: 'Footer bottom bar — nav links',
+      type: 'array',
+      group: 'footer',
+      description: 'Small links shown in the bottom bar (e.g. Privacy Policy, Terms).',
+      of: [{
+        type: 'object',
+        name: 'bottomNavItem',
+        fields: linkFields,
+        preview: {
+          select: {
+            title: 'label',
+            pageRef: 'pageRef.slug.current',
+            url: 'url',
+          },
+          prepare({ title, pageRef, url }: any) {
+            return { title, subtitle: pageRef ? `/${pageRef}/` : url }
+          },
+        },
+      }],
     }),
   ],
   preview: {
