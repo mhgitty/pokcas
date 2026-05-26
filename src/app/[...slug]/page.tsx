@@ -43,10 +43,16 @@ export default async function DynamicPage({ params }: Props) {
 
   const canonical = `${BASE}${buildPath(slug)}`
 
-  // Build breadcrumb — include parent if present
+  // Build breadcrumb — include grandparent and parent if present
   const breadcrumbItems = [{ name: 'Home', item: BASE }]
+  if (page.grandparentSlug && page.grandparentTitle) {
+    breadcrumbItems.push({ name: page.grandparentTitle, item: `${BASE}/${page.grandparentSlug}/` })
+  }
   if (page.parentSlug && page.parentTitle) {
-    breadcrumbItems.push({ name: page.parentTitle, item: `${BASE}/${page.parentSlug}/` })
+    const parentPath = page.grandparentSlug
+      ? `${BASE}/${page.grandparentSlug}/${page.parentSlug}/`
+      : `${BASE}/${page.parentSlug}/`
+    breadcrumbItems.push({ name: page.parentTitle, item: parentPath })
   }
   breadcrumbItems.push({ name: page.title, item: canonical })
 
@@ -83,8 +89,11 @@ export default async function DynamicPage({ params }: Props) {
         updatedAt={page.lastUpdated}
         breadcrumbs={[
           { label: 'Home', href: '/' },
+          ...(page.grandparentSlug && page.grandparentTitle
+            ? [{ label: page.grandparentTitle, href: `/${page.grandparentSlug}/` }]
+            : []),
           ...(page.parentSlug && page.parentTitle
-            ? [{ label: page.parentTitle, href: `/${page.parentSlug}` }]
+            ? [{ label: page.parentTitle, href: page.grandparentSlug ? `/${page.grandparentSlug}/${page.parentSlug}/` : `/${page.parentSlug}/` }]
             : []),
           { label: page.title },
         ]}

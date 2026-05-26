@@ -433,13 +433,19 @@ export const pageType = defineType({
       title: 'title',
       slug: 'slug.current',
       parentSlug: 'parent.slug.current',
+      grandparentSlug: 'parent.parent.slug.current',
       market: 'market',
     },
-    prepare({ title, slug, parentSlug, market }: any) {
+    prepare({ title, slug, parentSlug, grandparentSlug, market }: any) {
       const prefix = market === 'ca' ? '/ca' : market === 'au' ? '/au' : ''
-      const path = parentSlug
-        ? `${prefix}/${parentSlug}/${slug}/`
-        : `${prefix}/${slug}/`
+      let path: string
+      if (grandparentSlug && parentSlug) {
+        path = `${prefix}/${grandparentSlug}/${parentSlug}/${slug}/`
+      } else if (parentSlug) {
+        path = `${prefix}/${parentSlug}/${slug}/`
+      } else {
+        path = `${prefix}/${slug}/`
+      }
       return { title: title || '(untitled)', subtitle: path }
     },
   },

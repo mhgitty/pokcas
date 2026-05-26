@@ -132,6 +132,8 @@ const PAGE_FIELDS = `
   },
   "parentSlug": parent->slug.current,
   "parentTitle": parent->title,
+  "grandparentSlug": parent->parent->slug.current,
+  "grandparentTitle": parent->parent->title,
   "featuredImage": featuredImage { "url": asset->url, alt },
   lastUpdated, hideAuthor,
   "author": author-> {
@@ -152,16 +154,23 @@ export async function getPageBySlug(slug: string) {
   )
 }
 
-/** Resolve a page by its full URL path (supports 1 or 2 segments) */
+/** Resolve a page by its full URL path (supports 1, 2, or 3 segments) */
 export async function getPageByPath(segments: string[]) {
   if (segments.length === 1) {
     return getPageBySlug(segments[0])
   }
-  // Two-segment path: /parent/child
-  const [parentSlug, childSlug] = segments
+  if (segments.length === 2) {
+    const [parentSlug, childSlug] = segments
+    return client.fetch(
+      `*[_type == "page" && slug.current == $childSlug && parent->slug.current == $parentSlug && (market == "global" || !defined(market))][0] { ${PAGE_FIELDS} }`,
+      { parentSlug, childSlug }
+    )
+  }
+  // Three-segment path: /grandparent/parent/child
+  const [grandparentSlug, parentSlug, childSlug] = segments
   return client.fetch(
-    `*[_type == "page" && slug.current == $childSlug && parent->slug.current == $parentSlug && (market == "global" || !defined(market))][0] { ${PAGE_FIELDS} }`,
-    { parentSlug, childSlug }
+    `*[_type == "page" && slug.current == $childSlug && parent->slug.current == $parentSlug && parent->parent->slug.current == $grandparentSlug && (market == "global" || !defined(market))][0] { ${PAGE_FIELDS} }`,
+    { grandparentSlug, parentSlug, childSlug }
   )
 }
 
@@ -799,10 +808,17 @@ export async function getPageByPathAu(segments: string[]) {
   if (segments.length === 1) {
     return getPageBySlugAu(segments[0])
   }
-  const [parentSlug, childSlug] = segments
+  if (segments.length === 2) {
+    const [parentSlug, childSlug] = segments
+    return client.fetch(
+      `*[_type == "page" && slug.current == $childSlug && market == "au" && parent->slug.current == $parentSlug][0] { ${PAGE_FIELDS} }`,
+      { parentSlug, childSlug }
+    )
+  }
+  const [grandparentSlug, parentSlug, childSlug] = segments
   return client.fetch(
-    `*[_type == "page" && slug.current == $childSlug && market == "au" && parent->slug.current == $parentSlug][0] { ${PAGE_FIELDS} }`,
-    { parentSlug, childSlug }
+    `*[_type == "page" && slug.current == $childSlug && market == "au" && parent->slug.current == $parentSlug && parent->parent->slug.current == $grandparentSlug][0] { ${PAGE_FIELDS} }`,
+    { grandparentSlug, parentSlug, childSlug }
   )
 }
 
@@ -810,10 +826,17 @@ export async function getPageByPathCa(segments: string[]) {
   if (segments.length === 1) {
     return getPageBySlugCa(segments[0])
   }
-  const [parentSlug, childSlug] = segments
+  if (segments.length === 2) {
+    const [parentSlug, childSlug] = segments
+    return client.fetch(
+      `*[_type == "page" && slug.current == $childSlug && market == "ca" && parent->slug.current == $parentSlug][0] { ${PAGE_FIELDS} }`,
+      { parentSlug, childSlug }
+    )
+  }
+  const [grandparentSlug, parentSlug, childSlug] = segments
   return client.fetch(
-    `*[_type == "page" && slug.current == $childSlug && market == "ca" && parent->slug.current == $parentSlug][0] { ${PAGE_FIELDS} }`,
-    { parentSlug, childSlug }
+    `*[_type == "page" && slug.current == $childSlug && market == "ca" && parent->slug.current == $parentSlug && parent->parent->slug.current == $grandparentSlug][0] { ${PAGE_FIELDS} }`,
+    { grandparentSlug, parentSlug, childSlug }
   )
 }
 
