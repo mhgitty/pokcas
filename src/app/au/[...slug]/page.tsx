@@ -16,18 +16,23 @@ const BASE = 'https://pokcas.com'
 interface Props { params: Promise<{ slug: string[] }> }
 
 export async function generateStaticParams() {
-  const pages = await client.fetch<Array<{ slug: { current: string }; parent?: { slug: { current: string } } }>>(
+  const pages = await client.fetch<Array<{
+    slug: { current: string }
+    a1?: string; a2?: string; a3?: string; a4?: string
+  }>>(
     `*[_type == "page" && market == "au" && defined(slug.current)] {
       slug,
-      "parent": parent->{ slug }
+      "a1": parent->slug.current,
+      "a2": parent->parent->slug.current,
+      "a3": parent->parent->parent->slug.current,
+      "a4": parent->parent->parent->parent->slug.current
     }`
   ).catch(() => [])
 
-  return pages.map((p) =>
-    p.parent?.slug?.current
-      ? { slug: [p.parent.slug.current, p.slug.current] }
-      : { slug: [p.slug.current] }
-  )
+  return pages.map((p) => {
+    const ancestors = [p.a4, p.a3, p.a2, p.a1].filter(Boolean) as string[]
+    return { slug: [...ancestors, p.slug.current] }
+  })
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -53,14 +58,17 @@ export default async function CaSlugPage({ params }: Props) {
   const author = hideAuthor ? null : ((page as any).author ?? settings?.defaultAuthor ?? null)
   const factChecker = hideAuthor ? null : ((page as any).factChecker ?? null)
 
+  const p = page as any
+  const ancestorTitles = [p.a4Title, p.a3Title, p.a2Title, p.a1Title].filter(Boolean) as string[]
   const breadcrumbs: { label: string; href?: string }[] = [
     { label: 'Home', href: '/' },
     { label: 'Australia', href: '/au/' },
+    ...ancestorTitles.map((title, idx) => ({
+      label: title,
+      href: `/au/${slug.slice(0, idx + 1).join('/')}/`,
+    })),
+    { label: page.title },
   ]
-  if ((page as any).parentTitle && (page as any).parentSlug) {
-    breadcrumbs.push({ label: (page as any).parentTitle, href: `/ca/${(page as any).parentSlug}/` })
-  }
-  breadcrumbs.push({ label: page.title })
 
   const jsonLd = {
     '@context': 'https://schema.org',

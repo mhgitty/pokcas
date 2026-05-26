@@ -17,17 +17,29 @@ export const previewAction: DocumentActionComponent = (
   const doc = (props.draft ?? props.published ?? {}) as Record<string, any>
   const client = useClient({ apiVersion: '2026-04-22' })
 
-  // Resolve parent slug via API (parent field is a raw reference in the doc)
-  const parentRef = doc?.parent?._ref as string | undefined
-  const [parentSlug, setParentSlug] = useState<string | undefined>(undefined)
+  // Resolve full ancestor chain for page preview URLs
+  const docId = (doc?._id as string | undefined)?.replace(/^drafts\./, '')
+  const [ancestorPath, setAncestorPath] = useState('')
 
   useEffect(() => {
-    if (!parentRef) { setParentSlug(undefined); return }
+    if (props.type !== 'page' || !docId) { setAncestorPath(''); return }
     client
-      .fetch<string | null>(`*[_id == $id || _id == "drafts." + $id][0].slug.current`, { id: parentRef })
-      .then((s) => setParentSlug(s ?? undefined))
-      .catch(() => setParentSlug(undefined))
-  }, [parentRef, client])
+      .fetch<{ a1?: string; a2?: string; a3?: string; a4?: string } | null>(
+        `*[_id == $id || _id == "drafts." + $id][0] {
+          "a1": parent->slug.current,
+          "a2": parent->parent->slug.current,
+          "a3": parent->parent->parent->slug.current,
+          "a4": parent->parent->parent->parent->slug.current
+        }`,
+        { id: docId }
+      )
+      .then((r) => {
+        if (!r) { setAncestorPath(''); return }
+        const parts = [r.a4, r.a3, r.a2, r.a1].filter(Boolean) as string[]
+        setAncestorPath(parts.length > 0 ? parts.join('/') + '/' : '')
+      })
+      .catch(() => setAncestorPath(''))
+  }, [docId, props.type, client])
 
   const slug = doc?.slug?.current as string | undefined
   const mp = marketPrefix(doc?.market)
@@ -45,11 +57,7 @@ export const previewAction: DocumentActionComponent = (
       url = slug ? `${BASE}/${slug}/` : `${BASE}/`
       break
     case 'page':
-      if (slug) {
-        url = parentSlug
-          ? `${BASE}${mp}/${parentSlug}/${slug}/`
-          : `${BASE}${mp}/${slug}/`
-      }
+      if (slug) url = `${BASE}${mp}/${ancestorPath}${slug}/`
       break
     case 'bookmaker':
       url = slug

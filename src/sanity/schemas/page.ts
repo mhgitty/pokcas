@@ -432,21 +432,16 @@ export const pageType = defineType({
     select: {
       title: 'title',
       slug: 'slug.current',
-      parentSlug: 'parent.slug.current',
-      grandparentSlug: 'parent.parent.slug.current',
+      a1: 'parent.slug.current',
+      a2: 'parent.parent.slug.current',
+      a3: 'parent.parent.parent.slug.current',
+      a4: 'parent.parent.parent.parent.slug.current',
       market: 'market',
     },
-    prepare({ title, slug, parentSlug, grandparentSlug, market }: any) {
+    prepare({ title, slug, a1, a2, a3, a4, market }: any) {
       const prefix = market === 'ca' ? '/ca' : market === 'au' ? '/au' : ''
-      let path: string
-      if (grandparentSlug && parentSlug) {
-        path = `${prefix}/${grandparentSlug}/${parentSlug}/${slug}/`
-      } else if (parentSlug) {
-        path = `${prefix}/${parentSlug}/${slug}/`
-      } else {
-        path = `${prefix}/${slug}/`
-      }
-      return { title: title || '(untitled)', subtitle: path }
+      const parts = [a4, a3, a2, a1, slug].filter(Boolean)
+      return { title: title || '(untitled)', subtitle: `${prefix}/${parts.join('/')}/` }
     },
   },
 })

@@ -130,10 +130,14 @@ const PAGE_FIELDS = `
       }
     }
   },
-  "parentSlug": parent->slug.current,
-  "parentTitle": parent->title,
-  "grandparentSlug": parent->parent->slug.current,
-  "grandparentTitle": parent->parent->title,
+  "a1Slug": parent->slug.current,
+  "a1Title": parent->title,
+  "a2Slug": parent->parent->slug.current,
+  "a2Title": parent->parent->title,
+  "a3Slug": parent->parent->parent->slug.current,
+  "a3Title": parent->parent->parent->title,
+  "a4Slug": parent->parent->parent->parent->slug.current,
+  "a4Title": parent->parent->parent->parent->title,
   "featuredImage": featuredImage { "url": asset->url, alt },
   lastUpdated, hideAuthor,
   "author": author-> {
@@ -154,23 +158,25 @@ export async function getPageBySlug(slug: string) {
   )
 }
 
-/** Resolve a page by its full URL path (supports 1, 2, or 3 segments) */
+/** Build a dynamic ancestor filter for any path depth (up to 5 levels) */
+function buildAncestorFilter(segments: string[]): { conditions: string; params: Record<string, string> } {
+  const reversed = [...segments].reverse() // [child, parent, grandparent, ...]
+  const params: Record<string, string> = {}
+  const conditions = reversed.map((seg, i) => {
+    const key = `seg${i}`
+    params[key] = seg
+    return `${'parent->'.repeat(i)}slug.current == $${key}`
+  })
+  return { conditions: conditions.join(' && '), params }
+}
+
+/** Resolve a page by its full URL path — supports any depth up to 5 segments */
 export async function getPageByPath(segments: string[]) {
-  if (segments.length === 1) {
-    return getPageBySlug(segments[0])
-  }
-  if (segments.length === 2) {
-    const [parentSlug, childSlug] = segments
-    return client.fetch(
-      `*[_type == "page" && slug.current == $childSlug && parent->slug.current == $parentSlug && (market == "global" || !defined(market))][0] { ${PAGE_FIELDS} }`,
-      { parentSlug, childSlug }
-    )
-  }
-  // Three-segment path: /grandparent/parent/child
-  const [grandparentSlug, parentSlug, childSlug] = segments
+  if (segments.length === 1) return getPageBySlug(segments[0])
+  const { conditions, params } = buildAncestorFilter(segments)
   return client.fetch(
-    `*[_type == "page" && slug.current == $childSlug && parent->slug.current == $parentSlug && parent->parent->slug.current == $grandparentSlug && (market == "global" || !defined(market))][0] { ${PAGE_FIELDS} }`,
-    { grandparentSlug, parentSlug, childSlug }
+    `*[_type == "page" && ${conditions} && (market == "global" || !defined(market))][0] { ${PAGE_FIELDS} }`,
+    params
   )
 }
 
@@ -805,38 +811,20 @@ export async function getPageBySlugAu(slug: string) {
 }
 
 export async function getPageByPathAu(segments: string[]) {
-  if (segments.length === 1) {
-    return getPageBySlugAu(segments[0])
-  }
-  if (segments.length === 2) {
-    const [parentSlug, childSlug] = segments
-    return client.fetch(
-      `*[_type == "page" && slug.current == $childSlug && market == "au" && parent->slug.current == $parentSlug][0] { ${PAGE_FIELDS} }`,
-      { parentSlug, childSlug }
-    )
-  }
-  const [grandparentSlug, parentSlug, childSlug] = segments
+  if (segments.length === 1) return getPageBySlugAu(segments[0])
+  const { conditions, params } = buildAncestorFilter(segments)
   return client.fetch(
-    `*[_type == "page" && slug.current == $childSlug && market == "au" && parent->slug.current == $parentSlug && parent->parent->slug.current == $grandparentSlug][0] { ${PAGE_FIELDS} }`,
-    { grandparentSlug, parentSlug, childSlug }
+    `*[_type == "page" && ${conditions} && market == "au"][0] { ${PAGE_FIELDS} }`,
+    params
   )
 }
 
 export async function getPageByPathCa(segments: string[]) {
-  if (segments.length === 1) {
-    return getPageBySlugCa(segments[0])
-  }
-  if (segments.length === 2) {
-    const [parentSlug, childSlug] = segments
-    return client.fetch(
-      `*[_type == "page" && slug.current == $childSlug && market == "ca" && parent->slug.current == $parentSlug][0] { ${PAGE_FIELDS} }`,
-      { parentSlug, childSlug }
-    )
-  }
-  const [grandparentSlug, parentSlug, childSlug] = segments
+  if (segments.length === 1) return getPageBySlugCa(segments[0])
+  const { conditions, params } = buildAncestorFilter(segments)
   return client.fetch(
-    `*[_type == "page" && slug.current == $childSlug && market == "ca" && parent->slug.current == $parentSlug && parent->parent->slug.current == $grandparentSlug][0] { ${PAGE_FIELDS} }`,
-    { grandparentSlug, parentSlug, childSlug }
+    `*[_type == "page" && ${conditions} && market == "ca"][0] { ${PAGE_FIELDS} }`,
+    params
   )
 }
 

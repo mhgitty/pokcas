@@ -197,7 +197,7 @@ export default async function ReviewPage({ params }: Props) {
       </div>
 
       {bm.url && (
-        <StickyCtaBar url={bm.url} name={bm.name} logoUrl={bm.logo?.url ?? null} logoAlt={bm.logo?.alt ?? null} />
+        <StickyCtaBar url={bm.url} name={bm.name} logoUrl={bm.logo?.url ?? null} logoAlt={bm.logo?.alt ?? null} bonus={bm.indbetalingsbonus ?? null} terms={bm.terms ?? null} />
       )}
 
       <div className="article-layout">

@@ -43,18 +43,17 @@ export default async function DynamicPage({ params }: Props) {
 
   const canonical = `${BASE}${buildPath(slug)}`
 
-  // Build breadcrumb — include grandparent and parent if present
-  const breadcrumbItems = [{ name: 'Home', item: BASE }]
-  if (page.grandparentSlug && page.grandparentTitle) {
-    breadcrumbItems.push({ name: page.grandparentTitle, item: `${BASE}/${page.grandparentSlug}/` })
-  }
-  if (page.parentSlug && page.parentTitle) {
-    const parentPath = page.grandparentSlug
-      ? `${BASE}/${page.grandparentSlug}/${page.parentSlug}/`
-      : `${BASE}/${page.parentSlug}/`
-    breadcrumbItems.push({ name: page.parentTitle, item: parentPath })
-  }
-  breadcrumbItems.push({ name: page.title, item: canonical })
+  // Build ancestor breadcrumbs dynamically from route segments
+  // a4=deepest ancestor, a1=immediate parent — ordered outermost→innermost after filter
+  const ancestorTitles = [page.a4Title, page.a3Title, page.a2Title, page.a1Title].filter(Boolean) as string[]
+  const breadcrumbItems = [
+    { name: 'Home', item: BASE },
+    ...ancestorTitles.map((title, idx) => ({
+      name: title,
+      item: `${BASE}/${slug.slice(0, idx + 1).join('/')}/`,
+    })),
+    { name: page.title, item: canonical },
+  ]
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -89,12 +88,10 @@ export default async function DynamicPage({ params }: Props) {
         updatedAt={page.lastUpdated}
         breadcrumbs={[
           { label: 'Home', href: '/' },
-          ...(page.grandparentSlug && page.grandparentTitle
-            ? [{ label: page.grandparentTitle, href: `/${page.grandparentSlug}/` }]
-            : []),
-          ...(page.parentSlug && page.parentTitle
-            ? [{ label: page.parentTitle, href: page.grandparentSlug ? `/${page.grandparentSlug}/${page.parentSlug}/` : `/${page.parentSlug}/` }]
-            : []),
+          ...ancestorTitles.map((title, idx) => ({
+            label: title,
+            href: `/${slug.slice(0, idx + 1).join('/')}/`,
+          })),
           { label: page.title },
         ]}
       />

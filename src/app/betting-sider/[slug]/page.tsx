@@ -254,6 +254,8 @@ export default async function BookmakerPage({ params }: Props) {
           name={bm.name}
           logoUrl={bm.logo?.url ?? null}
           logoAlt={bm.logo?.alt ?? null}
+          bonus={bm.indbetalingsbonus ?? null}
+          terms={bm.terms ?? null}
         />
       )}
 
