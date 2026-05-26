@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { Icon } from '@/components/Icon'
 
 interface FaqBlockProps { value: { items?: { question: string; answer: string }[] } }
 
@@ -35,28 +36,13 @@ export function FaqBlock({ value }: FaqBlockProps) {
               >
                 <span>{item.question}</span>
 
-                {/* ? icon circle */}
-                <span style={{
-                  flexShrink: 0,
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '50%',
-                  background: isOpen ? 'var(--green)' : 'var(--border)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  transition: 'background 0.2s',
-                }}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                    <path
-                      d="M12 17v-1M12 13c0-2 2-2 2-4a2 2 0 1 0-4 0"
-                      stroke={isOpen ? '#fff' : '#9CA3AF'}
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </span>
+                {/* question-circle icon */}
+                <Icon
+                  name="question-circle"
+                  size={28}
+                  color={isOpen ? 'var(--green)' : 'var(--text-faint)'}
+                  style={{ flexShrink: 0, transition: 'color 0.2s' }}
+                />
               </button>
 
               {isOpen && (
