@@ -104,7 +104,8 @@ h1, h2, h3, h4, h5, h6 {
   white-space: nowrap;
   transition: color 0.15s;
 }
-.nav-link:hover { color: var(--text); }
+.nav-link:hover { color: var(--green); }
+.nav-link:hover svg { opacity: 1; }
 .nav-link-cta {
   background: var(--green);
   color: #fff !important;

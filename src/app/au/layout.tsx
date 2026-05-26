@@ -44,7 +44,7 @@ export default async function AuLayout({ children }: { children: React.ReactNode
 
   return (
     <>
-      <Navbar navItems={navItems} />
+      <Navbar navItems={navItems} logoHref="/au/" />
       {children}
       <Footer tagline={tagline} columns={columns} note={note} disclaimer={disclaimer} />
     </>

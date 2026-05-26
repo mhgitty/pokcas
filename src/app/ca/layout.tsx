@@ -44,7 +44,7 @@ export default async function CaLayout({ children }: { children: React.ReactNode
 
   return (
     <>
-      <Navbar navItems={navItems} />
+      <Navbar navItems={navItems} logoHref="/ca/" />
       {children}
       <Footer tagline={tagline} columns={columns} note={note} disclaimer={disclaimer} />
     </>

@@ -26,7 +26,7 @@ function resolveUrl(item: {
 
 interface ResolvedNavItem { label: string; href: string; isHighlighted: boolean; icon?: string; children: { label: string; href: string }[] }
 
-export async function Navbar({ navItems }: { navItems?: ResolvedNavItem[] } = {}) {
+export async function Navbar({ navItems, logoHref = '/' }: { navItems?: ResolvedNavItem[]; logoHref?: string } = {}) {
   let nav = navItems
   if (!nav) {
     const settings = await getSiteSettings().catch(() => null)
@@ -46,7 +46,7 @@ export async function Navbar({ navItems }: { navItems?: ResolvedNavItem[] } = {}
   return (
     <header className="navbar">
       <div className="navbar-inner">
-        <Link href="/" className="navbar-logo">
+        <Link href={logoHref} className="navbar-logo">
           <Image
             src="/logo.webp"
             alt="Pokcas"
