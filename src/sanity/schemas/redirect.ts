@@ -6,6 +6,22 @@ export const redirectType = defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'market',
+      title: 'Market',
+      type: 'string',
+      description: 'Which market this redirect belongs to. Determines the URL prefix.',
+      initialValue: 'global',
+      options: {
+        list: [
+          { title: '🌍 Global  →  /go/[code]', value: 'global' },
+          { title: '🇨🇦 Canada  →  /ca/go/[code]', value: 'ca' },
+          { title: '🇦🇺 Australia  →  /au/go/[code]', value: 'au' },
+        ],
+        layout: 'radio',
+      },
+      validation: (r) => r.required(),
+    }),
+    defineField({
       name: 'title',
       title: 'Navn',
       type: 'string',
@@ -16,7 +32,7 @@ export const redirectType = defineType({
       name: 'code',
       title: 'Kode (URL)',
       type: 'slug',
-      description: 'Bruges i URL\'en: pokcas.com/go/[kode]',
+      description: 'The code used in the URL. Global: /go/[code]  •  CA: /ca/go/[code]  •  AU: /au/go/[code]',
       options: { source: 'title' },
       validation: (r) => r.required(),
     }),
@@ -43,11 +59,12 @@ export const redirectType = defineType({
     }),
   ],
   preview: {
-    select: { title: 'title', code: 'code.current', active: 'active', destination: 'destination' },
-    prepare({ title, code, active, destination }: any) {
+    select: { title: 'title', code: 'code.current', active: 'active', destination: 'destination', market: 'market' },
+    prepare({ title, code, active, destination, market }: any) {
+      const prefix = market === 'ca' ? '/ca/go' : market === 'au' ? '/au/go' : '/go'
       return {
         title: `${active === false ? '⏸ ' : ''}${title}`,
-        subtitle: `/go/${code} → ${destination}`,
+        subtitle: `${prefix}/${code} → ${destination}`,
       }
     },
   },

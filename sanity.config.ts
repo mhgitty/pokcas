@@ -191,6 +191,18 @@ export default defineConfig({
                           .filter('_type == "casinoGame" && market == $market')
                           .params({ market: 'ca' })
                       ),
+                    S.listItem()
+                      .title('🔗 Redirects')
+                      .schemaType('redirect')
+                      .child(
+                        S.documentTypeList('redirect')
+                          .title('Redirects — Canada (/ca/go/...)')
+                          .filter('_type == "redirect" && market == $market')
+                          .params({ market: 'ca' })
+                          .initialValueTemplates([
+                            { id: 'redirect', params: { market: 'ca' } },
+                          ])
+                      ),
                   ])
               ),
 
@@ -272,6 +284,18 @@ export default defineConfig({
                           .filter('_type == "casinoGame" && market == $market')
                           .params({ market: 'au' })
                       ),
+                    S.listItem()
+                      .title('🔗 Redirects')
+                      .schemaType('redirect')
+                      .child(
+                        S.documentTypeList('redirect')
+                          .title('Redirects — Australia (/au/go/...)')
+                          .filter('_type == "redirect" && market == $market')
+                          .params({ market: 'au' })
+                          .initialValueTemplates([
+                            { id: 'redirect', params: { market: 'au' } },
+                          ])
+                      ),
                   ])
               ),
 
@@ -289,7 +313,11 @@ export default defineConfig({
             S.listItem()
               .title('🔗 Redirects')
               .schemaType('redirect')
-              .child(S.documentTypeList('redirect').title('All Redirects')),
+              .child(
+                S.documentTypeList('redirect')
+                  .title('Redirects — Global (/go/...)')
+                  .filter('_type == "redirect" && (market == "global" || !defined(market))')
+              ),
             S.divider(),
             S.listItem()
               .title('👤 Authors')

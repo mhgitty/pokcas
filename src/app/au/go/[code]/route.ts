@@ -8,13 +8,13 @@ export async function GET(
   const { code } = await params
 
   const redirect = await client.fetch<{ destination: string; active: boolean } | null>(
-    `*[_type == "redirect" && code.current == $code && (market == "global" || !defined(market))][0] { destination, active }`,
+    `*[_type == "redirect" && code.current == $code && market == "au"][0] { destination, active }`,
     { code },
     { next: { revalidate: 60 } }
   )
 
   if (!redirect || !redirect.active) {
-    return NextResponse.redirect(new URL('/', process.env.NEXT_PUBLIC_SITE_URL ?? 'https://pokcas.com'), 302)
+    return NextResponse.redirect(new URL('/au/', process.env.NEXT_PUBLIC_SITE_URL ?? 'https://pokcas.com'), 302)
   }
 
   return NextResponse.redirect(redirect.destination, 302)
