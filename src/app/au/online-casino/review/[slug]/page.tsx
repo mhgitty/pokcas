@@ -1,12 +1,10 @@
-import { Navbar } from '@/components/Navbar'
-import { Footer } from '@/components/Footer'
 import { StickyCtaBar } from '@/components/StickyCtaBar'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { TableOfContents } from '@/components/TableOfContents'
 import { MobileToc } from '@/components/MobileToc'
 import { JsonLd } from '@/components/JsonLd'
-import { getBookmakerBySlug, getPosts, getSiteSettings, clientNoCdn } from '@/lib/sanity'
+import { getBookmakerBySlugAu, getPosts, getSiteSettings, clientNoCdn } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
@@ -23,18 +21,18 @@ interface Props { params: Promise<{ slug: string }> }
 
 export async function generateStaticParams() {
   const bookmakers = await clientNoCdn.fetch<Array<{ slug: { current: string } }>>(
-    `*[_type == "bookmaker" && (market == "global" || !defined(market)) && defined(slug.current)] { slug }`
+    `*[_type == "bookmaker" && market == "au" && defined(slug.current)] { slug }`
   ).catch(() => [])
   return bookmakers.map((b) => ({ slug: b.slug.current }))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const bm = await getBookmakerBySlug(slug).catch(() => null)
+  const bm = await getBookmakerBySlugAu(slug).catch(() => null)
   if (!bm) return {}
-  const title = replaceDateVars(bm.metaTitle || `${bm.name} Review — bonus & offers`)
-  const description = replaceDateVars(bm.metaDescription || `Read our review of ${bm.name}. See bonus, wagering requirements and our rating.`)
-  const canonical = `${BASE}/review/${slug}/`
+  const title = replaceDateVars(bm.metaTitle || `${bm.name} Review Australia — bonus & offers`)
+  const description = replaceDateVars(bm.metaDescription || `Read our Australian review of ${bm.name}. See bonus, wagering requirements and our rating.`)
+  const canonical = `${BASE}/au/online-casino/review/${slug}/`
   const img = bm.ogImage?.url ? bm.ogImage : bm.logo?.url ? bm.logo : null
   return {
     title,
@@ -51,17 +49,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function ReviewPage({ params }: Props) {
+
+export default async function CaReviewSlugPage({ params }: Props) {
   const { slug } = await params
   const [bm, latestPosts, settings] = await Promise.all([
-    getBookmakerBySlug(slug).catch(() => null),
+    getBookmakerBySlugAu(slug).catch(() => null),
     getPosts(6),
     getSiteSettings().catch(() => null),
   ])
   if (!bm) notFound()
   const author = settings?.defaultAuthor ?? null
 
-  const canonical = `${BASE}/review/${slug}/`
+  const canonical = `${BASE}/au/online-casino/review/${slug}/`
 
   const faqs = (bm.body || [])
     .filter((b: any) => b._type === 'faqBlock')
@@ -75,8 +74,9 @@ export default async function ReviewPage({ params }: Props) {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Home', item: BASE },
-          { '@type': 'ListItem', position: 2, name: 'Casino Reviews', item: `${BASE}/review/` },
-          { '@type': 'ListItem', position: 3, name: bm.name, item: canonical },
+          { '@type': 'ListItem', position: 2, name: 'Australia', item: `${BASE}/au/` },
+          { '@type': 'ListItem', position: 3, name: 'Casino Reviews', item: `${BASE}/au/online-casino/review/` },
+          { '@type': 'ListItem', position: 4, name: bm.name, item: canonical },
         ],
       },
       {
@@ -100,14 +100,14 @@ export default async function ReviewPage({ params }: Props) {
   return (
     <>
       <JsonLd data={jsonLd} />
-      <Navbar />
 
       {/* Hero */}
       <div style={{ background: 'var(--bg-hero)', borderBottom: '1px solid var(--border)', padding: '40px 15px 32px' }}>
         <div style={{ maxWidth: '1250px', margin: '0 auto' }}>
           <Breadcrumbs crumbs={[
             { label: 'Home', href: '/' },
-            { label: 'Casino Reviews', href: '/review/' },
+            { label: 'Australia', href: '/au/' },
+            { label: 'Casino Reviews', href: '/au/reviews' },
             { label: bm.name },
           ]} />
 
@@ -138,8 +138,8 @@ export default async function ReviewPage({ params }: Props) {
                   <div style={{ background: 'var(--bg-raised)', border: '1px solid var(--border)', borderRadius: '10px', padding: '10px 14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <Icon name="card-2" size={22} color="var(--green)" style={{ flexShrink: 0 }} />
                     <div>
-                      <div style={{ fontSize: '10px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '1px' }}>Minimum deposit</div>
-                      <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>{bm.minIndbetaling} kr.</div>
+                      <div style={{ fontSize: '10px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '1px' }}>Min. deposit</div>
+                      <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>AUD {bm.minIndbetaling}</div>
                     </div>
                   </div>
                 )}
@@ -218,7 +218,6 @@ export default async function ReviewPage({ params }: Props) {
         </div>
       )}
 
-      <Footer />
     </>
   )
 }

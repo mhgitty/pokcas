@@ -1,12 +1,10 @@
-import { Navbar } from '@/components/Navbar'
-import { Footer } from '@/components/Footer'
 import { HeroSection } from '@/components/HeroSection'
 import { AuthorBio } from '@/components/AuthorBio'
 import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { TableOfContents } from '@/components/TableOfContents'
 import { MobileToc } from '@/components/MobileToc'
 import { JsonLd } from '@/components/JsonLd'
-import { getPageBySlug, getBookmakers, getSiteSettings } from '@/lib/sanity'
+import { getPageBySlugAu, getBookmarkersAu, getSiteSettings } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -15,12 +13,12 @@ import type { Metadata } from 'next'
 export const revalidate = 3600
 
 const BASE = 'https://pokcas.com'
-const CANONICAL = `${BASE}/online-casino/review/`
+const CANONICAL = `${BASE}/au/online-casino/review/`
 
 export async function generateMetadata(): Promise<Metadata> {
-  const page = await getPageBySlug('review').catch(() => null)
-  const title = replaceDateVars(page?.metaTitle || page?.title || 'Best Online Casino Reviews')
-  const description = replaceDateVars(page?.metaDescription || page?.intro || 'Compare the best online casinos. Expert reviews, bonus info and ratings.')
+  const page = await getPageBySlugAu('au-reviews').catch(() => null)
+  const title = replaceDateVars(page?.metaTitle || page?.title || 'Best Online Casinos Australia')
+  const description = replaceDateVars(page?.metaDescription || page?.intro || 'Compare the best online casinos in Australia. Expert reviews, bonus info and ratings.')
   return { title, description, alternates: { canonical: CANONICAL } }
 }
 
@@ -33,15 +31,15 @@ function ScoreBadge({ score }: { score: number }) {
   )
 }
 
-export default async function ReviewPage() {
+export default async function CaReviewsPage() {
   const [page, bookmakers, settings] = await Promise.all([
-    getPageBySlug('review').catch(() => null),
-    getBookmakers().catch(() => []),
+    getPageBySlugAu('au-reviews').catch(() => null),
+    getBookmarkersAu().catch(() => []),
     getSiteSettings().catch(() => null),
   ])
   const author = (page as any)?.author ?? settings?.defaultAuthor ?? null
-  const title = page?.title || 'Casino Reviews'
-  const intro = page?.intro || 'We have reviewed and ranked the best online casinos. Compare welcome bonuses, wagering requirements and our expert ratings.'
+  const title = page?.title || 'Best Online Casinos Australia'
+  const intro = page?.intro || 'We have reviewed and ranked the best online casinos for Australian players. Compare welcome bonuses, wagering requirements and expert ratings.'
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -50,7 +48,8 @@ export default async function ReviewPage() {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Home', item: BASE },
-          { '@type': 'ListItem', position: 2, name: title, item: CANONICAL },
+          { '@type': 'ListItem', position: 2, name: 'Australia', item: `${BASE}/au/` },
+          { '@type': 'ListItem', position: 3, name: title, item: CANONICAL },
         ],
       },
       {
@@ -59,7 +58,7 @@ export default async function ReviewPage() {
         url: CANONICAL,
         name: title,
         description: intro,
-        inLanguage: 'en-GB',
+        inLanguage: 'en-AU',
         publisher: { '@type': 'Organization', name: 'Pokcas', url: BASE },
       },
     ],
@@ -68,21 +67,19 @@ export default async function ReviewPage() {
   return (
     <>
       <JsonLd data={jsonLd} />
-      <Navbar />
       <HeroSection
         title={title}
         intro={intro}
         author={author}
         updatedAt={(page as any)?.lastUpdated ?? null}
         factChecker={(page as any)?.factChecker ?? null}
-        breadcrumbs={[{ label: 'Home', href: '/' }, { label: title }]}
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Australia', href: '/au/' }, { label: title }]}
       />
 
-      {/* Casino rankings table */}
       {bookmakers.length > 0 && (
         <div className="section" style={{ paddingBottom: page?.body ? '0' : undefined }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {bookmakers.map((bm: any, i: number) => (
+            {(bookmakers as any[]).map((bm: any, i: number) => (
               <div key={bm._id} style={{
                 background: 'var(--bg-card)',
                 border: i === 0 ? '2px solid var(--green)' : '1px solid var(--border)',
@@ -108,7 +105,6 @@ export default async function ReviewPage() {
                   alignItems: 'center',
                 }} className="bookmaker-card-inner">
 
-                  {/* Rank */}
                   <div style={{
                     fontSize: '18px', fontWeight: 800,
                     color: i < 3 ? 'var(--green)' : 'var(--text-faint)',
@@ -117,7 +113,6 @@ export default async function ReviewPage() {
                     #{i + 1}
                   </div>
 
-                  {/* Logo */}
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     {bm.logo?.url ? (
                       <div style={{ background: '#fff', borderRadius: '8px', padding: '6px 10px', border: '1px solid var(--border-faint)' }}>
@@ -131,7 +126,6 @@ export default async function ReviewPage() {
                     )}
                   </div>
 
-                  {/* Info */}
                   <div style={{ minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', flexWrap: 'wrap' }}>
                       <span style={{ fontFamily: 'var(--font-display)', fontSize: '16px', fontWeight: 700, color: 'var(--text)' }}>{bm.name}</span>
@@ -154,7 +148,7 @@ export default async function ReviewPage() {
                       {bm.minIndbetaling != null && (
                         <div>
                           <div style={{ fontSize: '10px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.4px' }}>Min. deposit</div>
-                          <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)' }}>{bm.minIndbetaling} kr.</div>
+                          <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)' }}>AUD {bm.minIndbetaling}</div>
                         </div>
                       )}
                     </div>
@@ -163,7 +157,6 @@ export default async function ReviewPage() {
                     )}
                   </div>
 
-                  {/* CTAs */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-end', flexShrink: 0 }}>
                     {bm.url && (
                       <a href={bm.url} target="_blank" rel="nofollow noopener noreferrer sponsored"
@@ -171,7 +164,7 @@ export default async function ReviewPage() {
                         Sign up →
                       </a>
                     )}
-                    <Link href={`/review/${bm.slug.current}`}
+                    <Link href={`/au/online-casino/review/${bm.slug.current}`}
                       style={{ fontSize: '12px', color: 'var(--text-muted)', textDecoration: 'none', whiteSpace: 'nowrap' }}>
                       Read review
                     </Link>
@@ -201,7 +194,6 @@ export default async function ReviewPage() {
         </div>
       )}
 
-      <Footer />
     </>
   )
 }

@@ -12,7 +12,7 @@ function resolveUrl(item: {
       ? `${prefix}/${item.pageParentSlug}/${item.pageSlug}/`
       : `${prefix}/${item.pageSlug}/`
   }
-  if (item.bookmakerSlug) return `/ca/reviews/${item.bookmakerSlug}/`
+  if (item.bookmakerSlug) return `/ca/online-casino/review/${item.bookmakerSlug}/`
   if (item.softwareSlug) return `/ca/online-casino/software/${item.softwareSlug}/`
   if (item.paymentMethodSlug) return `/ca/online-casino/payment/${item.paymentMethodSlug}/`
   if (item.postSlug) return `/${item.postSlug}/`

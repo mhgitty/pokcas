@@ -14,7 +14,7 @@ function resolveUrl(item: {
       ? `${prefix}/${item.pageParentSlug}/${item.pageSlug}/`
       : `${prefix}/${item.pageSlug}/`
   }
-  if (item.bookmakerSlug) return `${mp}/review/${item.bookmakerSlug}/`
+  if (item.bookmakerSlug) return mp ? `${mp}/online-casino/review/${item.bookmakerSlug}/` : `/review/${item.bookmakerSlug}/`
   if (item.softwareSlug) return `${mp}/online-casino/software/${item.softwareSlug}/`
   if (item.paymentMethodSlug) return `${mp}/online-casino/payment/${item.paymentMethodSlug}/`
   if (item.postSlug) return `/${item.postSlug}/`
@@ -34,7 +34,7 @@ const DEFAULT_COLUMNS = [
   {
     title: 'Casino Reviews',
     items: [
-      { label: 'All Casinos', url: '/review' },
+      { label: 'All Casinos', url: '/review/' },
       { label: 'Bonuses',     url: '/kampagner' },
     ],
   },

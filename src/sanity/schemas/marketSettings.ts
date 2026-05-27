@@ -41,7 +41,7 @@ const linkFields = [
     name: 'url',
     title: 'URL (custom / external)',
     type: 'string',
-    description: 'Only used if you don\'t select a reference above. E.g. /ca/reviews/ or https://...',
+    description: 'Only used if you don\'t select a reference above. E.g. /ca/online-casino/review/ or https://...',
   }),
 ]
 
@@ -74,7 +74,7 @@ const navItemFields = [
         },
         prepare({ title, pageRef, bookmakerRef, softwareRef, paymentMethodRef, postRef, url }: any) {
           const resolved = pageRef ? `/${pageRef}/`
-            : bookmakerRef ? `/review/${bookmakerRef}/`
+            : bookmakerRef ? `/online-casino/review/${bookmakerRef}/`
             : softwareRef ? `/software/${softwareRef}/`
             : paymentMethodRef ? `/online-casino/payment/${paymentMethodRef}/`
             : postRef ? `/${postRef}/`
@@ -132,7 +132,7 @@ export const marketSettingsType = defineType({
           },
           prepare({ title, isHighlighted, pageRef, bookmakerRef, softwareRef, paymentMethodRef, postRef, url }: any) {
             const resolved = pageRef ? `/${pageRef}/`
-              : bookmakerRef ? `/review/${bookmakerRef}/`
+              : bookmakerRef ? `/online-casino/review/${bookmakerRef}/`
               : softwareRef ? `/software/${softwareRef}/`
               : paymentMethodRef ? `/online-casino/payment/${paymentMethodRef}/`
               : postRef ? `/${postRef}/`
@@ -183,7 +183,7 @@ export const marketSettingsType = defineType({
                 },
                 prepare({ title, pageRef, bookmakerRef, softwareRef, paymentMethodRef, postRef, url }: any) {
                   const resolved = pageRef ? `/${pageRef}/`
-                    : bookmakerRef ? `/review/${bookmakerRef}/`
+                    : bookmakerRef ? `/online-casino/review/${bookmakerRef}/`
                     : softwareRef ? `/software/${softwareRef}/`
                     : paymentMethodRef ? `/online-casino/payment/${paymentMethodRef}/`
                     : postRef ? `/${postRef}/`
