@@ -200,7 +200,7 @@ export default defineConfig({
                           .filter('_type == "redirect" && market == $market')
                           .params({ market: 'ca' })
                           .initialValueTemplates([
-                            { id: 'redirect', params: { market: 'ca' } },
+                            { id: 'redirect' },
                           ])
                       ),
                   ])
@@ -293,7 +293,7 @@ export default defineConfig({
                           .filter('_type == "redirect" && market == $market')
                           .params({ market: 'au' })
                           .initialValueTemplates([
-                            { id: 'redirect', params: { market: 'au' } },
+                            { id: 'redirect' },
                           ])
                       ),
                   ])
