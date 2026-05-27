@@ -1,4 +1,5 @@
 import { PortableText } from '@portabletext/react'
+import { Icon } from '@/components/Icon'
 
 const bodyComponents = {
   block: { normal: ({ children }: any) => <p style={{ fontSize: '14px', color: 'var(--text-muted)', margin: '0 0 8px', lineHeight: 1.65 }}>{children}</p> },
@@ -77,12 +78,12 @@ export function CasinoKort({ value }: { value: CasinoKortData }) {
             {hasPros && (
               <div style={{ flex: 1, minWidth: '140px', border: '1px solid rgba(34,197,94,0.35)', borderRadius: '8px', padding: '12px 14px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '10px' }}>
-                  <span>✅</span>
+                  <Icon name="check-circle" size={14} color="var(--green)" />
                   <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--green)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Pros</span>
                 </div>
                 {value.pros!.map((pro, i) => (
                   <div key={i} style={{ display: 'flex', gap: '8px', alignItems: 'flex-start', fontSize: '13px', color: 'var(--text-muted)', marginBottom: '6px', lineHeight: 1.5 }}>
-                    <span style={{ color: 'var(--green)', flexShrink: 0, marginTop: '1px' }}>✓</span><span>{pro}</span>
+                    <Icon name="check-circle" size={14} color="var(--green)" style={{ flexShrink: 0, marginTop: '1px' }} /><span>{pro}</span>
                   </div>
                 ))}
               </div>
@@ -90,12 +91,12 @@ export function CasinoKort({ value }: { value: CasinoKortData }) {
             {hasCons && (
               <div style={{ flex: 1, minWidth: '140px', border: '1px solid rgba(239,68,68,0.35)', borderRadius: '8px', padding: '12px 14px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '10px' }}>
-                  <span>❌</span>
+                  <Icon name="close-circle" size={14} color="#ef4444" />
                   <span style={{ fontSize: '12px', fontWeight: 700, color: '#ef4444', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Cons</span>
                 </div>
                 {value.cons!.map((con, i) => (
                   <div key={i} style={{ display: 'flex', gap: '8px', alignItems: 'flex-start', fontSize: '13px', color: 'var(--text-muted)', marginBottom: '6px', lineHeight: 1.5 }}>
-                    <span style={{ color: '#ef4444', flexShrink: 0, marginTop: '1px' }}>✗</span><span>{con}</span>
+                    <Icon name="close-circle" size={14} color="#ef4444" style={{ flexShrink: 0, marginTop: '1px' }} /><span>{con}</span>
                   </div>
                 ))}
               </div>

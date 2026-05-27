@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { Icon } from '@/components/Icon'
 
 interface PaymentMethod {
   _id: string
@@ -15,7 +16,7 @@ function StatRow({ icon, label, value }: { icon: string; label: string; value?: 
   if (!value) return null
   return (
     <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '6px' }}>
-      <span style={{ fontSize: '15px', flexShrink: 0, lineHeight: 1.4 }}>{icon}</span>
+      <Icon name={icon} size={16} color="var(--green)" style={{ flexShrink: 0, marginTop: '1px' }} />
       <div style={{ minWidth: 0 }}>
         <div style={{ fontSize: '11px', color: 'var(--text-faint)', lineHeight: 1.2 }}>{label}</div>
         <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', lineHeight: 1.3 }}>{value}</div>
@@ -80,9 +81,9 @@ export function PaymentMethodsGrid({
             </div>
 
             <div style={{ flex: 1, marginBottom: '12px' }}>
-              <StatRow icon="💳" label="Transaction Fees"   value={method.transactionFees} />
-              <StatRow icon="⏱️" label="Withdrawal Time"    value={method.withdrawalTime} />
-              <StatRow icon="🎁" label="Eligible for Bonus" value={method.eligibleForBonuses} />
+              <StatRow icon="card"         label="Transaction Fees"   value={method.transactionFees} />
+              <StatRow icon="clock-circle" label="Withdrawal Time"    value={method.withdrawalTime} />
+              <StatRow icon="gift"         label="Eligible for Bonus" value={method.eligibleForBonuses} />
             </div>
 
             <Link
