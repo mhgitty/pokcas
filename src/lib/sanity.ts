@@ -398,7 +398,7 @@ export async function getPaymentMethodBySlug(slug: string) {
 export async function getSoftwareProviders() {
   return client.fetch(
     `*[_type == "software"] | order(name asc) {
-      _id, name, slug,
+      _id, name, slug, rtp, amountOfSlots, gameCategories,
       "logo": logo { "url": asset->url, alt }
     }`
   )
@@ -669,7 +669,7 @@ export async function getPaymentMethodBySlugCa(slug: string) {
 export async function getSoftwareProvidersCa() {
   return client.fetch(
     `*[_type == "software" && market == "ca"] | order(name asc) {
-      _id, name, slug,
+      _id, name, slug, rtp, amountOfSlots, gameCategories,
       "logo": logo { "url": asset->url, alt }
     }`
   )
@@ -798,7 +798,7 @@ export async function getPaymentMethodBySlugAu(slug: string) {
 export async function getSoftwareProvidersAu() {
   return client.fetch(
     `*[_type == "software" && market == "au"] | order(name asc) {
-      _id, name, slug,
+      _id, name, slug, rtp, amountOfSlots, gameCategories,
       "logo": logo { "url": asset->url, alt }
     }`
   )
