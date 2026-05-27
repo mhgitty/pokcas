@@ -199,9 +199,6 @@ export default defineConfig({
                           .title('Redirects — Canada (/ca/go/...)')
                           .filter('_type == "redirect" && market == $market')
                           .params({ market: 'ca' })
-                          .initialValueTemplates([
-                            { id: 'redirect' },
-                          ])
                       ),
                   ])
               ),
@@ -292,9 +289,6 @@ export default defineConfig({
                           .title('Redirects — Australia (/au/go/...)')
                           .filter('_type == "redirect" && market == $market')
                           .params({ market: 'au' })
-                          .initialValueTemplates([
-                            { id: 'redirect' },
-                          ])
                       ),
                   ])
               ),
