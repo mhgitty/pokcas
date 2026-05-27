@@ -1,44 +1,65 @@
-import { Breadcrumbs } from '@/components/Breadcrumbs'
+// Renders the Sanity page at /au/online-casino/payment/ (same as au/[...slug] would),
+// with the payment methods grid injected between the hero and body content.
+
+import { HeroSection } from '@/components/HeroSection'
+import { AuthorBio } from '@/components/AuthorBio'
+import { PortableTextRenderer } from '@/components/PortableTextRenderer'
+import { TableOfContents } from '@/components/TableOfContents'
+import { MobileToc } from '@/components/MobileToc'
 import { JsonLd } from '@/components/JsonLd'
-import { getPaymentMethodsAu } from '@/lib/sanity'
-import Link from 'next/link'
-import Image from 'next/image'
+import { PaymentMethodsGrid } from '@/components/PaymentMethodsGrid'
+import { getPageByPathAu, getPaymentMethodsAu, getSiteSettings } from '@/lib/sanity'
+import { replaceDateVars } from '@/lib/dateVars'
+import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
 export const revalidate = 3600
 
 const BASE = 'https://pokcas.com'
+const SLUG = ['online-casino', 'payment']
 const CANONICAL = `${BASE}/au/online-casino/payment/`
 
-export const metadata: Metadata = {
-  title: `Online Casino Payment Methods Australia ${new Date().getFullYear()} — Compare Deposits & Withdrawals`,
-  description: 'Compare all online casino payment methods available to Australian players — fees, withdrawal times, and bonus eligibility.',
-  alternates: { canonical: CANONICAL },
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getPageByPathAu(SLUG).catch(() => null)
+  if (!page) return {}
+  const title = replaceDateVars(page.metaTitle || page.title)
+  const description = replaceDateVars(page.metaDescription || page.intro || '')
+  return { title, description, alternates: { canonical: CANONICAL } }
 }
 
-function StatRow({ icon, label, value }: { icon: string; label: string; value?: string | null }) {
-  if (!value) return null
-  return (
-    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '6px' }}>
-      <span style={{ fontSize: '16px', flexShrink: 0, lineHeight: 1.4 }}>{icon}</span>
-      <div style={{ minWidth: 0 }}>
-        <div style={{ fontSize: '11px', color: 'var(--text-faint)', lineHeight: 1.2 }}>{label}</div>
-        <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', lineHeight: 1.3 }}>{value}</div>
-      </div>
-    </div>
-  )
-}
+export default async function AuPaymentMethodsIndexPage() {
+  const [page, methods, settings] = await Promise.all([
+    getPageByPathAu(SLUG).catch(() => null),
+    getPaymentMethodsAu().catch(() => []),
+    getSiteSettings().catch(() => null),
+  ])
+  if (!page) notFound()
+  const author = (page as any).author ?? settings?.defaultAuthor ?? null
 
-export default async function AuPaymentMethodsPage() {
-  const methods = await getPaymentMethodsAu().catch(() => [])
+  const breadcrumbs = [
+    { label: 'Home',      href: '/' },
+    { label: 'Australia', href: '/au/' },
+    { label: page.title },
+  ]
 
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home',            item: BASE },
-      { '@type': 'ListItem', position: 2, name: 'Australia',       item: `${BASE}/au/` },
-      { '@type': 'ListItem', position: 3, name: 'Payment Methods', item: CANONICAL },
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: breadcrumbs.map((c, i) => ({
+          '@type': 'ListItem', position: i + 1, name: c.label,
+          ...('href' in c && c.href ? { item: `${BASE}${c.href}` } : {}),
+        })),
+      },
+      {
+        '@type': 'WebPage',
+        '@id': `${CANONICAL}#webpage`,
+        url: CANONICAL,
+        name: replaceDateVars(page.title),
+        inLanguage: 'en-AU',
+        publisher: { '@type': 'Organization', name: 'Pokcas', url: BASE },
+      },
     ],
   }
 
@@ -46,104 +67,43 @@ export default async function AuPaymentMethodsPage() {
     <>
       <JsonLd data={jsonLd} />
 
-      {/* Hero */}
-      <div style={{ background: 'var(--bg-hero)', borderBottom: '1px solid var(--border)', padding: '40px 15px 32px' }}>
-        <div style={{ maxWidth: '1250px', margin: '0 auto' }}>
-          <Breadcrumbs crumbs={[
-            { label: 'Home',            href: '/' },
-            { label: 'Australia',       href: '/au/' },
-            { label: 'Payment Methods' },
-          ]} />
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(24px, 3.5vw, 40px)', fontWeight: 800, color: 'var(--text)', marginBottom: '8px', letterSpacing: '-0.03em' }}>
-            Casino Payment Methods in Australia
-          </h1>
-          <p style={{ fontSize: '15px', color: 'var(--text-muted)', maxWidth: '600px', margin: 0, lineHeight: 1.6 }}>
-            Compare all payment methods available at Australian online casinos — fees, withdrawal times, and bonus eligibility at a glance.
-          </p>
+      <HeroSection
+        title={page.title}
+        intro={page.intro ?? undefined}
+        author={author}
+        factChecker={(page as any).factChecker ?? null}
+        updatedAt={(page as any).lastUpdated ?? null}
+        breadcrumbs={breadcrumbs}
+      />
+
+      {/* Payment methods overview grid */}
+      {(methods as any[]).length > 0 && (
+        <div className="section" style={{ paddingBottom: page.body ? '0' : undefined }}>
+          <PaymentMethodsGrid
+            methods={methods as any[]}
+            hrefPrefix="/au/online-casino/payment"
+          />
         </div>
-      </div>
+      )}
 
-      {/* Payment methods grid */}
-      <div className="section">
-        {(methods as any[]).length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '64px', color: 'var(--text-faint)' }}>
-            <p>No payment methods yet — add them in Sanity Studio under 🇦🇺 Australia.</p>
-          </div>
-        ) : (
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-            gap: '20px',
-          }}>
-            {(methods as any[]).map((method: any) => (
-              <div key={method._id} style={{
-                background: 'var(--bg-card)',
-                border: '1px solid var(--border)',
-                borderRadius: '14px',
-                overflow: 'hidden',
-                display: 'flex',
-                flexDirection: 'column',
-              }}>
-                {/* Logo area */}
-                <div style={{
-                  background: '#fff',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '28px 24px',
-                  minHeight: '120px',
-                  borderBottom: '1px solid var(--border)',
-                }}>
-                  {method.logo?.url ? (
-                    <Image
-                      src={method.logo.url}
-                      alt={method.logo.alt || method.name}
-                      width={140}
-                      height={70}
-                      style={{ objectFit: 'contain', maxHeight: '70px', width: 'auto' }}
-                    />
-                  ) : (
-                    <div style={{ fontSize: '14px', fontWeight: 600, color: '#333', textAlign: 'center' }}>
-                      {method.name}
-                    </div>
-                  )}
-                </div>
+      {/* Body content */}
+      {page.body && (
+        <div className="article-layout">
+          <article className="article-content">
+            <MobileToc body={page.body} />
+            <PortableTextRenderer value={page.body} />
+          </article>
+          <aside className="toc-sidebar">
+            <TableOfContents body={page.body} />
+          </aside>
+        </div>
+      )}
 
-                {/* Card body */}
-                <div style={{ padding: '16px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                  <div style={{ fontFamily: 'var(--font-display)', fontSize: '15px', fontWeight: 700, color: 'var(--text)', marginBottom: '12px', lineHeight: 1.3 }}>
-                    {method.name}
-                  </div>
-
-                  <div style={{ flex: 1, marginBottom: '14px' }}>
-                    <StatRow icon="💳" label="Transaction Fees"   value={method.transactionFees} />
-                    <StatRow icon="⏱️" label="Withdrawal Time"    value={method.withdrawalTime} />
-                    <StatRow icon="🎁" label="Eligible for Bonus" value={method.eligibleForBonuses} />
-                  </div>
-
-                  <Link
-                    href={`/au/online-casino/payment/${method.slug.current}/`}
-                    style={{
-                      display: 'block',
-                      textAlign: 'center',
-                      padding: '10px 16px',
-                      border: '2px solid var(--green)',
-                      borderRadius: '8px',
-                      color: 'var(--green)',
-                      fontSize: '13px',
-                      fontWeight: 700,
-                      textDecoration: 'none',
-                      letterSpacing: '0.04em',
-                    }}
-                  >
-                    READ REVIEW
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      {author && (
+        <div className="section" style={{ paddingTop: '0' }}>
+          <AuthorBio author={author} compact />
+        </div>
+      )}
     </>
   )
 }

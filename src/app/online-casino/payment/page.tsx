@@ -1,176 +1,124 @@
+// This static route takes priority over [...slug] for /online-casino/payment/.
+// It renders the Sanity page at that path (same as [...slug] would) but injects
+// the payment methods grid between the hero and body content.
+
 import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
-import { Breadcrumbs } from '@/components/Breadcrumbs'
+import { HeroSection } from '@/components/HeroSection'
+import { ComparisonTable } from '@/components/ComparisonTable'
+import { AuthorBio } from '@/components/AuthorBio'
+import { PortableTextRenderer } from '@/components/PortableTextRenderer'
+import { TableOfContents } from '@/components/TableOfContents'
+import { MobileToc } from '@/components/MobileToc'
 import { JsonLd } from '@/components/JsonLd'
-import { getPaymentMethods, getSiteSettings } from '@/lib/sanity'
-// getSiteSettings used for nav resolution below
-import Link from 'next/link'
-import Image from 'next/image'
+import { PaymentMethodsGrid } from '@/components/PaymentMethodsGrid'
+import { getPageByPath, getPaymentMethods, getSiteSettings } from '@/lib/sanity'
+import { replaceDateVars } from '@/lib/dateVars'
+import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-
-function resolveUrl(item: {
-  url?: string; pageSlug?: string; pageParentSlug?: string;
-  bookmakerSlug?: string; softwareSlug?: string; paymentMethodSlug?: string; postSlug?: string;
-}): string {
-  if (item.pageSlug) return item.pageParentSlug ? `/${item.pageParentSlug}/${item.pageSlug}/` : `/${item.pageSlug}/`
-  if (item.bookmakerSlug) return `/review/${item.bookmakerSlug}/`
-  if (item.softwareSlug) return `/online-casino/software/${item.softwareSlug}/`
-  if (item.paymentMethodSlug) return `/online-casino/payment/${item.paymentMethodSlug}/`
-  if (item.postSlug) return `/${item.postSlug}/`
-  return item.url || '/'
-}
 
 export const revalidate = 3600
 
 const BASE = 'https://pokcas.com'
+const SLUG = ['online-casino', 'payment']
 const CANONICAL = `${BASE}/online-casino/payment/`
 
-export const metadata: Metadata = {
-  title: `Online Casino Payment Methods ${new Date().getFullYear()} — Compare Deposits & Withdrawals`,
-  description: 'Compare all online casino payment methods. See transaction fees, withdrawal times, and which methods are eligible for bonuses.',
-  alternates: { canonical: CANONICAL },
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getPageByPath(SLUG).catch(() => null)
+  if (!page) return {}
+  const title = replaceDateVars(page.metaTitle || page.title)
+  const description = replaceDateVars(page.metaDescription || page.intro || '')
+  return { title, description, alternates: { canonical: CANONICAL } }
 }
 
-function StatRow({ icon, label, value }: { icon: string; label: string; value?: string | null }) {
-  if (!value) return null
-  return (
-    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '6px' }}>
-      <span style={{ fontSize: '16px', flexShrink: 0, lineHeight: 1.4 }}>{icon}</span>
-      <div style={{ minWidth: 0 }}>
-        <div style={{ fontSize: '11px', color: 'var(--text-faint)', lineHeight: 1.2 }}>{label}</div>
-        <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', lineHeight: 1.3 }}>{value}</div>
-      </div>
-    </div>
-  )
-}
-
-export default async function PaymentMethodsPage() {
-  const [methods, settings] = await Promise.all([
+export default async function PaymentMethodsIndexPage() {
+  const [page, methods, settings] = await Promise.all([
+    getPageByPath(SLUG).catch(() => null),
     getPaymentMethods().catch(() => []),
     getSiteSettings().catch(() => null),
   ])
-
-  const rawNav = settings?.headerNav ?? []
-  const navItems = rawNav.map((item: any) => ({
-    label: item.label,
-    href: resolveUrl(item),
-    isHighlighted: item.isHighlighted ?? false,
-    icon: item.icon ?? undefined,
-    children: (item.children || []).map((c: any) => ({ label: c.label, href: resolveUrl(c) })),
-  }))
+  if (!page) notFound()
+  const author = page.author ?? settings?.defaultAuthor ?? null
 
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home',            item: BASE },
-      { '@type': 'ListItem', position: 2, name: 'Payment Methods', item: CANONICAL },
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home',            item: BASE },
+          { '@type': 'ListItem', position: 2, name: page.title,        item: CANONICAL },
+        ],
+      },
+      {
+        '@type': 'WebPage',
+        '@id': `${CANONICAL}#webpage`,
+        url: CANONICAL,
+        name: page.title,
+        description: page.intro || '',
+        inLanguage: 'en-GB',
+        publisher: { '@type': 'Organization', name: 'Pokcas', url: BASE },
+      },
     ],
   }
 
   return (
     <>
       <JsonLd data={jsonLd} />
-      <Navbar navItems={navItems} />
+      <Navbar />
 
-      {/* Hero */}
-      <div style={{ background: 'var(--bg-hero)', borderBottom: '1px solid var(--border)', padding: '40px 15px 32px' }}>
-        <div style={{ maxWidth: '1250px', margin: '0 auto' }}>
-          <Breadcrumbs crumbs={[
-            { label: 'Home',            href: '/' },
-            { label: 'Payment Methods' },
-          ]} />
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(24px, 3.5vw, 40px)', fontWeight: 800, color: 'var(--text)', marginBottom: '8px', letterSpacing: '-0.03em' }}>
-            Online Casino Payment Methods
-          </h1>
-          <p style={{ fontSize: '15px', color: 'var(--text-muted)', maxWidth: '600px', margin: 0, lineHeight: 1.6 }}>
-            Compare all payment methods available at online casinos — fees, withdrawal times, and bonus eligibility at a glance.
-          </p>
+      <HeroSection
+        title={page.title}
+        intro={page.intro}
+        author={author}
+        factChecker={page.factChecker}
+        updatedAt={page.lastUpdated}
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: page.title },
+        ]}
+      />
+
+      {/* Payment methods overview grid */}
+      {(methods as any[]).length > 0 && (
+        <div className="section" style={{ paddingBottom: page.body ? '0' : undefined }}>
+          <PaymentMethodsGrid
+            methods={methods as any[]}
+            hrefPrefix="/online-casino/payment"
+          />
         </div>
-      </div>
+      )}
 
-      {/* Payment methods grid */}
-      <div className="section">
-        {(methods as any[]).length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '64px', color: 'var(--text-faint)' }}>
-            <p>No payment methods yet — add them in Sanity Studio.</p>
-          </div>
-        ) : (
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-            gap: '20px',
-          }}>
-            {(methods as any[]).map((method: any) => (
-              <div key={method._id} style={{
-                background: 'var(--bg-card)',
-                border: '1px solid var(--border)',
-                borderRadius: '14px',
-                overflow: 'hidden',
-                display: 'flex',
-                flexDirection: 'column',
-              }}>
-                {/* Logo area */}
-                <div style={{
-                  background: '#fff',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '28px 24px',
-                  minHeight: '120px',
-                  borderBottom: '1px solid var(--border)',
-                }}>
-                  {method.logo?.url ? (
-                    <Image
-                      src={method.logo.url}
-                      alt={method.logo.alt || method.name}
-                      width={140}
-                      height={70}
-                      style={{ objectFit: 'contain', maxHeight: '70px', width: 'auto' }}
-                    />
-                  ) : (
-                    <div style={{ fontSize: '14px', fontWeight: 600, color: '#333', textAlign: 'center' }}>
-                      {method.name}
-                    </div>
-                  )}
-                </div>
+      {/* Comparison table */}
+      {page.showComparisonTable && page.comparisonTable && (
+        <div className="section" style={{ paddingBottom: page.body ? '0' : undefined }}>
+          {page.comparisonTableTitle && (
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: 700, color: 'var(--text)', marginBottom: '20px' }}>
+              {page.comparisonTableTitle}
+            </h2>
+          )}
+          <ComparisonTable data={page.comparisonTable} />
+        </div>
+      )}
 
-                {/* Card body */}
-                <div style={{ padding: '16px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                  <div style={{ fontFamily: 'var(--font-display)', fontSize: '15px', fontWeight: 700, color: 'var(--text)', marginBottom: '12px', lineHeight: 1.3 }}>
-                    {method.name}
-                  </div>
+      {/* Body content */}
+      {page.body && (
+        <div className="article-layout">
+          <article className="article-content">
+            <MobileToc body={page.body} />
+            <PortableTextRenderer value={page.body} />
+          </article>
+          <aside className="toc-sidebar">
+            <TableOfContents body={page.body} />
+          </aside>
+        </div>
+      )}
 
-                  <div style={{ flex: 1, marginBottom: '14px' }}>
-                    <StatRow icon="💳" label="Transaction Fees"   value={method.transactionFees} />
-                    <StatRow icon="⏱️" label="Withdrawal Time"    value={method.withdrawalTime} />
-                    <StatRow icon="🎁" label="Eligible for Bonus" value={method.eligibleForBonuses} />
-                  </div>
-
-                  <Link
-                    href={`/online-casino/payment/${method.slug.current}/`}
-                    style={{
-                      display: 'block',
-                      textAlign: 'center',
-                      padding: '10px 16px',
-                      border: '2px solid var(--green)',
-                      borderRadius: '8px',
-                      color: 'var(--green)',
-                      fontSize: '13px',
-                      fontWeight: 700,
-                      textDecoration: 'none',
-                      letterSpacing: '0.04em',
-                      transition: 'background 0.15s, color 0.15s',
-                    }}
-                  >
-                    READ REVIEW
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      {author && (
+        <div className="section" style={{ paddingTop: '0' }}>
+          <AuthorBio author={author} compact />
+        </div>
+      )}
 
       <Footer />
     </>
