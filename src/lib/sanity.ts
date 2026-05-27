@@ -368,7 +368,8 @@ export async function getHomepage() {
 export async function getPaymentMethods() {
   return client.fetch(
     `*[_type == "paymentMethod"] | order(name asc) {
-      _id, name, slug,
+      _id, name, slug, paymentCategory,
+      transactionFees, withdrawalTime, eligibleForBonuses,
       "logo": logo { "url": asset->url, alt }
     }`
   )
@@ -640,7 +641,8 @@ export async function getBonusBySlugCa(slug: string) {
 export async function getPaymentMethodsCa() {
   return client.fetch(
     `*[_type == "paymentMethod" && market == "ca"] | order(name asc) {
-      _id, name, slug,
+      _id, name, slug, paymentCategory,
+      transactionFees, withdrawalTime, eligibleForBonuses,
       "logo": logo { "url": asset->url, alt }
     }`
   )
@@ -768,7 +770,8 @@ export async function getBonusBySlugAu(slug: string) {
 export async function getPaymentMethodsAu() {
   return client.fetch(
     `*[_type == "paymentMethod" && market == "au"] | order(name asc) {
-      _id, name, slug,
+      _id, name, slug, paymentCategory,
+      transactionFees, withdrawalTime, eligibleForBonuses,
       "logo": logo { "url": asset->url, alt }
     }`
   )
