@@ -65,7 +65,7 @@ export function SoftwareProvidersGrid({
                 alt={provider.logo.alt || provider.name}
                 width={130}
                 height={65}
-                style={{ objectFit: 'contain', maxHeight: '65px', width: 'auto' }}
+                style={{ objectFit: 'contain', maxHeight: '65px', width: 'auto', borderRadius: '8px' }}
               />
             ) : (
               <div style={{ fontSize: '14px', fontWeight: 600, color: '#333', textAlign: 'center' }}>
@@ -82,7 +82,7 @@ export function SoftwareProvidersGrid({
 
             <div style={{ flex: 1, marginBottom: '12px' }}>
               <StatRow icon="chart-2"  label="RTP"             value={provider.rtp} />
-              <StatRow icon="joystick" label="Number of Slots" value={provider.amountOfSlots} />
+              <StatRow icon="play-circle" label="Number of Slots" value={provider.amountOfSlots} />
               <StatRow icon="gamepad"  label="Game Categories" value={provider.gameCategories} />
             </div>
 

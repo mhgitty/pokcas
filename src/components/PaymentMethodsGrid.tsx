@@ -65,7 +65,7 @@ export function PaymentMethodsGrid({
                 alt={method.logo.alt || method.name}
                 width={130}
                 height={65}
-                style={{ objectFit: 'contain', maxHeight: '65px', width: 'auto' }}
+                style={{ objectFit: 'contain', maxHeight: '65px', width: 'auto', borderRadius: '8px' }}
               />
             ) : (
               <div style={{ fontSize: '14px', fontWeight: 600, color: '#333', textAlign: 'center' }}>
