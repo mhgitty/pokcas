@@ -4,13 +4,19 @@ import { getSiteSettings } from '@/lib/sanity'
 import { MarketSelector } from './MarketSelector'
 
 function resolveUrl(item: {
-  url?: string; pageSlug?: string; pageParentSlug?: string; bookmakerSlug?: string;
-  softwareSlug?: string; paymentMethodSlug?: string; postSlug?: string;
-}): string {
-  if (item.pageSlug) return item.pageParentSlug ? `/${item.pageParentSlug}/${item.pageSlug}/` : `/${item.pageSlug}/`
-  if (item.bookmakerSlug) return `/review/${item.bookmakerSlug}/`
-  if (item.softwareSlug) return `/software/${item.softwareSlug}/`
-  if (item.paymentMethodSlug) return `/online-casino/payment/${item.paymentMethodSlug}/`
+  url?: string; pageSlug?: string; pageParentSlug?: string; pageMarket?: string;
+  bookmakerSlug?: string; softwareSlug?: string; paymentMethodSlug?: string; postSlug?: string;
+}, market?: string): string {
+  const mp = market === 'ca' ? '/ca' : market === 'au' ? '/au' : ''
+  if (item.pageSlug) {
+    const prefix = item.pageMarket === 'ca' ? '/ca' : item.pageMarket === 'au' ? '/au' : mp
+    return item.pageParentSlug
+      ? `${prefix}/${item.pageParentSlug}/${item.pageSlug}/`
+      : `${prefix}/${item.pageSlug}/`
+  }
+  if (item.bookmakerSlug) return `${mp}/review/${item.bookmakerSlug}/`
+  if (item.softwareSlug) return `${mp}/online-casino/software/${item.softwareSlug}/`
+  if (item.paymentMethodSlug) return `${mp}/online-casino/payment/${item.paymentMethodSlug}/`
   if (item.postSlug) return `/${item.postSlug}/`
   return item.url || '/'
 }
@@ -51,6 +57,7 @@ interface FooterProps {
   note?: string
   disclaimer?: string
   bottomNav?: any[]
+  market?: string
 }
 
 export async function Footer({
@@ -62,6 +69,7 @@ export async function Footer({
   note: noteProp,
   disclaimer: disclaimerProp,
   bottomNav: bottomNavProp,
+  market,
 }: FooterProps = {}) {
   const year = new Date().getFullYear()
 
@@ -118,7 +126,7 @@ export async function Footer({
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {(col.items || []).map((item: any) => {
-                  const href = resolveUrl(item)
+                  const href = resolveUrl(item, market)
                   return (
                     <Link
                       key={href + item.label}
@@ -246,7 +254,7 @@ export async function Footer({
             {bottomNav && bottomNav.length > 0 && (
               <nav style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
                 {bottomNav.map((item: any) => {
-                  const href = resolveUrl(item)
+                  const href = resolveUrl(item, market)
                   return (
                     <Link
                       key={href + item.label}

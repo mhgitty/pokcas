@@ -23,7 +23,7 @@ interface Props { params: Promise<{ slug: string }> }
 
 export async function generateStaticParams() {
   const bookmakers = await clientNoCdn.fetch<Array<{ slug: { current: string } }>>(
-    `*[_type == "bookmaker" && defined(slug.current)] { slug }`
+    `*[_type == "bookmaker" && (market == "global" || !defined(market)) && defined(slug.current)] { slug }`
   ).catch(() => [])
   return bookmakers.map((b) => ({ slug: b.slug.current }))
 }

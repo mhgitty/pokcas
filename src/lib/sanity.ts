@@ -192,7 +192,7 @@ export async function getCategories() {
 
 export async function getBookmakers() {
   return clientNoCdn.fetch(
-    `*[_type == "bookmaker"] | order(score desc, name asc) {
+    `*[_type == "bookmaker" && (market == "global" || !defined(market))] | order(score desc, name asc) {
       _id, name, slug, usp, score,
       indbetalingsbonus, minIndbetaling,
       gennemspilskrav, url, terms,
@@ -203,7 +203,7 @@ export async function getBookmakers() {
 
 export async function getBookmakerBySlug(slug: string) {
   return clientNoCdn.fetch(
-    `*[_type == "bookmaker" && slug.current == $slug][0] {
+    `*[_type == "bookmaker" && slug.current == $slug && (market == "global" || !defined(market))][0] {
       _id, titel, name, slug, usp, score,
       indbetalingsbonus, minIndbetaling, gennemspilskrav,
       url, terms, lanceringsdato, license, body,
@@ -219,7 +219,7 @@ export async function getBookmakerBySlug(slug: string) {
 
 export async function getBonuses(limit = 50) {
   return client.fetch(
-    `*[_type == "bonus" && active == true] | order(_createdAt desc) [0...$limit] {
+    `*[_type == "bonus" && active == true && (market == "global" || !defined(market))] | order(_createdAt desc) [0...$limit] {
       _id, title, slug,
       oddsBonusTitel, minimumOdds, minimumIndbetaling, gennemspilskrav,
       offerUrl, terms, casinoNavn,
@@ -367,7 +367,7 @@ export async function getHomepage() {
 
 export async function getPaymentMethods() {
   return client.fetch(
-    `*[_type == "paymentMethod"] | order(name asc) {
+    `*[_type == "paymentMethod" && (market == "global" || !defined(market))] | order(name asc) {
       _id, name, slug, paymentCategory,
       transactionFees, withdrawalTime, eligibleForBonuses,
       "logo": logo { "url": asset->url, alt }
@@ -377,7 +377,7 @@ export async function getPaymentMethods() {
 
 export async function getPaymentMethodBySlug(slug: string) {
   return client.fetch(
-    `*[_type == "paymentMethod" && slug.current == $slug][0] {
+    `*[_type == "paymentMethod" && slug.current == $slug && (market == "global" || !defined(market))][0] {
       _id, name, titel, slug, withdrawalTime,
       paymentCategory, transactionFees, eligibleForBonuses,
       metaTitle, metaDescription,
@@ -397,7 +397,7 @@ export async function getPaymentMethodBySlug(slug: string) {
 
 export async function getSoftwareProviders() {
   return client.fetch(
-    `*[_type == "software"] | order(name asc) {
+    `*[_type == "software" && (market == "global" || !defined(market))] | order(name asc) {
       _id, name, slug, rtp, amountOfSlots, gameCategories,
       "logo": logo { "url": asset->url, alt }
     }`
@@ -406,7 +406,7 @@ export async function getSoftwareProviders() {
 
 export async function getSoftwareBySlug(slug: string) {
   return client.fetch(
-    `*[_type == "software" && slug.current == $slug][0] {
+    `*[_type == "software" && slug.current == $slug && (market == "global" || !defined(market))][0] {
       _id, name, titel, slug, metaTitle, metaDescription,
       rtp, amountOfSlots, licenses, gameCategories, highestRtpSlot, bonusBuys,
       "intro": intro[] { ..., _type == "image" => { ..., "url": asset->url } },

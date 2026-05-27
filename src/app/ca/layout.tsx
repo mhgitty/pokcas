@@ -13,7 +13,7 @@ function resolveUrl(item: {
       : `${prefix}/${item.pageSlug}/`
   }
   if (item.bookmakerSlug) return `/ca/reviews/${item.bookmakerSlug}/`
-  if (item.softwareSlug) return `/ca/software/${item.softwareSlug}/`
+  if (item.softwareSlug) return `/ca/online-casino/software/${item.softwareSlug}/`
   if (item.paymentMethodSlug) return `/ca/online-casino/payment/${item.paymentMethodSlug}/`
   if (item.postSlug) return `/${item.postSlug}/`
   return item.url || '/'
@@ -46,7 +46,7 @@ export default async function CaLayout({ children }: { children: React.ReactNode
     <>
       <Navbar navItems={navItems} logoHref="/ca/" />
       {children}
-      <Footer tagline={tagline} columns={columns} note={note} disclaimer={disclaimer} />
+      <Footer tagline={tagline} columns={columns} note={note} disclaimer={disclaimer} market="ca" />
     </>
   )
 }

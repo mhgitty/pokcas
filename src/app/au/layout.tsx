@@ -13,7 +13,7 @@ function resolveUrl(item: {
       : `${prefix}/${item.pageSlug}/`
   }
   if (item.bookmakerSlug) return `/au/reviews/${item.bookmakerSlug}/`
-  if (item.softwareSlug) return `/au/software/${item.softwareSlug}/`
+  if (item.softwareSlug) return `/au/online-casino/software/${item.softwareSlug}/`
   if (item.paymentMethodSlug) return `/au/online-casino/payment/${item.paymentMethodSlug}/`
   if (item.postSlug) return `/${item.postSlug}/`
   return item.url || '/'
@@ -46,7 +46,7 @@ export default async function AuLayout({ children }: { children: React.ReactNode
     <>
       <Navbar navItems={navItems} logoHref="/au/" />
       {children}
-      <Footer tagline={tagline} columns={columns} note={note} disclaimer={disclaimer} />
+      <Footer tagline={tagline} columns={columns} note={note} disclaimer={disclaimer} market="au" />
     </>
   )
 }
