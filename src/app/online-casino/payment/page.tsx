@@ -3,9 +3,22 @@ import { Footer } from '@/components/Footer'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { JsonLd } from '@/components/JsonLd'
 import { getPaymentMethods, getSiteSettings } from '@/lib/sanity'
+// getSiteSettings used for nav resolution below
 import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
+
+function resolveUrl(item: {
+  url?: string; pageSlug?: string; pageParentSlug?: string;
+  bookmakerSlug?: string; softwareSlug?: string; paymentMethodSlug?: string; postSlug?: string;
+}): string {
+  if (item.pageSlug) return item.pageParentSlug ? `/${item.pageParentSlug}/${item.pageSlug}/` : `/${item.pageSlug}/`
+  if (item.bookmakerSlug) return `/review/${item.bookmakerSlug}/`
+  if (item.softwareSlug) return `/online-casino/software/${item.softwareSlug}/`
+  if (item.paymentMethodSlug) return `/online-casino/payment/${item.paymentMethodSlug}/`
+  if (item.postSlug) return `/${item.postSlug}/`
+  return item.url || '/'
+}
 
 export const revalidate = 3600
 
@@ -37,6 +50,15 @@ export default async function PaymentMethodsPage() {
     getSiteSettings().catch(() => null),
   ])
 
+  const rawNav = settings?.headerNav ?? []
+  const navItems = rawNav.map((item: any) => ({
+    label: item.label,
+    href: resolveUrl(item),
+    isHighlighted: item.isHighlighted ?? false,
+    icon: item.icon ?? undefined,
+    children: (item.children || []).map((c: any) => ({ label: c.label, href: resolveUrl(c) })),
+  }))
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -49,7 +71,7 @@ export default async function PaymentMethodsPage() {
   return (
     <>
       <JsonLd data={jsonLd} />
-      <Navbar settings={settings} />
+      <Navbar navItems={navItems} />
 
       {/* Hero */}
       <div style={{ background: 'var(--bg-hero)', borderBottom: '1px solid var(--border)', padding: '40px 15px 32px' }}>
@@ -150,7 +172,7 @@ export default async function PaymentMethodsPage() {
         )}
       </div>
 
-      <Footer settings={settings} />
+      <Footer />
     </>
   )
 }

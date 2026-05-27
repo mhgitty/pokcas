@@ -1,8 +1,6 @@
-import { Navbar } from '@/components/Navbar'
-import { Footer } from '@/components/Footer'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { JsonLd } from '@/components/JsonLd'
-import { getPaymentMethodsAu, getMarketSettings } from '@/lib/sanity'
+import { getPaymentMethodsAu } from '@/lib/sanity'
 import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
@@ -32,10 +30,7 @@ function StatRow({ icon, label, value }: { icon: string; label: string; value?: 
 }
 
 export default async function AuPaymentMethodsPage() {
-  const [methods, marketSettings] = await Promise.all([
-    getPaymentMethodsAu().catch(() => []),
-    getMarketSettings('au').catch(() => null),
-  ])
+  const methods = await getPaymentMethodsAu().catch(() => [])
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -50,7 +45,6 @@ export default async function AuPaymentMethodsPage() {
   return (
     <>
       <JsonLd data={jsonLd} />
-      <Navbar settings={marketSettings} logoHref="/au/" />
 
       {/* Hero */}
       <div style={{ background: 'var(--bg-hero)', borderBottom: '1px solid var(--border)', padding: '40px 15px 32px' }}>
@@ -150,8 +144,6 @@ export default async function AuPaymentMethodsPage() {
           </div>
         )}
       </div>
-
-      <Footer settings={marketSettings} />
     </>
   )
 }
