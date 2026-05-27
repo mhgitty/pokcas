@@ -10,8 +10,8 @@ interface HeroSectionProps {
   eyebrow?: string
   updatedAt?: string | null
   narrow?: boolean
-  author?: { name: string; linkedin?: string | null; imageUrl?: string | null } | null
-  factChecker?: { name: string; linkedin?: string | null; imageUrl?: string | null } | null
+  author?: { name: string; slug?: { current: string } | null; linkedin?: string | null; imageUrl?: string | null } | null
+  factChecker?: { name: string; slug?: { current: string } | null; linkedin?: string | null; imageUrl?: string | null } | null
   breadcrumbs?: Crumb[]
 }
 

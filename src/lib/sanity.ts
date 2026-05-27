@@ -145,7 +145,7 @@ const PAGE_FIELDS = `
     "imageUrl": image.asset->url
   },
   "factChecker": factChecker-> {
-    name, linkedin,
+    name, slug, linkedin,
     "imageUrl": image.asset->url
   },
   ${COMPARISON_TABLE_FRAGMENT}

@@ -1,5 +1,8 @@
+import Link from 'next/link'
+
 interface Author {
   name: string
+  slug?: { current: string } | null
   linkedin?: string | null
   imageUrl?: string | null
 }
@@ -8,6 +11,19 @@ interface AuthorBarProps {
   author?: Author | null
   factChecker?: Author | null
   updatedAt?: string | null
+}
+
+function AuthorLink({ person, label }: { person: Author; label: string }) {
+  const href = person.slug?.current ? `/author/${person.slug.current}/` : null
+  return (
+    <div style={{ fontSize: '12px', color: 'var(--text-faint)', lineHeight: 1.3 }}>
+      {label}{' '}
+      {href
+        ? <Link href={href} style={{ color: 'var(--green)', fontWeight: 600, textDecoration: 'none' }}>{person.name}</Link>
+        : <span style={{ color: 'var(--text)', fontWeight: 600 }}>{person.name}</span>
+      }
+    </div>
+  )
 }
 
 export function AuthorBar({ author, factChecker, updatedAt }: AuthorBarProps) {
@@ -32,13 +48,7 @@ export function AuthorBar({ author, factChecker, updatedAt }: AuthorBarProps) {
             </div>
           )}
           <div>
-            <div style={{ fontSize: '12px', color: 'var(--text-faint)', lineHeight: 1.3 }}>
-              Author:{' '}
-              {author.linkedin
-                ? <a href={author.linkedin} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--green)', fontWeight: 600, textDecoration: 'none' }}>{author.name}</a>
-                : <span style={{ color: 'var(--text)', fontWeight: 600 }}>{author.name}</span>
-              }
-            </div>
+            <AuthorLink person={author} label="Author:" />
             {dateStr && (
               <div style={{ fontSize: '12px', color: 'var(--text-faint)', lineHeight: 1.3 }}>
                 Last updated: <span style={{ color: 'var(--text-muted)' }}>{dateStr}</span>
@@ -59,19 +69,13 @@ export function AuthorBar({ author, factChecker, updatedAt }: AuthorBarProps) {
               <img src={factChecker.imageUrl} alt={factChecker.name} style={{ width: '40px', height: '40px', objectFit: 'cover', display: 'block' }} />
             </div>
           )}
-          <div style={{ fontSize: '12px', color: 'var(--text-faint)', lineHeight: 1.3 }}>
-            Fact checked by:{' '}
-            {factChecker.linkedin
-              ? <a href={factChecker.linkedin} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--green)', fontWeight: 600, textDecoration: 'none' }}>{factChecker.name}</a>
-              : <span style={{ color: 'var(--text)', fontWeight: 600 }}>{factChecker.name}</span>
-            }
-          </div>
+          <AuthorLink person={factChecker} label="Fact checked by:" />
         </div>
       )}
 
       {!author && dateStr && (
         <div style={{ fontSize: '12px', color: 'var(--text-faint)' }}>
-          Sidst opdateret: <span style={{ color: 'var(--text-muted)' }}>{dateStr}</span>
+          Last updated: <span style={{ color: 'var(--text-muted)' }}>{dateStr}</span>
         </div>
       )}
     </div>
