@@ -7,7 +7,8 @@ import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { TableOfContents } from '@/components/TableOfContents'
 import { MobileToc } from '@/components/MobileToc'
 import { JsonLd } from '@/components/JsonLd'
-import { getPageByPath, getSiteSettings } from '@/lib/sanity'
+import { HreflangHead } from '@/components/HreflangHead'
+import { getPageByPath, getSiteSettings, getHreflangScript } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
@@ -39,6 +40,7 @@ export default async function DynamicPage({ params }: Props) {
     getSiteSettings().catch(() => null),
   ])
   if (!page) notFound()
+  const hreflangScript = await getHreflangScript(page._id).catch(() => null)
   const author = page.author ?? settings?.defaultAuthor ?? null
 
   const canonical = `${BASE}${buildPath(slug)}`
@@ -78,6 +80,7 @@ export default async function DynamicPage({ params }: Props) {
 
   return (
     <>
+      <HreflangHead script={hreflangScript} />
       <JsonLd data={jsonLd} />
       <Navbar />
       <HeroSection

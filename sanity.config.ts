@@ -320,6 +320,14 @@ export default defineConfig({
                   .title('301 Redirects')
                   .defaultOrdering([{ field: 'from', direction: 'asc' }])
               ),
+            S.listItem()
+              .title('🌐 Hreflang')
+              .schemaType('hreflangGroup')
+              .child(
+                S.documentTypeList('hreflangGroup')
+                  .title('Hreflang Groups')
+                  .defaultOrdering([{ field: 'name', direction: 'asc' }])
+              ),
             S.divider(),
             S.listItem()
               .title('👤 Authors')

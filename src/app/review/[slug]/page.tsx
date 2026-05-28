@@ -6,7 +6,8 @@ import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { TableOfContents } from '@/components/TableOfContents'
 import { MobileToc } from '@/components/MobileToc'
 import { JsonLd } from '@/components/JsonLd'
-import { getBookmakerBySlug, getPosts, getSiteSettings, clientNoCdn } from '@/lib/sanity'
+import { getBookmakerBySlug, getPosts, getSiteSettings, clientNoCdn, getHreflangScript } from '@/lib/sanity'
+import { HreflangHead } from '@/components/HreflangHead'
 import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
@@ -59,6 +60,7 @@ export default async function ReviewPage({ params }: Props) {
     getSiteSettings().catch(() => null),
   ])
   if (!bm) notFound()
+  const hreflangScript = await getHreflangScript(bm._id).catch(() => null)
   const author = settings?.defaultAuthor ?? null
 
   const canonical = `${BASE}/review/${slug}/`
@@ -99,6 +101,7 @@ export default async function ReviewPage({ params }: Props) {
 
   return (
     <>
+      <HreflangHead script={hreflangScript} />
       <JsonLd data={jsonLd} />
       <Navbar />
 

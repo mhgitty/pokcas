@@ -4,7 +4,8 @@ import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { TableOfContents } from '@/components/TableOfContents'
 import { MobileToc } from '@/components/MobileToc'
 import { JsonLd } from '@/components/JsonLd'
-import { getBookmakerBySlugCa, getPosts, getSiteSettings, clientNoCdn } from '@/lib/sanity'
+import { HreflangHead } from '@/components/HreflangHead'
+import { getBookmakerBySlugCa, getPosts, getSiteSettings, clientNoCdn, getHreflangScript } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
@@ -58,6 +59,7 @@ export default async function CaReviewSlugPage({ params }: Props) {
     getSiteSettings().catch(() => null),
   ])
   if (!bm) notFound()
+  const hreflangScript = await getHreflangScript(bm._id).catch(() => null)
   const author = settings?.defaultAuthor ?? null
 
   const canonical = `${BASE}/ca/online-casino/review/${slug}/`
@@ -99,6 +101,7 @@ export default async function CaReviewSlugPage({ params }: Props) {
 
   return (
     <>
+      <HreflangHead script={hreflangScript} />
       <JsonLd data={jsonLd} />
 
       {/* Hero */}

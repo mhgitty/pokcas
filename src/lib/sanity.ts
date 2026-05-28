@@ -16,6 +16,20 @@ export const clientNoCdn = createClient({
   useCdn: false,
 })
 
+// ─── Hreflang ─────────────────────────────────────────────────────────────────
+// Embed in any query as: "hreflangScript": ${HREFLANG_FRAGMENT}
+// Uses a reverse reference lookup — finds any hreflangGroup that includes this doc.
+
+export const HREFLANG_FRAGMENT = `*[_type == "hreflangGroup" && ^._id in pages[]._ref][0].script`
+
+export async function getHreflangScript(docId: string): Promise<string | null> {
+  return client.fetch(
+    `*[_type == "hreflangGroup" && $docId in pages[]._ref][0].script`,
+    { docId },
+    { next: { revalidate: 3600 } }
+  )
+}
+
 // ─── Posts ────────────────────────────────────────────────────────────────────
 
 export async function getPosts(limit = 20, categorySlug?: string) {
