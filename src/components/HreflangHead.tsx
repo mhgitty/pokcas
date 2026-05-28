@@ -40,7 +40,7 @@ export function HreflangHead({ script }: { script?: string | null }) {
   return (
     <>
       {links.map(({ hreflang, href }) => (
-        <link key={hreflang} rel="alternate" hreflang={hreflang} href={href} />
+        <link key={hreflang} rel="alternate" hrefLang={hreflang} href={href} />
       ))}
     </>
   )
