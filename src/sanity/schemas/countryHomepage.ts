@@ -150,6 +150,28 @@ export const countryHomepageType = defineType({
       description: 'Main H1 on the country homepage.',
     }),
     { ...introField, title: 'Intro text', group: 'content' } as any,
+    // ── Hero navigation cards ──────────────────────────────────────────────
+    defineField({
+      name: 'heroCards',
+      title: 'Hero cards (right side)',
+      type: 'array',
+      group: 'content',
+      description: 'Up to 4 quick-link cards shown on the right half of the hero. Each card has a title, Solar icon, and link.',
+      of: [{
+        type: 'object',
+        name: 'heroCard',
+        fields: [
+          defineField({ name: 'title', title: 'Card title', type: 'string', validation: (r: any) => r.required() }),
+          defineField({ name: 'icon', title: 'Solar icon name (e.g. card-bold-duotone → use "card")', type: 'string' }),
+          defineField({ name: 'href', title: 'Link URL', type: 'string', validation: (r: any) => r.required() }),
+        ],
+        preview: {
+          select: { title: 'title', href: 'href' },
+          prepare: ({ title, href }: any) => ({ title: title || 'Card', subtitle: href }),
+        },
+      }],
+      validation: (r: any) => r.max(4),
+    }),
     { ...bodyField, group: 'content' } as any,
     // ── Page sections builder ──────────────────────────────────────────────
     defineField({

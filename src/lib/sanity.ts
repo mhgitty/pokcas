@@ -550,6 +550,7 @@ export async function getCountryHomepage(market: 'ca' | 'au') {
   return client.fetch(
     `*[_type == "countryHomepage" && _id == $id][0] {
       market, heroHeading, intro,
+      "heroCards": heroCards[] { _key, title, icon, href },
       "body": body[] {
         ...,
         _type == "casinoKortBlock" => {

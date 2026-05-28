@@ -1,4 +1,4 @@
-import { HeroSection } from '@/components/HeroSection'
+import { CountryHero } from '@/components/CountryHero'
 import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { MobileToc } from '@/components/MobileToc'
 import { JsonLd } from '@/components/JsonLd'
@@ -35,6 +35,7 @@ export default async function AuHomePage() {
   const title = hp?.heroHeading || 'Best Online Casinos in Australia'
   const intro = hp?.intro || 'Expert reviews of the top Australian online casinos. Compare welcome bonuses, wagering requirements and ratings.'
   const author = settings?.defaultAuthor ?? null
+  const heroCards = hp?.heroCards ?? []
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -61,10 +62,10 @@ export default async function AuHomePage() {
   return (
     <>
       <JsonLd data={jsonLd} />
-      <HeroSection
+      <CountryHero
         title={title}
         intro={intro}
-        author={author}
+        heroCards={heroCards}
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Australia' }]}
       />
 
