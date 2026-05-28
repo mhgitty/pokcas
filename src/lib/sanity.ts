@@ -652,6 +652,7 @@ export async function getPaymentMethodsCa() {
     `*[_type == "paymentMethod" && market == "ca"] | order(name asc) {
       _id, name, slug, paymentCategory,
       transactionFees, withdrawalTime, eligibleForBonuses,
+      "casinoCount": count(*[_type == "bookmaker" && market == "ca" && references(^._id)]),
       "logo": logo { "url": asset->url, alt }
     }`
   )
@@ -679,6 +680,7 @@ export async function getSoftwareProvidersCa() {
   return client.fetch(
     `*[_type == "software" && market == "ca"] | order(name asc) {
       _id, name, slug, rtp, amountOfSlots, gameCategories,
+      "casinoCount": count(*[_type == "bookmaker" && market == "ca" && references(^._id)]),
       "logo": logo { "url": asset->url, alt }
     }`
   )
@@ -781,6 +783,7 @@ export async function getPaymentMethodsAu() {
     `*[_type == "paymentMethod" && market == "au"] | order(name asc) {
       _id, name, slug, paymentCategory,
       transactionFees, withdrawalTime, eligibleForBonuses,
+      "casinoCount": count(*[_type == "bookmaker" && market == "au" && references(^._id)]),
       "logo": logo { "url": asset->url, alt }
     }`
   )
@@ -808,6 +811,7 @@ export async function getSoftwareProvidersAu() {
   return client.fetch(
     `*[_type == "software" && market == "au"] | order(name asc) {
       _id, name, slug, rtp, amountOfSlots, gameCategories,
+      "casinoCount": count(*[_type == "bookmaker" && market == "au" && references(^._id)]),
       "logo": logo { "url": asset->url, alt }
     }`
   )

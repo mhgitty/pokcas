@@ -1,8 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { Icon } from '@/components/Icon'
-import { PaymentMethodsGrid } from '@/components/PaymentMethodsGrid'
-import { SoftwareProvidersGrid } from '@/components/SoftwareProvidersGrid'
+import { RichIntro } from '@/components/RichIntro'
 import {
   getBookmakersCa, getBookmarkersAu,
   getPaymentMethodsCa, getPaymentMethodsAu,
@@ -13,12 +12,12 @@ import {
 
 interface SectionBase { _type: string; _key: string }
 
-interface SectionCasinoList    extends SectionBase { _type: 'sectionCasinoList';    title?: string; count?: number }
-interface SectionPaymentMethods extends SectionBase { _type: 'sectionPaymentMethods'; title?: string }
-interface SectionSoftware      extends SectionBase { _type: 'sectionSoftware';      title?: string }
-interface SectionCtaBanner     extends SectionBase { _type: 'sectionCtaBanner';     icon?: string; title: string; body?: string; buttonLabel?: string; buttonUrl?: string; style?: string }
-interface SectionHighlights    extends SectionBase { _type: 'sectionHighlights';    title?: string; intro?: string; items?: { _key: string; title: string; bullets?: string[] }[] }
-interface SectionGameTypes     extends SectionBase { _type: 'sectionGameTypes';     title?: string; items?: { _key: string; title: string; description?: string; icon?: string; href?: string }[] }
+interface SectionCasinoList     extends SectionBase { _type: 'sectionCasinoList';     title?: string; count?: number }
+interface SectionPaymentMethods extends SectionBase { _type: 'sectionPaymentMethods'; title?: string; intro?: any[] }
+interface SectionSoftware       extends SectionBase { _type: 'sectionSoftware';       title?: string; intro?: any[] }
+interface SectionCtaBanner      extends SectionBase { _type: 'sectionCtaBanner';      icon?: string; title: string; body?: string; buttonLabel?: string; buttonUrl?: string; style?: string }
+interface SectionHighlights     extends SectionBase { _type: 'sectionHighlights';     title?: string; intro?: string; items?: { _key: string; title: string; bullets?: string[] }[] }
+interface SectionGameTypes      extends SectionBase { _type: 'sectionGameTypes';      title?: string; items?: { _key: string; title: string; description?: string; icon?: string; href?: string }[] }
 
 type AnySection = SectionCasinoList | SectionPaymentMethods | SectionSoftware | SectionCtaBanner | SectionHighlights | SectionGameTypes
 
@@ -274,6 +273,121 @@ function GameTypesSection({ section }: { section: SectionGameTypes }) {
   )
 }
 
+// ── Provider cards (payment methods / software) ───────────────────────────────
+
+const MAX_DESKTOP = 8
+const MAX_MOBILE  = 4
+
+function ProviderCardsSection({
+  section,
+  items,
+  hrefPrefix,
+  seeAllLabel,
+  seeAllHref,
+  casinoLabel,
+}: {
+  section: SectionPaymentMethods | SectionSoftware
+  items: any[]
+  hrefPrefix: string
+  seeAllLabel: string
+  seeAllHref: string
+  casinoLabel: string
+}) {
+  const visible = items.slice(0, MAX_DESKTOP)
+  const hasMore = items.length > MAX_DESKTOP
+
+  return (
+    <div className="section">
+      {/* Header row */}
+      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '16px', marginBottom: section.intro ? '12px' : '20px', flexWrap: 'wrap' }}>
+        {section.title && (
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 700, color: 'var(--text)', margin: 0 }}>
+            {section.title}
+          </h2>
+        )}
+        <Link href={seeAllHref} style={{ fontSize: '13px', fontWeight: 600, color: 'var(--green)', textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
+          {seeAllLabel} →
+        </Link>
+      </div>
+
+      {/* Optional rich intro */}
+      {section.intro && section.intro.length > 0 && (
+        <p style={{ fontSize: '14px', color: 'var(--text-muted)', lineHeight: 1.7, margin: '0 0 20px' }}>
+          <RichIntro value={section.intro} />
+        </p>
+      )}
+
+      {/* Cards grid */}
+      <div className="provider-cards-grid">
+        {visible.map((item: any, i: number) => {
+          const isDesktopOnly = i >= MAX_MOBILE
+          return (
+            <Link
+              key={item._id}
+              href={`${hrefPrefix}/${item.slug.current}/`}
+              className={`provider-card${isDesktopOnly ? ' provider-card--desktop-only' : ''}`}
+            >
+              {/* Logo */}
+              <div style={{
+                width: '100%', height: '52px',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                background: '#fff',
+                borderRadius: '8px',
+                border: '1px solid var(--border-faint)',
+                marginBottom: '10px',
+                padding: '8px',
+                overflow: 'hidden',
+              }}>
+                {item.logo?.url ? (
+                  <Image
+                    src={item.logo.url}
+                    alt={item.logo.alt || item.name}
+                    width={80}
+                    height={36}
+                    style={{ objectFit: 'contain', maxHeight: '36px', width: 'auto' }}
+                  />
+                ) : (
+                  <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-faint)' }}>
+                    {item.name}
+                  </span>
+                )}
+              </div>
+
+              {/* Name */}
+              <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', lineHeight: 1.3, marginBottom: '4px', textAlign: 'center' }}>
+                {item.name}
+              </div>
+
+              {/* Casino count */}
+              <div style={{ fontSize: '11px', color: 'var(--text-faint)', textAlign: 'center' }}>
+                {item.casinoCount != null
+                  ? `${item.casinoCount} ${casinoLabel}`
+                  : ''}
+              </div>
+            </Link>
+          )
+        })}
+      </div>
+
+      {/* See all button */}
+      {(hasMore || true) && (
+        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+          <Link href={seeAllHref} style={{
+            display: 'inline-block',
+            border: '1px solid var(--border)',
+            borderRadius: '8px',
+            padding: '10px 24px',
+            fontSize: '14px', fontWeight: 600, color: 'var(--text)',
+            textDecoration: 'none',
+          }}>
+            {seeAllLabel}
+          </Link>
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ── Main export ───────────────────────────────────────────────────────────────
 
 export async function HomeSections({ sections, market }: { sections: AnySection[]; market: 'ca' | 'au' }) {
@@ -318,26 +432,28 @@ export async function HomeSections({ sections, market }: { sections: AnySection[
 
           case 'sectionPaymentMethods':
             return (payments as any[]).length > 0 ? (
-              <div key={section._key} className="section">
-                {section.title && (
-                  <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 700, color: 'var(--text)', marginBottom: '20px' }}>
-                    {section.title}
-                  </h2>
-                )}
-                <PaymentMethodsGrid methods={payments as any[]} hrefPrefix={payBase} />
-              </div>
+              <ProviderCardsSection
+                key={section._key}
+                section={section as SectionPaymentMethods}
+                items={payments as any[]}
+                hrefPrefix={payBase}
+                seeAllLabel="See all payment methods"
+                seeAllHref={`${payBase}/`}
+                casinoLabel="casinos"
+              />
             ) : null
 
           case 'sectionSoftware':
             return (software as any[]).length > 0 ? (
-              <div key={section._key} className="section">
-                {section.title && (
-                  <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 700, color: 'var(--text)', marginBottom: '20px' }}>
-                    {section.title}
-                  </h2>
-                )}
-                <SoftwareProvidersGrid providers={software as any[]} hrefPrefix={softBase} />
-              </div>
+              <ProviderCardsSection
+                key={section._key}
+                section={section as SectionSoftware}
+                items={software as any[]}
+                hrefPrefix={softBase}
+                seeAllLabel="See all software providers"
+                seeAllHref={`${softBase}/`}
+                casinoLabel="casinos"
+              />
             ) : null
 
           case 'sectionCtaBanner':

@@ -1,6 +1,8 @@
 import { defineField, defineType } from 'sanity'
 import { bodyField, introField } from './page'
 
+const sectionIntroField = { ...introField, name: 'intro', title: 'Intro text (optional)', description: 'Rich text shown between the section title and the cards.' } as any
+
 // ── Reusable inline section types ────────────────────────────────────────────
 
 const sectionCasinoList = {
@@ -21,6 +23,7 @@ const sectionPaymentMethods = {
   title: '💳 Payment Methods Grid',
   fields: [
     defineField({ name: 'title', title: 'Section title', type: 'string', initialValue: 'Payment Methods' }),
+    sectionIntroField,
   ],
   preview: { select: { title: 'title' }, prepare: ({ title }: any) => ({ title: `💳 ${title || 'Payment Methods'}` }) },
 }
@@ -31,6 +34,7 @@ const sectionSoftware = {
   title: '🎮 Software Providers Grid',
   fields: [
     defineField({ name: 'title', title: 'Section title', type: 'string', initialValue: 'Software Providers' }),
+    sectionIntroField,
   ],
   preview: { select: { title: 'title' }, prepare: ({ title }: any) => ({ title: `🎮 ${title || 'Software Providers'}` }) },
 }
