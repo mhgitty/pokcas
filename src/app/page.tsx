@@ -3,6 +3,7 @@ import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
 import { JsonLd } from '@/components/JsonLd'
 import { Icon } from '@/components/Icon'
+import { RichIntro } from '@/components/RichIntro'
 import { getPosts, getHomepage, getBookmakers } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
 import type { Metadata } from 'next'
@@ -32,7 +33,7 @@ export default async function HomePage() {
   ])
 
   const heroHeading = replaceDateVars(hp?.heroHeading || 'Find the Best Online Casino Bonuses')
-  const heroSubtext = replaceDateVars(hp?.intro || 'We compare and review all the top online casinos. Find the best welcome bonus and get started today.')
+  const heroIntro = hp?.intro ?? 'We compare and review all the top online casinos. Find the best welcome bonus and get started today.'
 
   const latestSectionTitle   = hp?.latestSectionTitle   || 'Latest'
   const casinoReviewsTitle   = hp?.casinoReviewsTitle   || 'Top Casino Reviews'
@@ -115,7 +116,9 @@ export default async function HomePage() {
           <h1 className="hero-heading">
             {heroHeading}
           </h1>
-          <p className="hero-subtext">{heroSubtext}</p>
+          <p className="hero-subtext">
+            {typeof heroIntro === 'string' ? replaceDateVars(heroIntro) : <RichIntro value={heroIntro} />}
+          </p>
         </div>
       </section>
 
