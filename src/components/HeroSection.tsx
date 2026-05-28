@@ -1,12 +1,13 @@
 import { replaceDateVars } from '@/lib/dateVars'
 import { Breadcrumbs } from './Breadcrumbs'
 import { AuthorBar } from './AuthorBar'
+import { RichIntro } from './RichIntro'
 
 interface Crumb { label: string; href?: string }
 
 interface HeroSectionProps {
   title: string
-  intro?: string
+  intro?: string | any[]
   eyebrow?: string
   updatedAt?: string | null
   narrow?: boolean
@@ -18,6 +19,7 @@ interface HeroSectionProps {
 export function HeroSection({ title, intro, eyebrow, updatedAt, narrow = false, author, factChecker, breadcrumbs }: HeroSectionProps) {
   const maxWidth = narrow ? '760px' : '1250px'
   const hasAuthorBar = author || factChecker || updatedAt
+  const hasIntro = Array.isArray(intro) ? intro.length > 0 : !!intro
 
   return (
     <section className="hero-section" style={{
@@ -45,7 +47,7 @@ export function HeroSection({ title, intro, eyebrow, updatedAt, narrow = false, 
           fontSize: 'clamp(24px, 3.5vw, 40px)',
           fontWeight: 800, color: 'var(--text)',
           lineHeight: 1.15, letterSpacing: '-0.03em',
-          marginBottom: hasAuthorBar ? '20px' : intro ? '16px' : '0',
+          marginBottom: hasAuthorBar ? '20px' : hasIntro ? '16px' : '0',
           width: '100%',
         }}>
           {replaceDateVars(title)}
@@ -53,9 +55,9 @@ export function HeroSection({ title, intro, eyebrow, updatedAt, narrow = false, 
 
         <AuthorBar author={author} factChecker={factChecker} updatedAt={updatedAt} />
 
-        {intro && (
+        {hasIntro && (
           <p style={{ fontSize: '15px', color: 'var(--text-muted)', lineHeight: 1.7, width: '100%', margin: 0 }}>
-            {replaceDateVars(intro)}
+            {typeof intro === 'string' ? replaceDateVars(intro) : <RichIntro value={intro} />}
           </p>
         )}
 

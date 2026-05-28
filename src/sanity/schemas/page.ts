@@ -3,6 +3,37 @@ import { TableBlockInput } from '../components/TableBlockInput'
 import { FaqBlockInput } from '../components/FaqBlockInput'
 import { comparisonTableFields } from './comparisonTable'
 
+// Minimal rich-text field for intro/lead text — supports inline formatting + links only
+export const introField = defineField({
+  name: 'intro',
+  title: 'Intro text',
+  type: 'array',
+  of: [{
+    type: 'block',
+    styles: [{ title: 'Normal', value: 'normal' }],
+    lists: [],
+    marks: {
+      decorators: [
+        { title: 'Bold',   value: 'strong' },
+        { title: 'Italic', value: 'em' },
+      ],
+      annotations: [
+        {
+          name: 'link',
+          type: 'object',
+          title: 'Link',
+          fields: [
+            { name: 'href',     type: 'url',     title: 'URL',
+              validation: (r: any) => r.uri({ scheme: ['http', 'https', 'mailto', 'tel'] }) },
+            { name: 'blank',    type: 'boolean', title: 'Open in new tab', initialValue: false },
+            { name: 'nofollow', type: 'boolean', title: 'Nofollow',        initialValue: false },
+          ],
+        },
+      ],
+    },
+  }],
+})
+
 export const bodyField = defineField({
   name: 'body',
   title: 'Content',
@@ -386,7 +417,7 @@ export const pageType = defineType({
       },
       description: 'Optional — nests this page under a parent (e.g. /parent/this-page/). Only shows pages in the same market.',
     }),
-    defineField({ name: 'intro', title: 'Intro', type: 'text', rows: 3, group: 'content' }),
+    { ...introField, title: 'Intro', group: 'content' } as any,
     ...comparisonTableFields.map(f => ({ ...f, group: 'content' })) as any,
     { ...bodyField, group: 'content' } as any,
     defineField({

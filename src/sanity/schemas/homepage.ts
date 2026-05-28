@@ -1,5 +1,5 @@
 import { defineField, defineType } from 'sanity'
-import { bodyField } from './page'
+import { bodyField, introField } from './page'
 import { comparisonTableFields } from './comparisonTable'
 
 export const homepageType = defineType({
@@ -20,15 +20,7 @@ export const homepageType = defineType({
       group: 'hero',
       initialValue: 'Find the best online casino bonus',
     }),
-    defineField({
-      name: 'intro',
-      title: 'Intro',
-      type: 'text',
-      rows: 3,
-      group: 'hero',
-      description: 'Short text below the heading in the hero section',
-      initialValue: 'We compare and review the top online casinos. Find the best welcome bonus and get started.',
-    }),
+    { ...introField, title: 'Intro', group: 'hero', description: 'Short text below the heading in the hero section' } as any,
 
     // Comparison table (renders above body text)
     ...comparisonTableFields.map(f => ({ ...f, group: 'content' })) as any,

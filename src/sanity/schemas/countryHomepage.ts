@@ -1,5 +1,5 @@
 import { defineField, defineType } from 'sanity'
-import { bodyField } from './page'
+import { bodyField, introField } from './page'
 
 // ── Reusable inline section types ────────────────────────────────────────────
 
@@ -145,13 +145,7 @@ export const countryHomepageType = defineType({
       group: 'content',
       description: 'Main H1 on the country homepage.',
     }),
-    defineField({
-      name: 'intro',
-      title: 'Intro text',
-      type: 'text',
-      rows: 3,
-      group: 'content',
-    }),
+    { ...introField, title: 'Intro text', group: 'content' } as any,
     { ...bodyField, group: 'content' } as any,
     // ── Page sections builder ──────────────────────────────────────────────
     defineField({

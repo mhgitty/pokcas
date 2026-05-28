@@ -1,5 +1,5 @@
 import { defineField, defineType } from 'sanity'
-import { bodyField } from './page'
+import { bodyField, introField } from './page'
 
 export const authorType = defineType({
   name: 'author',
@@ -15,14 +15,7 @@ export const authorType = defineType({
     defineField({ name: 'slug',     title: 'Slug',       type: 'slug',    group: 'profile', options: { source: 'name' }, validation: (r) => r.required() }),
     defineField({ name: 'role',     title: 'Role/Title', type: 'string',  group: 'profile', description: 'E.g. "Casino Expert" or "Senior Editor"' }),
     defineField({ name: 'image',    title: 'Photo',      type: 'image',   group: 'profile', options: { hotspot: true } }),
-    defineField({
-      name: 'intro',
-      title: 'Intro / Bio',
-      type: 'text',
-      rows: 4,
-      group: 'profile',
-      description: 'Short intro paragraph shown in the hero section of the author page',
-    }),
+    { ...introField, title: 'Intro / Bio', group: 'profile', description: 'Short intro paragraph shown in the hero section of the author page' } as any,
     defineField({
       name: 'education',
       title: 'Education',

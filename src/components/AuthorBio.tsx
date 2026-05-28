@@ -1,11 +1,12 @@
 import { Icon } from '@/components/Icon'
 import Link from 'next/link'
+import { RichIntro } from './RichIntro'
 interface AuthorBioProps {
   author: {
     name: string
     slug?: { current: string }
     bio?: string
-    intro?: string
+    intro?: string | any[]
     imageUrl?: string
     linkedin?: string
     x?: string
@@ -99,7 +100,9 @@ export function AuthorBio({ author, compact = false }: AuthorBioProps) {
 
         {(author.intro || author.bio) && (
           <p style={{ fontSize: '14px', color: 'var(--text-muted)', lineHeight: 1.7, margin: '0 0 16px' }}>
-            {author.intro || author.bio}
+            {author.intro
+              ? <RichIntro value={author.intro} />
+              : author.bio}
           </p>
         )}
 
