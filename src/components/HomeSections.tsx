@@ -327,43 +327,59 @@ function ProviderCardsSection({
               href={`${hrefPrefix}/${item.slug.current}/`}
               className={`provider-card${isDesktopOnly ? ' provider-card--desktop-only' : ''}`}
             >
-              {/* Logo */}
+              {/* Logo area */}
               <div style={{
-                width: '100%', height: '52px',
+                width: '100%', height: '90px',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                background: '#fff',
-                borderRadius: '8px',
-                border: '1px solid var(--border-faint)',
-                marginBottom: '10px',
-                padding: '8px',
+                marginBottom: '16px',
+                padding: '10px',
                 overflow: 'hidden',
               }}>
                 {item.logo?.url ? (
                   <Image
                     src={item.logo.url}
                     alt={item.logo.alt || item.name}
-                    width={80}
-                    height={36}
-                    style={{ objectFit: 'contain', maxHeight: '36px', width: 'auto' }}
+                    width={120}
+                    height={70}
+                    style={{ objectFit: 'contain', maxHeight: '70px', width: 'auto' }}
                   />
                 ) : (
-                  <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-faint)' }}>
-                    {item.name}
-                  </span>
+                  <div style={{
+                    width: '64px', height: '64px',
+                    borderRadius: '50%',
+                    background: 'rgba(34,197,94,0.1)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '22px', fontWeight: 800, color: 'var(--green)',
+                    fontFamily: 'var(--font-display)',
+                  }}>
+                    {item.name.charAt(0)}
+                  </div>
                 )}
               </div>
 
-              {/* Name */}
-              <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', lineHeight: 1.3, marginBottom: '4px', textAlign: 'center' }}>
-                {item.name}
+              {/* Name + arrow row */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '6px', width: '100%', marginBottom: '4px' }}>
+                <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', lineHeight: 1.3 }}>
+                  {item.name}
+                </span>
+                <div style={{
+                  flexShrink: 0,
+                  width: '26px', height: '26px',
+                  borderRadius: '50%',
+                  background: 'var(--bg-raised)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <Icon name="alt-arrow-right" size={13} color="var(--text-muted)" />
+                </div>
               </div>
 
               {/* Casino count */}
-              <div style={{ fontSize: '11px', color: 'var(--text-faint)', textAlign: 'center' }}>
-                {item.casinoCount != null
-                  ? `${item.casinoCount} ${casinoLabel}`
-                  : ''}
-              </div>
+              {item.casinoCount != null && (
+                <div style={{ fontSize: '12px', color: 'var(--text-muted)', width: '100%' }}>
+                  <strong style={{ color: 'var(--text)', fontWeight: 700 }}>{item.casinoCount}</strong>
+                  {' '}{casinoLabel}
+                </div>
+              )}
             </Link>
           )
         })}
