@@ -1,0 +1,358 @@
+import Image from 'next/image'
+import Link from 'next/link'
+import { Icon } from '@/components/Icon'
+import { PaymentMethodsGrid } from '@/components/PaymentMethodsGrid'
+import { SoftwareProvidersGrid } from '@/components/SoftwareProvidersGrid'
+import {
+  getBookmakersCa, getBookmarkersAu,
+  getPaymentMethodsCa, getPaymentMethodsAu,
+  getSoftwareProvidersCa, getSoftwareProvidersAu,
+} from '@/lib/sanity'
+
+// ── Types ─────────────────────────────────────────────────────────────────────
+
+interface SectionBase { _type: string; _key: string }
+
+interface SectionCasinoList    extends SectionBase { _type: 'sectionCasinoList';    title?: string; count?: number }
+interface SectionPaymentMethods extends SectionBase { _type: 'sectionPaymentMethods'; title?: string }
+interface SectionSoftware      extends SectionBase { _type: 'sectionSoftware';      title?: string }
+interface SectionCtaBanner     extends SectionBase { _type: 'sectionCtaBanner';     icon?: string; title: string; body?: string; buttonLabel?: string; buttonUrl?: string; style?: string }
+interface SectionHighlights    extends SectionBase { _type: 'sectionHighlights';    title?: string; intro?: string; items?: { _key: string; title: string; bullets?: string[] }[] }
+interface SectionGameTypes     extends SectionBase { _type: 'sectionGameTypes';     title?: string; items?: { _key: string; title: string; description?: string; icon?: string; href?: string }[] }
+
+type AnySection = SectionCasinoList | SectionPaymentMethods | SectionSoftware | SectionCtaBanner | SectionHighlights | SectionGameTypes
+
+// ── Casino list ───────────────────────────────────────────────────────────────
+
+function ScoreBadge({ score }: { score: number }) {
+  const color = score >= 8 ? 'var(--green)' : score >= 6 ? '#ca8a04' : '#dc2626'
+  return (
+    <span style={{ display: 'inline-block', background: color, color: '#fff', fontSize: '12px', fontWeight: 700, padding: '2px 9px', borderRadius: '20px' }}>
+      ★ {score.toFixed(1)}
+    </span>
+  )
+}
+
+function CasinoListSection({ bookmakers, section, reviewBase, listBase }: {
+  bookmakers: any[]
+  section: SectionCasinoList
+  reviewBase: string
+  listBase: string
+}) {
+  const count = section.count ?? 5
+  const title = section.title || 'Top Rated Casinos'
+  const visible = bookmakers.slice(0, count)
+
+  return (
+    <div className="section">
+      <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 700, marginBottom: '16px', color: 'var(--text)' }}>
+        {title}
+      </h2>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        {visible.map((bm: any, i: number) => (
+          <div key={bm._id} style={{
+            background: 'var(--bg-card)',
+            border: i === 0 ? '2px solid var(--green)' : '1px solid var(--border)',
+            borderRadius: '12px',
+            overflow: 'hidden',
+            position: 'relative',
+          }}>
+            {i === 0 && (
+              <div style={{
+                position: 'absolute', top: 0, left: 0, right: 0,
+                background: 'var(--green)', color: '#fff',
+                fontSize: '11px', fontWeight: 700, textAlign: 'center',
+                padding: '3px 0', letterSpacing: '0.5px',
+              }}>TOP RATED</div>
+            )}
+            <div style={{
+              display: 'grid', gridTemplateColumns: '40px 100px 1fr auto',
+              gap: '16px', padding: i === 0 ? '32px 24px 20px' : '20px 24px',
+              alignItems: 'center',
+            }} className="bookmaker-card-inner">
+              <div style={{ fontSize: '18px', fontWeight: 800, color: i < 3 ? 'var(--green)' : 'var(--text-faint)', textAlign: 'center' }}>
+                #{i + 1}
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {bm.logo?.url ? (
+                  <div style={{ background: '#fff', borderRadius: '8px', padding: '6px 10px', border: '1px solid var(--border-faint)' }}>
+                    <Image src={bm.logo.url} alt={bm.logo.alt || bm.name} width={80} height={40}
+                      style={{ objectFit: 'contain', maxHeight: '40px', width: 'auto', display: 'block' }} />
+                  </div>
+                ) : (
+                  <div style={{ width: '80px', height: '40px', background: 'var(--bg-raised)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', color: 'var(--text-faint)' }}>
+                    {bm.name}
+                  </div>
+                )}
+              </div>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', flexWrap: 'wrap' }}>
+                  <span style={{ fontFamily: 'var(--font-display)', fontSize: '16px', fontWeight: 700, color: 'var(--text)' }}>{bm.name}</span>
+                  {bm.score != null && <ScoreBadge score={bm.score} />}
+                </div>
+                {bm.usp && <p style={{ fontSize: '13px', color: 'var(--text-muted)', margin: '0 0 6px', lineHeight: 1.5 }}>{bm.usp}</p>}
+                {bm.indbetalingsbonus && (
+                  <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--green)' }}>{bm.indbetalingsbonus}</div>
+                )}
+                {bm.terms && (
+                  <div style={{ fontSize: '10px', color: 'var(--text-faint)', marginTop: '4px', lineHeight: 1.4 }}>{bm.terms}</div>
+                )}
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-end', flexShrink: 0 }}>
+                {bm.url && (
+                  <a href={bm.url} target="_blank" rel="nofollow noopener noreferrer sponsored"
+                    style={{ display: 'inline-block', background: 'var(--green)', color: '#fff', padding: '10px 18px', borderRadius: '8px', fontSize: '14px', fontWeight: 600, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+                    Sign up →
+                  </a>
+                )}
+                <Link href={`${reviewBase}/${bm.slug.current}/`}
+                  style={{ fontSize: '12px', color: 'var(--text-muted)', textDecoration: 'none', whiteSpace: 'nowrap' }}>
+                  Read review
+                </Link>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      {bookmakers.length > count && (
+        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+          <Link href={listBase}
+            style={{ display: 'inline-block', border: '1px solid var(--border)', borderRadius: '8px', padding: '10px 24px', fontSize: '14px', fontWeight: 600, color: 'var(--text)', textDecoration: 'none' }}>
+            See all {bookmakers.length} casinos →
+          </Link>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ── CTA Banner ────────────────────────────────────────────────────────────────
+
+function CtaBannerSection({ section }: { section: SectionCtaBanner }) {
+  const style = section.style || 'green'
+
+  const bgMap: Record<string, string> = {
+    green:  'linear-gradient(135deg, var(--green) 0%, #16a34a 100%)',
+    dark:   'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
+    purple: 'linear-gradient(135deg, #7c3aed 0%, #db2777 100%)',
+    light:  'var(--bg-raised)',
+  }
+  const textColor = style === 'light' ? 'var(--text)' : '#fff'
+  const subColor  = style === 'light' ? 'var(--text-muted)' : 'rgba(255,255,255,0.8)'
+  const btnBg     = style === 'light' ? 'var(--green)' : '#fff'
+  const btnColor  = style === 'light' ? '#fff' : (style === 'green' ? 'var(--green-dark)' : style === 'purple' ? '#7c3aed' : '#1e293b')
+
+  return (
+    <div style={{
+      background: bgMap[style] || bgMap.green,
+      padding: '56px 24px',
+      textAlign: 'center',
+    }}>
+      <div style={{ maxWidth: '680px', margin: '0 auto' }}>
+        {section.icon && (
+          <div style={{ marginBottom: '16px', display: 'flex', justifyContent: 'center' }}>
+            <Icon name={section.icon} size={40} color={textColor} />
+          </div>
+        )}
+        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(22px, 3vw, 32px)', fontWeight: 800, color: textColor, marginBottom: '12px', letterSpacing: '-0.02em' }}>
+          {section.title}
+        </h2>
+        {section.body && (
+          <p style={{ fontSize: '15px', color: subColor, lineHeight: 1.7, marginBottom: '24px' }}>
+            {section.body}
+          </p>
+        )}
+        {section.buttonLabel && section.buttonUrl && (
+          <Link href={section.buttonUrl} style={{
+            display: 'inline-block',
+            background: btnBg,
+            color: btnColor,
+            padding: '13px 28px',
+            borderRadius: '8px',
+            fontSize: '14px',
+            fontWeight: 700,
+            textDecoration: 'none',
+            letterSpacing: '0.04em',
+            textTransform: 'uppercase',
+          }}>
+            {section.buttonLabel}
+          </Link>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// ── Highlights ────────────────────────────────────────────────────────────────
+
+function HighlightsSection({ section }: { section: SectionHighlights }) {
+  return (
+    <div className="section">
+      {section.title && (
+        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 700, color: 'var(--text)', marginBottom: section.intro ? '8px' : '20px', textAlign: 'center' }}>
+          {section.title}
+        </h2>
+      )}
+      {section.intro && (
+        <p style={{ fontSize: '14px', color: 'var(--text-muted)', lineHeight: 1.7, textAlign: 'center', marginBottom: '24px', maxWidth: '680px', margin: '0 auto 24px' }}>
+          {section.intro}
+        </p>
+      )}
+      {section.items && section.items.length > 0 && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
+          {section.items.map((item) => (
+            <div key={item._key} style={{
+              background: 'var(--bg-raised)',
+              border: '1px solid var(--border)',
+              borderRadius: '14px',
+              padding: '20px',
+            }}>
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: '15px', fontWeight: 700, color: 'var(--text)', marginBottom: '12px' }}>
+                {item.title}
+              </div>
+              {item.bullets && item.bullets.length > 0 && (
+                <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {item.bullets.map((bullet, i) => (
+                    <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.5 }}>
+                      <Icon name="check-circle" size={14} color="var(--green)" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      {bullet}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ── Game Types ────────────────────────────────────────────────────────────────
+
+function GameTypesSection({ section }: { section: SectionGameTypes }) {
+  return (
+    <div className="section">
+      {section.title && (
+        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 700, color: 'var(--text)', marginBottom: '20px', textAlign: 'center' }}>
+          {section.title}
+        </h2>
+      )}
+      {section.items && section.items.length > 0 && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px' }}>
+          {section.items.map((item) => {
+            const inner = (
+              <div key={item._key} style={{
+                background: 'var(--bg-raised)',
+                border: '1px solid var(--border)',
+                borderRadius: '14px',
+                padding: '24px',
+                transition: 'border-color 0.15s',
+              }}>
+                {item.icon && (
+                  <div style={{ marginBottom: '12px' }}>
+                    <Icon name={item.icon} size={28} color="var(--green)" />
+                  </div>
+                )}
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: '18px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>
+                  {item.title}
+                </div>
+                {item.description && (
+                  <p style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.6, margin: 0 }}>
+                    {item.description}
+                  </p>
+                )}
+              </div>
+            )
+            return item.href ? (
+              <Link key={item._key} href={item.href} style={{ textDecoration: 'none' }}>{inner}</Link>
+            ) : <div key={item._key}>{inner}</div>
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ── Main export ───────────────────────────────────────────────────────────────
+
+export async function HomeSections({ sections, market }: { sections: AnySection[]; market: 'ca' | 'au' }) {
+  if (!sections || sections.length === 0) return null
+
+  // Pre-fetch data for data-driven sections
+  const needsBookmakers = sections.some(s => s._type === 'sectionCasinoList')
+  const needsPayments   = sections.some(s => s._type === 'sectionPaymentMethods')
+  const needsSoftware   = sections.some(s => s._type === 'sectionSoftware')
+
+  const [bookmakers, payments, software] = await Promise.all([
+    needsBookmakers
+      ? (market === 'ca' ? getBookmakersCa() : getBookmarkersAu()).catch(() => [])
+      : Promise.resolve([]),
+    needsPayments
+      ? (market === 'ca' ? getPaymentMethodsCa() : getPaymentMethodsAu()).catch(() => [])
+      : Promise.resolve([]),
+    needsSoftware
+      ? (market === 'ca' ? getSoftwareProvidersCa() : getSoftwareProvidersAu()).catch(() => [])
+      : Promise.resolve([]),
+  ])
+
+  const reviewBase = market === 'ca' ? '/ca/online-casino/review' : '/au/online-casino/review'
+  const listBase   = market === 'ca' ? '/ca/online-casino/review/' : '/au/online-casino/review/'
+  const payBase    = market === 'ca' ? '/ca/online-casino/payment' : '/au/online-casino/payment'
+  const softBase   = market === 'ca' ? '/ca/online-casino/software' : '/au/online-casino/software'
+
+  return (
+    <>
+      {sections.map((section) => {
+        switch (section._type) {
+          case 'sectionCasinoList':
+            return (bookmakers as any[]).length > 0 ? (
+              <CasinoListSection
+                key={section._key}
+                bookmakers={bookmakers as any[]}
+                section={section}
+                reviewBase={reviewBase}
+                listBase={listBase}
+              />
+            ) : null
+
+          case 'sectionPaymentMethods':
+            return (payments as any[]).length > 0 ? (
+              <div key={section._key} className="section">
+                {section.title && (
+                  <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 700, color: 'var(--text)', marginBottom: '20px' }}>
+                    {section.title}
+                  </h2>
+                )}
+                <PaymentMethodsGrid methods={payments as any[]} hrefPrefix={payBase} />
+              </div>
+            ) : null
+
+          case 'sectionSoftware':
+            return (software as any[]).length > 0 ? (
+              <div key={section._key} className="section">
+                {section.title && (
+                  <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 700, color: 'var(--text)', marginBottom: '20px' }}>
+                    {section.title}
+                  </h2>
+                )}
+                <SoftwareProvidersGrid providers={software as any[]} hrefPrefix={softBase} />
+              </div>
+            ) : null
+
+          case 'sectionCtaBanner':
+            return <CtaBannerSection key={section._key} section={section} />
+
+          case 'sectionHighlights':
+            return <HighlightsSection key={section._key} section={section as SectionHighlights} />
+
+          case 'sectionGameTypes':
+            return <GameTypesSection key={section._key} section={section as SectionGameTypes} />
+
+          default:
+            return null
+        }
+      })}
+    </>
+  )
+}

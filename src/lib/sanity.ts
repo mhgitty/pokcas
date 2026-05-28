@@ -563,6 +563,15 @@ export async function getCountryHomepage(market: 'ca' | 'au') {
           }
         }
       },
+      "sections": sections[] {
+        _type, _key,
+        title, count, body, icon, buttonLabel, buttonUrl, style,
+        intro,
+        "items": items[] {
+          _key, title, description, icon, href,
+          "bullets": bullets[]
+        }
+      },
       metaTitle, metaDescription,
       "ogImage": ogImage { "url": asset->url, alt }
     }`,
