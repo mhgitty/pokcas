@@ -2,6 +2,8 @@ import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
   trailingSlash: true,
+  // Exclude Studio from static export — it must be dynamic
+  outputFileTracingExcludes: { '/studio/[[...tool]]': ['**'] },
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'cdn.sanity.io' },
