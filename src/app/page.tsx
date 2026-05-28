@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
 import { JsonLd } from '@/components/JsonLd'
+import { Icon } from '@/components/Icon'
 import { getPosts, getHomepage, getBookmakers } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
 import type { Metadata } from 'next'
@@ -32,6 +33,19 @@ export default async function HomePage() {
 
   const heroHeading = replaceDateVars(hp?.heroHeading || 'Find the Best Online Casino Bonuses')
   const heroSubtext = replaceDateVars(hp?.intro || 'We compare and review all the top online casinos. Find the best welcome bonus and get started today.')
+
+  const latestSectionTitle   = hp?.latestSectionTitle   || 'Latest'
+  const casinoReviewsTitle   = hp?.casinoReviewsTitle   || 'Top Casino Reviews'
+  const topRatedTitle        = hp?.topRatedTitle        || 'Top Rated Casinos'
+  const featuredSectionTitle = hp?.featuredSectionTitle || 'Featured'
+
+  const trustItems: { _key: string; icon?: string; title: string; body: string }[] = hp?.trustItems?.length > 0
+    ? hp.trustItems
+    : [
+        { _key: 'trust-1', icon: 'cup-star',           title: 'Trusted by Brands & Players',    body: 'Operators, game developers, players, large media outlets & many key people recommend Pokcas as their number one choice.' },
+        { _key: 'trust-2', icon: 'medal-ribbons-star',  title: 'Industry Leaders',               body: 'The only News, Reviews & Ranking platform of this kind in the world with over a decade of experience.' },
+        { _key: 'trust-3', icon: 'scale',               title: 'Independent & Transparent',      body: 'Full ownership, no outside investors or influence. We hire independent journalists from all around the world.' },
+      ]
 
   const faqs = (hp?.body ?? [])
     .filter((b: any) => b._type === 'faqBlock')
@@ -122,7 +136,7 @@ export default async function HomePage() {
                 fontWeight: 700,
                 color: 'var(--text)',
                 marginBottom: '24px',
-              }}>Latest</h2>
+              }}>{latestSectionTitle}</h2>
 
               <div style={{
                 display: 'grid',
@@ -284,7 +298,7 @@ export default async function HomePage() {
                     fontWeight: 700,
                     color: 'var(--text)',
                     marginBottom: '16px',
-                  }}>Top Casino Reviews</h2>
+                  }}>{casinoReviewsTitle}</h2>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     {topBookmakers.map((bm: any, i: number) => (
                       <div key={bm._id} style={{
@@ -360,7 +374,7 @@ export default async function HomePage() {
                     fontWeight: 700,
                     color: 'var(--text)',
                     marginBottom: '16px',
-                  }}>Top Rated Casinos</h2>
+                  }}>{topRatedTitle}</h2>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     {topBookmakers.map((bm: any, i: number) => (
                       <div key={bm._id + '-2'} style={{
@@ -462,7 +476,7 @@ export default async function HomePage() {
                 fontWeight: 700,
                 color: 'var(--text)',
                 marginBottom: '28px',
-              }}>Featured</h2>
+              }}>{featuredSectionTitle}</h2>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '36px' }}>
                 {featuredCategories.map(cat => (
@@ -536,47 +550,27 @@ export default async function HomePage() {
           }}
             className="trust-grid"
           >
-            <div style={{ textAlign: 'center', padding: '0 8px' }}>
-              <div style={{ fontSize: '36px', marginBottom: '12px' }}>🏆</div>
-              <h3 style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: '16px',
-                fontWeight: 700,
-                color: 'var(--text)',
-                marginBottom: '10px',
-              }}>Trusted by Brands &amp; Players</h3>
-              <p style={{ fontSize: '13.5px', color: 'var(--text-muted, #888)', lineHeight: 1.65, margin: 0 }}>
-                Operators, game developers, players, large media outlets &amp; many key people recommend Pokcas as their number one choice.
-              </p>
-            </div>
-
-            <div style={{ textAlign: 'center', padding: '0 8px', borderLeft: '1px solid var(--border)', borderRight: '1px solid var(--border)' }}>
-              <div style={{ fontSize: '36px', marginBottom: '12px' }}>🥇</div>
-              <h3 style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: '16px',
-                fontWeight: 700,
-                color: 'var(--text)',
-                marginBottom: '10px',
-              }}>Industry Leaders</h3>
-              <p style={{ fontSize: '13.5px', color: 'var(--text-muted, #888)', lineHeight: 1.65, margin: 0 }}>
-                The only News, Reviews &amp; Ranking platform of this kind in the world with over a decade of experience.
-              </p>
-            </div>
-
-            <div style={{ textAlign: 'center', padding: '0 8px' }}>
-              <div style={{ fontSize: '36px', marginBottom: '12px' }}>⚖️</div>
-              <h3 style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: '16px',
-                fontWeight: 700,
-                color: 'var(--text)',
-                marginBottom: '10px',
-              }}>Independent &amp; Transparent</h3>
-              <p style={{ fontSize: '13.5px', color: 'var(--text-muted, #888)', lineHeight: 1.65, margin: 0 }}>
-                Full ownership, no outside investors or influence. We hire independent journalists from all around the world.
-              </p>
-            </div>
+            {trustItems.map((item, i) => (
+              <div key={item._key} style={{
+                textAlign: 'center',
+                padding: '0 8px',
+                ...(i === 1 ? { borderLeft: '1px solid var(--border)', borderRight: '1px solid var(--border)' } : {}),
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '14px' }}>
+                  <Icon name={item.icon || 'shield-check'} size={36} color="var(--green)" />
+                </div>
+                <h3 style={{
+                  fontFamily: 'var(--font-display)',
+                  fontSize: '16px',
+                  fontWeight: 700,
+                  color: 'var(--text)',
+                  marginBottom: '10px',
+                }}>{item.title}</h3>
+                <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', lineHeight: 1.65, margin: 0 }}>
+                  {item.body}
+                </p>
+              </div>
+            ))}
           </div>
         </section>
 

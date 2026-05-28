@@ -356,6 +356,8 @@ export async function getHomepage() {
         }
       },
       howItWorksTitle, showHowItWorks, howItWorksItems,
+      latestSectionTitle, casinoReviewsTitle, topRatedTitle, featuredSectionTitle,
+      "trustItems": trustItems[] { _key, icon, title, body },
       metaTitle, metaDescription,
       "featuredImage": featuredImage { "url": asset->url, alt },
       ${COMPARISON_TABLE_FRAGMENT}
