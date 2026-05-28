@@ -1,4 +1,21 @@
-import { defineField, defineType } from 'sanity'
+import { defineField, defineType, type SlugIsUniqueValidator } from 'sanity'
+
+/**
+ * Slug uniqueness scoped per market.
+ * The same slug (e.g. "online-casino") can exist once in global, once in ca, once in au.
+ */
+const isSlugUniquePerMarket: SlugIsUniqueValidator = async (slug, context) => {
+  const { document, getClient } = context
+  const client = getClient({ apiVersion: '2026-04-22' })
+  const market = (document as any)?.market || 'global'
+  const docId = (document as any)?._id?.replace(/^drafts\./, '') ?? ''
+
+  const existingId = await client.fetch<string | null>(
+    `*[_type == "page" && slug.current == $slug && market == $market && _id != $id && !(_id in path("drafts.**"))][0]._id`,
+    { slug, market, id: docId }
+  )
+  return existingId === null
+}
 import { TableBlockInput } from '../components/TableBlockInput'
 import { FaqBlockInput } from '../components/FaqBlockInput'
 import { comparisonTableFields } from './comparisonTable'
@@ -381,7 +398,7 @@ export const pageType = defineType({
   ],
   fields: [
     defineField({ name: 'title', title: 'Title', type: 'string', group: 'content', validation: (r) => r.required() }),
-    defineField({ name: 'slug',  title: 'Slug',  type: 'slug',   group: 'content', options: { source: 'title' }, validation: (r) => r.required() }),
+    defineField({ name: 'slug',  title: 'Slug',  type: 'slug',   group: 'content', options: { source: 'title', isUnique: isSlugUniquePerMarket }, validation: (r) => r.required() }),
     defineField({
       name: 'market',
       title: 'Market',

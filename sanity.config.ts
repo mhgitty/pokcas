@@ -312,6 +312,14 @@ export default defineConfig({
                   .title('Redirects — Global (/go/...)')
                   .filter('_type == "redirect" && (market == "global" || !defined(market))')
               ),
+            S.listItem()
+              .title('↩ 301 Redirects')
+              .schemaType('pageRedirect')
+              .child(
+                S.documentTypeList('pageRedirect')
+                  .title('301 Redirects')
+                  .defaultOrdering([{ field: 'from', direction: 'asc' }])
+              ),
             S.divider(),
             S.listItem()
               .title('👤 Authors')

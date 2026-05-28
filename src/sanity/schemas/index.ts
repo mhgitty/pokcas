@@ -8,6 +8,7 @@ import { bonusType } from './bonus'
 import { comparisonTableTemplateType } from './comparisonTableTemplate'
 import { siteSettingsType } from './siteSettings'
 import { redirectType } from './redirect'
+import { pageRedirectType } from './pageRedirect'
 import { paymentMethodType } from './paymentMethod'
 import { softwareType } from './software'
 import { casinoGameType } from './casinoGame'
@@ -27,6 +28,7 @@ export const schemaTypes = [
   authorType,
   categoryType,
   redirectType,
+  pageRedirectType,
   paymentMethodType,
   softwareType,
   casinoGameType,
