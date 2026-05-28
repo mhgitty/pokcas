@@ -26,6 +26,10 @@
   --text-faint:   #9CA3AF;
 }
 
+/* ─── Admin bar offset (set by JS when bar is visible) ───────────────────── */
+:root { --admin-bar-height: 0px; }
+html { padding-top: var(--admin-bar-height); }
+
 /* ─── Reset ──────────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { overflow-x: clip; }

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Figtree } from 'next/font/google'
+import { AdminBar } from '@/components/AdminBar'
 import './globals.css'
 
 const figtree = Figtree({
@@ -43,7 +44,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={figtree.variable}>
-      <body>{children}</body>
+      <body>
+        <AdminBar />
+        {children}
+      </body>
     </html>
   )
 }
