@@ -28,6 +28,8 @@ export const hreflangGroupType = defineType({
       of: [{
         type: 'reference',
         to: [
+          { type: 'homepage' },
+          { type: 'countryHomepage' },
           { type: 'page' },
           { type: 'bookmaker' },
           { type: 'post' },

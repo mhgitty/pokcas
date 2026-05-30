@@ -3,7 +3,8 @@ import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { MobileToc } from '@/components/MobileToc'
 import { JsonLd } from '@/components/JsonLd'
 import { HomeSections } from '@/components/HomeSections'
-import { getCountryHomepage, getSiteSettings } from '@/lib/sanity'
+import { getCountryHomepage, getSiteSettings, getHreflangScript } from '@/lib/sanity'
+import { HreflangHead } from '@/components/HreflangHead'
 import { replaceDateVars } from '@/lib/dateVars'
 import { AuthorBio } from '@/components/AuthorBio'
 import type { Metadata } from 'next'
@@ -36,6 +37,7 @@ export default async function AuHomePage() {
   const intro = hp?.intro || 'Expert reviews of the top Australian online casinos. Compare welcome bonuses, wagering requirements and ratings.'
   const author = settings?.defaultAuthor ?? null
   const heroCards = hp?.heroCards ?? []
+  const hreflangScript = await getHreflangScript('au-homepage').catch(() => null)
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -61,6 +63,7 @@ export default async function AuHomePage() {
 
   return (
     <>
+      <HreflangHead script={hreflangScript} />
       <JsonLd data={jsonLd} />
       <CountryHero
         title={title}

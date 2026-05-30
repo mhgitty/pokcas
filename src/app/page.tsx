@@ -4,7 +4,8 @@ import { Footer } from '@/components/Footer'
 import { JsonLd } from '@/components/JsonLd'
 import { Icon } from '@/components/Icon'
 import { RichIntro } from '@/components/RichIntro'
-import { getPosts, getHomepage, getBookmakers } from '@/lib/sanity'
+import { getPosts, getHomepage, getBookmakers, getHreflangScript } from '@/lib/sanity'
+import { HreflangHead } from '@/components/HreflangHead'
 import { replaceDateVars } from '@/lib/dateVars'
 import type { Metadata } from 'next'
 
@@ -81,6 +82,8 @@ export default async function HomePage() {
     ],
   }
 
+  const hreflangScript = await getHreflangScript('homepage').catch(() => null)
+
   const postList = posts as any[]
   const topBookmakers = (bookmakers as any[]).slice(0, 4)
 
@@ -107,6 +110,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <HreflangHead script={hreflangScript} />
       <JsonLd data={jsonLd} />
       <Navbar />
 
