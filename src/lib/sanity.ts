@@ -23,10 +23,9 @@ export const clientNoCdn = createClient({
 export const HREFLANG_FRAGMENT = `*[_type == "hreflangGroup" && ^._id in pages[]._ref][0].script`
 
 export async function getHreflangScript(docId: string): Promise<string | null> {
-  return client.fetch(
-    `*[_type == "hreflangGroup" && $docId in pages[]._ref][0].script`,
-    { docId },
-    { next: { revalidate: 300 } } // 5 min — hreflang changes should appear quickly
+  return clientNoCdn.fetch(
+    `*[_type == "hreflangGroup" && references($docId)][0].script`,
+    { docId }
   )
 }
 

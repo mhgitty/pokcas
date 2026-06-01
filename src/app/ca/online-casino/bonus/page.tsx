@@ -5,7 +5,7 @@ import { TableOfContents } from '@/components/TableOfContents'
 import { MobileToc } from '@/components/MobileToc'
 import { AuthorBio } from '@/components/AuthorBio'
 import { JsonLd } from '@/components/JsonLd'
-import { getPageBySlugCa, getSiteSettings, getHreflangScript } from '@/lib/sanity'
+import { getPageByPathCa, getSiteSettings, getHreflangScript } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
@@ -16,7 +16,7 @@ const BASE = 'https://pokcas.com'
 const CANONICAL = `${BASE}/ca/online-casino/bonus/`
 
 export async function generateMetadata(): Promise<Metadata> {
-  const page = await getPageBySlugCa('bonus').catch(() => null)
+  const page = await getPageByPathCa(['online-casino', 'bonus']).catch(() => null)
   if (!page) return {}
   const title = replaceDateVars(page.metaTitle || page.title)
   const description = replaceDateVars(page.metaDescription || page.intro || '')
@@ -34,7 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function CaBonusPage() {
   const [page, settings] = await Promise.all([
-    getPageBySlugCa('bonus').catch(() => null),
+    getPageByPathCa(['online-casino', 'bonus']).catch(() => null),
     getSiteSettings().catch(() => null),
   ])
   if (!page) notFound()
