@@ -304,6 +304,7 @@ export const getSiteSettings = cache(async () => {
           label, url,
           "pageSlug": pageRef->slug.current,
           "pageParentSlug": pageRef->parent->slug.current,
+          "pageMarket": pageRef->market,
           "bookmakerSlug": bookmakerRef->slug.current,
           "softwareSlug": softwareRef->slug.current,
           "paymentMethodSlug": paymentMethodRef->slug.current,
@@ -327,6 +328,7 @@ export const getSiteSettings = cache(async () => {
         label, url,
         "pageSlug": pageRef->slug.current,
         "pageParentSlug": pageRef->parent->slug.current,
+        "pageMarket": pageRef->market,
         "bookmakerSlug": bookmakerRef->slug.current,
         "postSlug": postRef->slug.current,
       }
