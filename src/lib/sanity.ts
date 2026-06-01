@@ -26,7 +26,7 @@ export async function getHreflangScript(docId: string): Promise<string | null> {
   return client.fetch(
     `*[_type == "hreflangGroup" && $docId in pages[]._ref][0].script`,
     { docId },
-    { next: { revalidate: 3600 } }
+    { next: { revalidate: 300 } } // 5 min — hreflang changes should appear quickly
   )
 }
 

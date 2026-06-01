@@ -77,15 +77,16 @@ export function DropdownBlock({ value }: DropdownBlockProps) {
         }}
         aria-expanded={open}
       >
-        <span style={{
+        <h2 style={{
           fontFamily: 'var(--font-display)',
           fontSize: '15.5px',
           fontWeight: 700,
           color: 'var(--text)',
           lineHeight: 1.4,
+          margin: 0,
         }}>
           {value.title}
-        </span>
+        </h2>
         <span style={{
           flexShrink: 0,
           width: '28px',
