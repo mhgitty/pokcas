@@ -10,6 +10,7 @@ import { headingId } from '@/lib/headingId'
 import { CasinoKort } from './CasinoKort'
 import { BonusKort } from './BonusKort'
 import { HowToBlock } from './HowToBlock'
+import { DropdownBlock } from './DropdownBlock'
 
 type Post = {
   _id: string
@@ -145,6 +146,7 @@ export function PortableTextRenderer({ value, posts }: { value: any[]; posts?: P
           </div>
         )
       },
+      dropdownBlock: ({ value }: any) => <DropdownBlock value={value} />,
       calloutBlock: ({ value }: any) => <CalloutBlock value={value} />,
       faqBlock: ({ value }: any) => <FaqBlock value={value} />,
       prosConsBlock: ({ value }: any) => <ProsConsBlock value={value} />,

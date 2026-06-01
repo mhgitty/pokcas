@@ -211,6 +211,64 @@ export const bodyField = defineField({
     },
     {
       type: 'object',
+      name: 'dropdownBlock',
+      title: 'Dropdown / Accordion',
+      fields: [
+        {
+          name: 'title',
+          title: 'Title',
+          type: 'string',
+          description: 'The clickable heading shown when collapsed.',
+          validation: (r: any) => r.required(),
+        },
+        {
+          name: 'content',
+          title: 'Content',
+          type: 'array',
+          description: 'The text shown when expanded.',
+          of: [{
+            type: 'block',
+            styles: [
+              { title: 'Normal', value: 'normal' },
+              { title: 'H3', value: 'h3' },
+              { title: 'H4', value: 'h4' },
+            ],
+            lists: [
+              { title: 'Bullet', value: 'bullet' },
+              { title: 'Numbered', value: 'number' },
+            ],
+            marks: {
+              decorators: [
+                { title: 'Bold', value: 'strong' },
+                { title: 'Italic', value: 'em' },
+              ],
+              annotations: [{
+                name: 'link', type: 'object', title: 'Link',
+                fields: [
+                  { name: 'href', type: 'url', title: 'URL', validation: (r: any) => r.uri({ scheme: ['http', 'https', 'mailto'] }) },
+                  { name: 'blank', type: 'boolean', title: 'Open in new tab', initialValue: false },
+                ],
+              }],
+            },
+          }],
+        },
+        {
+          name: 'defaultOpen',
+          title: 'Open by default',
+          type: 'boolean',
+          initialValue: false,
+          description: 'If enabled, the dropdown will be expanded when the page loads.',
+        },
+      ],
+      preview: {
+        select: { title: 'title', defaultOpen: 'defaultOpen' },
+        prepare({ title, defaultOpen }: any) {
+          return { title: `▾ ${title || 'Dropdown'}`, subtitle: defaultOpen ? 'Open by default' : 'Collapsed by default' }
+        },
+      },
+    },
+    {
+      type: 'object',
       name: 'ctaButton',
       title: 'CTA Button',
       fields: [
