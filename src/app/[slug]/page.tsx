@@ -69,7 +69,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const title = replaceDateVars(page.metaTitle || page.title)
     const description = replaceDateVars(page.metaDescription || page.intro || '')
     const canonical = `${BASE}/${slug}/`
-    return { title, description, alternates: { canonical } }
+    return { title, description, alternates: { canonical }, openGraph: { title, description, url: canonical } }
   }
 
   return {}

@@ -25,9 +25,10 @@ export const metadata: Metadata = {
     siteName: 'Pokcas.com',
     locale: 'en_US',
     type: 'website',
-    url: BASE,
+    url: BASE + '/',
     title: 'Pokcas — Your International Casino Guide',
     description: 'Find the best online casinos and casino bonuses.',
+    images: [{ url: `${BASE}/og.png`, width: 1200, height: 630, alt: 'Pokcas.com' }],
   },
   twitter: { card: 'summary_large_image' },
   robots: {

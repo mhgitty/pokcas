@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const page = await getPageBySlug('review').catch(() => null)
   const title = replaceDateVars(page?.metaTitle || page?.title || 'Best Online Casino Reviews')
   const description = replaceDateVars(page?.metaDescription || page?.intro || 'Compare the best online casinos. Expert reviews, bonus info and ratings.')
-  return { title, description, alternates: { canonical: CANONICAL } }
+  return { title, description, alternates: { canonical: CANONICAL }, openGraph: { title, description, url: CANONICAL, type: 'website', images: [{ url: `${BASE}/og.png` }] } }
 }
 
 function ScoreBadge({ score }: { score: number }) {

@@ -9,7 +9,12 @@ function resolveUrl(item: {
 }, market?: string): string {
   const mp = market === 'ca' ? '/ca' : market === 'au' ? '/au' : ''
   if (item.pageSlug) {
-    const prefix = item.pageMarket === 'ca' ? '/ca' : item.pageMarket === 'au' ? '/au' : mp
+    // Use the page's own market to determine prefix.
+    // 'global' pages always resolve without a market prefix regardless of which footer they appear in.
+    const prefix = item.pageMarket === 'ca' ? '/ca'
+                 : item.pageMarket === 'au' ? '/au'
+                 : item.pageMarket === 'global' ? ''
+                 : mp  // fallback for legacy nav items without a market field
     return item.pageParentSlug
       ? `${prefix}/${item.pageParentSlug}/${item.pageSlug}/`
       : `${prefix}/${item.pageSlug}/`

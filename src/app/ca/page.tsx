@@ -23,7 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title,
     description,
     alternates: { canonical: CANONICAL },
-    openGraph: { title, description, url: CANONICAL, ...(img ? { images: [{ url: img }] } : {}) },
+    openGraph: { title, description, url: CANONICAL, type: 'website', images: hp?.ogImage?.url ? [{ url: hp.ogImage.url }] : [{ url: `${BASE}/og.png` }] },
   }
 }
 

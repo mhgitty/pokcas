@@ -31,7 +31,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = replaceDateVars(provider.metaTitle || `${provider.name} Casinos Canada — best ${provider.name} online casinos`)
   const description = replaceDateVars(provider.metaDescription || `Find the best Canadian online casinos powered by ${provider.name}. Compare bonuses and ratings.`)
   const canonical = `${BASE}/ca/online-casino/software/${slug}/`
-  return { title, description, alternates: { canonical } }
+  const logo = provider.logo
+  return { title, description, alternates: { canonical }, openGraph: { title, description, url: canonical, type: 'article', images: logo?.url ? [{ url: logo.url }] : [{ url: `${BASE}/og.png` }] } }
 }
 
 export default async function CaSoftwareSlugPage({ params }: Props) {

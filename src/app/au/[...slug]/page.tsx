@@ -42,7 +42,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = replaceDateVars(page.metaTitle || page.title)
   const description = replaceDateVars(page.metaDescription || page.intro || '')
   const canonical = `${BASE}/au/${slug.join('/')}/`
-  return { title, description, alternates: { canonical } }
+  const ogImg = (page as any).ogImage
+  return { title, description, alternates: { canonical }, openGraph: { title, description, url: canonical, type: 'article', images: ogImg?.url ? [{ url: ogImg.url }] : [{ url: `${BASE}/og.png` }] } }
 }
 
 export default async function CaSlugPage({ params }: Props) {

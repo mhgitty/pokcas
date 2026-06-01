@@ -31,7 +31,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = replaceDateVars(provider.metaTitle || `${provider.name} Online Casinos — best ${provider.name} casinos`)
   const description = replaceDateVars(provider.metaDescription || `Find the best online casinos powered by ${provider.name}. Compare bonuses and ratings.`)
   const canonical = `${BASE}/online-casino/software/${slug}/`
-  return { title, description, alternates: { canonical } }
+  const logo = provider.logo
+  return { title, description, alternates: { canonical }, openGraph: { title, description, url: canonical, type: 'article', images: logo?.url ? [{ url: logo.url }] : [{ url: `${BASE}/og.png` }] } }
 }
 
 export default async function SoftwareSlugPage({ params }: Props) {

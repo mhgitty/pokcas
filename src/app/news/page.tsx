@@ -7,10 +7,17 @@ import type { Metadata } from 'next'
 
 export const revalidate = 3600
 
+const BASE = 'https://pokcas.com'
+
 export const metadata: Metadata = {
   title: 'News & Guides — Pokcas',
   description: 'Browse all casino guides, bonus tips and news from the Pokcas team.',
-  alternates: { canonical: 'https://pokcas.com/news/' },
+  alternates: { canonical: `${BASE}/news/` },
+  openGraph: {
+    title: 'News & Guides — Pokcas',
+    description: 'Browse all casino guides, bonus tips and news from the Pokcas team.',
+    url: `${BASE}/news/`,
+  },
 }
 
 // How many posts to show per category on the index

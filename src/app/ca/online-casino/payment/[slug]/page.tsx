@@ -31,7 +31,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = replaceDateVars(method.metaTitle || `${method.name} Casinos Canada — pay with ${method.name}`)
   const description = replaceDateVars(method.metaDescription || `Find the best Canadian online casinos that accept ${method.name}. Compare withdrawal times, fees and bonuses.`)
   const canonical = `${BASE}/ca/online-casino/payment/${slug}/`
-  return { title, description, alternates: { canonical } }
+  const logo = method.logo
+  return { title, description, alternates: { canonical }, openGraph: { title, description, url: canonical, type: 'article', images: logo?.url ? [{ url: logo.url }] : [{ url: `${BASE}/og.png` }] } }
 }
 
 export default async function CaPaymentSlugPage({ params }: Props) {
