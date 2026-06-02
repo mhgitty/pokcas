@@ -11,6 +11,11 @@ function marketPrefix(market?: string) {
   return ''
 }
 
+// Only include lastModified when we have a real timestamp — never fake it with new Date()
+function lastMod(date?: string): { lastModified: Date } | Record<string, never> {
+  return date ? { lastModified: new Date(date) } : {}
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [posts, pages, bookmakers, bonusser, paymentMethods, software] = await Promise.all([
 
@@ -40,90 +45,66 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ])
 
   // ── Bookmaker review URLs by market ──────────────────────────────────────────
-  const bookmakerEntries = bookmakers.map((b) => {
+  const bookmakerEntries: MetadataRoute.Sitemap = bookmakers.map((b) => {
     const mp = marketPrefix(b.market)
     const url = mp
       ? `${BASE}${mp}/online-casino/review/${b.slug.current}/`
       : `${BASE}/review/${b.slug.current}/`
-    return {
-      url,
-      lastModified: b._updatedAt ? new Date(b._updatedAt) : undefined,
-      changeFrequency: 'weekly' as const,
-      priority: 0.85,
-    }
+    return { url, ...lastMod(b._updatedAt) }
   })
 
   // ── Page URLs by market ───────────────────────────────────────────────────────
-  const pageEntries = pages.map((p) => {
+  const pageEntries: MetadataRoute.Sitemap = pages.map((p) => {
     const mp = marketPrefix(p.market)
     const slug = p.parentSlug
       ? `${p.parentSlug}/${p.slug.current}`
       : p.slug.current
-    return {
-      url: `${BASE}${mp}/${slug}/`,
-      lastModified: p._updatedAt ? new Date(p._updatedAt) : undefined,
-      changeFrequency: 'monthly' as const,
-      priority: p.parentSlug ? 0.4 : 0.5,
-    }
+    return { url: `${BASE}${mp}/${slug}/`, ...lastMod(p._updatedAt) }
   })
 
   // ── Payment method URLs by market ─────────────────────────────────────────────
-  const paymentEntries = paymentMethods.map((m) => {
+  const paymentEntries: MetadataRoute.Sitemap = paymentMethods.map((m) => {
     const mp = marketPrefix(m.market)
-    return {
-      url: `${BASE}${mp}/online-casino/payment/${m.slug.current}/`,
-      lastModified: m._updatedAt ? new Date(m._updatedAt) : undefined,
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    }
+    return { url: `${BASE}${mp}/online-casino/payment/${m.slug.current}/`, ...lastMod(m._updatedAt) }
   })
 
   // ── Software URLs by market ───────────────────────────────────────────────────
-  const softwareEntries = software.map((s) => {
+  const softwareEntries: MetadataRoute.Sitemap = software.map((s) => {
     const mp = marketPrefix(s.market)
-    return {
-      url: `${BASE}${mp}/online-casino/software/${s.slug.current}/`,
-      lastModified: s._updatedAt ? new Date(s._updatedAt) : undefined,
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    }
+    return { url: `${BASE}${mp}/online-casino/software/${s.slug.current}/`, ...lastMod(s._updatedAt) }
   })
 
   return [
-    // ── Root ──
-    { url: `${BASE}/`,                         lastModified: new Date(), changeFrequency: 'daily',   priority: 1.0 },
-    { url: `${BASE}/review/`,                  changeFrequency: 'daily',   priority: 0.9 },
-    { url: `${BASE}/casino-bonus/`,            changeFrequency: 'daily',   priority: 0.9 },
-    { url: `${BASE}/online-casino/payment/`,   changeFrequency: 'weekly',  priority: 0.8 },
-    { url: `${BASE}/online-casino/software/`,  changeFrequency: 'weekly',  priority: 0.8 },
+    // ── Root index pages (no fake lastmod) ──
+    { url: `${BASE}/` },
+    { url: `${BASE}/review/` },
+    { url: `${BASE}/casino-bonus/` },
+    { url: `${BASE}/online-casino/payment/` },
+    { url: `${BASE}/online-casino/software/` },
 
-    // ── Canada ──
-    { url: `${BASE}/ca/`,                                lastModified: new Date(), changeFrequency: 'daily',   priority: 1.0 },
-    { url: `${BASE}/ca/online-casino/review/`,           changeFrequency: 'daily',   priority: 0.9 },
-    { url: `${BASE}/ca/online-casino/payment/`,          changeFrequency: 'weekly',  priority: 0.8 },
-    { url: `${BASE}/ca/online-casino/software/`,         changeFrequency: 'weekly',  priority: 0.8 },
+    // ── Canada index pages ──
+    { url: `${BASE}/ca/` },
+    { url: `${BASE}/ca/online-casino/review/` },
+    { url: `${BASE}/ca/online-casino/payment/` },
+    { url: `${BASE}/ca/online-casino/software/` },
 
-    // ── Australia ──
-    { url: `${BASE}/au/`,                                lastModified: new Date(), changeFrequency: 'daily',   priority: 1.0 },
-    { url: `${BASE}/au/online-casino/review/`,           changeFrequency: 'daily',   priority: 0.9 },
-    { url: `${BASE}/au/online-casino/payment/`,          changeFrequency: 'weekly',  priority: 0.8 },
-    { url: `${BASE}/au/online-casino/software/`,         changeFrequency: 'weekly',  priority: 0.8 },
+    // ── Australia index pages ──
+    { url: `${BASE}/au/` },
+    { url: `${BASE}/au/online-casino/review/` },
+    { url: `${BASE}/au/online-casino/payment/` },
+    { url: `${BASE}/au/online-casino/software/` },
 
-    // ── Dynamic content ──
+    // ── Dynamic content (real lastmod from Sanity _updatedAt) ──
     ...bookmakerEntries,
     ...bonusser.map((b) => ({
       url: `${BASE}/casino-bonus/${b.slug.current}/`,
-      lastModified: b._updatedAt ? new Date(b._updatedAt) : undefined,
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
+      ...lastMod(b._updatedAt),
     })),
     ...paymentEntries,
     ...softwareEntries,
     ...posts.map((p) => ({
       url: `${BASE}/${p.slug.current}/`,
-      lastModified: p.lastUpdated ? new Date(p.lastUpdated) : p.publishedAt ? new Date(p.publishedAt) : undefined,
-      changeFrequency: 'weekly' as const,
-      priority: 0.7,
+      ...lastMod(p.lastUpdated ?? p.publishedAt),
     })),
     ...pageEntries,
   ]
