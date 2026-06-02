@@ -20,7 +20,7 @@ const BASE = 'https://pokcas.com'
 interface Props { params: Promise<{ slug: string[] }> }
 
 function buildPath(segments: string[]) {
-  return '/' + segments.join('/') + '/' + '/'
+  return '/' + segments.join('/') + '/'
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
