@@ -75,10 +75,10 @@ export default async function CaReviewSlugPage({ params }: Props) {
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: BASE },
-          { '@type': 'ListItem', position: 2, name: 'Australia', item: `${BASE}/au/` },
-          { '@type': 'ListItem', position: 3, name: 'Casino Reviews', item: `${BASE}/au/online-casino/review/` },
-          { '@type': 'ListItem', position: 4, name: bm.name, item: canonical },
+          { '@type': 'ListItem', position: 1, name: 'Home', item: `${BASE}/au/` },
+          { '@type': 'ListItem', position: 2, name: 'Online casino', item: `${BASE}/au/online-casino/` },
+          { '@type': 'ListItem', position: 3, name: 'Casino reviews', item: `${BASE}/au/online-casino/review/` },
+          { '@type': 'ListItem', position: 4, name: slug.replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase()), item: canonical },
         ],
       },
       {
@@ -108,9 +108,10 @@ export default async function CaReviewSlugPage({ params }: Props) {
       <div style={{ background: 'var(--bg-hero)', borderBottom: '1px solid var(--border)', padding: '40px 15px 32px' }}>
         <div style={{ maxWidth: '1250px', margin: '0 auto' }}>
           <Breadcrumbs crumbs={[
-            { label: 'Home', href: '/au/' },
-            { label: 'Casino Reviews', href: '/au/reviews' },
-            { label: bm.name },
+            { label: 'Home',           href: '/au/' },
+            { label: 'Online casino',  href: '/au/online-casino/' },
+            { label: 'Casino reviews', href: '/au/online-casino/review/' },
+            { label: slug.replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase()) },
           ]} />
 
           <div className="bm-hero">

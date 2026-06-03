@@ -34,8 +34,9 @@ export default async function CaSoftwareIndexPage() {
   const author = (page as any).author ?? settings?.defaultAuthor ?? null
 
   const breadcrumbs = [
-    { label: 'Home',     href: '/ca/' },
-    { label: page.title },
+    { label: 'Home',           href: '/ca/' },
+    { label: 'Online casino',  href: '/ca/online-casino/' },
+    { label: 'Software' },
   ]
 
   const jsonLd = {

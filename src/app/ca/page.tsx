@@ -45,8 +45,7 @@ export default async function CaHomePage() {
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: BASE },
-          { '@type': 'ListItem', position: 2, name: 'Canada', item: CANONICAL },
+          { '@type': 'ListItem', position: 1, name: 'Home', item: CANONICAL },
         ],
       },
       {

@@ -37,8 +37,9 @@ export default async function AuPaymentMethodsIndexPage() {
   const author = (page as any).author ?? settings?.defaultAuthor ?? null
 
   const breadcrumbs = [
-    { label: 'Home',      href: '/au/' },
-    { label: page.title },
+    { label: 'Home',            href: '/au/' },
+    { label: 'Online casino',   href: '/au/online-casino/' },
+    { label: 'Payment methods' },
   ]
 
   const jsonLd = {

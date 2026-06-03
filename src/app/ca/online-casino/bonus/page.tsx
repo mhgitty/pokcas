@@ -45,8 +45,9 @@ export default async function CaBonusPage() {
   const factChecker = hideAuthor ? null : ((page as any).factChecker ?? null)
 
   const breadcrumbs = [
-    { label: 'Home', href: '/ca/' },
-    { label: page.title },
+    { label: 'Home',          href: '/ca/' },
+    { label: 'Online casino', href: '/ca/online-casino/' },
+    { label: 'Bonus' },
   ]
 
   const jsonLd = {

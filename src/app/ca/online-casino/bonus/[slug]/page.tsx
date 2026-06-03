@@ -139,10 +139,10 @@ export default async function CaBonusSlugPage({ params }: Props) {
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: BASE },
-          { '@type': 'ListItem', position: 2, name: 'Canada', item: `${BASE}/ca/` },
-          { '@type': 'ListItem', position: 3, name: 'Casino Bonuses', item: `${BASE}/ca/online-casino/bonus/` },
-          { '@type': 'ListItem', position: 4, name: bonus.title, item: canonical },
+          { '@type': 'ListItem', position: 1, name: 'Home',          item: `${BASE}/ca/` },
+          { '@type': 'ListItem', position: 2, name: 'Online casino', item: `${BASE}/ca/online-casino/` },
+          { '@type': 'ListItem', position: 3, name: 'Bonus',         item: `${BASE}/ca/online-casino/bonus/` },
+          { '@type': 'ListItem', position: 4, name: slug.replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase()), item: canonical },
         ],
       },
       { '@type': 'WebPage', '@id': `${canonical}#webpage`, url: canonical, name: bonus.title, inLanguage: 'en-CA', publisher: { '@type': 'Organization', name: 'Pokcas', url: BASE } },

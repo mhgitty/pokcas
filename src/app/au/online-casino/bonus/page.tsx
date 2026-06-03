@@ -23,9 +23,9 @@ export default async function CaBonusesPage() {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: BASE },
-      { '@type': 'ListItem', position: 2, name: 'Australia', item: `${BASE}/au/` },
-      { '@type': 'ListItem', position: 3, name: 'Casino Bonuses', item: CANONICAL },
+      { '@type': 'ListItem', position: 1, name: 'Home',          item: `${BASE}/au/` },
+      { '@type': 'ListItem', position: 2, name: 'Online casino', item: `${BASE}/au/online-casino/` },
+      { '@type': 'ListItem', position: 3, name: 'Bonus',         item: CANONICAL },
     ],
   }
 
@@ -35,7 +35,7 @@ export default async function CaBonusesPage() {
 
       <div style={{ background: 'var(--bg-hero)', borderBottom: '1px solid var(--border)', padding: '40px 15px 32px' }}>
         <div style={{ maxWidth: '1250px', margin: '0 auto' }}>
-          <Breadcrumbs crumbs={[{ label: 'Home', href: '/au/' }, { label: 'Casino Bonuses' }]} />
+          <Breadcrumbs crumbs={[{ label: 'Home', href: '/au/' }, { label: 'Online casino', href: '/au/online-casino/' }, { label: 'Bonus' }]} />
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(24px, 3.5vw, 40px)', fontWeight: 800, color: 'var(--text)', marginBottom: '8px', letterSpacing: '-0.03em' }}>
             Best Casino Bonuses in Australia
           </h1>

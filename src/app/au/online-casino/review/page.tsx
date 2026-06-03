@@ -47,9 +47,9 @@ export default async function CaReviewsPage() {
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: BASE },
-          { '@type': 'ListItem', position: 2, name: 'Australia', item: `${BASE}/au/` },
-          { '@type': 'ListItem', position: 3, name: title, item: CANONICAL },
+          { '@type': 'ListItem', position: 1, name: 'Home', item: `${BASE}/au/` },
+          { '@type': 'ListItem', position: 2, name: 'Online casino', item: `${BASE}/au/online-casino/` },
+          { '@type': 'ListItem', position: 3, name: 'Casino reviews', item: CANONICAL },
         ],
       },
       {
@@ -73,7 +73,7 @@ export default async function CaReviewsPage() {
         author={author}
         updatedAt={(page as any)?.lastUpdated ?? null}
         factChecker={(page as any)?.factChecker ?? null}
-        breadcrumbs={[{ label: 'Home', href: '/au/' }, { label: title }]}
+        breadcrumbs={[{ label: 'Home', href: '/au/' }, { label: 'Online casino', href: '/au/online-casino/' }, { label: 'Casino reviews' }]}
       />
 
       {bookmakers.length > 0 && (

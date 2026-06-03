@@ -46,9 +46,10 @@ export default async function AuPaymentSlugPage({ params }: Props) {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home',      item: BASE },
-      { '@type': 'ListItem', position: 2, name: 'Australia', item: `${BASE}/au/` },
-      { '@type': 'ListItem', position: 3, name: method.name, item: canonical },
+      { '@type': 'ListItem', position: 1, name: 'Home',            item: `${BASE}/au/` },
+      { '@type': 'ListItem', position: 2, name: 'Online casino',   item: `${BASE}/au/online-casino/` },
+      { '@type': 'ListItem', position: 3, name: 'Payment methods', item: `${BASE}/au/online-casino/payment/` },
+      { '@type': 'ListItem', position: 4, name: slug.replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase()), item: canonical },
     ],
   }
 
@@ -60,8 +61,10 @@ export default async function AuPaymentSlugPage({ params }: Props) {
       <div style={{ background: 'var(--bg-hero)', paddingTop: '32px', paddingBottom: '0' }}>
         <div style={{ maxWidth: '1250px', margin: '0 auto', padding: '0 15px' }}>
           <Breadcrumbs crumbs={[
-            { label: 'Home',      href: '/au/' },
-            { label: method.name },
+            { label: 'Home',            href: '/au/' },
+            { label: 'Online casino',   href: '/au/online-casino/' },
+            { label: 'Payment methods', href: '/au/online-casino/payment/' },
+            { label: slug.replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase()) },
           ]} />
         </div>
       </div>

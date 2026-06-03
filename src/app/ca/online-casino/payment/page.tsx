@@ -38,7 +38,8 @@ export default async function CaPaymentMethodsIndexPage() {
 
   const breadcrumbs = [
     { label: 'Home',            href: '/ca/' },
-    { label: page.title },
+    { label: 'Online casino',   href: '/ca/online-casino/' },
+    { label: 'Payment methods' },
   ]
 
   const jsonLd = {

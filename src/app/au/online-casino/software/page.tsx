@@ -34,8 +34,9 @@ export default async function AuSoftwareIndexPage() {
   const author = (page as any).author ?? settings?.defaultAuthor ?? null
 
   const breadcrumbs = [
-    { label: 'Home',      href: '/au/' },
-    { label: page.title },
+    { label: 'Home',           href: '/au/' },
+    { label: 'Online casino',  href: '/au/online-casino/' },
+    { label: 'Software' },
   ]
 
   const jsonLd = {
