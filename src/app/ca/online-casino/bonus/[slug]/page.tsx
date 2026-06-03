@@ -77,8 +77,7 @@ export default async function CaBonusSlugPage({ params }: Props) {
 
     const slugLabel = (s: string) => s.replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase())
     const breadcrumbs = [
-      { label: 'Home', href: '/' },
-      { label: 'Canada', href: '/ca/' },
+      { label: 'Home', href: '/ca/' },
       { label: 'Online casino', href: '/ca/online-casino/' },
       { label: 'Bonus', href: '/ca/online-casino/bonus/' },
       { label: slugLabel(slug) },

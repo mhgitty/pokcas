@@ -37,8 +37,7 @@ export default async function CaPaymentMethodsIndexPage() {
   const author = (page as any).author ?? settings?.defaultAuthor ?? null
 
   const breadcrumbs = [
-    { label: 'Home',            href: '/' },
-    { label: 'Canada',          href: '/ca/' },
+    { label: 'Home',            href: '/ca/' },
     { label: page.title },
   ]
 

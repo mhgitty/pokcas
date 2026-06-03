@@ -69,7 +69,7 @@ export default async function AuHomePage() {
         title={title}
         intro={intro}
         heroCards={heroCards}
-        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Australia' }]}
+        breadcrumbs={[{ label: 'Home', href: '/au/' }]}
       />
 
       {hp?.sections?.length > 0 && (

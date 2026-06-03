@@ -60,8 +60,7 @@ export default async function CaPaymentSlugPage({ params }: Props) {
       <div style={{ background: 'var(--bg-hero)', paddingTop: '32px', paddingBottom: '0' }}>
         <div style={{ maxWidth: '1250px', margin: '0 auto', padding: '0 15px' }}>
           <Breadcrumbs crumbs={[
-            { label: 'Home',           href: '/' },
-            { label: 'Canada',         href: '/ca/' },
+            { label: 'Home',           href: '/ca/' },
             { label: method.name },
           ]} />
         </div>

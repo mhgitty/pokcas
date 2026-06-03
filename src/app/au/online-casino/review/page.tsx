@@ -73,7 +73,7 @@ export default async function CaReviewsPage() {
         author={author}
         updatedAt={(page as any)?.lastUpdated ?? null}
         factChecker={(page as any)?.factChecker ?? null}
-        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Australia', href: '/au/' }, { label: title }]}
+        breadcrumbs={[{ label: 'Home', href: '/au/' }, { label: title }]}
       />
 
       {bookmakers.length > 0 && (

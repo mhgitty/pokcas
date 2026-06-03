@@ -45,8 +45,7 @@ export default async function CaBonusPage() {
   const factChecker = hideAuthor ? null : ((page as any).factChecker ?? null)
 
   const breadcrumbs = [
-    { label: 'Home', href: '/' },
-    { label: 'Canada', href: '/ca/' },
+    { label: 'Home', href: '/ca/' },
     { label: page.title },
   ]
 

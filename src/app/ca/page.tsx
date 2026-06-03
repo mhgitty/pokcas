@@ -69,7 +69,7 @@ export default async function CaHomePage() {
         title={title}
         intro={intro}
         heroCards={heroCards}
-        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Canada' }]}
+        breadcrumbs={[{ label: 'Home', href: '/ca/' }]}
       />
 
       {hp?.sections?.length > 0 && (

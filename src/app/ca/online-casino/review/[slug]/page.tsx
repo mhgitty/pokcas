@@ -108,8 +108,7 @@ export default async function CaReviewSlugPage({ params }: Props) {
       <div style={{ background: 'var(--bg-hero)', borderBottom: '1px solid var(--border)', padding: '40px 15px 32px' }}>
         <div style={{ maxWidth: '1250px', margin: '0 auto' }}>
           <Breadcrumbs crumbs={[
-            { label: 'Home', href: '/' },
-            { label: 'Canada', href: '/ca/' },
+            { label: 'Home', href: '/ca/' },
             { label: 'Casino Reviews', href: '/ca/reviews' },
             { label: bm.name },
           ]} />

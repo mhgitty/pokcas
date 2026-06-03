@@ -61,8 +61,7 @@ export default async function CaSlugPage({ params }: Props) {
 
   const slugLabel = (s: string) => s.replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase())
   const breadcrumbs: { label: string; href?: string }[] = [
-    { label: 'Home', href: '/' },
-    { label: 'Australia', href: '/au/' },
+    { label: 'Home', href: '/au/' },
     ...slug.slice(0, -1).map((seg, idx) => ({
       label: slugLabel(seg),
       href: `/au/${slug.slice(0, idx + 1).join('/')}/`,

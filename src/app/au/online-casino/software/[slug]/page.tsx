@@ -61,8 +61,7 @@ export default async function AuSoftwareSlugPage({ params }: Props) {
       <div style={{ background: 'var(--bg-hero)', paddingTop: '32px', paddingBottom: '0' }}>
         <div style={{ maxWidth: '1250px', margin: '0 auto', padding: '0 15px' }}>
           <Breadcrumbs crumbs={[
-            { label: 'Home',      href: '/' },
-            { label: 'Australia', href: '/au/' },
+            { label: 'Home',      href: '/au/' },
             { label: 'Software',  href: '/au/online-casino/software/' },
             { label: provider.name },
           ]} />

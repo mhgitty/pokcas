@@ -34,8 +34,7 @@ export default async function AuSoftwareIndexPage() {
   const author = (page as any).author ?? settings?.defaultAuthor ?? null
 
   const breadcrumbs = [
-    { label: 'Home',      href: '/' },
-    { label: 'Australia', href: '/au/' },
+    { label: 'Home',      href: '/au/' },
     { label: page.title },
   ]
 

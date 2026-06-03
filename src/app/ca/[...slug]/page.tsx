@@ -62,8 +62,7 @@ export default async function CaSlugPage({ params }: Props) {
   // Use slug segments as breadcrumb labels — cleaner than full page titles
   const slugLabel = (s: string) => s.replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase())
   const breadcrumbs: { label: string; href?: string }[] = [
-    { label: 'Home', href: '/' },
-    { label: 'Canada', href: '/ca/' },
+    { label: 'Home', href: '/ca/' },
     ...slug.slice(0, -1).map((seg, idx) => ({
       label: slugLabel(seg),
       href: `/ca/${slug.slice(0, idx + 1).join('/')}/`,

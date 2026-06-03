@@ -57,8 +57,7 @@ export default async function AuCasinoGamePage({ params }: Props) {
       <div style={{ background: 'var(--bg-hero)', paddingTop: '32px', paddingBottom: '32px', borderBottom: '1px solid var(--border)' }}>
         <div style={{ maxWidth: '1250px', margin: '0 auto', padding: '0 15px' }}>
           <Breadcrumbs crumbs={[
-            { label: 'Home', href: '/' },
-            { label: 'Australia', href: '/au/' },
+            { label: 'Home', href: '/au/' },
             { label: 'Casino Games', href: '/au/casino-games/' },
             { label: game.name },
           ]} />
