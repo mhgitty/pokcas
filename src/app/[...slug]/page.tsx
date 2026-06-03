@@ -46,16 +46,14 @@ export default async function DynamicPage({ params }: Props) {
 
   const canonical = `${BASE}${buildPath(slug)}`
 
-  // Build ancestor breadcrumbs dynamically from route segments
-  // a4=deepest ancestor, a1=immediate parent — ordered outermost→innermost after filter
-  const ancestorTitles = [page.a4Title, page.a3Title, page.a2Title, page.a1Title].filter(Boolean) as string[]
+  const slugLabel = (s: string) => s.replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase())
   const breadcrumbItems = [
     { name: 'Home', item: BASE },
-    ...ancestorTitles.map((title, idx) => ({
-      name: title,
+    ...slug.slice(0, -1).map((seg, idx) => ({
+      name: slugLabel(seg),
       item: `${BASE}/${slug.slice(0, idx + 1).join('/')}/`,
     })),
-    { name: page.title, item: canonical },
+    { name: slugLabel(slug[slug.length - 1]), item: canonical },
   ]
 
   const jsonLd = {
@@ -92,11 +90,11 @@ export default async function DynamicPage({ params }: Props) {
         updatedAt={page.lastUpdated}
         breadcrumbs={[
           { label: 'Home', href: '/' },
-          ...ancestorTitles.map((title, idx) => ({
-            label: title,
+          ...slug.slice(0, -1).map((seg, idx) => ({
+            label: slugLabel(seg),
             href: `/${slug.slice(0, idx + 1).join('/')}/`,
           })),
-          { label: page.title },
+          { label: slugLabel(slug[slug.length - 1]) },
         ]}
       />
 

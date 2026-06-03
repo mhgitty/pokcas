@@ -59,16 +59,15 @@ export default async function CaSlugPage({ params }: Props) {
   const author = hideAuthor ? null : ((page as any).author ?? settings?.defaultAuthor ?? null)
   const factChecker = hideAuthor ? null : ((page as any).factChecker ?? null)
 
-  const p = page as any
-  const ancestorTitles = [p.a4Title, p.a3Title, p.a2Title, p.a1Title].filter(Boolean) as string[]
+  const slugLabel = (s: string) => s.replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase())
   const breadcrumbs: { label: string; href?: string }[] = [
     { label: 'Home', href: '/' },
     { label: 'Australia', href: '/au/' },
-    ...ancestorTitles.map((title, idx) => ({
-      label: title,
+    ...slug.slice(0, -1).map((seg, idx) => ({
+      label: slugLabel(seg),
       href: `/au/${slug.slice(0, idx + 1).join('/')}/`,
     })),
-    { label: page.title },
+    { label: slugLabel(slug[slug.length - 1]) },
   ]
 
   const jsonLd = {

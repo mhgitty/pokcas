@@ -75,12 +75,13 @@ export default async function CaBonusSlugPage({ params }: Props) {
     const author = hideAuthor ? null : ((page as any).author ?? settings?.defaultAuthor ?? null)
     const factChecker = hideAuthor ? null : ((page as any).factChecker ?? null)
 
+    const slugLabel = (s: string) => s.replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase())
     const breadcrumbs = [
       { label: 'Home', href: '/' },
       { label: 'Canada', href: '/ca/' },
-      { label: 'Online Casino', href: '/ca/online-casino/' },
+      { label: 'Online casino', href: '/ca/online-casino/' },
       { label: 'Bonus', href: '/ca/online-casino/bonus/' },
-      { label: page.title },
+      { label: slugLabel(slug) },
     ]
 
     const jsonLd = {
