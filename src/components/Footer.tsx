@@ -4,7 +4,7 @@ import { getSiteSettings } from '@/lib/sanity'
 import { MarketSelector } from './MarketSelector'
 
 function resolveUrl(item: {
-  url?: string; pageSlug?: string; pageParentSlug?: string; pageMarket?: string;
+  url?: string; pageSlug?: string; pageParentSlug?: string; pageParent2Slug?: string; pageParent3Slug?: string; pageMarket?: string;
   bookmakerSlug?: string; softwareSlug?: string; paymentMethodSlug?: string; postSlug?: string;
 }, market?: string): string {
   const mp = market === 'ca' ? '/ca' : market === 'au' ? '/au' : ''
@@ -15,9 +15,8 @@ function resolveUrl(item: {
                  : item.pageMarket === 'au' ? '/au'
                  : item.pageMarket === 'global' ? ''
                  : mp  // fallback for legacy nav items without a market field
-    return item.pageParentSlug
-      ? `${prefix}/${item.pageParentSlug}/${item.pageSlug}/`
-      : `${prefix}/${item.pageSlug}/`
+    const segments = [item.pageParent3Slug, item.pageParent2Slug, item.pageParentSlug, item.pageSlug].filter(Boolean)
+    return `${prefix}/${segments.join('/')}/`
   }
   if (item.bookmakerSlug) return mp ? `${mp}/online-casino/review/${item.bookmakerSlug}/` : `/review/${item.bookmakerSlug}/`
   if (item.softwareSlug) return `${mp}/online-casino/software/${item.softwareSlug}/`
