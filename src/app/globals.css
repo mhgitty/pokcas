@@ -647,8 +647,8 @@ footer {
     gap: 16px !important;
   }
 
-  /* Casino comparison — wrap/stack on mobile */
-  .casino-cmp-r1 { flex-wrap: wrap; }
+  /* Casino comparison — stack on mobile */
+  .casino-cmp-r1 { grid-template-columns: 1fr !important; }
   .casino-cmp-ministats {
     border-left: none !important;
     border-right: none !important;
@@ -706,8 +706,9 @@ footer {
     gap: 14px !important;
   }
 
-  /* Casino comparison — allow wrap on tablet if tight */
-  .casino-cmp-r1 { flex-wrap: wrap; }
+  /* Casino comparison — stack on tablet */
+  .casino-cmp-r1 { grid-template-columns: 1fr !important; }
+  .casino-cmp-ministats { border-left: none !important; border-right: none !important; padding-left: 0 !important; padding-right: 0 !important; }
   .casino-cmp-r2 { flex-wrap: wrap; }
 
   /* Bonus card — narrower image on tablet */

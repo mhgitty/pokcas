@@ -205,66 +205,71 @@ function CasinoRow({ casino, currency }: { casino: Casino; currency: string }) {
         </span>
       )}
 
-      {/* Row 1 — evenly spaced, flush start to end */}
+      {/* Row 1 — fixed column tracks so the bonus column aligns across every row */}
       <div className="casino-cmp-r1" style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '20px',
+        display: 'grid',
+        gridTemplateColumns: '300px 132px minmax(0, 1fr) 190px',
+        alignItems: 'center', gap: '20px',
       }}>
         {/* logo + rating + name grouped together */}
-        <div className="casino-cmp-brand" style={{ display: 'flex', alignItems: 'center', gap: '14px', flexShrink: 0 }}>
-        {/* logo (no box, rounded image) */}
-        <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', width: '104px' }}>
-          {casino.logo?.url ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={casino.logo.url} alt={casino.logo.alt || casino.name}
-              style={{ maxWidth: '100%', maxHeight: '64px', objectFit: 'contain', display: 'block', borderRadius: '8px' }} />
-          ) : (
-            <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-muted)' }}>{casino.name}</span>
+        <div className="casino-cmp-brand" style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: 0 }}>
+          {/* logo (no box, rounded image) */}
+          <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', width: '104px' }}>
+            {casino.logo?.url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={casino.logo.url} alt={casino.logo.alt || casino.name}
+                style={{ maxWidth: '100%', maxHeight: '64px', objectFit: 'contain', display: 'block', borderRadius: '8px' }} />
+            ) : (
+              <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-muted)' }}>{casino.name}</span>
+            )}
+          </div>
+
+          {/* rating + name */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '6px', minWidth: 0 }}>
+            {casino.score != null && <ScoreBadge score={casino.score} />}
+            <Link href={reviewHref} style={{
+              fontSize: '20px', fontWeight: 700, color: 'var(--text)', textDecoration: 'none',
+              whiteSpace: 'nowrap', fontFamily: 'var(--font-display)',
+              maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis',
+            }}>
+              {casino.name}
+            </Link>
+          </div>
+        </div>
+
+        {/* min dep / wager — always occupies its column so rows align */}
+        <div className="casino-cmp-ministats" style={{
+          display: 'flex', flexDirection: 'column', gap: '6px',
+          ...(hasStats ? { borderLeft: '1px solid var(--border-faint)', borderRight: '1px solid var(--border-faint)', padding: '0 16px' } : {}),
+        }}>
+          {casino.minIndbetaling != null && (
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+              <span style={{ ...LABEL, width: '58px' }}>Min dep</span>
+              <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)' }}>{currency}{casino.minIndbetaling}</span>
+            </div>
+          )}
+          {casino.gennemspilskrav && (
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+              <span style={{ ...LABEL, width: '58px' }}>Wager</span>
+              <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)' }}>{casino.gennemspilskrav}</span>
+            </div>
           )}
         </div>
 
-        {/* rating + name */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '6px', flexShrink: 0 }}>
-          {casino.score != null && <ScoreBadge score={casino.score} />}
-          <Link href={reviewHref} style={{
-            fontSize: '20px', fontWeight: 700, color: 'var(--text)', textDecoration: 'none',
-            whiteSpace: 'nowrap', fontFamily: 'var(--font-display)',
-          }}>
-            {casino.name}
-          </Link>
-        </div>
-        </div>
-
-        {hasStats && (
-          <div className="casino-cmp-ministats" style={{
-            display: 'flex', flexDirection: 'column', gap: '6px', flexShrink: 0,
-          }}>
-            {casino.minIndbetaling != null && (
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                <span style={{ ...LABEL, width: '58px' }}>Min dep</span>
-                <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)' }}>{currency}{casino.minIndbetaling}</span>
+        {/* welcome bonus — always occupies its column */}
+        <div className="casino-cmp-bonus" style={{ minWidth: 0 }}>
+          {casino.indbetalingsbonus && (
+            <>
+              <div style={{ ...LABEL, marginBottom: '3px' }}>Welcome bonus</div>
+              <div style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text)', lineHeight: 1.15, overflowWrap: 'anywhere' }}>
+                {casino.indbetalingsbonus}
               </div>
-            )}
-            {casino.gennemspilskrav && (
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                <span style={{ ...LABEL, width: '58px' }}>Wager</span>
-                <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)' }}>{casino.gennemspilskrav}</span>
-              </div>
-            )}
-          </div>
-        )}
-
-        {casino.indbetalingsbonus && (
-          <div className="casino-cmp-bonus" style={{ flexShrink: 0, minWidth: 0 }}>
-            <div style={{ ...LABEL, marginBottom: '3px' }}>Welcome bonus</div>
-            <div style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text)', lineHeight: 1.15, overflowWrap: 'anywhere' }}>
-              {casino.indbetalingsbonus}
-            </div>
-          </div>
-        )}
+            </>
+          )}
+        </div>
 
         <div className="casino-cmp-cta" style={{
           display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: '6px',
-          minWidth: '170px', flexShrink: 0,
         }}>
           {casino.url && (
             <a href={casino.url} target="_blank" rel="nofollow noopener noreferrer sponsored" style={{
