@@ -105,8 +105,16 @@ const COMPARISON_TABLE_FRAGMENT = `
     bookmakers[]-> {
       _id, name, slug, usp, score,
       indbetalingsbonus, minIndbetaling, gennemspilskrav,
-      url, terms,
-      "logo": logo { "url": asset->url, alt }
+      url, terms, market,
+      "logo": logo { "url": asset->url, alt },
+      "paymentMethods": paymentMethods[]-> {
+        _id, name, "slug": slug.current,
+        "logo": logo { "url": asset->url, alt }
+      },
+      "software": software[]-> {
+        _id, name, "slug": slug.current,
+        "logo": logo { "url": asset->url, alt }
+      }
     }
   }
 `

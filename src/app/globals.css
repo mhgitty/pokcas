@@ -647,6 +647,13 @@ footer {
     gap: 16px !important;
   }
 
+  /* Casino comparison row — stack on mobile */
+  .casino-compare-inner {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+    text-align: left;
+  }
+
   /* Bonus card — stack on mobile */
   .bonus-card-grid {
     grid-template-columns: 1fr !important;
@@ -692,6 +699,12 @@ footer {
   .bookmaker-card-inner {
     grid-template-columns: 90px 1fr auto !important;
     gap: 14px !important;
+  }
+
+  /* Casino comparison row — stack on tablet too (4 cells wrap awkwardly otherwise) */
+  .casino-compare-inner {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
   }
 
   /* Bonus card — narrower image on tablet */
