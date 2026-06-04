@@ -38,6 +38,11 @@ interface CasinoComparisonTableProps {
 
 const DEFAULT_DISCLOSURE = 'We may earn a commission from these casinos · 18+ · Play responsibly'
 
+const LABEL: React.CSSProperties = {
+  fontSize: '12px', color: 'var(--text-faint)', textTransform: 'uppercase',
+  letterSpacing: '0.5px', fontWeight: 600,
+}
+
 // ─── Score badge ──────────────────────────────────────────────────────────────
 function ScoreBadge({ score }: { score: number }) {
   const color = score >= 8 ? 'var(--green)' : score >= 6 ? '#ca8a04' : '#dc2626'
@@ -46,7 +51,7 @@ function ScoreBadge({ score }: { score: number }) {
       display: 'inline-flex', alignItems: 'center', gap: '4px',
       background: color, color: '#fff',
       fontSize: '13px', fontWeight: 800, lineHeight: 1,
-      padding: '5px 10px', borderRadius: '18px', flexShrink: 0,
+      padding: '5px 10px', borderRadius: '18px',
     }}>
       <Icon name="star" size={13} color="#fff" /> {score.toFixed(1)}
     </span>
@@ -54,12 +59,12 @@ function ScoreBadge({ score }: { score: number }) {
 }
 
 // ─── A single logo tile ─────────────────────────────────────────────────────────
-function LogoTile({ item, size = 24 }: { item: LogoRef; size?: number }) {
+function LogoTile({ item, size = 28 }: { item: LogoRef; size?: number }) {
   if (item.logo?.url) {
     return (
       <div title={item.name} style={{
-        width: size, height: size, borderRadius: '6px', background: '#fff',
-        border: '1px solid var(--border-faint)', flexShrink: 0,
+        width: size, height: size, borderRadius: '7px', background: '#fff',
+        border: '1px solid var(--border-faint)',
         display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden',
       }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -70,8 +75,8 @@ function LogoTile({ item, size = 24 }: { item: LogoRef; size?: number }) {
   }
   return (
     <div title={item.name} style={{
-      height: size, padding: '0 7px', borderRadius: '6px', background: 'var(--bg-raised)',
-      border: '1px solid var(--border-faint)', flexShrink: 0,
+      height: size, padding: '0 7px', borderRadius: '7px', background: 'var(--bg-raised)',
+      border: '1px solid var(--border-faint)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       fontSize: '9.5px', fontWeight: 600, color: 'var(--text-muted)', whiteSpace: 'nowrap',
     }}>
@@ -80,8 +85,8 @@ function LogoTile({ item, size = 24 }: { item: LogoRef; size?: number }) {
   )
 }
 
-// ─── Logo stack with "+N" → tooltip listing all ─────────────────────────────────
-function LogoStack({ label, items, max = 2 }: { label: string; items: LogoRef[]; max?: number }) {
+// ─── Logo stack: overlapping logos + "+N" → tooltip listing all ──────────────────
+function LogoStack({ label, items, max = 4 }: { label: string; items: LogoRef[]; max?: number }) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -98,30 +103,35 @@ function LogoStack({ label, items, max = 2 }: { label: string; items: LogoRef[];
 
   return (
     <div style={{ flexShrink: 0 }}>
-      <div style={{
-        fontSize: '9px', color: 'var(--text-faint)', textTransform: 'uppercase',
-        letterSpacing: '0.5px', marginBottom: '4px', fontWeight: 600,
-      }}>
-        {label}
-      </div>
+      <div style={{ ...LABEL, marginBottom: '6px' }}>{label}</div>
       <div
         ref={ref}
         style={{ position: 'relative', display: 'inline-flex' }}
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-          {shown.map((it) => <LogoTile key={it._id} item={it} />)}
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          {shown.map((it, i) => (
+            <div key={it._id} style={{
+              marginLeft: i === 0 ? 0 : '-9px',
+              borderRadius: '8px',
+              boxShadow: '0 0 0 2px var(--bg-card)',
+              position: 'relative',
+              zIndex: shown.length - i,
+            }}>
+              <LogoTile item={it} size={28} />
+            </div>
+          ))}
           {extra > 0 && (
             <button
               type="button"
               onClick={() => setOpen((o) => !o)}
               aria-label={`Show all ${items.length} ${label.toLowerCase()}`}
               style={{
-                height: 24, minWidth: 24, padding: '0 6px', borderRadius: '6px',
-                background: 'var(--green-light)', border: '1px solid var(--green)',
-                color: 'var(--green-dark)', fontSize: '11px', fontWeight: 800,
-                cursor: 'pointer', flexShrink: 0,
+                height: 28, minWidth: 28, padding: '0 7px', borderRadius: '8px',
+                marginLeft: '5px', background: 'var(--green-light)', border: '1px solid var(--green)',
+                color: 'var(--green-dark)', fontSize: '12px', fontWeight: 800,
+                cursor: 'pointer', position: 'relative', zIndex: 0,
               }}
             >
               +{extra}
@@ -136,10 +146,7 @@ function LogoStack({ label, items, max = 2 }: { label: string; items: LogoRef[];
             background: 'var(--bg-card)', border: '1px solid var(--border)',
             borderRadius: '10px', boxShadow: '0 12px 32px rgba(0,0,0,0.16)', padding: '9px',
           }}>
-            <div style={{
-              fontSize: '9.5px', color: 'var(--text-faint)', textTransform: 'uppercase',
-              letterSpacing: '0.5px', fontWeight: 700, marginBottom: '7px',
-            }}>
+            <div style={{ ...LABEL, fontSize: '9.5px', fontWeight: 700, marginBottom: '7px' }}>
               {label} · {items.length}
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
@@ -195,12 +202,12 @@ function CasinoRow({ casino, currency }: { casino: Casino; currency: string }) {
         </span>
       )}
 
-      {/* Row 1 — logo · rating · min dep/wager · bonus · CTA */}
+      {/* Row 1 — logo · rating+name · min dep/wager · bonus · CTA */}
       <div className="casino-cmp-r1" style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
         <div style={{
-          width: '92px', height: '44px', background: '#fff', borderRadius: '8px',
+          width: '85px', height: '85px', background: '#fff', borderRadius: '10px',
           border: '1px solid var(--border-faint)', flexShrink: 0,
-          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '6px',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '8px',
         }}>
           {casino.logo?.url ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -211,23 +218,31 @@ function CasinoRow({ casino, currency }: { casino: Casino; currency: string }) {
           )}
         </div>
 
-        {casino.score != null && <ScoreBadge score={casino.score} />}
+        {/* rating + name */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '5px', flexShrink: 0 }}>
+          {casino.score != null && <ScoreBadge score={casino.score} />}
+          <Link href={reviewHref} style={{
+            fontSize: '13px', fontWeight: 700, color: 'var(--text)', textDecoration: 'none', whiteSpace: 'nowrap',
+          }}>
+            {casino.name}
+          </Link>
+        </div>
 
         {hasStats && (
           <div className="casino-cmp-ministats" style={{
-            display: 'flex', flexDirection: 'column', gap: '5px', flexShrink: 0,
-            padding: '0 14px', borderLeft: '1px solid var(--border-faint)', borderRight: '1px solid var(--border-faint)',
+            display: 'flex', flexDirection: 'column', gap: '6px', flexShrink: 0,
+            padding: '0 16px', borderLeft: '1px solid var(--border-faint)', borderRight: '1px solid var(--border-faint)',
           }}>
             {casino.minIndbetaling != null && (
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
-                <span style={{ fontSize: '9px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: 600, width: '46px' }}>Min dep</span>
-                <span style={{ fontSize: '12.5px', fontWeight: 700, color: 'var(--text)' }}>{currency}{casino.minIndbetaling}</span>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                <span style={{ ...LABEL, width: '58px' }}>Min dep</span>
+                <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)' }}>{currency}{casino.minIndbetaling}</span>
               </div>
             )}
             {casino.gennemspilskrav && (
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
-                <span style={{ fontSize: '9px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: 600, width: '46px' }}>Wager</span>
-                <span style={{ fontSize: '12.5px', fontWeight: 700, color: 'var(--text)' }}>{casino.gennemspilskrav}</span>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                <span style={{ ...LABEL, width: '58px' }}>Wager</span>
+                <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)' }}>{casino.gennemspilskrav}</span>
               </div>
             )}
           </div>
@@ -236,10 +251,8 @@ function CasinoRow({ casino, currency }: { casino: Casino; currency: string }) {
         <div style={{ flex: '1 1 auto', minWidth: 0 }}>
           {casino.indbetalingsbonus && (
             <>
-              <div style={{ fontSize: '9px', color: 'var(--text-faint)', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: 600, marginBottom: '2px' }}>
-                Welcome bonus
-              </div>
-              <div style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text)', lineHeight: 1.2 }}>
+              <div style={{ ...LABEL, marginBottom: '3px' }}>Welcome bonus</div>
+              <div style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text)', lineHeight: 1.15 }}>
                 {casino.indbetalingsbonus}
               </div>
             </>
