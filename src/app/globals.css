@@ -656,6 +656,7 @@ footer {
     padding-right: 0 !important;
   }
   .casino-cmp-cta { width: 100%; min-width: 0 !important; }
+  .casino-cmp-bonus { width: 100%; }
   .casino-cmp-r2 { flex-wrap: wrap; }
 
   /* Bonus card — stack on mobile */

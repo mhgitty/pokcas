@@ -200,7 +200,7 @@ function CasinoRow({ casino, currency }: { casino: Casino; currency: string }) {
           padding: '3px 12px', borderRadius: '20px',
           maxWidth: 'calc(100% - 36px)',
         }}>
-          <Icon name="bolt" size={12} color="#fff" />
+          <Icon name="cup-star" size={12} color="#fff" />
           <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{casino.usp}</span>
         </span>
       )}
@@ -254,9 +254,9 @@ function CasinoRow({ casino, currency }: { casino: Casino; currency: string }) {
         )}
 
         {casino.indbetalingsbonus && (
-          <div style={{ flexShrink: 0, minWidth: 0 }}>
+          <div className="casino-cmp-bonus" style={{ flexShrink: 0, minWidth: 0 }}>
             <div style={{ ...LABEL, marginBottom: '3px' }}>Welcome bonus</div>
-            <div style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text)', lineHeight: 1.15 }}>
+            <div style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text)', lineHeight: 1.15, overflowWrap: 'anywhere' }}>
               {casino.indbetalingsbonus}
             </div>
           </div>
