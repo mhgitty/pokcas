@@ -84,6 +84,7 @@ export default async function CaBonusSlugPage({ params }: Props) {
     <>
       <JsonLd data={jsonLd} />
       <BonusHero
+        bonusListHref="/au/online-casino/bonus/"
         title={bonus.title}
         casinoNavn={bonus.casinoNavn}
         logoUrl={bonus.casinoLogo?.url ?? bonus.bookmaker?.logo?.url ?? null}

@@ -8,7 +8,7 @@ import { Icon } from './Icon'
 const DEFAULT_NAV = [
   { label: 'Home',             url: '/',               isHighlighted: false, children: [] },
   { label: 'Casino Reviews',   url: '/review/', isHighlighted: false, children: [] },
-  { label: 'Bonuses',          url: '/kampagner/',     isHighlighted: false, children: [] },
+  { label: 'Bonuses',          url: '/ca/online-casino/bonus/', isHighlighted: false, children: [] },
   { label: 'Guides & Articles', url: '/blog/',         isHighlighted: false, children: [] },
 ]
 

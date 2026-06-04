@@ -39,7 +39,7 @@ const DEFAULT_COLUMNS = [
     title: 'Casino Reviews',
     items: [
       { label: 'All Casinos', url: '/review/' },
-      { label: 'Bonuses',     url: '/kampagner' },
+      { label: 'Bonuses',     url: '/ca/online-casino/bonus/' },
     ],
   },
   {

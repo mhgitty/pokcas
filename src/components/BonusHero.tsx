@@ -16,6 +16,7 @@ interface BonusHeroProps {
   maksGevinst?: string | null
   bonuskode?: string | null
   spinVaerdi?: string | null
+  bonusListHref?: string
 }
 
 
@@ -45,7 +46,7 @@ function StatBox({ label, value, icon }: { label: string; value: string | null; 
 export function BonusHero({
   title, casinoNavn, logoUrl, logoAlt, offerUrl, terms,
   minimumOdds, minimumIndbetaling, gennemspilskrav,
-  maksGevinst, bonuskode, spinVaerdi,
+  maksGevinst, bonuskode, spinVaerdi, bonusListHref = '/',
 }: BonusHeroProps) {
   const [copied, setCopied] = useState(false)
 
@@ -64,7 +65,7 @@ export function BonusHero({
     }}>
       <div style={{ maxWidth: '1250px', margin: '0 auto' }}>
 
-        <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Bonuses', href: '/kampagner' }, { label: title }]} />
+        <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Bonuses', href: bonusListHref }, { label: title }]} />
 
         {/* Logo + title */}
         <div style={{ display: 'flex', gap: '18px', alignItems: 'center', marginBottom: '28px' }}>

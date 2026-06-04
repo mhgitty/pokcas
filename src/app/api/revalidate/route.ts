@@ -25,8 +25,12 @@ export async function POST(req: NextRequest) {
       revalidatePath('/review/[slug]', 'page')
       if (slug) { revalidatePath(`/review/${slug}/`, 'page'); specific.push(`/review/${slug}/`) }
     } else if (type === 'bonus') {
-      revalidatePath('/kampagner/[slug]', 'page')
-      if (slug) { revalidatePath(`/kampagner/${slug}/`, 'page'); specific.push(`/kampagner/${slug}/`) }
+      revalidatePath('/ca/online-casino/bonus/[slug]', 'page')
+      revalidatePath('/au/online-casino/bonus/[slug]', 'page')
+      if (slug) {
+        revalidatePath(`/ca/online-casino/bonus/${slug}/`, 'page'); specific.push(`/ca/online-casino/bonus/${slug}/`)
+        revalidatePath(`/au/online-casino/bonus/${slug}/`, 'page'); specific.push(`/au/online-casino/bonus/${slug}/`)
+      }
     }
 
     return NextResponse.json({

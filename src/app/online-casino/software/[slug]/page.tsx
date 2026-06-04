@@ -125,7 +125,7 @@ export default async function SoftwareSlugPage({ params }: Props) {
                       Sign up
                     </a>
                   )}
-                  <Link href={`/betting-sider/${casino.slug.current}/`}
+                  <Link href={`/review/${casino.slug.current}/`}
                     style={{ background: 'var(--bg-raised)', color: 'var(--text-muted)', padding: '8px 14px', borderRadius: '6px', fontSize: '13px', fontWeight: 500, textDecoration: 'none', border: '1px solid var(--border)' }}>
                     Review
                   </Link>

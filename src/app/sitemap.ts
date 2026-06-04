@@ -31,8 +31,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       `*[_type == "bookmaker" && defined(slug.current)] { slug, market, _updatedAt }`
     ).catch(() => []),
 
-    client.fetch<Array<{ slug: { current: string }; _updatedAt?: string }>>(
-      `*[_type == "bonus" && active == true && defined(slug.current) && (market == "global" || !defined(market))] { slug, _updatedAt }`
+    client.fetch<Array<{ slug: { current: string }; market?: string; _updatedAt?: string }>>(
+      `*[_type == "bonus" && active == true && defined(slug.current) && market in ["ca", "au"]] { slug, market, _updatedAt }`
     ).catch(() => []),
 
     client.fetch<Array<{ slug: { current: string }; market?: string; _updatedAt?: string }>>(
@@ -78,26 +78,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // ── Root index pages (no fake lastmod) ──
     { url: `${BASE}/` },
     { url: `${BASE}/review/` },
-    { url: `${BASE}/casino-bonus/` },
     { url: `${BASE}/online-casino/payment/` },
     { url: `${BASE}/online-casino/software/` },
 
     // ── Canada index pages ──
     { url: `${BASE}/ca/` },
     { url: `${BASE}/ca/online-casino/review/` },
+    { url: `${BASE}/ca/online-casino/bonus/` },
     { url: `${BASE}/ca/online-casino/payment/` },
     { url: `${BASE}/ca/online-casino/software/` },
 
     // ── Australia index pages ──
     { url: `${BASE}/au/` },
     { url: `${BASE}/au/online-casino/review/` },
+    { url: `${BASE}/au/online-casino/bonus/` },
     { url: `${BASE}/au/online-casino/payment/` },
     { url: `${BASE}/au/online-casino/software/` },
 
     // ── Dynamic content (real lastmod from Sanity _updatedAt) ──
     ...bookmakerEntries,
     ...bonusser.map((b) => ({
-      url: `${BASE}/casino-bonus/${b.slug.current}/`,
+      url: `${BASE}${marketPrefix(b.market)}/online-casino/bonus/${b.slug.current}/`,
       ...lastMod(b._updatedAt),
     })),
     ...paymentEntries,

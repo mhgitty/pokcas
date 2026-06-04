@@ -254,7 +254,7 @@ export const getBonusser = getBonuses
 
 export async function getBonusBySlug(slug: string) {
   return client.fetch(
-    `*[_type == "bonus" && slug.current == $slug][0] {
+    `*[_type == "bonus" && slug.current == $slug && (market == "global" || !defined(market))][0] {
       _id, title, slug, body, metaTitle, metaDescription,
       minimumOdds, minimumIndbetaling, gennemspilskrav,
       maksGevinst, bonuskode, spinVaerdi,

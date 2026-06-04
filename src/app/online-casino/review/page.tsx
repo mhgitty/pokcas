@@ -1,2 +1,2 @@
-import { redirect } from 'next/navigation'
-export default function OnlineCasinoReviewRedirect() { redirect('/review/') }
+import { permanentRedirect } from 'next/navigation'
+export default function OnlineCasinoReviewRedirect() { permanentRedirect('/review/') }
