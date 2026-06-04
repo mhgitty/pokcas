@@ -17,6 +17,23 @@ export const comparisonTableTemplateType = defineType({
       validation: (r) => r.required(),
     }),
     defineField({
+      name: 'market',
+      title: 'Market',
+      type: 'string',
+      description: 'Which market this template belongs to. Only casinos/bonuses from this market can be added.',
+      options: {
+        list: [
+          { title: '🌍 Global', value: 'global' },
+          { title: '🇨🇦 Canada', value: 'ca' },
+          { title: '🇦🇺 Australia', value: 'au' },
+        ],
+        layout: 'radio',
+        direction: 'horizontal',
+      },
+      initialValue: 'global',
+      validation: (r) => r.required(),
+    }),
+    defineField({
       name: 'tableType',
       title: 'Vis',
       type: 'string',
@@ -41,8 +58,11 @@ export const comparisonTableTemplateType = defineType({
           type: 'reference',
           to: [{ type: 'bonus' }],
           options: {
-            filter: 'active == true',
             disableNew: true,
+            filter: ({ document }: any) => ({
+              filter: 'active == true && market == $market',
+              params: { market: document?.market || 'global' },
+            }),
           },
         },
       ],
@@ -59,6 +79,10 @@ export const comparisonTableTemplateType = defineType({
           to: [{ type: 'bookmaker' }],
           options: {
             disableNew: true,
+            filter: ({ document }: any) => ({
+              filter: 'market == $market',
+              params: { market: document?.market || 'global' },
+            }),
           },
         },
       ],
@@ -69,15 +93,17 @@ export const comparisonTableTemplateType = defineType({
     select: {
       title: 'title',
       tableType: 'tableType',
+      market: 'market',
       bonuses: 'bonuses',
       bookmakers: 'bookmakers',
     },
-    prepare({ title, tableType, bonuses, bookmakers }: any) {
+    prepare({ title, tableType, market, bonuses, bookmakers }: any) {
       const count = tableType === 'bonus'
         ? (bonuses || []).length
         : (bookmakers || []).length
       const label = tableType === 'bonus' ? 'bonusser' : 'bookmakers'
-      return { title, subtitle: `${count} ${label}` }
+      const flag = market === 'ca' ? '🇨🇦' : market === 'au' ? '🇦🇺' : '🌍'
+      return { title, subtitle: `${flag} ${count} ${label}` }
     },
   },
 })

@@ -110,6 +110,14 @@ export default defineConfig({
                           .filter('_type == "casinoGame" && market == $market')
                           .params({ market: 'global' })
                       ),
+                    S.listItem()
+                      .title('📊 Comparison Templates')
+                      .schemaType('comparisonTableTemplate')
+                      .child(
+                        S.documentTypeList('comparisonTableTemplate')
+                          .title('Comparison Templates — Global')
+                          .filter('_type == "comparisonTableTemplate" && (market == "global" || !defined(market))')
+                      ),
                   ])
               ),
 
@@ -189,6 +197,15 @@ export default defineConfig({
                         S.documentTypeList('casinoGame')
                           .title('Casino Games — Canada')
                           .filter('_type == "casinoGame" && market == $market')
+                          .params({ market: 'ca' })
+                      ),
+                    S.listItem()
+                      .title('📊 Comparison Templates')
+                      .schemaType('comparisonTableTemplate')
+                      .child(
+                        S.documentTypeList('comparisonTableTemplate')
+                          .title('Comparison Templates — Canada')
+                          .filter('_type == "comparisonTableTemplate" && market == $market')
                           .params({ market: 'ca' })
                       ),
                     S.listItem()
@@ -282,6 +299,15 @@ export default defineConfig({
                           .params({ market: 'au' })
                       ),
                     S.listItem()
+                      .title('📊 Comparison Templates')
+                      .schemaType('comparisonTableTemplate')
+                      .child(
+                        S.documentTypeList('comparisonTableTemplate')
+                          .title('Comparison Templates — Australia')
+                          .filter('_type == "comparisonTableTemplate" && market == $market')
+                          .params({ market: 'au' })
+                      ),
+                    S.listItem()
                       .title('🔗 Redirects')
                       .schemaType('redirect')
                       .child(
@@ -300,10 +326,6 @@ export default defineConfig({
               .title('📝 Posts')
               .schemaType('post')
               .child(S.documentTypeList('post').title('All Posts')),
-            S.listItem()
-              .title('📊 Comparison Templates')
-              .schemaType('comparisonTableTemplate')
-              .child(S.documentTypeList('comparisonTableTemplate').title('Templates')),
             S.listItem()
               .title('🔗 Redirects')
               .schemaType('redirect')
