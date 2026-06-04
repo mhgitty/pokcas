@@ -1,6 +1,7 @@
 import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
 import { JsonLd } from '@/components/JsonLd'
+import { HreflangLinks } from '@/components/HreflangLinks'
 import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { Icon } from '@/components/Icon'
 import { getAuthorBySlug, getPostsByAuthor, getAuthorPaths } from '@/lib/sanity'
@@ -78,6 +79,7 @@ export default async function AuthorPage({ params }: Props) {
   return (
     <>
       <JsonLd data={jsonLd} />
+      <HreflangLinks docId={(author as any)._id} />
       <Navbar />
 
       {/* ── Hero ──────────────────────────────────────────────────────────── */}

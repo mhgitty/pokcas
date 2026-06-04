@@ -7,6 +7,7 @@ import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { TableOfContents } from '@/components/TableOfContents'
 import { MobileToc } from '@/components/MobileToc'
 import { JsonLd } from '@/components/JsonLd'
+import { HreflangLinks } from '@/components/HreflangLinks'
 import { PaymentMethodsGrid } from '@/components/PaymentMethodsGrid'
 import { getPageByPathCa, getPaymentMethodsCa, getSiteSettings } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
@@ -66,6 +67,7 @@ export default async function CaPaymentMethodsIndexPage() {
   return (
     <>
       <JsonLd data={jsonLd} />
+      <HreflangLinks docId={(page as any)?._id} />
 
       <HeroSection
         title={page.title}

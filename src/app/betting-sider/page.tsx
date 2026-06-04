@@ -6,6 +6,7 @@ import { AuthorBio } from '@/components/AuthorBio'
 import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { TableOfContents } from '@/components/TableOfContents'
 import { JsonLd } from '@/components/JsonLd'
+import { HreflangLinks } from '@/components/HreflangLinks'
 import { MobileToc } from '@/components/MobileToc'
 import { getPageBySlug, getSiteSettings } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
@@ -74,6 +75,7 @@ export default async function BettingSiderPage() {
   return (
     <>
       <JsonLd data={jsonLd} />
+      <HreflangLinks docId={(page as any)?._id} />
       <Navbar />
       <HeroSection
         title={page.title}

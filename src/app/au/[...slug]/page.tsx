@@ -5,7 +5,8 @@ import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { TableOfContents } from '@/components/TableOfContents'
 import { MobileToc } from '@/components/MobileToc'
 import { JsonLd } from '@/components/JsonLd'
-import { getPageByPathAu, getSiteSettings, client } from '@/lib/sanity'
+import { HreflangHead } from '@/components/HreflangHead'
+import { getPageByPathAu, getSiteSettings, getHreflangScript, client } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
@@ -55,6 +56,7 @@ export default async function CaSlugPage({ params }: Props) {
   ])
   if (!page) notFound()
 
+  const hreflangScript = await getHreflangScript((page as any)._id).catch(() => null)
   const canonical = `${BASE}/au/${slug.join('/')}/`
   const hideAuthor = (page as any).hideAuthor ?? false
   const author = hideAuthor ? null : ((page as any).author ?? settings?.defaultAuthor ?? null)
@@ -96,6 +98,7 @@ export default async function CaSlugPage({ params }: Props) {
   return (
     <>
       <JsonLd data={jsonLd} />
+      <HreflangHead script={hreflangScript} />
       <HeroSection
         title={page.title}
         intro={page.intro ?? undefined}

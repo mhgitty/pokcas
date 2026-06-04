@@ -5,6 +5,7 @@ import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { MobileToc } from '@/components/MobileToc'
 import { TableOfContents } from '@/components/TableOfContents'
 import { JsonLd } from '@/components/JsonLd'
+import { HreflangLinks } from '@/components/HreflangLinks'
 import { getLigaStillingerBySlug, getLigaStillingerPaths, getSiteSettings } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
@@ -185,6 +186,7 @@ export default async function LigaStillingerPage({ params }: Props) {
   return (
     <>
       <JsonLd data={jsonLd} />
+      <HreflangLinks docId={(page as any)._id} />
       <Navbar />
 
       {/* Hero */}

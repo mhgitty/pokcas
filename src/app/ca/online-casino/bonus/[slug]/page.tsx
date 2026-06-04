@@ -6,6 +6,7 @@ import { TableOfContents } from '@/components/TableOfContents'
 import { MobileToc } from '@/components/MobileToc'
 import { AuthorBio } from '@/components/AuthorBio'
 import { JsonLd } from '@/components/JsonLd'
+import { HreflangLinks } from '@/components/HreflangLinks'
 import { getBonusBySlugCa, getPageByPathCa, getSiteSettings, getHreflangScript, client } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
@@ -152,6 +153,7 @@ export default async function CaBonusSlugPage({ params }: Props) {
   return (
     <>
       <JsonLd data={jsonLd} />
+      <HreflangLinks docId={(bonus as any)._id} />
       <BonusHero
         bonusListHref="/ca/online-casino/bonus/"
         title={bonus.title}

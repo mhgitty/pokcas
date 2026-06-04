@@ -4,6 +4,7 @@ import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { TableOfContents } from '@/components/TableOfContents'
 import { MobileToc } from '@/components/MobileToc'
 import { JsonLd } from '@/components/JsonLd'
+import { HreflangLinks } from '@/components/HreflangLinks'
 import { getPageBySlugAu, getBookmarkersAu, getSiteSettings } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
 import Link from 'next/link'
@@ -67,6 +68,7 @@ export default async function CaReviewsPage() {
   return (
     <>
       <JsonLd data={jsonLd} />
+      <HreflangLinks docId={(page as any)?._id} />
       <HeroSection
         title={title}
         intro={intro}

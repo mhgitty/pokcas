@@ -10,6 +10,7 @@ import { TableOfContents } from '@/components/TableOfContents'
 import { MobileToc } from '@/components/MobileToc'
 import { AuthorMeta } from '@/components/AuthorMeta'
 import { JsonLd } from '@/components/JsonLd'
+import { HreflangLinks } from '@/components/HreflangLinks'
 import { getPostBySlug, getPageByPath, getPosts, getSiteSettings, client } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
@@ -129,6 +130,7 @@ export default async function SlugPage({ params }: Props) {
     return (
       <>
         <JsonLd data={{ '@context': 'https://schema.org', '@graph': jsonLdGraph }} />
+        <HreflangLinks docId={(post as any)._id} />
         <Navbar />
 
         <div style={{ background: 'var(--bg-hero)', borderBottom: '1px solid var(--border)', padding: '40px 15px 32px' }}>
@@ -206,6 +208,7 @@ export default async function SlugPage({ params }: Props) {
   return (
     <>
       <JsonLd data={jsonLd} />
+      <HreflangLinks docId={(page as any)._id} />
       <Navbar />
       <HeroSection
         title={page.title}

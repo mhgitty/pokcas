@@ -3,6 +3,7 @@ import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { TableOfContents } from '@/components/TableOfContents'
 import { AuthorBio } from '@/components/AuthorBio'
 import { JsonLd } from '@/components/JsonLd'
+import { HreflangLinks } from '@/components/HreflangLinks'
 import { getBonusBySlugAu, getSiteSettings, client } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
@@ -83,6 +84,7 @@ export default async function CaBonusSlugPage({ params }: Props) {
   return (
     <>
       <JsonLd data={jsonLd} />
+      <HreflangLinks docId={(bonus as any)._id} />
       <BonusHero
         bonusListHref="/au/online-casino/bonus/"
         title={bonus.title}

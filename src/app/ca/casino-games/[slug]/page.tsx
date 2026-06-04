@@ -1,5 +1,6 @@
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { JsonLd } from '@/components/JsonLd'
+import { HreflangLinks } from '@/components/HreflangLinks'
 import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { getCasinoGameBySlugCa, client } from '@/lib/sanity'
 import { notFound } from 'next/navigation'
@@ -51,6 +52,7 @@ export default async function CaCasinoGamePage({ params }: Props) {
   return (
     <>
       <JsonLd data={jsonLd} />
+      <HreflangLinks docId={(game as any)._id} />
 
       {/* Breadcrumbs + Hero */}
       <div style={{ background: 'var(--bg-hero)', paddingTop: '32px', paddingBottom: '32px', borderBottom: '1px solid var(--border)' }}>

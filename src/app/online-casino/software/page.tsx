@@ -7,6 +7,7 @@ import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { TableOfContents } from '@/components/TableOfContents'
 import { MobileToc } from '@/components/MobileToc'
 import { JsonLd } from '@/components/JsonLd'
+import { HreflangLinks } from '@/components/HreflangLinks'
 import { SoftwareProvidersGrid } from '@/components/SoftwareProvidersGrid'
 import { getPageByPath, getSoftwareProviders, getSiteSettings } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
@@ -61,6 +62,7 @@ export default async function SoftwareIndexPage() {
   return (
     <>
       <JsonLd data={jsonLd} />
+      <HreflangLinks docId={(page as any)?._id} />
       <Navbar />
 
       <HeroSection

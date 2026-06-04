@@ -1,5 +1,6 @@
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { JsonLd } from '@/components/JsonLd'
+import { HreflangLinks } from '@/components/HreflangLinks'
 import { SoftwareHero } from '@/components/SoftwareHero'
 import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { TableOfContents } from '@/components/TableOfContents'
@@ -55,6 +56,7 @@ export default async function SoftwareSlugPage({ params }: Props) {
   return (
     <>
       <JsonLd data={jsonLd} />
+      <HreflangLinks docId={(provider as any)._id} />
 
       {/* Breadcrumbs */}
       <div style={{ background: 'var(--bg-hero)', paddingTop: '32px', paddingBottom: '0' }}>

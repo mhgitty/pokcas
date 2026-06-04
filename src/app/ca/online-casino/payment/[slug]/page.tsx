@@ -1,5 +1,6 @@
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { JsonLd } from '@/components/JsonLd'
+import { HreflangLinks } from '@/components/HreflangLinks'
 import { PaymentMethodHero } from '@/components/PaymentMethodHero'
 import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { TableOfContents } from '@/components/TableOfContents'
@@ -56,6 +57,7 @@ export default async function CaPaymentSlugPage({ params }: Props) {
   return (
     <>
       <JsonLd data={jsonLd} />
+      <HreflangLinks docId={(method as any)._id} />
 
       {/* Breadcrumbs (above hero card) */}
       <div style={{ background: 'var(--bg-hero)', paddingTop: '32px', paddingBottom: '0' }}>
