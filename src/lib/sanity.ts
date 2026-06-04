@@ -180,6 +180,11 @@ function buildAncestorFilter(segments: string[]): { conditions: string; params: 
     params[key] = seg
     return `${'parent->'.repeat(i)}slug.current == $${key}`
   })
+  // Anchor the chain to the root: the topmost matched segment must itself have
+  // no parent. Without this, a partial path matches a deeper page — e.g.
+  // /ca/bonus/no-deposit/ would match the page that actually lives at
+  // /ca/online-casino/bonus/no-deposit/, since only the immediate parent is checked.
+  conditions.push(`!defined(${'parent->'.repeat(segments.length - 1)}parent)`)
   return { conditions: conditions.join(' && '), params }
 }
 
