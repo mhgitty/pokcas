@@ -64,11 +64,6 @@ export default async function CaReviewSlugPage({ params }: Props) {
 
   const canonical = `${BASE}/ca/online-casino/review/${slug}/`
 
-  const faqs = (bm.body || [])
-    .filter((b: any) => b._type === 'faqBlock')
-    .flatMap((b: any) => b.items || [])
-    .filter((f: any) => f.question && f.answer)
-
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -88,14 +83,6 @@ export default async function CaReviewSlugPage({ params }: Props) {
         author: { '@type': 'Organization', name: 'Pokcas' },
         url: canonical,
       },
-      ...(faqs.length > 0 ? [{
-        '@type': 'FAQPage',
-        mainEntity: faqs.map((f: any) => ({
-          '@type': 'Question',
-          name: f.question,
-          acceptedAnswer: { '@type': 'Answer', text: f.answer },
-        })),
-      }] : []),
     ],
   }
 

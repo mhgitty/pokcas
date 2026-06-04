@@ -8,8 +8,26 @@ export function FaqBlock({ value }: FaqBlockProps) {
   const { items = [] } = value
   const [open, setOpen] = useState<number | null>(0)
 
+  // Emit FAQPage structured data for any FAQ block, on any page that renders it.
+  const faqs = items.filter((i) => i?.question && i?.answer)
+  const faqSchema = faqs.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: { '@type': 'Answer', text: f.answer },
+    })),
+  } : null
+
   return (
     <div style={{ margin: '32px 0' }}>
+      {faqSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      )}
       <div style={{ border: '1px solid var(--border)', borderRadius: '12px', overflow: 'hidden' }}>
         {items.map((item, i) => {
           const isOpen = open === i

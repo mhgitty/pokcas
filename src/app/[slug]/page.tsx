@@ -75,13 +75,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {}
 }
 
-function extractFaqs(body: any[]): Array<{ question: string; answer: string }> {
-  return (body || [])
-    .filter((b: any) => b._type === 'faqBlock')
-    .flatMap((b: any) => b.items || [])
-    .filter((f: any) => f.question && f.answer)
-}
-
 export default async function SlugPage({ params }: Props) {
   const { slug } = await params
 
@@ -95,7 +88,6 @@ export default async function SlugPage({ params }: Props) {
   if (post) {
     const author = post.author ?? settings?.defaultAuthor ?? null
     const canonical = `${BASE}/${slug}/`
-    const faqs = post.body ? extractFaqs(post.body) : []
 
     const jsonLdGraph: object[] = [
       {
@@ -133,17 +125,6 @@ export default async function SlugPage({ params }: Props) {
         ...(post.featuredImage?.url ? { image: post.featuredImage.url } : {}),
       },
     ]
-
-    if (faqs.length > 0) {
-      jsonLdGraph.push({
-        '@type': 'FAQPage',
-        mainEntity: faqs.map((f) => ({
-          '@type': 'Question',
-          name: f.question,
-          acceptedAnswer: { '@type': 'Answer', text: f.answer },
-        })),
-      })
-    }
 
     return (
       <>
