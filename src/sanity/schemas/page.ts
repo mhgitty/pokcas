@@ -18,6 +18,7 @@ const isSlugUniquePerMarket: SlugIsUniqueValidator = async (slug, context) => {
 }
 import { TableBlockInput } from '../components/TableBlockInput'
 import { FaqBlockInput } from '../components/FaqBlockInput'
+import { ProsConsBlockInput } from '../components/ProsConsBlockInput'
 import { comparisonTableFields } from './comparisonTable'
 
 // Minimal rich-text field for intro/lead text — supports inline formatting + links only
@@ -177,6 +178,7 @@ export const bodyField = defineField({
       type: 'object',
       name: 'prosConsBlock',
       title: 'Pros & Cons',
+      components: { input: ProsConsBlockInput },
       fields: [
         { name: 'title', title: 'Heading (optional)', type: 'string' },
         { name: 'pros', title: 'Pros ✅', type: 'array', of: [{ type: 'string' }] },
