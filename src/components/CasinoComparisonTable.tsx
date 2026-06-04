@@ -106,7 +106,7 @@ function LogoStack({ label, items, max = 4 }: { label: string; items: LogoRef[];
 
   return (
     <div style={{ flexShrink: 0 }}>
-      <div style={{ ...LABEL, marginBottom: '6px' }}>{label}</div>
+      <div style={{ ...LABEL, fontSize: '10px', marginBottom: '6px' }}>{label}</div>
       <div
         ref={ref}
         style={{ position: 'relative', display: 'inline-flex' }}
@@ -209,6 +209,8 @@ function CasinoRow({ casino, currency }: { casino: Casino; currency: string }) {
       <div className="casino-cmp-r1" style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '20px',
       }}>
+        {/* logo + rating + name grouped together */}
+        <div className="casino-cmp-brand" style={{ display: 'flex', alignItems: 'center', gap: '14px', flexShrink: 0 }}>
         {/* logo (no box, rounded image) */}
         <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', width: '104px' }}>
           {casino.logo?.url ? (
@@ -229,6 +231,7 @@ function CasinoRow({ casino, currency }: { casino: Casino; currency: string }) {
           }}>
             {casino.name}
           </Link>
+        </div>
         </div>
 
         {hasStats && (
@@ -268,13 +271,13 @@ function CasinoRow({ casino, currency }: { casino: Casino; currency: string }) {
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
               background: 'var(--green)', color: '#fff',
               padding: '13px 24px', borderRadius: '9px',
-              fontSize: '18px', fontWeight: 800, textDecoration: 'none', whiteSpace: 'nowrap',
+              fontSize: '16px', fontWeight: 800, textDecoration: 'none', whiteSpace: 'nowrap',
             }}>
               Get bonus <Icon name="arrow-right" size={18} color="#fff" />
             </a>
           )}
           <Link href={reviewHref} style={{ textAlign: 'center', fontSize: '12px', color: 'var(--text-muted)', textDecoration: 'none' }}>
-            Read review
+            Read casino review
           </Link>
         </div>
       </div>
