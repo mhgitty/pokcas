@@ -1,6 +1,7 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
+import { Icon } from './Icon'
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 interface LogoRef {
@@ -43,7 +44,7 @@ function ScoreBadge({ score }: { score: number }) {
       fontSize: '12.5px', fontWeight: 800, lineHeight: 1,
       padding: '4px 9px', borderRadius: '20px',
     }}>
-      ★ {score.toFixed(1)}
+      <Icon name="star" size={13} color="#fff" /> {score.toFixed(1)}
     </span>
   )
 }
@@ -212,8 +213,9 @@ function CasinoRow({ casino, rank, currency }: { casino: Casino; rank: number; c
           background: 'var(--green)', color: '#fff',
           fontSize: '10.5px', fontWeight: 800, letterSpacing: '0.4px',
           padding: '3px 12px', borderRadius: '20px', textTransform: 'uppercase',
+          display: 'inline-flex', alignItems: 'center', gap: '5px',
         }}>
-          🏆 Top rated
+          <Icon name="cup-star" size={12} color="#fff" /> Top rated
         </div>
       )}
 
@@ -304,14 +306,14 @@ function CasinoRow({ casino, rank, currency }: { casino: Casino; rank: number; c
               target="_blank"
               rel="nofollow noopener noreferrer sponsored"
               style={{
-                display: 'block', textAlign: 'center',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
                 background: 'var(--green)', color: '#fff',
                 padding: '13px 22px', borderRadius: '9px',
                 fontSize: '14.5px', fontWeight: 800,
                 textDecoration: 'none', whiteSpace: 'nowrap',
               }}
             >
-              Get bonus →
+              Get bonus <Icon name="arrow-right" size={16} color="#fff" />
             </a>
           )}
           <Link href={reviewHref} style={{
