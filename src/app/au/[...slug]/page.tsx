@@ -1,5 +1,6 @@
 import { HeroSection } from '@/components/HeroSection'
 import { AuthorBio } from '@/components/AuthorBio'
+import { ComparisonTable } from '@/components/ComparisonTable'
 import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { TableOfContents } from '@/components/TableOfContents'
 import { MobileToc } from '@/components/MobileToc'
@@ -103,6 +104,18 @@ export default async function CaSlugPage({ params }: Props) {
         updatedAt={(page as any).lastUpdated ?? null}
         breadcrumbs={breadcrumbs}
       />
+
+      {/* Comparison table — configured per page in Sanity Studio */}
+      {(page as any).showComparisonTable && (page as any).comparisonTable && (
+        <div className="section" style={{ paddingBottom: page.body ? '0' : undefined }}>
+          {(page as any).comparisonTableTitle && (
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: 700, color: 'var(--text)', marginBottom: '20px' }}>
+              {replaceDateVars((page as any).comparisonTableTitle)}
+            </h2>
+          )}
+          <ComparisonTable data={(page as any).comparisonTable} />
+        </div>
+      )}
 
       {page.body && (
         <div className="article-layout">
