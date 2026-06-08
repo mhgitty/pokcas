@@ -23,8 +23,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       `*[_type == "post" && defined(slug.current) && defined(publishedAt)] | order(publishedAt desc) { slug, publishedAt, lastUpdated }`
     ).catch(() => []),
 
-    client.fetch<Array<{ slug: { current: string }; parentSlug?: string; market?: string; _updatedAt?: string }>>(
-      `*[_type == "page" && defined(slug.current)] { slug, "parentSlug": parent->slug.current, market, _updatedAt }`
+    client.fetch<Array<{ slug: { current: string }; a1?: string; a2?: string; a3?: string; a4?: string; market?: string; _updatedAt?: string }>>(
+      `*[_type == "page" && defined(slug.current)] {
+        slug,
+        "a1": parent->slug.current,
+        "a2": parent->parent->slug.current,
+        "a3": parent->parent->parent->slug.current,
+        "a4": parent->parent->parent->parent->slug.current,
+        market, _updatedAt
+      }`
     ).catch(() => []),
 
     client.fetch<Array<{ slug: { current: string }; market?: string; _updatedAt?: string }>>(
@@ -56,10 +63,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // ── Page URLs by market ───────────────────────────────────────────────────────
   const pageEntries: MetadataRoute.Sitemap = pages.map((p) => {
     const mp = marketPrefix(p.market)
-    const slug = p.parentSlug
-      ? `${p.parentSlug}/${p.slug.current}`
-      : p.slug.current
-    return { url: `${BASE}${mp}/${slug}/`, ...lastMod(p._updatedAt) }
+    const parts = [p.a4, p.a3, p.a2, p.a1, p.slug.current].filter(Boolean)
+    return { url: `${BASE}${mp}/${parts.join('/')}/`, ...lastMod(p._updatedAt) }
   })
 
   // ── Payment method URLs by market ─────────────────────────────────────────────
