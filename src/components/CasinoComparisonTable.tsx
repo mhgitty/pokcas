@@ -209,10 +209,11 @@ function CasinoRow({ casino, currency }: { casino: Casino; currency: string }) {
       <div className="casino-cmp-r1" style={{
         display: 'grid',
         gridTemplateColumns: '300px 132px minmax(0, 1fr) 190px',
+        gridTemplateAreas: '"brand stats bonus cta"',
         alignItems: 'center', gap: '20px',
       }}>
         {/* logo + rating + name grouped together */}
-        <div className="casino-cmp-brand" style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: 0 }}>
+        <div className="casino-cmp-brand" style={{ gridArea: 'brand', display: 'flex', alignItems: 'center', gap: '14px', minWidth: 0 }}>
           {/* logo (no box, rounded image) */}
           <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', width: '104px' }}>
             {casino.logo?.url ? (
@@ -239,6 +240,7 @@ function CasinoRow({ casino, currency }: { casino: Casino; currency: string }) {
 
         {/* min dep / wager — always occupies its column so rows align */}
         <div className="casino-cmp-ministats" style={{
+          gridArea: 'stats',
           display: 'flex', flexDirection: 'column', gap: '6px',
           ...(hasStats ? { borderLeft: '1px solid var(--border-faint)', borderRight: '1px solid var(--border-faint)', padding: '0 16px' } : {}),
         }}>
@@ -257,7 +259,7 @@ function CasinoRow({ casino, currency }: { casino: Casino; currency: string }) {
         </div>
 
         {/* welcome bonus — always occupies its column */}
-        <div className="casino-cmp-bonus" style={{ minWidth: 0 }}>
+        <div className="casino-cmp-bonus" style={{ gridArea: 'bonus', minWidth: 0 }}>
           {casino.indbetalingsbonus && (
             <>
               <div style={{ ...LABEL, marginBottom: '3px' }}>Welcome bonus</div>
@@ -269,6 +271,7 @@ function CasinoRow({ casino, currency }: { casino: Casino; currency: string }) {
         </div>
 
         <div className="casino-cmp-cta" style={{
+          gridArea: 'cta',
           display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: '6px',
         }}>
           {casino.url && (
@@ -287,16 +290,23 @@ function CasinoRow({ casino, currency }: { casino: Casino; currency: string }) {
         </div>
       </div>
 
-      {/* Row 2 — terms · payments · software */}
+      {/* Row 2 — terms · payments · software (fixed payment/software tracks so they align across rows) */}
       <div className="casino-cmp-r2" style={{
-        display: 'flex', alignItems: 'center', gap: '18px',
+        display: 'grid',
+        gridTemplateColumns: 'minmax(0, 1fr) 165px 165px',
+        gridTemplateAreas: '"terms payments software"',
+        alignItems: 'center', columnGap: '18px', rowGap: '14px',
         marginTop: '12px', paddingTop: '11px', borderTop: '1px solid var(--border-faint)',
       }}>
-        <div style={{ flex: '1 1 auto', minWidth: 0, fontSize: '11px', color: 'var(--text-faint)', lineHeight: 1.45 }}>
+        <div className="casino-cmp-terms" style={{ gridArea: 'terms', minWidth: 0, fontSize: '11px', color: 'var(--text-faint)', lineHeight: 1.45 }}>
           {terms}
         </div>
-        <LogoStack label="Payments" items={casino.paymentMethods || []} />
-        <LogoStack label="Software" items={casino.software || []} />
+        <div style={{ gridArea: 'payments', minWidth: 0 }}>
+          <LogoStack label="Payments" items={casino.paymentMethods || []} />
+        </div>
+        <div style={{ gridArea: 'software', minWidth: 0 }}>
+          <LogoStack label="Software" items={casino.software || []} />
+        </div>
       </div>
     </div>
   )

@@ -647,8 +647,11 @@ footer {
     gap: 16px !important;
   }
 
-  /* Casino comparison — stack on mobile */
-  .casino-cmp-r1 { grid-template-columns: 1fr !important; }
+  /* Casino comparison — compact layout on mobile */
+  .casino-cmp-r1 {
+    grid-template-columns: 1fr auto !important;
+    grid-template-areas: "brand stats" "bonus bonus" "cta cta" !important;
+  }
   .casino-cmp-ministats {
     border-left: none !important;
     border-right: none !important;
@@ -657,7 +660,10 @@ footer {
   }
   .casino-cmp-cta { width: 100%; min-width: 0 !important; }
   .casino-cmp-bonus { width: 100%; }
-  .casino-cmp-r2 { flex-wrap: wrap; }
+  .casino-cmp-r2 {
+    grid-template-columns: 1fr 1fr !important;
+    grid-template-areas: "payments software" "terms terms" !important;
+  }
 
   /* Bonus card — stack on mobile */
   .bonus-card-grid {
@@ -706,10 +712,16 @@ footer {
     gap: 14px !important;
   }
 
-  /* Casino comparison — stack on tablet */
-  .casino-cmp-r1 { grid-template-columns: 1fr !important; }
+  /* Casino comparison — compact layout on tablet */
+  .casino-cmp-r1 {
+    grid-template-columns: 1fr auto !important;
+    grid-template-areas: "brand stats" "bonus bonus" "cta cta" !important;
+  }
   .casino-cmp-ministats { border-left: none !important; border-right: none !important; padding-left: 0 !important; padding-right: 0 !important; }
-  .casino-cmp-r2 { flex-wrap: wrap; }
+  .casino-cmp-r2 {
+    grid-template-columns: 1fr 1fr !important;
+    grid-template-areas: "payments software" "terms terms" !important;
+  }
 
   /* Bonus card — narrower image on tablet */
   .bonus-card-grid {
