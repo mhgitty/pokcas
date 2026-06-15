@@ -47,8 +47,44 @@ const linkFields = [
   }),
 ]
 
-// ── Sub-menu item ─────────────────────────────────────────────────────────────
-const subNavItemFields = [...linkFields]
+// ── Shared preview for link items ───────────────────────────────────────────────
+const linkPreview = {
+  select: {
+    title: 'label',
+    pageRef: 'pageRef.slug.current',
+    bookmakerRef: 'bookmakerRef.slug.current',
+    softwareRef: 'softwareRef.slug.current',
+    paymentMethodRef: 'paymentMethodRef.slug.current',
+    postRef: 'postRef.slug.current',
+    url: 'url',
+  },
+  prepare({ title, pageRef, bookmakerRef, softwareRef, paymentMethodRef, postRef, url }: any) {
+    const resolved = pageRef ? `/${pageRef}/`
+      : bookmakerRef ? `/review/${bookmakerRef}/`
+      : softwareRef ? `/software/${softwareRef}/`
+      : paymentMethodRef ? `/online-casino/payment/${paymentMethodRef}/`
+      : postRef ? `/${postRef}/`
+      : url
+    return { title, subtitle: resolved }
+  },
+}
+
+// ── Sub-menu item (2nd level) — can hold its own nested sub-menu (3rd level) ──────
+const subNavItemFields = [
+  ...linkFields,
+  defineField({
+    name: 'children',
+    title: 'Sub-menu (nested)',
+    type: 'array',
+    description: 'Optional — gives this dropdown entry its own nested flyout sub-menu',
+    of: [{
+      type: 'object',
+      name: 'subSubNavItem',
+      fields: linkFields,
+      preview: linkPreview,
+    }],
+  }),
+]
 
 // ── Top-level nav item ─────────────────────────────────────────────────────────
 const navItemFields = [

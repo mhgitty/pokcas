@@ -311,6 +311,17 @@ export const getSiteSettings = cache(async () => {
           "softwareSlug": softwareRef->slug.current,
           "paymentMethodSlug": paymentMethodRef->slug.current,
           "postSlug": postRef->slug.current,
+          children[] {
+            label, url,
+            "pageSlug": pageRef->slug.current,
+            "pageParentSlug": pageRef->parent->slug.current,
+            "pageParent2Slug": pageRef->parent->parent->slug.current,
+            "pageParent3Slug": pageRef->parent->parent->parent->slug.current,
+            "bookmakerSlug": bookmakerRef->slug.current,
+            "softwareSlug": softwareRef->slug.current,
+            "paymentMethodSlug": paymentMethodRef->slug.current,
+            "postSlug": postRef->slug.current,
+          }
         }
       },
       footerTagline,
@@ -563,6 +574,18 @@ export async function getMarketSettings(market: 'ca' | 'au') {
           "softwareSlug": softwareRef->slug.current,
           "paymentMethodSlug": paymentMethodRef->slug.current,
           "postSlug": postRef->slug.current,
+          children[] {
+            label, url,
+            "pageSlug": pageRef->slug.current,
+            "pageParentSlug": pageRef->parent->slug.current,
+            "pageParent2Slug": pageRef->parent->parent->slug.current,
+            "pageParent3Slug": pageRef->parent->parent->parent->slug.current,
+            "pageMarket": pageRef->market,
+            "bookmakerSlug": bookmakerRef->slug.current,
+            "softwareSlug": softwareRef->slug.current,
+            "paymentMethodSlug": paymentMethodRef->slug.current,
+            "postSlug": postRef->slug.current,
+          }
         }
       },
       footerColumns[] {

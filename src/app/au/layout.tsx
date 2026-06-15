@@ -31,7 +31,11 @@ export default async function AuLayout({ children }: { children: React.ReactNode
     href: resolveUrl(item),
     isHighlighted: item.isHighlighted ?? false,
     icon: item.icon ?? undefined,
-    children: (item.children || []).map((c: any) => ({ label: c.label, href: resolveUrl(c) })),
+    children: (item.children || []).map((c: any) => ({
+      label: c.label,
+      href: resolveUrl(c),
+      children: (c.children || []).map((g: any) => ({ label: g.label, href: resolveUrl(g) })),
+    })),
   }))
 
   // Footer — market overrides global

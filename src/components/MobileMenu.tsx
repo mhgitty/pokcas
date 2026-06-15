@@ -6,16 +6,17 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { MarketSelector } from './MarketSelector'
 
-interface NavChild { label: string; href: string }
+interface NavChild { label: string; href: string; children?: { label: string; href: string }[] }
 interface NavItem  { label: string; href: string; isHighlighted?: boolean; children?: NavChild[] }
 
 export function MobileMenu({ items }: { items: NavItem[] }) {
   const [open, setOpen] = useState(false)
   const [expanded, setExpanded] = useState<string | null>(null)
+  const [subExpanded, setSubExpanded] = useState<string | null>(null)
   const pathname = usePathname()
 
   // Close menu on route change
-  useEffect(() => { setOpen(false); setExpanded(null) }, [pathname])
+  useEffect(() => { setOpen(false); setExpanded(null); setSubExpanded(null) }, [pathname])
 
   // Lock body scroll when open
   useEffect(() => {
@@ -82,16 +83,54 @@ export function MobileMenu({ items }: { items: NavItem[] }) {
 
               {hasChildren && isExpanded && (
                 <div className="mobile-menu-children">
-                  {item.children!.map((child) => (
-                    <Link
-                      key={child.href + child.label}
-                      href={child.href}
-                      className="mobile-menu-sublink"
-                      onClick={() => setOpen(false)}
-                    >
-                      {child.label}
-                    </Link>
-                  ))}
+                  {item.children!.map((child) => {
+                    const childHasKids = !!(child.children && child.children.length > 0)
+                    const childKey = item.href + item.label + '::' + child.href + child.label
+                    const isSubExpanded = subExpanded === childKey
+                    if (!childHasKids) {
+                      return (
+                        <Link
+                          key={childKey}
+                          href={child.href}
+                          className="mobile-menu-sublink"
+                          onClick={() => setOpen(false)}
+                        >
+                          {child.label}
+                        </Link>
+                      )
+                    }
+                    return (
+                      <div key={childKey}>
+                        <div className="mobile-menu-link-row">
+                          <Link href={child.href} className="mobile-menu-sublink" onClick={() => setOpen(false)}>
+                            {child.label}
+                          </Link>
+                          <button
+                            className="mobile-menu-chevron-btn"
+                            onClick={() => setSubExpanded(isSubExpanded ? null : childKey)}
+                            aria-expanded={isSubExpanded}
+                            aria-label={isSubExpanded ? 'Close submenu' : 'Open submenu'}
+                          >
+                            <Icon name="alt-arrow-down" size={15} className={`mobile-menu-chevron${isSubExpanded ? ' open' : ''}`} />
+                          </button>
+                        </div>
+                        {isSubExpanded && (
+                          <div className="mobile-menu-children mobile-menu-children-nested">
+                            {child.children!.map((g) => (
+                              <Link
+                                key={g.href + g.label}
+                                href={g.href}
+                                className="mobile-menu-sublink"
+                                onClick={() => setOpen(false)}
+                              >
+                                {g.label}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })}
                 </div>
               )}
             </div>

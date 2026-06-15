@@ -144,8 +144,8 @@ h1, h2, h3, h4, h5, h6 {
   transition: opacity 0.15s, transform 0.15s, visibility 0.15s;
   box-shadow: 0 8px 24px rgba(0,0,0,0.3);
 }
-.nav-item-dropdown:hover .nav-dropdown,
-.nav-item-dropdown:focus-within .nav-dropdown {
+.nav-item-dropdown:hover > .nav-dropdown,
+.nav-item-dropdown:focus-within > .nav-dropdown {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
@@ -161,6 +161,25 @@ h1, h2, h3, h4, h5, h6 {
   transition: background 0.1s, color 0.1s;
 }
 .nav-dropdown-item:hover { background: var(--bg-raised); color: var(--text); }
+
+/* Nested (3rd-level) flyout submenu */
+.nav-dropdown-sub { position: relative; }
+.nav-dropdown-item-has-children {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.nav-dropdown-flyout {
+  top: -7px;
+  left: calc(100% + 5px);
+}
+.nav-dropdown-sub:hover > .nav-dropdown-flyout,
+.nav-dropdown-sub:focus-within > .nav-dropdown-flyout {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
 
 /* ─── Hero ───────────────────────────────────────────────────────────────── */
 .hero-section {
@@ -435,6 +454,11 @@ footer {
 
 .mobile-menu-children {
   padding-bottom: 6px;
+}
+.mobile-menu-children-nested {
+  padding-left: 14px;
+  margin-left: 6px;
+  border-left: 1px solid var(--border);
 }
 
 /* ─── Bookmaker hero responsive grid ─────────────────────────────────────── */

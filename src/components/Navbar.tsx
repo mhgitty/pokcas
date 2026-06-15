@@ -24,7 +24,8 @@ function resolveUrl(item: {
   return item.url || '/'
 }
 
-interface ResolvedNavItem { label: string; href: string; isHighlighted: boolean; icon?: string; children: { label: string; href: string }[] }
+interface ResolvedNavChild { label: string; href: string; children?: { label: string; href: string }[] }
+interface ResolvedNavItem { label: string; href: string; isHighlighted: boolean; icon?: string; children: ResolvedNavChild[] }
 
 export async function Navbar({ navItems, logoHref = '/' }: { navItems?: ResolvedNavItem[]; logoHref?: string } = {}) {
   let nav = navItems
@@ -39,6 +40,7 @@ export async function Navbar({ navItems, logoHref = '/' }: { navItems?: Resolved
       children: (item.children || []).map((c: any) => ({
         label: c.label,
         href: resolveUrl(c),
+        children: (c.children || []).map((g: any) => ({ label: g.label, href: resolveUrl(g) })),
       })),
     }))
   }
@@ -84,11 +86,30 @@ export async function Navbar({ navItems, logoHref = '/' }: { navItems?: Resolved
                   <Icon name="alt-arrow-down" size={14} style={{ marginLeft: '2px', flexShrink: 0, opacity: 0.5 }} />
                 </Link>
                 <div className="nav-dropdown">
-                  {item.children.map((child: { href: string; label: string }) => (
-                    <Link key={child.href + child.label} href={child.href} className="nav-dropdown-item">
-                      {child.label}
-                    </Link>
-                  ))}
+                  {item.children.map((child) => {
+                    if (child.children && child.children.length > 0) {
+                      return (
+                        <div key={child.href + child.label} className="nav-dropdown-sub">
+                          <Link href={child.href} className="nav-dropdown-item nav-dropdown-item-has-children">
+                            {child.label}
+                            <Icon name="alt-arrow-right" size={13} style={{ flexShrink: 0, opacity: 0.5 }} />
+                          </Link>
+                          <div className="nav-dropdown nav-dropdown-flyout">
+                            {child.children.map((g) => (
+                              <Link key={g.href + g.label} href={g.href} className="nav-dropdown-item">
+                                {g.label}
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      )
+                    }
+                    return (
+                      <Link key={child.href + child.label} href={child.href} className="nav-dropdown-item">
+                        {child.label}
+                      </Link>
+                    )
+                  })}
                 </div>
               </div>
             )
