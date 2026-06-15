@@ -178,7 +178,12 @@ function LogoStack({ label, items, max = 4 }: { label: string; items: LogoRef[];
 
 // ─── One casino row ─────────────────────────────────────────────────────────────
 function CasinoRow({ casino, currency }: { casino: Casino; currency: string }) {
-  const reviewHref = `/review/${casino.slug.current}/`
+  // Review URL follows the casino's market: CA/AU live under /{market}/online-casino/review/,
+  // global casinos under /review/.
+  const mp = casino.market === 'ca' ? '/ca' : casino.market === 'au' ? '/au' : ''
+  const reviewHref = mp
+    ? `${mp}/online-casino/review/${casino.slug.current}/`
+    : `/review/${casino.slug.current}/`
   const hasStats = casino.minIndbetaling != null || !!casino.gennemspilskrav
   const terms = casino.terms || DEFAULT_TERMS
 
