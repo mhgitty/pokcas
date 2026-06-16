@@ -7,6 +7,7 @@ import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { TableOfContents } from '@/components/TableOfContents'
 import { MobileToc } from '@/components/MobileToc'
 import { JsonLd } from '@/components/JsonLd'
+import { ComparisonTable } from '@/components/ComparisonTable'
 import { HreflangLinks } from '@/components/HreflangLinks'
 import { PaymentMethodsGrid } from '@/components/PaymentMethodsGrid'
 import { getPageByPathCa, getPaymentMethodsCa, getSiteSettings } from '@/lib/sanity'
@@ -85,6 +86,18 @@ export default async function CaPaymentMethodsIndexPage() {
             methods={methods as any[]}
             hrefPrefix="/ca/online-casino/payment"
           />
+        </div>
+      )}
+
+      {/* Comparison table — configured on the CMS page in Sanity Studio */}
+      {page.showComparisonTable && page.comparisonTable && (
+        <div className="section" style={{ paddingBottom: page.body ? '0' : undefined }}>
+          {page.comparisonTableTitle && (
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: 700, color: 'var(--text)', marginBottom: '20px' }}>
+              {replaceDateVars(page.comparisonTableTitle)}
+            </h2>
+          )}
+          <ComparisonTable data={page.comparisonTable} />
         </div>
       )}
 
