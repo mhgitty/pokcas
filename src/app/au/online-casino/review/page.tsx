@@ -5,7 +5,7 @@ import { TableOfContents } from '@/components/TableOfContents'
 import { MobileToc } from '@/components/MobileToc'
 import { JsonLd } from '@/components/JsonLd'
 import { HreflangLinks } from '@/components/HreflangLinks'
-import { getPageBySlugAu, getBookmarkersAu, getSiteSettings } from '@/lib/sanity'
+import { getPageByPathAu, getPageBySlugAu, getBookmarkersAu, getSiteSettings } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -17,7 +17,8 @@ const BASE = 'https://pokcas.com'
 const CANONICAL = `${BASE}/au/online-casino/review/`
 
 export async function generateMetadata(): Promise<Metadata> {
-  const page = await getPageBySlugAu('au-reviews').catch(() => null)
+  const page = (await getPageByPathAu(['online-casino', 'review']).catch(() => null))
+    || (await getPageBySlugAu('au-reviews').catch(() => null))
   const title = replaceDateVars(page?.metaTitle || page?.title || 'Best Online Casinos Australia')
   const description = replaceDateVars(page?.metaDescription || page?.intro || 'Compare the best online casinos in Australia. Expert reviews, bonus info and ratings.')
   return { title, description, alternates: { canonical: CANONICAL } }
@@ -33,11 +34,13 @@ function ScoreBadge({ score }: { score: number }) {
 }
 
 export default async function CaReviewsPage() {
-  const [page, bookmakers, settings] = await Promise.all([
+  const [pathPage, legacyPage, bookmakers, settings] = await Promise.all([
+    getPageByPathAu(['online-casino', 'review']).catch(() => null),
     getPageBySlugAu('au-reviews').catch(() => null),
     getBookmarkersAu().catch(() => []),
     getSiteSettings().catch(() => null),
   ])
+  const page = pathPage || legacyPage
   const author = (page as any)?.author ?? settings?.defaultAuthor ?? null
   const title = page?.title || 'Best Online Casinos Australia'
   const intro = page?.intro || 'We have reviewed and ranked the best online casinos for Australian players. Compare welcome bonuses, wagering requirements and expert ratings.'
