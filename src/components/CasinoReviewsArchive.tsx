@@ -131,19 +131,31 @@ export function CasinoReviewsArchive({ casinos, hrefPrefix = '/review', title = 
                   )}
 
                   {c.indbetalingsbonus && (
-                    <div style={{ fontSize: '12.5px', color: 'var(--green-dark)', fontWeight: 600, marginBottom: '12px' }}>
+                    <div style={{ fontSize: '16px', color: 'var(--green-dark)', fontWeight: 800, marginBottom: '12px', lineHeight: 1.3 }}>
                       {c.indbetalingsbonus}
                     </div>
                   )}
 
-                  <Link href={href} style={{
-                    marginTop: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px',
-                    background: 'var(--bg-raised)', border: '1px solid var(--border)',
-                    color: 'var(--text)', padding: '9px 14px', borderRadius: '8px',
-                    fontSize: '13.5px', fontWeight: 600, textDecoration: 'none',
-                  }}>
-                    Read review <Icon name="arrow-right" size={14} />
-                  </Link>
+                  <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {c.url && (
+                      <a href={c.url} target="_blank" rel="nofollow noopener noreferrer sponsored" style={{
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px',
+                        background: 'var(--green)', color: '#fff',
+                        padding: '10px 14px', borderRadius: '8px',
+                        fontSize: '14px', fontWeight: 800, textDecoration: 'none',
+                      }}>
+                        Visit casino <Icon name="arrow-right" size={15} color="#fff" />
+                      </a>
+                    )}
+                    <Link href={href} style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px',
+                      background: 'var(--bg-raised)', border: '1px solid var(--border)',
+                      color: 'var(--text)', padding: '9px 14px', borderRadius: '8px',
+                      fontSize: '13.5px', fontWeight: 600, textDecoration: 'none',
+                    }}>
+                      Read review
+                    </Link>
+                  </div>
                 </div>
               </div>
             )
