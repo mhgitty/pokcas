@@ -99,12 +99,55 @@ function parseNumbered(text: string): FaqItem[] | null {
   return items.length > 1 ? items : null
 }
 
+function stripMd(s: string): string {
+  return s
+    .replace(/\*\*(.+?)\*\*/g, '$1')
+    .replace(/\*(.+?)\*/g, '$1')
+    .replace(/^#{1,6}\s*/, '')
+    .replace(/^[-*•]\s+/, '')
+    .trim()
+}
+
+// Plain alternating "question line / answer line" format with no markup —
+// the way ChatGPT lays out FAQs when you just copy the text.
+function parseQA(text: string): FaqItem[] | null {
+  const lines = text.split('\n').map((l) => stripMd(l.trim())).filter(Boolean)
+  if (lines.length < 2) return null
+
+  const items: FaqItem[] = []
+  let q: string | null = null
+  let a: string[] = []
+  const flush = () => {
+    if (q) { items.push({ _type: 'faqItem', _key: key(), question: q, answer: a.join('\n\n') }); q = null; a = [] }
+  }
+  for (const line of lines) {
+    const cleaned = line.replace(/^(Q|Question)\s*[:.)-]\s*/i, '')
+    if (cleaned.endsWith('?')) {
+      flush()
+      q = cleaned
+    } else if (q) {
+      a.push(line.replace(/^(A|Answer)\s*[:.)-]\s*/i, ''))
+    }
+  }
+  flush()
+
+  // Fallback: questions without a trailing "?" — treat as strict alternating pairs
+  if (items.length === 0) {
+    for (let i = 0; i + 1 < lines.length; i += 2) {
+      items.push({ _type: 'faqItem', _key: key(), question: lines[i], answer: lines[i + 1] })
+    }
+  }
+  return items.length ? items : null
+}
+
 function parseInput(input: string): FaqItem[] | null {
   const trimmed = input.trim()
   if (trimmed.toLowerCase().includes('<h')) return parseHtml(trimmed)
   const md = parseMarkdown(trimmed)
   if (md) return md
-  return parseNumbered(trimmed)
+  const numbered = parseNumbered(trimmed)
+  if (numbered) return numbered
+  return parseQA(trimmed)
 }
 
 // ── Component ──────────────────────────────────────────────────────────────────
@@ -120,7 +163,7 @@ export function FaqBlockInput(props: ObjectInputProps) {
     if (!input.trim()) return
     const result = parseInput(input)
     if (!result) {
-      setError("Couldn't recognise the format. Paste the text directly from ChatGPT — it works with ### headings, **Bold** questions, or numbered lists.")
+      setError("Couldn't recognise the format. Paste the text directly from ChatGPT — it works with plain question/answer lines, ### headings, **Bold** questions, or numbered lists.")
       setPreview(null)
       return
     }
@@ -158,7 +201,7 @@ export function FaqBlockInput(props: ObjectInputProps) {
           <Box padding={4}>
             <Stack space={4}>
               <Text size={1} muted>
-                Paste ChatGPT output directly — works with ### headings, **bold** questions, or numbered lists. Each heading becomes a question; the text below it becomes the answer.
+                Paste ChatGPT output directly — works with plain question/answer lines, ### headings, **bold** questions, or numbered lists. Each question becomes an item; the line(s) below it become the answer.
               </Text>
               <TextArea
                 rows={12}
