@@ -1,12 +1,13 @@
 import { HeroSection } from '@/components/HeroSection'
 import { AuthorBio } from '@/components/AuthorBio'
 import { ComparisonTable } from '@/components/ComparisonTable'
+import { CasinoReviewsArchive } from '@/components/CasinoReviewsArchive'
 import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { TableOfContents } from '@/components/TableOfContents'
 import { MobileToc } from '@/components/MobileToc'
 import { JsonLd } from '@/components/JsonLd'
 import { HreflangLinks } from '@/components/HreflangLinks'
-import { getPageByPathCa, getPageBySlugCa, getSiteSettings } from '@/lib/sanity'
+import { getPageByPathCa, getPageBySlugCa, getBookmakersCa, getSiteSettings } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
 import type { Metadata } from 'next'
 
@@ -24,9 +25,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function CaReviewsPage() {
-  const [pathPage, legacyPage, settings] = await Promise.all([
+  const [pathPage, legacyPage, bookmakers, settings] = await Promise.all([
     getPageByPathCa(['online-casino', 'review']).catch(() => null),
     getPageBySlugCa('ca-reviews').catch(() => null),
+    getBookmakersCa().catch(() => []),
     getSiteSettings().catch(() => null),
   ])
   const page = pathPage || legacyPage
@@ -81,6 +83,8 @@ export default async function CaReviewsPage() {
           <ComparisonTable data={(page as any).comparisonTable} />
         </div>
       )}
+
+      <CasinoReviewsArchive casinos={bookmakers as any[]} hrefPrefix="/ca/online-casino/review" />
 
       {page?.body && (
         <div className="article-layout">
