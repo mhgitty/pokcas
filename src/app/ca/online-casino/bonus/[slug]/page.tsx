@@ -6,6 +6,7 @@ import { TableOfContents } from '@/components/TableOfContents'
 import { MobileToc } from '@/components/MobileToc'
 import { AuthorBio } from '@/components/AuthorBio'
 import { JsonLd } from '@/components/JsonLd'
+import { ComparisonTable } from '@/components/ComparisonTable'
 import { HreflangLinks } from '@/components/HreflangLinks'
 import { getBonusBySlugCa, getPageByPathCa, getSiteSettings, getHreflangScript, client } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
@@ -110,6 +111,16 @@ export default async function CaBonusSlugPage({ params }: Props) {
           updatedAt={(page as any).lastUpdated ?? null}
           breadcrumbs={breadcrumbs}
         />
+        {(page as any).showComparisonTable && (page as any).comparisonTable && (
+          <div className="section" style={{ paddingBottom: page.body ? '0' : undefined }}>
+            {(page as any).comparisonTableTitle && (
+              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: 700, color: 'var(--text)', marginBottom: '20px' }}>
+                {replaceDateVars((page as any).comparisonTableTitle)}
+              </h2>
+            )}
+            <ComparisonTable data={(page as any).comparisonTable} />
+          </div>
+        )}
         {page.body && (
           <div className="article-layout">
             <article className="article-content">

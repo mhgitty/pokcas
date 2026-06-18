@@ -1,8 +1,14 @@
+import { HeroSection } from '@/components/HeroSection'
+import { HreflangHead } from '@/components/HreflangHead'
+import { PortableTextRenderer } from '@/components/PortableTextRenderer'
+import { TableOfContents } from '@/components/TableOfContents'
+import { MobileToc } from '@/components/MobileToc'
+import { AuthorBio } from '@/components/AuthorBio'
 import { JsonLd } from '@/components/JsonLd'
-import { Breadcrumbs } from '@/components/Breadcrumbs'
-import { getBonusesAu } from '@/lib/sanity'
-import Link from 'next/link'
-import Image from 'next/image'
+import { ComparisonTable } from '@/components/ComparisonTable'
+import { getPageByPathAu, getSiteSettings, getHreflangScript } from '@/lib/sanity'
+import { replaceDateVars } from '@/lib/dateVars'
+import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
 export const revalidate = 3600
@@ -10,116 +16,100 @@ export const revalidate = 3600
 const BASE = 'https://pokcas.com'
 const CANONICAL = `${BASE}/au/online-casino/bonus/`
 
-export const metadata: Metadata = {
-  title: `Best Casino Bonuses Australia ${new Date().getFullYear()}`,
-  description: 'Find the best casino bonuses for Australian players. Welcome bonuses, free spins and exclusive offers.',
-  alternates: { canonical: CANONICAL },
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getPageByPathAu(['online-casino', 'bonus']).catch(() => null)
+  if (!page) return {}
+  const title = replaceDateVars(page.metaTitle || page.title)
+  const description = replaceDateVars(page.metaDescription || page.intro || '')
+  const ogImg = (page as any).ogImage
+  return {
+    title,
+    description,
+    alternates: { canonical: CANONICAL },
+    openGraph: {
+      title, description, url: CANONICAL, type: 'article',
+      images: ogImg?.url ? [{ url: ogImg.url }] : [{ url: `${BASE}/og.png` }],
+    },
+  }
 }
 
-export default async function CaBonusesPage() {
-  const bonuses = await getBonusesAu(40).catch(() => [])
+export default async function AuBonusPage() {
+  const [page, settings] = await Promise.all([
+    getPageByPathAu(['online-casino', 'bonus']).catch(() => null),
+    getSiteSettings().catch(() => null),
+  ])
+  if (!page) notFound()
+
+  const hreflangScript = await getHreflangScript((page as any)._id).catch(() => null)
+  const hideAuthor = (page as any).hideAuthor ?? false
+  const author = hideAuthor ? null : ((page as any).author ?? settings?.defaultAuthor ?? null)
+  const factChecker = hideAuthor ? null : ((page as any).factChecker ?? null)
+
+  const breadcrumbs = [
+    { label: 'Home',          href: '/au/' },
+    { label: 'Online casino', href: '/au/online-casino/' },
+    { label: 'Bonus' },
+  ]
 
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home',          item: `${BASE}/au/` },
-      { '@type': 'ListItem', position: 2, name: 'Online casino', item: `${BASE}/au/online-casino/` },
-      { '@type': 'ListItem', position: 3, name: 'Bonus',         item: CANONICAL },
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: breadcrumbs.map((c, i) => ({
+          '@type': 'ListItem', position: i + 1, name: c.label,
+          ...(c.href ? { item: `${BASE}${c.href}` } : {}),
+        })),
+      },
+      {
+        '@type': 'WebPage',
+        '@id': `${CANONICAL}#webpage`,
+        url: CANONICAL,
+        name: replaceDateVars(page.title),
+        inLanguage: 'en-AU',
+        publisher: { '@type': 'Organization', name: 'Pokcas', url: BASE },
+      },
     ],
   }
 
   return (
     <>
+      <HreflangHead script={hreflangScript} />
       <JsonLd data={jsonLd} />
-
-      <div style={{ background: 'var(--bg-hero)', borderBottom: '1px solid var(--border)', padding: '40px 15px 32px' }}>
-        <div style={{ maxWidth: '1250px', margin: '0 auto' }}>
-          <Breadcrumbs crumbs={[{ label: 'Home', href: '/au/' }, { label: 'Online casino', href: '/au/online-casino/' }, { label: 'Bonus' }]} />
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(24px, 3.5vw, 40px)', fontWeight: 800, color: 'var(--text)', marginBottom: '8px', letterSpacing: '-0.03em' }}>
-            Best Casino Bonuses in Australia
-          </h1>
-          <p style={{ fontSize: '15px', color: 'var(--text-muted)' }}>The best current bonuses from top online casinos available to Australian players.</p>
+      <HeroSection
+        title={page.title}
+        intro={(page as any).intro ?? undefined}
+        author={author}
+        factChecker={factChecker}
+        updatedAt={(page as any).lastUpdated ?? null}
+        breadcrumbs={breadcrumbs}
+      />
+      {(page as any).showComparisonTable && (page as any).comparisonTable && (
+        <div className="section" style={{ paddingBottom: page.body ? '0' : undefined }}>
+          {(page as any).comparisonTableTitle && (
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: 700, color: 'var(--text)', marginBottom: '20px' }}>
+              {replaceDateVars((page as any).comparisonTableTitle)}
+            </h2>
+          )}
+          <ComparisonTable data={(page as any).comparisonTable} />
         </div>
-      </div>
-
-      <div className="section">
-        {(bonuses as any[]).length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '64px', color: 'var(--text-faint)' }}>
-            <p>No bonuses yet — add them in Sanity Studio under 🇨🇦 Australia.</p>
-          </div>
-        ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {(bonuses as any[]).map((bonus: any) => (
-              <div key={bonus._id} style={{
-                background: 'var(--bg-card)',
-                border: '1px solid var(--border)',
-                borderRadius: '12px',
-                overflow: 'hidden',
-              }}>
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: '100px 1fr auto',
-                  gap: '16px',
-                  padding: '20px 24px',
-                  alignItems: 'center',
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    {bonus.casinoLogo?.url ? (
-                      <div style={{ background: '#fff', borderRadius: '8px', padding: '6px 10px', border: '1px solid var(--border-faint)' }}>
-                        <Image src={bonus.casinoLogo.url} alt={bonus.casinoLogo.alt || bonus.casinoNavn || ''} width={80} height={40}
-                          style={{ objectFit: 'contain', maxHeight: '40px', width: 'auto', display: 'block' }} />
-                      </div>
-                    ) : (
-                      <div style={{ width: '80px', height: '40px', background: 'var(--bg-raised)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', color: 'var(--text-faint)' }}>
-                        {bonus.casinoNavn || bonus.bookmaker?.name || ''}
-                      </div>
-                    )}
-                  </div>
-
-                  <div style={{ minWidth: 0 }}>
-                    <div style={{ fontFamily: 'var(--font-display)', fontSize: '15px', fontWeight: 700, color: 'var(--text)', marginBottom: '4px' }}>
-                      {bonus.oddsBonusTitel || bonus.title}
-                    </div>
-                    {bonus.casinoNavn && (
-                      <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '4px' }}>{bonus.casinoNavn}</div>
-                    )}
-                    <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                      {bonus.minimumIndbetaling != null && (
-                        <div style={{ fontSize: '12px', color: 'var(--text-faint)' }}>
-                          Min. deposit: <strong style={{ color: 'var(--text)' }}>AUD {bonus.minimumIndbetaling}</strong>
-                        </div>
-                      )}
-                      {bonus.gennemspilskrav && (
-                        <div style={{ fontSize: '12px', color: 'var(--text-faint)' }}>
-                          Wager: <strong style={{ color: 'var(--text)' }}>{bonus.gennemspilskrav}</strong>
-                        </div>
-                      )}
-                    </div>
-                    {bonus.terms && (
-                      <div style={{ fontSize: '10px', color: 'var(--text-faint)', marginTop: '6px', lineHeight: 1.4 }}>{bonus.terms}</div>
-                    )}
-                  </div>
-
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-end', flexShrink: 0 }}>
-                    {bonus.offerUrl && (
-                      <a href={bonus.offerUrl} target="_blank" rel="nofollow noopener noreferrer sponsored"
-                        style={{ display: 'inline-block', background: 'var(--green)', color: '#fff', padding: '10px 18px', borderRadius: '8px', fontSize: '14px', fontWeight: 600, textDecoration: 'none', whiteSpace: 'nowrap' }}>
-                        Get bonus →
-                      </a>
-                    )}
-                    <Link href={`/au/online-casino/bonus/${bonus.slug.current}`}
-                      style={{ fontSize: '12px', color: 'var(--text-muted)', textDecoration: 'none', whiteSpace: 'nowrap' }}>
-                      Read more
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
+      )}
+      {page.body && (
+        <div className="article-layout">
+          <article className="article-content">
+            <MobileToc body={page.body} />
+            <PortableTextRenderer value={page.body} />
+          </article>
+          <aside className="toc-sidebar">
+            <TableOfContents body={page.body} />
+          </aside>
+        </div>
+      )}
+      {author && (
+        <div className="section" style={{ paddingTop: '0' }}>
+          <AuthorBio author={author} compact />
+        </div>
+      )}
     </>
   )
 }

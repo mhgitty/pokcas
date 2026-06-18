@@ -1,10 +1,14 @@
 import { BonusHero } from '@/components/BonusHero'
+import { HeroSection } from '@/components/HeroSection'
+import { HreflangHead } from '@/components/HreflangHead'
 import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { TableOfContents } from '@/components/TableOfContents'
+import { MobileToc } from '@/components/MobileToc'
 import { AuthorBio } from '@/components/AuthorBio'
 import { JsonLd } from '@/components/JsonLd'
+import { ComparisonTable } from '@/components/ComparisonTable'
 import { HreflangLinks } from '@/components/HreflangLinks'
-import { getBonusBySlugAu, getSiteSettings, client } from '@/lib/sanity'
+import { getBonusBySlugAu, getPageByPathAu, getSiteSettings, getHreflangScript, client } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
@@ -24,60 +28,136 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
+  const canonical = `${BASE}/au/online-casino/bonus/${slug}/`
+
+  // CMS page takes priority
+  const page = await getPageByPathAu(['online-casino', 'bonus', slug]).catch(() => null)
+  if (page) {
+    const title = replaceDateVars(page.metaTitle || page.title)
+    const description = replaceDateVars(page.metaDescription || page.intro || '')
+    const ogImg = (page as any).ogImage
+    return {
+      title, description,
+      alternates: { canonical },
+      openGraph: { title, description, url: canonical, type: 'article', images: ogImg?.url ? [{ url: ogImg.url }] : [{ url: `${BASE}/og.png` }] },
+    }
+  }
+
+  // Fall back to bonus document
   const bonus = await getBonusBySlugAu(slug).catch(() => null)
   if (!bonus) return {}
   const title = replaceDateVars(bonus.metaTitle || bonus.title)
   const description = replaceDateVars(bonus.metaDescription || '')
-  const canonical = `${BASE}/au/online-casino/bonus/${slug}/`
-  const img = bonus.ogImage?.url ? bonus.ogImage
-    : bonus.kampagneBillede?.url ? bonus.kampagneBillede
-    : bonus.casinoLogo?.url ? bonus.casinoLogo
-    : null
+  const img = bonus.ogImage?.url ? bonus.ogImage : bonus.kampagneBillede?.url ? bonus.kampagneBillede : bonus.casinoLogo?.url ? bonus.casinoLogo : null
   return {
-    title,
-    description,
+    title, description,
     alternates: { canonical },
     openGraph: {
       title, description, url: canonical, type: 'article',
-      ...(img ? { images: [{ url: img.url, alt: img.alt || title }] } : {}),
+      ...(img ? { images: [{ url: img.url, alt: img.alt || title }] } : { images: [{ url: `${BASE}/og.png` }] }),
     },
-    twitter: {
-      title, description,
-      ...(img ? { images: [img.url] } : {}),
-    },
+    twitter: { title, description, ...(img ? { images: [img.url] } : {}) },
   }
 }
 
-export default async function CaBonusSlugPage({ params }: Props) {
+export default async function AuBonusSlugPage({ params }: Props) {
   const { slug } = await params
-  const [bonus, settings] = await Promise.all([
+  const canonical = `${BASE}/au/online-casino/bonus/${slug}/`
+
+  const [page, bonus, settings] = await Promise.all([
+    getPageByPathAu(['online-casino', 'bonus', slug]).catch(() => null),
     getBonusBySlugAu(slug).catch(() => null),
     getSiteSettings().catch(() => null),
   ])
-  if (!bonus) notFound()
-  const author = settings?.defaultAuthor ?? null
 
-  const canonical = `${BASE}/au/online-casino/bonus/${slug}/`
+  // ── CMS page ─────────────────────────────────────────────────────────────────
+  if (page) {
+    const hreflangScript = await getHreflangScript((page as any)._id).catch(() => null)
+    const hideAuthor = (page as any).hideAuthor ?? false
+    const author = hideAuthor ? null : ((page as any).author ?? settings?.defaultAuthor ?? null)
+    const factChecker = hideAuthor ? null : ((page as any).factChecker ?? null)
+
+    const slugLabel = (s: string) => s.replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase())
+    const breadcrumbs = [
+      { label: 'Home', href: '/au/' },
+      { label: 'Online casino', href: '/au/online-casino/' },
+      { label: 'Bonus', href: '/au/online-casino/bonus/' },
+      { label: slugLabel(slug) },
+    ]
+
+    const jsonLd = {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'BreadcrumbList',
+          itemListElement: breadcrumbs.map((c, i) => ({
+            '@type': 'ListItem', position: i + 1, name: c.label,
+            ...(c.href ? { item: `${BASE}${c.href}` } : {}),
+          })),
+        },
+        { '@type': 'WebPage', '@id': `${canonical}#webpage`, url: canonical, name: replaceDateVars(page.title), inLanguage: 'en-AU', publisher: { '@type': 'Organization', name: 'Pokcas', url: BASE } },
+      ],
+    }
+
+    return (
+      <>
+        <HreflangHead script={hreflangScript} />
+        <JsonLd data={jsonLd} />
+        <HeroSection
+          title={page.title}
+          intro={(page as any).intro ?? undefined}
+          author={author}
+          factChecker={factChecker}
+          updatedAt={(page as any).lastUpdated ?? null}
+          breadcrumbs={breadcrumbs}
+        />
+        {(page as any).showComparisonTable && (page as any).comparisonTable && (
+          <div className="section" style={{ paddingBottom: page.body ? '0' : undefined }}>
+            {(page as any).comparisonTableTitle && (
+              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: 700, color: 'var(--text)', marginBottom: '20px' }}>
+                {replaceDateVars((page as any).comparisonTableTitle)}
+              </h2>
+            )}
+            <ComparisonTable data={(page as any).comparisonTable} />
+          </div>
+        )}
+        {page.body && (
+          <div className="article-layout">
+            <article className="article-content">
+              <MobileToc body={page.body} />
+              <PortableTextRenderer value={page.body} />
+            </article>
+            <aside className="toc-sidebar">
+              <TableOfContents body={page.body} />
+            </aside>
+          </div>
+        )}
+        {author && (
+          <div className="section" style={{ paddingTop: '0' }}>
+            <AuthorBio author={author} compact />
+          </div>
+        )}
+      </>
+    )
+  }
+
+  // ── Bonus document ────────────────────────────────────────────────────────────
+  if (!bonus) notFound()
+
+  const author = settings?.defaultAuthor ?? null
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: BASE },
-          { '@type': 'ListItem', position: 2, name: 'Australia', item: `${BASE}/au/` },
-          { '@type': 'ListItem', position: 3, name: 'Casino Bonuses', item: `${BASE}/au/online-casino/bonus/` },
-          { '@type': 'ListItem', position: 4, name: bonus.title, item: canonical },
+          { '@type': 'ListItem', position: 1, name: 'Home',          item: `${BASE}/au/` },
+          { '@type': 'ListItem', position: 2, name: 'Online casino', item: `${BASE}/au/online-casino/` },
+          { '@type': 'ListItem', position: 3, name: 'Bonus',         item: `${BASE}/au/online-casino/bonus/` },
+          { '@type': 'ListItem', position: 4, name: slug.replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase()), item: canonical },
         ],
       },
-      {
-        '@type': 'WebPage',
-        '@id': `${canonical}#webpage`,
-        url: canonical,
-        name: bonus.title,
-        inLanguage: 'en-AU',
-        publisher: { '@type': 'Organization', name: 'Pokcas', url: BASE },
-      },
+      { '@type': 'WebPage', '@id': `${canonical}#webpage`, url: canonical, name: bonus.title, inLanguage: 'en-AU', publisher: { '@type': 'Organization', name: 'Pokcas', url: BASE } },
     ],
   }
 
