@@ -1,5 +1,6 @@
 import { defineField, defineType } from 'sanity'
 import { bodyField } from './page'
+import { comparisonTableFields } from './comparisonTable'
 
 export const paymentMethodType = defineType({
   name: 'paymentMethod',
@@ -75,6 +76,7 @@ export const paymentMethodType = defineType({
       description: 'e.g. "Yes", "No", "Depends on the casino"',
     }),
     { ...bodyField } as any,
+    ...comparisonTableFields,
     defineField({
       name: 'metaTitle',
       title: 'Meta Title',

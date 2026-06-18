@@ -1,5 +1,6 @@
 import { defineField, defineType } from 'sanity'
 import { bodyField } from './page'
+import { comparisonTableFields } from './comparisonTable'
 
 export const softwareType = defineType({
   name: 'software',
@@ -119,6 +120,7 @@ export const softwareType = defineType({
     // ── Content ─────────────────────────────────────────────────────────────────
     { ...bodyField, title: 'Intro', name: 'intro', group: 'content' } as any,
     { ...bodyField, group: 'content' } as any,
+    ...comparisonTableFields.map(fld => ({ ...fld, group: 'content' })) as any,
 
     // ── SEO ─────────────────────────────────────────────────────────────────────
     defineField({

@@ -430,6 +430,7 @@ export async function getPaymentMethodBySlug(slug: string) {
   return client.fetch(
     `*[_type == "paymentMethod" && slug.current == $slug && (market == "global" || !defined(market))][0] {
       _id, name, titel, slug, withdrawalTime,
+      ${COMPARISON_TABLE_FRAGMENT},
       paymentCategory, transactionFees, eligibleForBonuses,
       metaTitle, metaDescription,
       "intro": intro[] { ..., _type == "image" => { ..., "url": asset->url } },
@@ -459,6 +460,7 @@ export async function getSoftwareBySlug(slug: string) {
   return client.fetch(
     `*[_type == "software" && slug.current == $slug && (market == "global" || !defined(market))][0] {
       _id, name, titel, slug, metaTitle, metaDescription,
+      ${COMPARISON_TABLE_FRAGMENT},
       rtp, amountOfSlots, licenses, gameCategories, highestRtpSlot, bonusBuys,
       "intro": intro[] { ..., _type == "image" => { ..., "url": asset->url } },
       "body": body[] { ..., _type == "image" => { ..., "url": asset->url } },
@@ -738,6 +740,7 @@ export async function getPaymentMethodBySlugCa(slug: string) {
   return client.fetch(
     `*[_type == "paymentMethod" && slug.current == $slug && market == "ca"][0] {
       _id, name, titel, slug, withdrawalTime,
+      ${COMPARISON_TABLE_FRAGMENT},
       paymentCategory, transactionFees, eligibleForBonuses,
       metaTitle, metaDescription,
       "intro": intro[] { ..., _type == "image" => { ..., "url": asset->url } },
@@ -766,6 +769,7 @@ export async function getSoftwareBySlugCa(slug: string) {
   return client.fetch(
     `*[_type == "software" && slug.current == $slug && market == "ca"][0] {
       _id, name, titel, slug, metaTitle, metaDescription,
+      ${COMPARISON_TABLE_FRAGMENT},
       rtp, amountOfSlots, licenses, gameCategories, highestRtpSlot, bonusBuys,
       "intro": intro[] { ..., _type == "image" => { ..., "url": asset->url } },
       "body": body[] { ..., _type == "image" => { ..., "url": asset->url } },
@@ -869,6 +873,7 @@ export async function getPaymentMethodBySlugAu(slug: string) {
   return client.fetch(
     `*[_type == "paymentMethod" && slug.current == $slug && market == "au"][0] {
       _id, name, titel, slug, withdrawalTime,
+      ${COMPARISON_TABLE_FRAGMENT},
       paymentCategory, transactionFees, eligibleForBonuses,
       metaTitle, metaDescription,
       "intro": intro[] { ..., _type == "image" => { ..., "url": asset->url } },
@@ -897,6 +902,7 @@ export async function getSoftwareBySlugAu(slug: string) {
   return client.fetch(
     `*[_type == "software" && slug.current == $slug && market == "au"][0] {
       _id, name, titel, slug, metaTitle, metaDescription,
+      ${COMPARISON_TABLE_FRAGMENT},
       rtp, amountOfSlots, licenses, gameCategories, highestRtpSlot, bonusBuys,
       "intro": intro[] { ..., _type == "image" => { ..., "url": asset->url } },
       "body": body[] { ..., _type == "image" => { ..., "url": asset->url } },

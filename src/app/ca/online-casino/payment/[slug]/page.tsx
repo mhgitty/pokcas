@@ -1,5 +1,6 @@
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { JsonLd } from '@/components/JsonLd'
+import { ComparisonTable } from '@/components/ComparisonTable'
 import { HreflangLinks } from '@/components/HreflangLinks'
 import { PaymentMethodHero } from '@/components/PaymentMethodHero'
 import { PortableTextRenderer } from '@/components/PortableTextRenderer'
@@ -82,6 +83,18 @@ export default async function CaPaymentSlugPage({ params }: Props) {
         eligibleForBonuses={method.eligibleForBonuses}
         intro={method.intro}
       />
+
+      {/* Comparison table — configured on the CMS document in Sanity Studio */}
+      {(method as any).showComparisonTable && (method as any).comparisonTable && (
+        <div className="section" style={{ paddingBottom: (method.body && method.body.length > 0) ? '0' : undefined }}>
+          {(method as any).comparisonTableTitle && (
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: 700, color: 'var(--text)', marginBottom: '20px' }}>
+              {replaceDateVars((method as any).comparisonTableTitle)}
+            </h2>
+          )}
+          <ComparisonTable data={(method as any).comparisonTable} />
+        </div>
+      )}
 
       {/* Body content */}
       {method.body && method.body.length > 0 && (
