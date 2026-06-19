@@ -17,7 +17,7 @@ function lastMod(date?: string): { lastModified: Date } | Record<string, never> 
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [posts, pages, bookmakers, bonusser, paymentMethods, software] = await Promise.all([
+  const [posts, pages, bookmakers, bonusser, paymentMethods, software, casinoGuides] = await Promise.all([
 
     client.fetch<Array<{ slug: { current: string }; publishedAt?: string; lastUpdated?: string }>>(
       `*[_type == "post" && defined(slug.current) && defined(publishedAt)] | order(publishedAt desc) { slug, publishedAt, lastUpdated }`
@@ -49,6 +49,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     client.fetch<Array<{ slug: { current: string }; market?: string; _updatedAt?: string }>>(
       `*[_type == "software" && defined(slug.current)] { slug, market, _updatedAt }`
     ).catch(() => []),
+
+    client.fetch<Array<{ slug: { current: string }; market?: string; _updatedAt?: string }>>(
+      `*[_type == "casinoGuide" && defined(slug.current)] { slug, market, _updatedAt }`
+    ).catch(() => []),
   ])
 
   // ── Bookmaker review URLs by market ──────────────────────────────────────────
@@ -79,12 +83,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     return { url: `${BASE}${mp}/online-casino/software/${s.slug.current}/`, ...lastMod(s._updatedAt) }
   })
 
+  const guideEntries: MetadataRoute.Sitemap = casinoGuides.map((g) => {
+    const mp = marketPrefix(g.market)
+    return { url: `${BASE}${mp}/casino-guides/${g.slug.current}/`, ...lastMod(g._updatedAt) }
+  })
+
   return [
     // ── Root index pages (no fake lastmod) ──
     { url: `${BASE}/` },
     { url: `${BASE}/review/` },
     { url: `${BASE}/online-casino/payment/` },
     { url: `${BASE}/online-casino/software/` },
+    { url: `${BASE}/casino-guides/` },
 
     // ── Canada index pages ──
     { url: `${BASE}/ca/` },
@@ -92,6 +102,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/ca/online-casino/bonus/` },
     { url: `${BASE}/ca/online-casino/payment/` },
     { url: `${BASE}/ca/online-casino/software/` },
+    { url: `${BASE}/ca/casino-guides/` },
 
     // ── Australia index pages ──
     { url: `${BASE}/au/` },
@@ -99,6 +110,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/au/online-casino/bonus/` },
     { url: `${BASE}/au/online-casino/payment/` },
     { url: `${BASE}/au/online-casino/software/` },
+    { url: `${BASE}/au/casino-guides/` },
 
     // ── Dynamic content (real lastmod from Sanity _updatedAt) ──
     ...bookmakerEntries,
@@ -108,6 +120,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
     ...paymentEntries,
     ...softwareEntries,
+    ...guideEntries,
     ...posts.map((p) => ({
       url: `${BASE}/${p.slug.current}/`,
       ...lastMod(p.lastUpdated ?? p.publishedAt),

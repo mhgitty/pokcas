@@ -976,3 +976,37 @@ export async function getCasinoGameBySlugAu(slug: string) {
     { slug }
   )
 }
+
+// ─── Casino Guides ──────────────────────────────────────────────────────────────
+
+export async function getCasinoGuideBySlug(slug: string) {
+  return client.fetch(
+    `*[_type == "casinoGuide" && slug.current == $slug && market == "global"][0] { ${PAGE_FIELDS} }`,
+    { slug }
+  )
+}
+
+export async function getCasinoGuideBySlugCa(slug: string) {
+  return client.fetch(
+    `*[_type == "casinoGuide" && slug.current == $slug && market == "ca"][0] { ${PAGE_FIELDS} }`,
+    { slug }
+  )
+}
+
+export async function getCasinoGuideBySlugAu(slug: string) {
+  return client.fetch(
+    `*[_type == "casinoGuide" && slug.current == $slug && market == "au"][0] { ${PAGE_FIELDS} }`,
+    { slug }
+  )
+}
+
+/** List of guides for the archive grid (light projection). */
+export async function getCasinoGuides(market: 'global' | 'ca' | 'au') {
+  return client.fetch(
+    `*[_type == "casinoGuide" && market == $market && defined(slug.current)] | order(title asc) {
+      _id, title, "slug": slug.current, metaDescription, lastUpdated,
+      "featuredImage": featuredImage { "url": asset->url, alt }
+    }`,
+    { market }
+  )
+}

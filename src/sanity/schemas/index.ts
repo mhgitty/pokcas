@@ -13,6 +13,7 @@ import { hreflangGroupType } from './hreflangGroup'
 import { paymentMethodType } from './paymentMethod'
 import { softwareType } from './software'
 import { casinoGameType } from './casinoGame'
+import { casinoGuideType } from './casinoGuide'
 import { marketSettingsType } from './marketSettings'
 import { countryHomepageType } from './countryHomepage'
 
@@ -34,4 +35,5 @@ export const schemaTypes = [
   paymentMethodType,
   softwareType,
   casinoGameType,
+  casinoGuideType,
 ]
