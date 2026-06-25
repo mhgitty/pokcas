@@ -9,8 +9,6 @@ import { MobileToc } from '@/components/MobileToc'
 import { getPaymentMethodBySlugCa, client } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
-import Image from 'next/image'
 import type { Metadata } from 'next'
 
 export const revalidate = 3600
@@ -109,47 +107,6 @@ export default async function CaPaymentSlugPage({ params }: Props) {
         </div>
       )}
 
-      {/* Casino list */}
-      {method.casinos && method.casinos.length > 0 && (
-        <div className="section">
-          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', fontWeight: 700, marginBottom: '16px', color: 'var(--text)' }}>
-            Canadian Casinos Accepting {method.name}
-          </h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {method.casinos.map((casino: any) => (
-              <div key={casino._id} style={{
-                background: 'var(--bg-card)', border: '1px solid var(--border)',
-                borderRadius: '10px', padding: '16px 20px',
-                display: 'flex', alignItems: 'center', gap: '16px',
-              }}>
-                {casino.logo?.url && (
-                  <div style={{ flexShrink: 0, width: '64px', height: '32px', display: 'flex', alignItems: 'center' }}>
-                    <Image src={casino.logo.url} alt={casino.logo.alt || casino.name}
-                      width={64} height={32}
-                      style={{ objectFit: 'contain', maxHeight: '32px', width: 'auto' }} />
-                  </div>
-                )}
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontWeight: 600, color: 'var(--text)', fontSize: '14px' }}>{casino.name}</div>
-                  {casino.usp && <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{casino.usp}</div>}
-                </div>
-                <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
-                  {casino.url && (
-                    <a href={casino.url} target="_blank" rel="nofollow noopener noreferrer sponsored"
-                      style={{ background: 'var(--green)', color: '#fff', padding: '8px 14px', borderRadius: '6px', fontSize: '13px', fontWeight: 600, textDecoration: 'none' }}>
-                      Sign up
-                    </a>
-                  )}
-                  <Link href={`/ca/reviews/${casino.slug.current}/`}
-                    style={{ background: 'var(--bg-raised)', color: 'var(--text-muted)', padding: '8px 14px', borderRadius: '6px', fontSize: '13px', fontWeight: 500, textDecoration: 'none', border: '1px solid var(--border)' }}>
-                    Review
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </>
   )
 }
