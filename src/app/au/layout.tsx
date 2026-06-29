@@ -49,7 +49,7 @@ export default async function AuLayout({ children }: { children: React.ReactNode
     <>
       <Navbar navItems={navItems} logoHref="/au/" />
       {children}
-      <Footer tagline={tagline} columns={columns} note={note} disclaimer={disclaimer} market="au" />
+      <Footer tagline={tagline} columns={columns} note={note} disclaimer={disclaimer} socialLinks={ms?.socialLinks ?? gs?.socialLinks} market="au" />
     </>
   )
 }

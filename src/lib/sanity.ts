@@ -325,6 +325,7 @@ export const getSiteSettings = cache(async () => {
         }
       },
       footerTagline,
+      socialLinks,
       footerColumns[] {
         title,
         items[] {
@@ -544,7 +545,7 @@ export async function getAuthorPaths() {
 export async function getMarketSettings(market: 'ca' | 'au') {
   return client.fetch(
     `*[_type == "marketSettings" && _id == $id][0] {
-      market, footerTagline, footerNote, footerDisclaimer,
+      market, footerTagline, footerNote, footerDisclaimer, socialLinks,
       footerLongDisclaimer,
       "footerMediaLogos": footerMediaLogos[] {
         alt, url,

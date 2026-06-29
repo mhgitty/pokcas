@@ -49,7 +49,7 @@ export default async function CaLayout({ children }: { children: React.ReactNode
     <>
       <Navbar navItems={navItems} logoHref="/ca/" />
       {children}
-      <Footer tagline={tagline} columns={columns} note={note} disclaimer={disclaimer} market="ca" />
+      <Footer tagline={tagline} columns={columns} note={note} disclaimer={disclaimer} socialLinks={ms?.socialLinks ?? gs?.socialLinks} market="ca" />
     </>
   )
 }

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getSiteSettings } from '@/lib/sanity'
 import { MarketSelector } from './MarketSelector'
+import { SocialLinks, type SocialLinkData } from './SocialLinks'
 
 function resolveUrl(item: {
   url?: string; pageSlug?: string; pageParentSlug?: string; pageParent2Slug?: string; pageParent3Slug?: string; pageMarket?: string;
@@ -61,6 +62,7 @@ interface FooterProps {
   note?: string
   disclaimer?: string
   bottomNav?: any[]
+  socialLinks?: SocialLinkData | null
   market?: string
 }
 
@@ -73,6 +75,7 @@ export async function Footer({
   note: noteProp,
   disclaimer: disclaimerProp,
   bottomNav: bottomNavProp,
+  socialLinks: socialLinksProp,
   market,
 }: FooterProps = {}) {
   const year = new Date().getFullYear()
@@ -87,6 +90,7 @@ export async function Footer({
   const note         = noteProp         ?? settings?.footerNote         ?? `© ${year} Pokcas.com · Play responsibly · 18+`
   const disclaimer   = disclaimerProp   ?? settings?.footerDisclaimer   ?? 'Affiliate links may be present · See terms at the casino'
   const bottomNav    = bottomNavProp    ?? settings?.footerBottomNav    ?? []
+  const socialLinks  = socialLinksProp  ?? settings?.socialLinks        ?? null
 
   return (
     <footer style={{ borderTop: '1px solid var(--border)', background: 'var(--bg-footer)', marginTop: '80px' }}>
@@ -115,6 +119,7 @@ export async function Footer({
             <p style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.6, margin: 0 }}>
               {tagline}
             </p>
+            <SocialLinks links={socialLinks} />
           </div>
 
           {/* Link columns — each gets equal space */}
