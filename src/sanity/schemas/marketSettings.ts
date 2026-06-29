@@ -66,7 +66,24 @@ const linkPreview = {
   },
 }
 
-// ── Sub-menu item (2nd level) — can hold its own nested sub-menu (3rd level) ──────
+// ── 3rd-level item — can hold a 4th-level sub-menu ───────────────────────────────
+const subSubNavItemFields = [
+  ...linkFields,
+  defineField({
+    name: 'children',
+    title: 'Sub-menu (nested)',
+    type: 'array',
+    description: 'Optional — another nested sub-menu level',
+    of: [{
+      type: 'object',
+      name: 'subSubSubNavItem',
+      fields: linkFields,
+      preview: linkPreview,
+    }],
+  }),
+]
+
+// ── Sub-menu item (2nd level) — can hold its own nested sub-menus (3rd/4th level) ──
 const subNavItemFields = [
   ...linkFields,
   defineField({
@@ -77,7 +94,7 @@ const subNavItemFields = [
     of: [{
       type: 'object',
       name: 'subSubNavItem',
-      fields: linkFields,
+      fields: subSubNavItemFields,
       preview: linkPreview,
     }],
   }),

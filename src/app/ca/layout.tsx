@@ -26,17 +26,14 @@ export default async function CaLayout({ children }: { children: React.ReactNode
 
   // Header nav — market overrides global
   const rawNav = ms?.headerNav?.length ? ms.headerNav : gs?.headerNav
-  const navItems = rawNav?.map((item: any) => ({
+  const mapNode = (item: any): any => ({
     label: item.label,
     href: resolveUrl(item),
     isHighlighted: item.isHighlighted ?? false,
     icon: item.icon ?? undefined,
-    children: (item.children || []).map((c: any) => ({
-      label: c.label,
-      href: resolveUrl(c),
-      children: (c.children || []).map((g: any) => ({ label: g.label, href: resolveUrl(g) })),
-    })),
-  }))
+    children: (item.children || []).map(mapNode),
+  })
+  const navItems = rawNav?.map(mapNode)
 
   // Footer — market overrides global
   const year = new Date().getFullYear()

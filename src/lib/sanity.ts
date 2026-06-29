@@ -282,6 +282,14 @@ export async function getBonusBySlug(slug: string) {
 // ─── Site settings (menus) ────────────────────────────────────────────────────
 // Wrapped in React cache() so Navbar + Footer share one fetch per page render.
 
+// ── Header nav projection (nested children → multi-level sub-menus) ──────────────
+const navSlugFields = (m: boolean) =>
+  `"pageSlug": pageRef->slug.current, "pageParentSlug": pageRef->parent->slug.current, "pageParent2Slug": pageRef->parent->parent->slug.current, "pageParent3Slug": pageRef->parent->parent->parent->slug.current, "pageParent4Slug": pageRef->parent->parent->parent->parent->slug.current, ${m ? '"pageMarket": pageRef->market, ' : ''}"bookmakerSlug": bookmakerRef->slug.current, "softwareSlug": softwareRef->slug.current, "paymentMethodSlug": paymentMethodRef->slug.current, "postSlug": postRef->slug.current`
+const navChildren = (depth: number, m: boolean): string =>
+  depth <= 0 ? '' : `, children[] { label, url, ${navSlugFields(m)}${navChildren(depth - 1, m)} }`
+const headerNavProjection = (m: boolean) =>
+  `headerNav[] { label, url, isHighlighted, icon, ${navSlugFields(m)}${navChildren(3, m)} }`
+
 export const getSiteSettings = cache(async () => {
   return client.fetch(
     `*[_type == "siteSettings"][0] {
@@ -291,42 +299,7 @@ export const getSiteSettings = cache(async () => {
         name, slug, bio, linkedin, x, facebook,
         "imageUrl": image.asset->url
       },
-      headerNav[] {
-        label, url, isHighlighted, icon,
-        "pageSlug": pageRef->slug.current,
-        "pageParentSlug": pageRef->parent->slug.current,
-        "pageParent2Slug": pageRef->parent->parent->slug.current,
-        "pageParent3Slug": pageRef->parent->parent->parent->slug.current,
-        "pageParent4Slug": pageRef->parent->parent->parent->parent->slug.current,
-        "bookmakerSlug": bookmakerRef->slug.current,
-        "softwareSlug": softwareRef->slug.current,
-        "paymentMethodSlug": paymentMethodRef->slug.current,
-        "postSlug": postRef->slug.current,
-        children[] {
-          label, url,
-          "pageSlug": pageRef->slug.current,
-          "pageParentSlug": pageRef->parent->slug.current,
-          "pageParent2Slug": pageRef->parent->parent->slug.current,
-          "pageParent3Slug": pageRef->parent->parent->parent->slug.current,
-          "pageParent4Slug": pageRef->parent->parent->parent->parent->slug.current,
-          "bookmakerSlug": bookmakerRef->slug.current,
-          "softwareSlug": softwareRef->slug.current,
-          "paymentMethodSlug": paymentMethodRef->slug.current,
-          "postSlug": postRef->slug.current,
-          children[] {
-            label, url,
-            "pageSlug": pageRef->slug.current,
-            "pageParentSlug": pageRef->parent->slug.current,
-            "pageParent2Slug": pageRef->parent->parent->slug.current,
-            "pageParent3Slug": pageRef->parent->parent->parent->slug.current,
-            "pageParent4Slug": pageRef->parent->parent->parent->parent->slug.current,
-            "bookmakerSlug": bookmakerRef->slug.current,
-            "softwareSlug": softwareRef->slug.current,
-            "paymentMethodSlug": paymentMethodRef->slug.current,
-            "postSlug": postRef->slug.current,
-          }
-        }
-      },
+      ${headerNavProjection(false)},
       footerTagline,
       socialLinks,
       footerColumns[] {
@@ -560,45 +533,7 @@ export async function getMarketSettings(market: 'ca' | 'au') {
         alt, url,
         "imageUrl": image.asset->url
       },
-      headerNav[] {
-        label, url, isHighlighted, icon,
-        "pageSlug": pageRef->slug.current,
-        "pageParentSlug": pageRef->parent->slug.current,
-        "pageParent2Slug": pageRef->parent->parent->slug.current,
-        "pageParent3Slug": pageRef->parent->parent->parent->slug.current,
-        "pageParent4Slug": pageRef->parent->parent->parent->parent->slug.current,
-        "pageMarket": pageRef->market,
-        "bookmakerSlug": bookmakerRef->slug.current,
-        "softwareSlug": softwareRef->slug.current,
-        "paymentMethodSlug": paymentMethodRef->slug.current,
-        "postSlug": postRef->slug.current,
-        children[] {
-          label, url,
-          "pageSlug": pageRef->slug.current,
-          "pageParentSlug": pageRef->parent->slug.current,
-          "pageParent2Slug": pageRef->parent->parent->slug.current,
-          "pageParent3Slug": pageRef->parent->parent->parent->slug.current,
-          "pageParent4Slug": pageRef->parent->parent->parent->parent->slug.current,
-          "pageMarket": pageRef->market,
-          "bookmakerSlug": bookmakerRef->slug.current,
-          "softwareSlug": softwareRef->slug.current,
-          "paymentMethodSlug": paymentMethodRef->slug.current,
-          "postSlug": postRef->slug.current,
-          children[] {
-            label, url,
-            "pageSlug": pageRef->slug.current,
-            "pageParentSlug": pageRef->parent->slug.current,
-            "pageParent2Slug": pageRef->parent->parent->slug.current,
-            "pageParent3Slug": pageRef->parent->parent->parent->slug.current,
-            "pageParent4Slug": pageRef->parent->parent->parent->parent->slug.current,
-            "pageMarket": pageRef->market,
-            "bookmakerSlug": bookmakerRef->slug.current,
-            "softwareSlug": softwareRef->slug.current,
-            "paymentMethodSlug": paymentMethodRef->slug.current,
-            "postSlug": postRef->slug.current,
-          }
-        }
-      },
+      ${headerNavProjection(true)},
       footerColumns[] {
         title,
         items[] {
