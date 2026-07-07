@@ -1,20 +1,46 @@
 import { createClient } from 'next-sanity'
 import { cache } from 'react'
 
-export const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
-  apiVersion: '2026-04-22',
-  useCdn: true,
-})
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!
+const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET!
+const apiVersion = '2026-04-22'
 
-// Bypasses CDN — use for queries that need fresh/uncached data
-export const clientNoCdn = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
-  apiVersion: '2026-04-22',
-  useCdn: false,
-})
+const publishedClient = createClient({ projectId, dataset, apiVersion, useCdn: true })
+const publishedNoCdnClient = createClient({ projectId, dataset, apiVersion, useCdn: false })
+
+// Draft (preview) client — reads unpublished drafts. Only active when a read
+// token is set AND Next.js Draft Mode is enabled for the request.
+const readToken = process.env.SANITY_API_READ_TOKEN
+const draftClient = readToken
+  ? createClient({ projectId, dataset, apiVersion, useCdn: false, token: readToken, perspective: 'drafts' })
+  : null
+
+async function isPreview(): Promise<boolean> {
+  if (!draftClient) return false
+  try {
+    const { draftMode } = await import('next/headers')
+    return (await draftMode()).isEnabled
+  } catch {
+    return false // no request scope (e.g. build-time generateStaticParams)
+  }
+}
+
+// Draft-aware clients. When Draft Mode is on they read drafts (fresh, no cache);
+// otherwise they behave exactly like the published clients. Call sites use
+// `.fetch(...)` unchanged.
+export const client = {
+  fetch: async <R = any>(query: string, params: any = {}, options: any = {}): Promise<R> => {
+    if (await isPreview()) return draftClient!.fetch<R>(query, params, { cache: 'no-store' })
+    return publishedClient.fetch<R>(query, params, options)
+  },
+}
+
+export const clientNoCdn = {
+  fetch: async <R = any>(query: string, params: any = {}, options: any = {}): Promise<R> => {
+    if (await isPreview()) return draftClient!.fetch<R>(query, params, { cache: 'no-store' })
+    return publishedNoCdnClient.fetch<R>(query, params, options)
+  },
+}
 
 // ─── Hreflang ─────────────────────────────────────────────────────────────────
 // Embed in any query as: "hreflangScript": ${HREFLANG_FRAGMENT}
