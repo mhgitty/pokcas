@@ -28,18 +28,35 @@ async function isPreview(): Promise<boolean> {
 // Draft-aware clients. When Draft Mode is on they read drafts (fresh, no cache);
 // otherwise they behave exactly like the published clients. Call sites use
 // `.fetch(...)` unchanged.
+//
+// The draft fetch is fault-tolerant: if it throws (missing/invalid read token,
+// insufficient permissions, transient API error), we log the real cause and
+// fall back to the published client so preview never hard-crashes the page.
+async function draftAwareFetch<R>(
+  fallback: (q: string, p: any, o: any) => Promise<R>,
+  query: string,
+  params: any,
+  options: any
+): Promise<R> {
+  if (await isPreview()) {
+    try {
+      return await draftClient!.fetch<R>(query, params, { cache: 'no-store' })
+    } catch (err) {
+      console.error('[preview] draft fetch failed, falling back to published:', err)
+      return fallback(query, params, options)
+    }
+  }
+  return fallback(query, params, options)
+}
+
 export const client = {
-  fetch: async <R = any>(query: string, params: any = {}, options: any = {}): Promise<R> => {
-    if (await isPreview()) return draftClient!.fetch<R>(query, params, { cache: 'no-store' })
-    return publishedClient.fetch<R>(query, params, options)
-  },
+  fetch: <R = any>(query: string, params: any = {}, options: any = {}): Promise<R> =>
+    draftAwareFetch<R>((q, p, o) => publishedClient.fetch<R>(q, p, o), query, params, options),
 }
 
 export const clientNoCdn = {
-  fetch: async <R = any>(query: string, params: any = {}, options: any = {}): Promise<R> => {
-    if (await isPreview()) return draftClient!.fetch<R>(query, params, { cache: 'no-store' })
-    return publishedNoCdnClient.fetch<R>(query, params, options)
-  },
+  fetch: <R = any>(query: string, params: any = {}, options: any = {}): Promise<R> =>
+    draftAwareFetch<R>((q, p, o) => publishedNoCdnClient.fetch<R>(q, p, o), query, params, options),
 }
 
 // ─── Hreflang ─────────────────────────────────────────────────────────────────
