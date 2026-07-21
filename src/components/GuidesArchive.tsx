@@ -18,9 +18,12 @@ interface Props {
   title?: string
   /** Optional rich text rendered between the heading and the list. */
   intro?: React.ReactNode
+  /** Optional "see all" link shown under the list. */
+  seeAllHref?: string
+  seeAllLabel?: string
 }
 
-export function GuidesArchive({ guides, hrefPrefix = '/casino-guides', title = 'All casino guides', intro }: Props) {
+export function GuidesArchive({ guides, hrefPrefix = '/casino-guides', title = 'All casino guides', intro, seeAllHref, seeAllLabel = 'See all casino guides' }: Props) {
   const [query, setQuery] = useState('')
 
   const filtered = useMemo(() => {
@@ -107,6 +110,20 @@ export function GuidesArchive({ guides, hrefPrefix = '/casino-guides', title = '
               </Link>
             )
           })}
+        </div>
+      )}
+
+      {seeAllHref && (
+        <div style={{ textAlign: 'center', marginTop: '22px' }}>
+          <Link href={seeAllHref} style={{
+            display: 'inline-flex', alignItems: 'center', gap: '6px',
+            background: 'var(--bg-raised)', border: '1px solid var(--border)',
+            color: 'var(--text)', padding: '11px 20px', borderRadius: '10px',
+            fontSize: '14px', fontWeight: 600, textDecoration: 'none',
+          }}>
+            {seeAllLabel}
+            <Icon name="arrow-right" size={16} />
+          </Link>
         </div>
       )}
     </div>

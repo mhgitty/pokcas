@@ -88,7 +88,7 @@ export function CountryHero({ title, intro, heroCards, breadcrumbs }: CountryHer
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
                       <span style={{
                         fontFamily: 'var(--font-display)',
-                        fontSize: '16px',
+                        fontSize: '19px',
                         fontWeight: 700,
                         color: 'var(--text)',
                         lineHeight: 1.3,
@@ -97,13 +97,12 @@ export function CountryHero({ title, intro, heroCards, breadcrumbs }: CountryHer
                       </span>
                       <div style={{
                         flexShrink: 0,
-                        width: '28px', height: '28px',
+                        width: '30px', height: '30px',
                         borderRadius: '50%',
-                        background: 'var(--bg-page)',
-                        border: '1px solid var(--border)',
+                        background: 'var(--green)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                       }}>
-                        <Icon name="alt-arrow-right" size={14} color="var(--text-muted)" />
+                        <Icon name="alt-arrow-right" size={15} color="#fff" />
                       </div>
                     </div>
                   </Link>

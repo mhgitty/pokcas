@@ -17,7 +17,7 @@ interface SectionBase { _type: string; _key: string }
 
 interface SectionCasinoList     extends SectionBase { _type: 'sectionCasinoList';     title?: string; count?: number }
 interface SectionReviewsArchive extends SectionBase { _type: 'sectionReviewsArchive'; title?: string; intro?: any[]; count?: number }
-interface SectionGuidesArchive  extends SectionBase { _type: 'sectionGuidesArchive';  title?: string; intro?: any[] }
+interface SectionGuidesArchive  extends SectionBase { _type: 'sectionGuidesArchive';  title?: string; intro?: any[]; count?: number }
 interface SectionPaymentMethods extends SectionBase { _type: 'sectionPaymentMethods'; title?: string; intro?: any[] }
 interface SectionSoftware       extends SectionBase { _type: 'sectionSoftware';       title?: string; intro?: any[] }
 interface SectionCtaBanner      extends SectionBase { _type: 'sectionCtaBanner';      icon?: string; title: string; body?: string; buttonLabel?: string; buttonUrl?: string; style?: string }
@@ -364,23 +364,23 @@ function ProviderCardsSection({
 
               {/* Name + arrow row */}
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '6px', width: '100%', marginBottom: '4px' }}>
-                <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', lineHeight: 1.3 }}>
+                <span style={{ fontSize: '16.5px', fontWeight: 700, color: 'var(--text)', lineHeight: 1.3 }}>
                   {item.name}
                 </span>
                 <div style={{
                   flexShrink: 0,
-                  width: '26px', height: '26px',
+                  width: '28px', height: '28px',
                   borderRadius: '50%',
-                  background: 'var(--bg-raised)',
+                  background: 'var(--green)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
-                  <Icon name="alt-arrow-right" size={13} color="var(--text-muted)" />
+                  <Icon name="alt-arrow-right" size={14} color="#fff" />
                 </div>
               </div>
 
               {/* Casino count */}
               {item.casinoCount != null && (
-                <div style={{ fontSize: '12px', color: 'var(--text-muted)', width: '100%' }}>
+                <div style={{ fontSize: '14px', color: 'var(--text-muted)', width: '100%' }}>
                   <strong style={{ color: 'var(--text)', fontWeight: 700 }}>{item.casinoCount}</strong>
                   {' '}{casinoLabel}
                 </div>
@@ -464,7 +464,7 @@ export async function HomeSections({ sections, market }: { sections: AnySection[
             const sec = section as SectionReviewsArchive
             const all = reviewCasinos as any[]
             if (all.length === 0) return null
-            const max = sec.count ?? 10
+            const max = sec.count ?? 4
             return (
               <CasinoReviewsArchive
                 key={section._key}
@@ -481,13 +481,15 @@ export async function HomeSections({ sections, market }: { sections: AnySection[
             const sec = section as SectionGuidesArchive
             const all = guides as any[]
             if (all.length === 0) return null
+            const gmax = sec.count ?? 4
             return (
               <GuidesArchive
                 key={section._key}
-                guides={all}
+                guides={all.slice(0, gmax)}
                 hrefPrefix={guideBase}
                 title={sec.title || 'Casino guides'}
                 intro={sec.intro ? <RichIntro value={sec.intro} /> : undefined}
+                seeAllHref={all.length > gmax ? `${guideBase}/` : undefined}
               />
             )
           }

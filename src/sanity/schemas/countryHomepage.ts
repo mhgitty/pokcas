@@ -25,7 +25,7 @@ const sectionReviewsArchive = {
     defineField({ name: 'title', title: 'Section title', type: 'string', initialValue: 'Casino reviews' }),
     sectionIntroField,
     defineField({
-      name: 'count', title: 'Max casinos to show', type: 'number', initialValue: 10,
+      name: 'count', title: 'Max casinos to show', type: 'number', initialValue: 4,
       description: 'A "See all reviews" link is shown when there are more than this',
       validation: (r: any) => r.min(1).max(50),
     }),
@@ -34,7 +34,7 @@ const sectionReviewsArchive = {
     select: { title: 'title', count: 'count' },
     prepare: ({ title, count }: any) => ({
       title: `⭐ ${title || 'Casino reviews'}`,
-      subtitle: `Searchable · max ${count || 10}`,
+      subtitle: `Searchable · max ${count || 4}`,
     }),
   },
 }
@@ -46,10 +46,18 @@ const sectionGuidesArchive = {
   fields: [
     defineField({ name: 'title', title: 'Section title', type: 'string', initialValue: 'Casino guides' }),
     sectionIntroField,
+    defineField({
+      name: 'count', title: 'Max guides to show', type: 'number', initialValue: 4,
+      description: 'A "See all casino guides" button is shown when there are more than this',
+      validation: (r: any) => r.min(1).max(50),
+    }),
   ],
   preview: {
-    select: { title: 'title' },
-    prepare: ({ title }: any) => ({ title: `📚 ${title || 'Casino guides'}`, subtitle: 'Searchable archive' }),
+    select: { title: 'title', count: 'count' },
+    prepare: ({ title, count }: any) => ({
+      title: `📚 ${title || 'Casino guides'}`,
+      subtitle: `Searchable · max ${count || 4}`,
+    }),
   },
 }
 

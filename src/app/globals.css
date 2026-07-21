@@ -549,7 +549,7 @@ footer {
 .country-hero-inner {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 48px;
+  gap: 28px;
   align-items: center;
 }
 
@@ -579,7 +579,7 @@ footer {
   justify-content: space-between;
   padding: 20px;
   min-height: 140px;
-  background: var(--bg-card);
+  background: linear-gradient(155deg, rgba(26,122,60,0.16) 0%, rgba(26,122,60,0.04) 100%);
   border: 1px solid var(--border);
   border-radius: 16px;
   text-decoration: none;
@@ -588,7 +588,8 @@ footer {
 
 .country-hero-card:hover {
   border-color: var(--green);
-  box-shadow: 0 4px 20px rgba(34,197,94,0.12);
+  background: linear-gradient(155deg, rgba(26,122,60,0.24) 0%, rgba(26,122,60,0.08) 100%);
+  box-shadow: 0 4px 20px rgba(34,197,94,0.16);
   transform: translateY(-2px);
 }
 
