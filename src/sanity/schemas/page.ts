@@ -228,6 +228,57 @@ export const bodyField = defineField({
     },
     {
       type: 'object',
+      name: 'pageLinksBlock',
+      title: 'Page Links (boxes)',
+      description: 'A grid of link boxes pointing at pages you choose',
+      fields: [
+        {
+          name: 'heading', title: 'Heading (optional)', type: 'string',
+          description: 'Shown above the boxes, e.g. "Popular guides"',
+        },
+        {
+          name: 'items', title: 'Links', type: 'array',
+          of: [{
+            type: 'object',
+            name: 'pageLinkItem',
+            fields: [
+              {
+                name: 'page', title: 'Page', type: 'reference',
+                to: [
+                  { type: 'page' }, { type: 'casinoGuide' }, { type: 'bookmaker' },
+                  { type: 'bonus' }, { type: 'paymentMethod' }, { type: 'software' },
+                  { type: 'casinoGame' }, { type: 'post' },
+                ],
+                validation: (r: any) => r.required(),
+              },
+              {
+                name: 'label', title: 'Box text (optional)', type: 'string',
+                description: 'What the box says. Leave empty to use the page title.',
+              },
+            ],
+            preview: {
+              select: { label: 'label', title: 'page.title', name: 'page.name' },
+              prepare({ label, title, name }: any) {
+                const target = title || name || 'Page'
+                return { title: label || target, subtitle: label ? target : undefined }
+              },
+            },
+          }],
+        },
+      ],
+      preview: {
+        select: { heading: 'heading', items: 'items' },
+        prepare({ heading, items }: any) {
+          const n = (items || []).length
+          return {
+            title: heading || 'Page Links',
+            subtitle: `${n} ${n === 1 ? 'box' : 'boxes'}`,
+          }
+        },
+      },
+    },
+    {
+      type: 'object',
       name: 'cashbackCalculatorBlock',
       title: 'Cashback Calculator',
       fields: [

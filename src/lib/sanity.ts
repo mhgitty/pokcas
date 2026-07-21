@@ -560,6 +560,22 @@ export const getRelatedContent = cache(async (
   return { title, items }
 })
 
+/**
+ * Resolves a hand-picked list of documents for the "Page links" body block.
+ * Order is preserved; missing/unpublished targets are dropped.
+ */
+export const getLinkedPages = cache(async (ids: string[]): Promise<RelatedItem[]> => {
+  const clean = (ids || []).filter(Boolean)
+  if (clean.length === 0) return []
+
+  const rows: RelatedItem[] = await client.fetch(
+    `*[_id in $ids && defined(slug.current)] { ${RELATED_PROJECTION} }`,
+    { ids: clean }
+  )
+  const byId = new Map(rows.map((r) => [r._id, r]))
+  return clean.map((id) => byId.get(id)).filter(Boolean) as RelatedItem[]
+})
+
 // ─── Author lookup (for the callout / quote body block) ───────────────────────
 
 export type QuoteAuthor = {

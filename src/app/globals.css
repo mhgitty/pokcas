@@ -841,3 +841,18 @@ footer {
 @media (max-width: 560px) {
   .related-grid { grid-template-columns: 1fr; }
 }
+
+/* ── Page links block (body) ───────────────────────────────────────────────── */
+.pagelinks-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.pagelinks-card { transition: border-color 0.15s ease, transform 0.15s ease; }
+.pagelinks-card:hover {
+  border-color: var(--green);
+  transform: translateY(-2px);
+}
+@media (max-width: 700px) {
+  .pagelinks-grid { grid-template-columns: 1fr; }
+}
