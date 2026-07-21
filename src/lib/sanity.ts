@@ -344,6 +344,7 @@ export const getSiteSettings = cache(async () => {
       },
       ${headerNavProjection(false)},
       footerTagline,
+      relatedPagesTitle,
       socialLinks,
       footerColumns[] {
         title,
@@ -447,6 +448,131 @@ export async function getPaymentMethods() {
     }`
   )
 }
+
+// ─── Related pages (bottom-of-page internal linking) ──────────────────────────
+
+export type RelatedItem = {
+  _id: string
+  _type: string
+  title?: string
+  name?: string
+  slug?: { current?: string }
+  market?: string
+  a1?: string
+  a2?: string
+  a3?: string
+  a4?: string
+}
+
+const RELATED_PROJECTION = `
+  _id, _type, title, name, slug, market,
+  "a1": parent->slug.current,
+  "a2": parent->parent->slug.current,
+  "a3": parent->parent->parent->slug.current,
+  "a4": parent->parent->parent->parent->slug.current
+`
+
+/** Builds the public URL for a related item, based on its own type + market. */
+export function relatedItemHref(item: RelatedItem): string {
+  const mp = item.market === 'ca' ? '/ca' : item.market === 'au' ? '/au' : ''
+  const slug = item.slug?.current
+  if (!slug) return '/'
+  switch (item._type) {
+    case 'page': {
+      const segments = [item.a4, item.a3, item.a2, item.a1, slug].filter(Boolean)
+      return `${mp}/${segments.join('/')}/`
+    }
+    case 'casinoGuide':
+      return `${mp}/casino-guides/${slug}/`
+    case 'paymentMethod':
+      return `${mp}/online-casino/payment/${slug}/`
+    case 'software':
+      return `${mp}/online-casino/software/${slug}/`
+    case 'bonus':
+      return `${mp}/online-casino/bonus/${slug}/`
+    case 'bookmaker':
+      return mp ? `${mp}/online-casino/review/${slug}/` : `/review/${slug}/`
+    case 'casinoGame':
+      return `${mp}/casino-games/${slug}/`
+    case 'post':
+      return `/${slug}/`
+    default:
+      return `${mp}/${slug}/`
+  }
+}
+
+/**
+ * Resolves the "Related pages" block for a document.
+ * Hand-picked references win; otherwise falls back to sibling pages under the
+ * same parent (for CMS pages) or other entries of the same type + market.
+ * Fetches everything it needs from the document id, so page templates don't
+ * need any GROQ changes.
+ */
+export const getRelatedContent = cache(async (
+  docId: string,
+  limit = 6
+): Promise<{ title?: string; items: RelatedItem[] }> => {
+  if (!docId) return { items: [] }
+
+  const self = await client.fetch<{
+    _type?: string
+    market?: string
+    relatedTitle?: string
+    parentRef?: string
+    ids?: string[]
+  } | null>(
+    `*[_id == $docId][0] {
+      _type, market, relatedTitle,
+      "parentRef": parent._ref,
+      "ids": relatedPages[]._ref
+    }`,
+    { docId }
+  )
+
+  if (!self?._type) return { items: [] }
+
+  const title = self.relatedTitle
+  const max = Math.max(1, Math.min(limit, 12))
+  const ids = (self.ids || []).filter(Boolean)
+
+  // 1. Hand-picked, order preserved.
+  if (ids.length > 0) {
+    const rows: RelatedItem[] = await client.fetch(
+      `*[_id in $ids && defined(slug.current)] { ${RELATED_PROJECTION} }`,
+      { ids }
+    )
+    const byId = new Map(rows.map((r) => [r._id, r]))
+    return { title, items: ids.map((id) => byId.get(id)).filter(Boolean) as RelatedItem[] }
+  }
+
+  // 2. Automatic.
+  const market = self.market || 'global'
+  const marketFilter =
+    market === 'global' ? '(market == "global" || !defined(market))' : 'market == $market'
+
+  // CMS pages: siblings sharing the same parent.
+  if (self._type === 'page') {
+    const parentFilter = self.parentRef ? 'parent._ref == $parentRef' : '!defined(parent)'
+    return {
+      title,
+      items: await client.fetch(
+        `*[_type == "page" && _id != $docId && defined(slug.current) && ${marketFilter} && ${parentFilter}]
+          | order(title asc) [0...$max] { ${RELATED_PROJECTION} }`,
+        { docId, market, parentRef: self.parentRef || '', max }
+      ),
+    }
+  }
+
+  // Everything else: other entries of the same type in the same market.
+  return {
+    title,
+    items: await client.fetch(
+      `*[_type == $docType && _id != $docId && defined(slug.current) && ${marketFilter}]
+        | order(coalesce(title, name) asc) [0...$max] { ${RELATED_PROJECTION} }`,
+      { docId, docType: self._type, market, max }
+    ),
+  }
+})
 
 // ─── Author lookup (for the callout / quote body block) ───────────────────────
 

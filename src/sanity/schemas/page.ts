@@ -52,6 +52,30 @@ export const introField = defineField({
   }],
 })
 
+// ── Related pages (bottom of page) ────────────────────────────────────────────
+// Shared by every content type that renders a "Related pages" block.
+export const relatedPagesFields = [
+  defineField({
+    name: 'relatedTitle',
+    title: 'Related pages heading (optional)',
+    type: 'string',
+    description: 'Overrides the site-wide default heading for this page only',
+  }),
+  defineField({
+    name: 'relatedPages',
+    title: 'Related pages (optional)',
+    type: 'array',
+    description: 'Leave empty to automatically show related pages (siblings / same section)',
+    of: [{
+      type: 'reference',
+      to: [
+        { type: 'page' }, { type: 'casinoGuide' }, { type: 'bookmaker' },
+        { type: 'bonus' }, { type: 'paymentMethod' }, { type: 'software' },
+      ],
+    }],
+  }),
+]
+
 export const bodyField = defineField({
   name: 'body',
   title: 'Content',
@@ -631,6 +655,7 @@ export const pageType = defineType({
     { ...introField, title: 'Intro', group: 'content' } as any,
     ...comparisonTableFields.map(f => ({ ...f, group: 'content' })) as any,
     { ...bodyField, group: 'content' } as any,
+    ...relatedPagesFields.map((f) => ({ ...f, group: 'content' })),
     defineField({
       name: 'author',
       title: 'Author',

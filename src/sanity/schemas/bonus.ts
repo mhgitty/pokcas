@@ -1,5 +1,5 @@
 import { defineField, defineType } from 'sanity'
-import { bodyField } from './page'
+import { bodyField, relatedPagesFields } from './page'
 
 export const bonusType = defineType({
   name: 'bonus',
@@ -168,6 +168,7 @@ export const bonusType = defineType({
 
     // ── Page content ──────────────────────────────────────────────────────────
     { ...bodyField, group: 'content' } as any,
+    ...relatedPagesFields.map((f) => ({ ...f, group: 'content' })),
 
     // ── SEO ───────────────────────────────────────────────────────────────────
     defineField({ name: 'metaTitle',       title: 'Meta title',       type: 'string',             group: 'seo' }),

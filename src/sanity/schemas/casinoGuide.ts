@@ -1,5 +1,5 @@
 import { defineField, defineType } from 'sanity'
-import { introField, bodyField } from './page'
+import { introField, bodyField, relatedPagesFields } from './page'
 import { comparisonTableFields } from './comparisonTable'
 
 /**
@@ -38,6 +38,7 @@ export const casinoGuideType = defineType({
     { ...introField, title: 'Intro', group: 'content' } as any,
     ...comparisonTableFields.map((f) => ({ ...f, group: 'content' })) as any,
     { ...bodyField, group: 'content' } as any,
+    ...relatedPagesFields.map((f) => ({ ...f, group: 'content' })),
     defineField({ name: 'author', title: 'Author', type: 'reference', to: [{ type: 'author' }], group: 'content', description: 'Shown in hero and as author card at the bottom' }),
     defineField({ name: 'factChecker', title: 'Fact checker', type: 'reference', to: [{ type: 'author' }], group: 'content' }),
     defineField({ name: 'lastUpdated', title: 'Last updated', type: 'date', group: 'content' }),

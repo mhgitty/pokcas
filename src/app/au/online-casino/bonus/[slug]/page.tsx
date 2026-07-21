@@ -12,6 +12,7 @@ import { getBonusBySlugAu, getPageByPathAu, getSiteSettings, getHreflangScript, 
 import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import { RelatedPages } from '@/components/RelatedPages'
 
 export const revalidate = 3600
 
@@ -195,6 +196,8 @@ export default async function AuBonusSlugPage({ params }: Props) {
           <AuthorBio author={author} compact />
         </div>
       )}
+      <RelatedPages docId={page._id} />
+
     </>
   )
 }

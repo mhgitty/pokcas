@@ -12,6 +12,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
+import { RelatedPages } from '@/components/RelatedPages'
 
 export const revalidate = 3600
 
@@ -150,6 +151,8 @@ export default async function SoftwareSlugPage({ params }: Props) {
           </div>
         </div>
       )}
+      <RelatedPages docId={provider._id} />
+
     </>
   )
 }

@@ -10,6 +10,7 @@ import { getCasinoGuideBySlugCa, getSiteSettings, client } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import { RelatedPages } from '@/components/RelatedPages'
 
 export const revalidate = 3600
 
@@ -113,6 +114,8 @@ export default async function CaCasinoGuidePage({ params }: Props) {
           <AuthorBio author={author} compact />
         </div>
       )}
+      <RelatedPages docId={guide._id} />
+
     </>
   )
 }

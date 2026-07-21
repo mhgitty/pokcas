@@ -12,6 +12,7 @@ import { replaceDateVars } from '@/lib/dateVars'
 import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
+import { RelatedPages } from '@/components/RelatedPages'
 
 export const revalidate = 3600
 
@@ -204,6 +205,8 @@ export default async function ReviewPage() {
       )}
 
       <Footer />
+      <RelatedPages docId={page._id} />
+
     </>
   )
 }

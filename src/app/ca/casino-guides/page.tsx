@@ -10,6 +10,7 @@ import { HreflangLinks } from '@/components/HreflangLinks'
 import { getPageBySlugCa, getCasinoGuides, getSiteSettings } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
 import type { Metadata } from 'next'
+import { RelatedPages } from '@/components/RelatedPages'
 
 export const revalidate = 3600
 
@@ -94,6 +95,8 @@ export default async function CaCasinoGuidesPage() {
           <AuthorBio author={author} compact />
         </div>
       )}
+      <RelatedPages docId={page._id} />
+
     </>
   )
 }

@@ -15,6 +15,7 @@ import { Icon } from '@/components/Icon'
 import { AuthorBio } from '@/components/AuthorBio'
 import { ScoreMeter } from '@/components/ScoreMeter'
 import type { Metadata } from 'next'
+import { RelatedPages } from '@/components/RelatedPages'
 
 export const revalidate = 3600
 
@@ -209,6 +210,8 @@ export default async function ReviewPage({ params }: Props) {
       )}
 
       <Footer />
+      <RelatedPages docId={bm._id} />
+
     </>
   )
 }

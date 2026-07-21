@@ -188,6 +188,14 @@ export const siteSettingsType = defineType({
 
     // ── Default author ──────────────────────────────────────────────────────────
     defineField({
+      name: 'relatedPagesTitle',
+      title: 'Related pages heading',
+      type: 'string',
+      group: 'general',
+      description: 'Site-wide heading for the related pages block at the bottom of pages, e.g. "Other pages you may like". Can be overridden per page.',
+      initialValue: 'Other pages you may like',
+    }),
+    defineField({
       name: 'defaultAuthor',
       title: 'Default author',
       type: 'reference',
