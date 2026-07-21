@@ -448,6 +448,51 @@ export async function getPaymentMethods() {
   )
 }
 
+// ─── Provider box (body block) ────────────────────────────────────────────────
+// Resolves the payment methods / software providers shown by a providerBoxBlock.
+// Either an explicit hand-picked list (order preserved) or the top N for a market.
+
+export type ProviderBoxItem = {
+  _id: string
+  _type: 'paymentMethod' | 'software'
+  name?: string
+  slug?: { current?: string }
+  logo?: { url?: string; alt?: string }
+}
+
+export async function getProviderBoxItems(opts: {
+  provider: 'paymentMethod' | 'software'
+  market?: string
+  ids?: string[]
+  limit?: number
+}): Promise<ProviderBoxItem[]> {
+  const type = opts.provider === 'software' ? 'software' : 'paymentMethod'
+  const ids = (opts.ids || []).filter(Boolean)
+  const projection = `_id, _type, name, slug, "logo": logo { "url": asset->url, alt }`
+
+  if (ids.length > 0) {
+    // Hand-picked: accept either type so a mixed selection still resolves,
+    // and let each item's own _type drive its URL.
+    const rows: ProviderBoxItem[] = await client.fetch(
+      `*[_id in $ids && _type in ["paymentMethod", "software"]] { ${projection} }`,
+      { ids }
+    )
+    // GROQ ignores the order of $ids — restore the editor's chosen order.
+    const byId = new Map(rows.map((r) => [r._id, r]))
+    return ids.map((id) => byId.get(id)).filter(Boolean) as ProviderBoxItem[]
+  }
+
+  const market = opts.market || 'global'
+  const marketFilter =
+    market === 'global' ? '(market == "global" || !defined(market))' : 'market == $market'
+  const limit = Math.max(1, Math.min(opts.limit || 6, 24))
+
+  return client.fetch(
+    `*[_type == $type && ${marketFilter}] | order(name asc) [0...$limit] { ${projection} }`,
+    { type, market, limit }
+  )
+}
+
 export async function getPaymentMethodBySlug(slug: string) {
   return client.fetch(
     `*[_type == "paymentMethod" && slug.current == $slug && (market == "global" || !defined(market))][0] {

@@ -784,3 +784,19 @@ footer {
   .wcalc-fields { grid-template-columns: 1fr; }
   .wcalc-inputs, .wcalc-results { padding: 18px 16px !important; }
 }
+
+/* ── Provider box (payment methods / software) ─────────────────────────────── */
+.pbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+.pbox-item { transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease; }
+.pbox-item:hover {
+  border-color: var(--green) !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+  transform: translateY(-2px);
+}
+@media (max-width: 520px) {
+  .pbox-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; }
+}

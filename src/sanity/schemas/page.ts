@@ -176,6 +176,58 @@ export const bodyField = defineField({
     },
     {
       type: 'object',
+      name: 'providerBoxBlock',
+      title: 'Payment Methods / Software Box',
+      description: 'Shows a box of payment methods or software providers with logo + name',
+      fields: [
+        {
+          name: 'provider', title: 'Show', type: 'string',
+          options: {
+            list: [
+              { title: 'Payment methods', value: 'paymentMethod' },
+              { title: 'Software providers', value: 'software' },
+            ],
+            layout: 'radio',
+          },
+          initialValue: 'paymentMethod',
+          validation: (r: any) => r.required(),
+        },
+        {
+          name: 'market', title: 'Market', type: 'string',
+          options: {
+            list: [
+              { title: 'Global', value: 'global' },
+              { title: 'Canada', value: 'ca' },
+              { title: 'Australia', value: 'au' },
+            ],
+          },
+          initialValue: 'global',
+          description: 'Which market to pull from, and which URLs to link to',
+        },
+        {
+          name: 'items', title: 'Pick specific ones (optional)', type: 'array',
+          description: 'Leave empty to automatically show the first entries for the market above',
+          of: [{ type: 'reference', to: [{ type: 'paymentMethod' }, { type: 'software' }] }],
+        },
+        {
+          name: 'limit', title: 'How many to show', type: 'number',
+          description: 'Only used when nothing is hand-picked above',
+          initialValue: 6,
+          validation: (r: any) => r.min(1).max(24),
+        },
+      ],
+      preview: {
+        select: { provider: 'provider', items: 'items', limit: 'limit', market: 'market' },
+        prepare({ provider, items, limit, market }: any) {
+          const what = provider === 'software' ? 'Software providers' : 'Payment methods'
+          const count = items?.length ? `${items.length} hand-picked` : `first ${limit || 6}`
+          const mkt = market && market !== 'global' ? ` · ${String(market).toUpperCase()}` : ''
+          return { title: what, subtitle: `${count}${mkt}` }
+        },
+      },
+    },
+    {
+      type: 'object',
       name: 'wageringCalculatorBlock',
       title: 'Wagering Calculator',
       fields: [

@@ -5,6 +5,7 @@ import { CalloutBlock } from './CalloutBlock'
 import { FaqBlock } from './FaqBlock'
 import { ProsConsBlock } from './ProsConsBlock'
 import { WageringCalculator } from './WageringCalculator'
+import { ProviderBox } from './ProviderBox'
 import { LatestPostsBlock } from './LatestPostsBlock'
 import { TableBlock } from './TableBlock'
 import { headingId } from '@/lib/headingId'
@@ -152,6 +153,7 @@ export function PortableTextRenderer({ value, posts }: { value: any[]; posts?: P
       faqBlock: ({ value }: any) => <FaqBlock value={value} />,
       prosConsBlock: ({ value }: any) => <ProsConsBlock value={value} />,
       wageringCalculatorBlock: ({ value }: any) => <WageringCalculator value={value} />,
+      providerBoxBlock: ({ value }: any) => <ProviderBox value={value} />,
       tableBlock: ({ value }: any) => <TableBlock value={value} />,
       casinoKortBlock: ({ value }: any) => <CasinoKort value={value} />,
       bonusKortBlock: ({ value }: any) => <BonusKort value={value} />,
