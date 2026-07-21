@@ -17,6 +17,42 @@ const sectionCasinoList = {
   preview: { select: { title: 'title' }, prepare: ({ title }: any) => ({ title: `🎰 ${title || 'Casino List'}` }) },
 }
 
+const sectionReviewsArchive = {
+  type: 'object' as const,
+  name: 'sectionReviewsArchive',
+  title: '⭐ Casino Reviews (searchable)',
+  fields: [
+    defineField({ name: 'title', title: 'Section title', type: 'string', initialValue: 'Casino reviews' }),
+    sectionIntroField,
+    defineField({
+      name: 'count', title: 'Max casinos to show', type: 'number', initialValue: 10,
+      description: 'A "See all reviews" link is shown when there are more than this',
+      validation: (r: any) => r.min(1).max(50),
+    }),
+  ],
+  preview: {
+    select: { title: 'title', count: 'count' },
+    prepare: ({ title, count }: any) => ({
+      title: `⭐ ${title || 'Casino reviews'}`,
+      subtitle: `Searchable · max ${count || 10}`,
+    }),
+  },
+}
+
+const sectionGuidesArchive = {
+  type: 'object' as const,
+  name: 'sectionGuidesArchive',
+  title: '📚 Casino Guides (searchable)',
+  fields: [
+    defineField({ name: 'title', title: 'Section title', type: 'string', initialValue: 'Casino guides' }),
+    sectionIntroField,
+  ],
+  preview: {
+    select: { title: 'title' },
+    prepare: ({ title }: any) => ({ title: `📚 ${title || 'Casino guides'}`, subtitle: 'Searchable archive' }),
+  },
+}
+
 const sectionPaymentMethods = {
   type: 'object' as const,
   name: 'sectionPaymentMethods',
@@ -182,6 +218,8 @@ export const countryHomepageType = defineType({
       description: 'Add, remove and drag to reorder sections on the homepage. Each type has its own settings.',
       of: [
         sectionCasinoList,
+        sectionReviewsArchive,
+        sectionGuidesArchive,
         sectionPaymentMethods,
         sectionSoftware,
         sectionCtaBanner,

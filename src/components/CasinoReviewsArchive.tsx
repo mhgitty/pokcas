@@ -19,6 +19,11 @@ interface Props {
   /** Prefix for the review link, e.g. "/ca/online-casino/review". */
   hrefPrefix?: string
   title?: string
+  /** Optional rich text rendered between the heading and the list. */
+  intro?: React.ReactNode
+  /** Optional "see all" link shown under the list. */
+  seeAllHref?: string
+  seeAllLabel?: string
 }
 
 function ScoreBadge({ score }: { score: number }) {
@@ -34,7 +39,7 @@ function ScoreBadge({ score }: { score: number }) {
   )
 }
 
-export function CasinoReviewsArchive({ casinos, hrefPrefix = '/review', title = 'All casino reviews' }: Props) {
+export function CasinoReviewsArchive({ casinos, hrefPrefix = '/review', title = 'All casino reviews', intro, seeAllHref, seeAllLabel = 'See all reviews' }: Props) {
   const [query, setQuery] = useState('')
 
   const filtered = useMemo(() => {
@@ -88,6 +93,8 @@ export function CasinoReviewsArchive({ casinos, hrefPrefix = '/review', title = 
           )}
         </div>
       </div>
+
+      {intro && <div style={{ marginBottom: '20px' }}>{intro}</div>}
 
       {filtered.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '48px', color: 'var(--text-faint)', fontSize: '14px' }}>
@@ -160,6 +167,20 @@ export function CasinoReviewsArchive({ casinos, hrefPrefix = '/review', title = 
               </div>
             )
           })}
+        </div>
+      )}
+
+      {seeAllHref && (
+        <div style={{ textAlign: 'center', marginTop: '22px' }}>
+          <Link href={seeAllHref} style={{
+            display: 'inline-flex', alignItems: 'center', gap: '6px',
+            background: 'var(--bg-raised)', border: '1px solid var(--border)',
+            color: 'var(--text)', padding: '11px 20px', borderRadius: '10px',
+            fontSize: '14px', fontWeight: 600, textDecoration: 'none',
+          }}>
+            {seeAllLabel}
+            <Icon name="arrow-right" size={16} />
+          </Link>
         </div>
       )}
     </div>

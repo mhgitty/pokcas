@@ -2,10 +2,13 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Icon } from '@/components/Icon'
 import { RichIntro } from '@/components/RichIntro'
+import { CasinoReviewsArchive } from '@/components/CasinoReviewsArchive'
+import { GuidesArchive } from '@/components/GuidesArchive'
 import {
   getBookmakersCa, getBookmarkersAu,
   getPaymentMethodsCa, getPaymentMethodsAu,
   getSoftwareProvidersCa, getSoftwareProvidersAu,
+  getCasinoGuides,
 } from '@/lib/sanity'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -13,13 +16,15 @@ import {
 interface SectionBase { _type: string; _key: string }
 
 interface SectionCasinoList     extends SectionBase { _type: 'sectionCasinoList';     title?: string; count?: number }
+interface SectionReviewsArchive extends SectionBase { _type: 'sectionReviewsArchive'; title?: string; intro?: any[]; count?: number }
+interface SectionGuidesArchive  extends SectionBase { _type: 'sectionGuidesArchive';  title?: string; intro?: any[] }
 interface SectionPaymentMethods extends SectionBase { _type: 'sectionPaymentMethods'; title?: string; intro?: any[] }
 interface SectionSoftware       extends SectionBase { _type: 'sectionSoftware';       title?: string; intro?: any[] }
 interface SectionCtaBanner      extends SectionBase { _type: 'sectionCtaBanner';      icon?: string; title: string; body?: string; buttonLabel?: string; buttonUrl?: string; style?: string }
 interface SectionHighlights     extends SectionBase { _type: 'sectionHighlights';     title?: string; intro?: string; items?: { _key: string; title: string; bullets?: string[] }[] }
 interface SectionGameTypes      extends SectionBase { _type: 'sectionGameTypes';      title?: string; items?: { _key: string; title: string; description?: string; icon?: string; href?: string }[] }
 
-type AnySection = SectionCasinoList | SectionPaymentMethods | SectionSoftware | SectionCtaBanner | SectionHighlights | SectionGameTypes
+type AnySection = SectionCasinoList | SectionReviewsArchive | SectionGuidesArchive | SectionPaymentMethods | SectionSoftware | SectionCtaBanner | SectionHighlights | SectionGameTypes
 
 // ── Casino list ───────────────────────────────────────────────────────────────
 
@@ -413,8 +418,10 @@ export async function HomeSections({ sections, market }: { sections: AnySection[
   const needsBookmakers = sections.some(s => s._type === 'sectionCasinoList')
   const needsPayments   = sections.some(s => s._type === 'sectionPaymentMethods')
   const needsSoftware   = sections.some(s => s._type === 'sectionSoftware')
+  const needsReviews    = sections.some(s => s._type === 'sectionReviewsArchive')
+  const needsGuides     = sections.some(s => s._type === 'sectionGuidesArchive')
 
-  const [bookmakers, payments, software] = await Promise.all([
+  const [bookmakers, payments, software, reviewCasinos, guides] = await Promise.all([
     needsBookmakers
       ? (market === 'ca' ? getBookmakersCa() : getBookmarkersAu()).catch(() => [])
       : Promise.resolve([]),
@@ -424,12 +431,19 @@ export async function HomeSections({ sections, market }: { sections: AnySection[
     needsSoftware
       ? (market === 'ca' ? getSoftwareProvidersCa() : getSoftwareProvidersAu()).catch(() => [])
       : Promise.resolve([]),
+    needsReviews
+      ? (market === 'ca' ? getBookmakersCa() : getBookmarkersAu()).catch(() => [])
+      : Promise.resolve([]),
+    needsGuides
+      ? getCasinoGuides(market).catch(() => [])
+      : Promise.resolve([]),
   ])
 
   const reviewBase = market === 'ca' ? '/ca/online-casino/review' : '/au/online-casino/review'
   const listBase   = market === 'ca' ? '/ca/online-casino/review/' : '/au/online-casino/review/'
   const payBase    = market === 'ca' ? '/ca/online-casino/payment' : '/au/online-casino/payment'
   const softBase   = market === 'ca' ? '/ca/online-casino/software' : '/au/online-casino/software'
+  const guideBase  = market === 'ca' ? '/ca/casino-guides' : '/au/casino-guides'
 
   return (
     <>
@@ -445,6 +459,38 @@ export async function HomeSections({ sections, market }: { sections: AnySection[
                 listBase={listBase}
               />
             ) : null
+
+          case 'sectionReviewsArchive': {
+            const sec = section as SectionReviewsArchive
+            const all = reviewCasinos as any[]
+            if (all.length === 0) return null
+            const max = sec.count ?? 10
+            return (
+              <CasinoReviewsArchive
+                key={section._key}
+                casinos={all.slice(0, max)}
+                hrefPrefix={reviewBase}
+                title={sec.title || 'Casino reviews'}
+                intro={sec.intro ? <RichIntro value={sec.intro} /> : undefined}
+                seeAllHref={all.length > max ? listBase : undefined}
+              />
+            )
+          }
+
+          case 'sectionGuidesArchive': {
+            const sec = section as SectionGuidesArchive
+            const all = guides as any[]
+            if (all.length === 0) return null
+            return (
+              <GuidesArchive
+                key={section._key}
+                guides={all}
+                hrefPrefix={guideBase}
+                title={sec.title || 'Casino guides'}
+                intro={sec.intro ? <RichIntro value={sec.intro} /> : undefined}
+              />
+            )
+          }
 
           case 'sectionPaymentMethods':
             return (payments as any[]).length > 0 ? (

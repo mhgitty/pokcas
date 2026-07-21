@@ -16,9 +16,11 @@ interface Props {
   /** Prefix for the guide link, e.g. "/ca/casino-guides". */
   hrefPrefix?: string
   title?: string
+  /** Optional rich text rendered between the heading and the list. */
+  intro?: React.ReactNode
 }
 
-export function GuidesArchive({ guides, hrefPrefix = '/casino-guides', title = 'All casino guides' }: Props) {
+export function GuidesArchive({ guides, hrefPrefix = '/casino-guides', title = 'All casino guides', intro }: Props) {
   const [query, setQuery] = useState('')
 
   const filtered = useMemo(() => {
@@ -64,6 +66,8 @@ export function GuidesArchive({ guides, hrefPrefix = '/casino-guides', title = '
           )}
         </div>
       </div>
+
+      {intro && <div style={{ marginBottom: '20px' }}>{intro}</div>}
 
       {filtered.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '48px', color: 'var(--text-faint)', fontSize: '14px' }}>
