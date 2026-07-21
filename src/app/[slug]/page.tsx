@@ -256,7 +256,7 @@ export default async function SlugPage({ params }: Props) {
       )}
 
       <Footer />
-      <RelatedPages docId={post._id} />
+      <RelatedPages docId={post?._id} />
 
     </>
   )

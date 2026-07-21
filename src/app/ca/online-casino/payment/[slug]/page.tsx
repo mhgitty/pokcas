@@ -108,7 +108,7 @@ export default async function CaPaymentSlugPage({ params }: Props) {
         </div>
       )}
 
-      <RelatedPages docId={method._id} />
+      <RelatedPages docId={method?._id} />
 
     </>
   )

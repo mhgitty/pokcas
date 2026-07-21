@@ -139,7 +139,7 @@ export default async function CaSlugPage({ params }: Props) {
         </div>
       )}
 
-      <RelatedPages docId={page._id} />
+      <RelatedPages docId={page?._id} />
 
     </>
   )

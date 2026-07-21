@@ -153,7 +153,7 @@ export default async function CaSoftwareSlugPage({ params }: Props) {
           </div>
         </div>
       )}
-      <RelatedPages docId={provider._id} />
+      <RelatedPages docId={provider?._id} />
 
     </>
   )

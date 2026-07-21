@@ -120,7 +120,7 @@ export default async function SoftwareIndexPage() {
       )}
 
       <Footer />
-      <RelatedPages docId={page._id} />
+      <RelatedPages docId={page?._id} />
 
     </>
   )

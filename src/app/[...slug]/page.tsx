@@ -130,7 +130,7 @@ export default async function DynamicPage({ params }: Props) {
       )}
 
       <Footer />
-      <RelatedPages docId={page._id} />
+      <RelatedPages docId={page?._id} />
 
     </>
   )

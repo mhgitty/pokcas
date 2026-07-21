@@ -196,7 +196,7 @@ export default async function AuBonusSlugPage({ params }: Props) {
           <AuthorBio author={author} compact />
         </div>
       )}
-      <RelatedPages docId={page._id} />
+      <RelatedPages docId={page?._id} />
 
     </>
   )

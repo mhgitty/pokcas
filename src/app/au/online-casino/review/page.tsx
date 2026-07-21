@@ -105,7 +105,7 @@ export default async function AuReviewsPage() {
         </div>
       )}
 
-      <RelatedPages docId={page._id} />
+      <RelatedPages docId={page?._id} />
 
     </>
   )

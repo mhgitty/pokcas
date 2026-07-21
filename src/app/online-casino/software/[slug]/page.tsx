@@ -151,7 +151,7 @@ export default async function SoftwareSlugPage({ params }: Props) {
           </div>
         </div>
       )}
-      <RelatedPages docId={provider._id} />
+      <RelatedPages docId={provider?._id} />
 
     </>
   )

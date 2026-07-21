@@ -124,7 +124,7 @@ export default async function PaymentMethodsIndexPage() {
       )}
 
       <Footer />
-      <RelatedPages docId={page._id} />
+      <RelatedPages docId={page?._id} />
 
     </>
   )

@@ -209,7 +209,7 @@ export default async function CaReviewSlugPage({ params }: Props) {
         </div>
       )}
 
-      <RelatedPages docId={bm._id} />
+      <RelatedPages docId={bm?._id} />
 
     </>
   )

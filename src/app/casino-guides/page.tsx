@@ -99,7 +99,7 @@ export default async function CasinoGuidesPage() {
         </div>
       )}
       <Footer />
-      <RelatedPages docId={page._id} />
+      <RelatedPages docId={page?._id} />
 
     </>
   )

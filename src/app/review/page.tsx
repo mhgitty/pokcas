@@ -205,7 +205,7 @@ export default async function ReviewPage() {
       )}
 
       <Footer />
-      <RelatedPages docId={page._id} />
+      <RelatedPages docId={page?._id} />
 
     </>
   )

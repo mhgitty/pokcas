@@ -137,7 +137,7 @@ export default async function CasinoGamePage({ params }: Props) {
           <PortableTextRenderer value={game.body} />
         </div>
       )}
-      <RelatedPages docId={game._id} />
+      <RelatedPages docId={game?._id} />
 
     </>
   )

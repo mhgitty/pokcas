@@ -118,7 +118,7 @@ export default async function CasinoGuidePage({ params }: Props) {
         </div>
       )}
       <Footer />
-      <RelatedPages docId={guide._id} />
+      <RelatedPages docId={guide?._id} />
 
     </>
   )

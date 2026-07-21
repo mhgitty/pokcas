@@ -210,7 +210,7 @@ export default async function ReviewPage({ params }: Props) {
       )}
 
       <Footer />
-      <RelatedPages docId={bm._id} />
+      <RelatedPages docId={bm?._id} />
 
     </>
   )

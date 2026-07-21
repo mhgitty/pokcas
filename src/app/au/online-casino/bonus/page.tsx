@@ -111,7 +111,7 @@ export default async function AuBonusPage() {
           <AuthorBio author={author} compact />
         </div>
       )}
-      <RelatedPages docId={page._id} />
+      <RelatedPages docId={page?._id} />
 
     </>
   )
