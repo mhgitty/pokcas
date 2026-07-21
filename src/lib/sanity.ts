@@ -456,6 +456,8 @@ export type RelatedItem = {
   _type: string
   title?: string
   name?: string
+  /** Editor-supplied link text that overrides the target's own title. */
+  label?: string
   slug?: { current?: string }
   market?: string
   a1?: string
@@ -503,75 +505,59 @@ export function relatedItemHref(item: RelatedItem): string {
 
 /**
  * Resolves the "Related pages" block for a document.
- * Hand-picked references win; otherwise falls back to sibling pages under the
- * same parent (for CMS pages) or other entries of the same type + market.
+ * Hand-picked only — nothing is shown unless an editor adds entries.
+ * Each entry may carry a custom `label` that overrides the target's own title.
  * Fetches everything it needs from the document id, so page templates don't
  * need any GROQ changes.
  */
 export const getRelatedContent = cache(async (
   docId: string,
-  limit = 6
+  limit = 12
 ): Promise<{ title?: string; items: RelatedItem[] }> => {
   if (!docId) return { items: [] }
 
   const self = await client.fetch<{
-    _type?: string
-    market?: string
     relatedTitle?: string
-    parentRef?: string
-    ids?: string[]
+    related?: { ref?: string; label?: string }[]
   } | null>(
+    // `coalesce(page._ref, _ref)` supports both the current object shape
+    // ({ page, label }) and any entries saved as plain references before.
     `*[_id == $docId][0] {
-      _type, market, relatedTitle,
-      "parentRef": parent._ref,
-      "ids": relatedPages[]._ref
+      relatedTitle,
+      "related": relatedPages[] {
+        "ref": coalesce(page._ref, _ref),
+        label
+      }
     }`,
     { docId }
   )
 
-  if (!self?._type) return { items: [] }
+  if (!self) return { items: [] }
 
   const title = self.relatedTitle
-  const max = Math.max(1, Math.min(limit, 12))
-  const ids = (self.ids || []).filter(Boolean)
+  const picked = (self.related || []).filter((r) => r?.ref)
+  if (picked.length === 0) return { title, items: [] }
 
-  // 1. Hand-picked, order preserved.
-  if (ids.length > 0) {
-    const rows: RelatedItem[] = await client.fetch(
-      `*[_id in $ids && defined(slug.current)] { ${RELATED_PROJECTION} }`,
-      { ids }
-    )
-    const byId = new Map(rows.map((r) => [r._id, r]))
-    return { title, items: ids.map((id) => byId.get(id)).filter(Boolean) as RelatedItem[] }
-  }
+  const ids = picked.map((r) => r.ref!) as string[]
+  const labelById = new Map(picked.map((r) => [r.ref!, r.label]))
 
-  // 2. Automatic.
-  const market = self.market || 'global'
-  const marketFilter =
-    market === 'global' ? '(market == "global" || !defined(market))' : 'market == $market'
+  const rows: RelatedItem[] = await client.fetch(
+    `*[_id in $ids && defined(slug.current)] { ${RELATED_PROJECTION} }`,
+    { ids }
+  )
+  const byId = new Map(rows.map((r) => [r._id, r]))
 
-  // CMS pages: siblings sharing the same parent.
-  if (self._type === 'page') {
-    const parentFilter = self.parentRef ? 'parent._ref == $parentRef' : '!defined(parent)'
-    return {
-      title,
-      items: await client.fetch(
-        `*[_type == "page" && _id != $docId && defined(slug.current) && ${marketFilter} && ${parentFilter}]
-          | order(title asc) [0...$max] { ${RELATED_PROJECTION} }`,
-        { docId, market, parentRef: self.parentRef || '', max }
-      ),
-    }
-  }
+  const items = ids
+    .map((id) => {
+      const row = byId.get(id)
+      if (!row) return null
+      const label = labelById.get(id)
+      return label ? { ...row, label } : row
+    })
+    .filter(Boolean)
+    .slice(0, Math.max(1, limit)) as RelatedItem[]
 
-  // Everything else: other entries of the same type in the same market.
-  return {
-    title,
-    items: await client.fetch(
-      `*[_type == $docType && _id != $docId && defined(slug.current) && ${marketFilter}]
-        | order(coalesce(title, name) asc) [0...$max] { ${RELATED_PROJECTION} }`,
-      { docId, docType: self._type, market, max }
-    ),
-  }
+  return { title, items }
 })
 
 // ─── Author lookup (for the callout / quote body block) ───────────────────────

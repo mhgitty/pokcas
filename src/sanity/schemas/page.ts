@@ -63,15 +63,37 @@ export const relatedPagesFields = [
   }),
   defineField({
     name: 'relatedPages',
-    title: 'Related pages (optional)',
+    title: 'Related pages',
     type: 'array',
-    description: 'Leave empty to automatically show related pages (siblings / same section)',
+    description: 'Pick the pages to link to at the bottom. Nothing is shown unless you add them here.',
     of: [{
-      type: 'reference',
-      to: [
-        { type: 'page' }, { type: 'casinoGuide' }, { type: 'bookmaker' },
-        { type: 'bonus' }, { type: 'paymentMethod' }, { type: 'software' },
+      type: 'object',
+      name: 'relatedPageItem',
+      fields: [
+        {
+          name: 'page',
+          title: 'Page',
+          type: 'reference',
+          to: [
+            { type: 'page' }, { type: 'casinoGuide' }, { type: 'bookmaker' },
+            { type: 'bonus' }, { type: 'paymentMethod' }, { type: 'software' },
+          ],
+          validation: (r: any) => r.required(),
+        },
+        {
+          name: 'label',
+          title: 'Link text (optional)',
+          type: 'string',
+          description: 'What the link says on the frontend. Leave empty to use the page title.',
+        },
       ],
+      preview: {
+        select: { label: 'label', title: 'page.title', name: 'page.name' },
+        prepare({ label, title, name }: any) {
+          const target = title || name || 'Page'
+          return { title: label || target, subtitle: label ? target : undefined }
+        },
+      },
     }],
   }),
 ]

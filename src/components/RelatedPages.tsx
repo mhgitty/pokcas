@@ -50,7 +50,7 @@ export async function RelatedPages({ docId, limit = 6 }: RelatedPagesProps) {
 
       <div className="related-grid">
         {items.map((item) => {
-          const label = item.title || item.name || 'Read more'
+          const label = item.label || item.title || item.name || 'Read more'
           return (
             <Link
               key={item._id}
