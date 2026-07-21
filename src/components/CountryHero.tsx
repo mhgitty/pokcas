@@ -34,7 +34,12 @@ export function CountryHero({ title, intro, heroCards, breadcrumbs }: CountryHer
 
           {/* ── Left: title + intro ── */}
           <div className="country-hero-left">
-            {breadcrumbs && breadcrumbs.length > 0 && <Breadcrumbs crumbs={breadcrumbs} />}
+            {breadcrumbs && breadcrumbs.length > 0 && (
+              // Kept in the DOM for accessibility + breadcrumb markup, hidden visually.
+              <div className="visually-hidden">
+                <Breadcrumbs crumbs={breadcrumbs} />
+              </div>
+            )}
 
             <h1 style={{
               fontFamily: 'var(--font-display)',
@@ -54,7 +59,7 @@ export function CountryHero({ title, intro, heroCards, breadcrumbs }: CountryHer
                 color: 'var(--text-muted)',
                 lineHeight: 1.7,
                 margin: 0,
-                maxWidth: '480px',
+                maxWidth: '640px',
               }}>
                 {typeof intro === 'string' ? replaceDateVars(intro) : <RichIntro value={intro} />}
               </p>
