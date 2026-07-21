@@ -176,6 +176,48 @@ export const bodyField = defineField({
     },
     {
       type: 'object',
+      name: 'wageringCalculatorBlock',
+      title: 'Wagering Calculator',
+      fields: [
+        {
+          name: 'heading', title: 'Heading', type: 'string',
+          description: 'Shown above the calculator, e.g. "Wagering requirement calculator"',
+        },
+        {
+          name: 'currency', title: 'Currency symbol', type: 'string',
+          description: 'e.g. $, C$, A$, €, £', initialValue: '$',
+        },
+        {
+          name: 'defaultDeposit', title: 'Default deposit amount', type: 'number',
+          initialValue: 100,
+        },
+        {
+          name: 'defaultBonusPercent', title: 'Default bonus (%)', type: 'number',
+          description: 'e.g. 100 for a 100% match bonus', initialValue: 100,
+        },
+        {
+          name: 'defaultWagering', title: 'Default wagering requirement (x)', type: 'number',
+          description: 'e.g. 35 for 35x', initialValue: 35,
+        },
+        {
+          name: 'defaultIncludeDeposit', title: 'Wagering applies to bonus + deposit', type: 'boolean',
+          description: 'Off = wagering applies to the bonus amount only (most common). On = bonus + deposit.',
+          initialValue: false,
+        },
+        {
+          name: 'defaultContribution', title: 'Default game contribution (%)', type: 'number',
+          description: 'e.g. 100 for slots, 10 for table games', initialValue: 100,
+        },
+      ],
+      preview: {
+        select: { heading: 'heading', w: 'defaultWagering' },
+        prepare({ heading, w }: any) {
+          return { title: heading || 'Wagering Calculator', subtitle: w ? `Default ${w}x` : 'Calculator' }
+        },
+      },
+    },
+    {
+      type: 'object',
       name: 'prosConsBlock',
       title: 'Pros & Cons',
       components: { input: ProsConsBlockInput },

@@ -15,6 +15,7 @@ const DEFAULT_NAV = [
 function resolveUrl(item: {
   url?: string; pageSlug?: string; pageParentSlug?: string; pageParent2Slug?: string; pageParent3Slug?: string; pageParent4Slug?: string;
   bookmakerSlug?: string; softwareSlug?: string; paymentMethodSlug?: string; postSlug?: string;
+  casinoGuideSlug?: string; casinoGuideMarket?: string;
 }): string {
   if (item.pageSlug) {
     const segments = [item.pageParent4Slug, item.pageParent3Slug, item.pageParent2Slug, item.pageParentSlug, item.pageSlug].filter(Boolean)
@@ -24,6 +25,10 @@ function resolveUrl(item: {
   if (item.softwareSlug) return `/software/${item.softwareSlug}/`
   if (item.paymentMethodSlug) return `/online-casino/payment/${item.paymentMethodSlug}/`
   if (item.postSlug) return `/${item.postSlug}/`
+  if (item.casinoGuideSlug) {
+    const gp = item.casinoGuideMarket === 'ca' ? '/ca' : item.casinoGuideMarket === 'au' ? '/au' : ''
+    return `${gp}/casino-guides/${item.casinoGuideSlug}/`
+  }
   return item.url || '/'
 }
 

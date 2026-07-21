@@ -7,6 +7,7 @@ import { SocialLinks, type SocialLinkData } from './SocialLinks'
 function resolveUrl(item: {
   url?: string; pageSlug?: string; pageParentSlug?: string; pageParent2Slug?: string; pageParent3Slug?: string; pageParent4Slug?: string; pageMarket?: string;
   bookmakerSlug?: string; softwareSlug?: string; paymentMethodSlug?: string; postSlug?: string;
+  casinoGuideSlug?: string; casinoGuideMarket?: string;
 }, market?: string): string {
   const mp = market === 'ca' ? '/ca' : market === 'au' ? '/au' : ''
   if (item.pageSlug) {
@@ -23,6 +24,10 @@ function resolveUrl(item: {
   if (item.softwareSlug) return `${mp}/online-casino/software/${item.softwareSlug}/`
   if (item.paymentMethodSlug) return `${mp}/online-casino/payment/${item.paymentMethodSlug}/`
   if (item.postSlug) return `/${item.postSlug}/`
+  if (item.casinoGuideSlug) {
+    const gp = item.casinoGuideMarket === 'ca' ? '/ca' : item.casinoGuideMarket === 'au' ? '/au' : ''
+    return `${gp}/casino-guides/${item.casinoGuideSlug}/`
+  }
   return item.url || '/'
 }
 

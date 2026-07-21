@@ -327,7 +327,7 @@ export async function getBonusBySlug(slug: string) {
 
 // ── Header nav projection (nested children → multi-level sub-menus) ──────────────
 const navSlugFields = (m: boolean) =>
-  `"pageSlug": pageRef->slug.current, "pageParentSlug": pageRef->parent->slug.current, "pageParent2Slug": pageRef->parent->parent->slug.current, "pageParent3Slug": pageRef->parent->parent->parent->slug.current, "pageParent4Slug": pageRef->parent->parent->parent->parent->slug.current, ${m ? '"pageMarket": pageRef->market, ' : ''}"bookmakerSlug": bookmakerRef->slug.current, "softwareSlug": softwareRef->slug.current, "paymentMethodSlug": paymentMethodRef->slug.current, "postSlug": postRef->slug.current`
+  `"pageSlug": pageRef->slug.current, "pageParentSlug": pageRef->parent->slug.current, "pageParent2Slug": pageRef->parent->parent->slug.current, "pageParent3Slug": pageRef->parent->parent->parent->slug.current, "pageParent4Slug": pageRef->parent->parent->parent->parent->slug.current, ${m ? '"pageMarket": pageRef->market, ' : ''}"bookmakerSlug": bookmakerRef->slug.current, "softwareSlug": softwareRef->slug.current, "paymentMethodSlug": paymentMethodRef->slug.current, "postSlug": postRef->slug.current, "casinoGuideSlug": casinoGuideRef->slug.current, "casinoGuideMarket": casinoGuideRef->market`
 const navChildren = (depth: number, m: boolean): string =>
   depth <= 0 ? '' : `, children[] { label, url, ${navSlugFields(m)}${navChildren(depth - 1, m)} }`
 const headerNavProjection = (m: boolean) =>
@@ -358,7 +358,7 @@ export const getSiteSettings = cache(async () => {
           "bookmakerSlug": bookmakerRef->slug.current,
           "softwareSlug": softwareRef->slug.current,
           "paymentMethodSlug": paymentMethodRef->slug.current,
-          "postSlug": postRef->slug.current,
+          "postSlug": postRef->slug.current, "casinoGuideSlug": casinoGuideRef->slug.current, "casinoGuideMarket": casinoGuideRef->market,
         }
       },
       footerLongDisclaimer,
@@ -385,7 +385,7 @@ export const getSiteSettings = cache(async () => {
         "bookmakerSlug": bookmakerRef->slug.current,
         "softwareSlug": softwareRef->slug.current,
         "paymentMethodSlug": paymentMethodRef->slug.current,
-        "postSlug": postRef->slug.current,
+        "postSlug": postRef->slug.current, "casinoGuideSlug": casinoGuideRef->slug.current, "casinoGuideMarket": casinoGuideRef->market,
       }
     }`,
     {},
@@ -590,7 +590,7 @@ export async function getMarketSettings(market: 'ca' | 'au') {
           "bookmakerSlug": bookmakerRef->slug.current,
           "softwareSlug": softwareRef->slug.current,
           "paymentMethodSlug": paymentMethodRef->slug.current,
-          "postSlug": postRef->slug.current,
+          "postSlug": postRef->slug.current, "casinoGuideSlug": casinoGuideRef->slug.current, "casinoGuideMarket": casinoGuideRef->market,
         }
       },
       footerBottomNav[] {
@@ -604,7 +604,7 @@ export async function getMarketSettings(market: 'ca' | 'au') {
         "bookmakerSlug": bookmakerRef->slug.current,
         "softwareSlug": softwareRef->slug.current,
         "paymentMethodSlug": paymentMethodRef->slug.current,
-        "postSlug": postRef->slug.current,
+        "postSlug": postRef->slug.current, "casinoGuideSlug": casinoGuideRef->slug.current, "casinoGuideMarket": casinoGuideRef->market,
       }
     }`,
     { id: `${market}-settings` },

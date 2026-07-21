@@ -4,6 +4,7 @@ import { replaceDateVarsInBlocks } from '@/lib/dateVars'
 import { CalloutBlock } from './CalloutBlock'
 import { FaqBlock } from './FaqBlock'
 import { ProsConsBlock } from './ProsConsBlock'
+import { WageringCalculator } from './WageringCalculator'
 import { LatestPostsBlock } from './LatestPostsBlock'
 import { TableBlock } from './TableBlock'
 import { headingId } from '@/lib/headingId'
@@ -150,6 +151,7 @@ export function PortableTextRenderer({ value, posts }: { value: any[]; posts?: P
       calloutBlock: ({ value }: any) => <CalloutBlock value={value} />,
       faqBlock: ({ value }: any) => <FaqBlock value={value} />,
       prosConsBlock: ({ value }: any) => <ProsConsBlock value={value} />,
+      wageringCalculatorBlock: ({ value }: any) => <WageringCalculator value={value} />,
       tableBlock: ({ value }: any) => <TableBlock value={value} />,
       casinoKortBlock: ({ value }: any) => <CasinoKort value={value} />,
       bonusKortBlock: ({ value }: any) => <BonusKort value={value} />,

@@ -38,6 +38,13 @@ const linkFields = [
     description: 'Select a blog post — URL is auto-filled',
   }),
   defineField({
+    name: 'casinoGuideRef',
+    title: 'Casino guide (select from CMS)',
+    type: 'reference',
+    to: [{ type: 'casinoGuide' }],
+    description: 'Select a casino guide — URL is auto-filled',
+  }),
+  defineField({
     name: 'url',
     title: 'URL (custom / external)',
     type: 'string',
@@ -53,14 +60,16 @@ const linkPreview = {
     softwareRef: 'softwareRef.slug.current',
     paymentMethodRef: 'paymentMethodRef.slug.current',
     postRef: 'postRef.slug.current',
+    casinoGuideRef: 'casinoGuideRef.slug.current',
     url: 'url',
   },
-  prepare({ title, pageRef, bookmakerRef, softwareRef, paymentMethodRef, postRef, url }: any) {
+  prepare({ title, pageRef, bookmakerRef, softwareRef, paymentMethodRef, postRef, casinoGuideRef, url }: any) {
     const resolved = pageRef ? `/${pageRef}/`
       : bookmakerRef ? `/online-casino/review/${bookmakerRef}/`
       : softwareRef ? `/software/${softwareRef}/`
       : paymentMethodRef ? `/online-casino/payment/${paymentMethodRef}/`
       : postRef ? `/${postRef}/`
+      : casinoGuideRef ? `/casino-guides/${casinoGuideRef}/`
       : url
     return { title, subtitle: resolved }
   },

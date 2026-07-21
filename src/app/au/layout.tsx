@@ -5,6 +5,7 @@ import { getMarketSettings, getSiteSettings } from '@/lib/sanity'
 function resolveUrl(item: {
   url?: string; pageSlug?: string; pageParentSlug?: string; pageParent2Slug?: string; pageParent3Slug?: string; pageParent4Slug?: string; pageMarket?: string;
   bookmakerSlug?: string; softwareSlug?: string; paymentMethodSlug?: string; postSlug?: string;
+  casinoGuideSlug?: string; casinoGuideMarket?: string;
 }): string {
   if (item.pageSlug) {
     const prefix = item.pageMarket === 'au' ? '/au' : item.pageMarket === 'ca' ? '/ca' : ''
@@ -15,6 +16,10 @@ function resolveUrl(item: {
   if (item.softwareSlug) return `/au/online-casino/software/${item.softwareSlug}/`
   if (item.paymentMethodSlug) return `/au/online-casino/payment/${item.paymentMethodSlug}/`
   if (item.postSlug) return `/${item.postSlug}/`
+  if (item.casinoGuideSlug) {
+    const gp = item.casinoGuideMarket === 'ca' ? '/ca' : item.casinoGuideMarket === 'au' ? '/au' : ''
+    return `${gp}/casino-guides/${item.casinoGuideSlug}/`
+  }
   return item.url || '/'
 }
 
