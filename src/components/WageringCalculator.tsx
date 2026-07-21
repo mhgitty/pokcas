@@ -234,7 +234,7 @@ export function WageringCalculator({ value }: WageringCalculatorProps) {
           </div>
 
           <p style={{ margin: '12px 0 0', fontSize: '12.5px', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-            You must wager <strong>{fmt(wagerAmount, currency)}</strong> in total to unlock the bonus
+            You must wager <strong>{fmt(wagerAmount, currency)}</strong> in total to be able to withdraw winnings
             — {fmt(base, currency)} ({includeDeposit ? 'bonus + deposit' : 'bonus only'}) × {w || 0}x
             {c > 0 && c !== 100 && <> ÷ {c}% game contribution</>}.
           </p>
