@@ -95,7 +95,7 @@ export const bodyField = defineField({
     {
       type: 'object',
       name: 'calloutBlock',
-      title: 'Info / Tip box',
+      title: 'Info / Tip / Quote box',
       fields: [
         {
           name: 'variant', title: 'Type', type: 'string',
@@ -104,10 +104,16 @@ export const bodyField = defineField({
               { title: 'ℹ️ Info', value: 'info' },
               { title: '💡 Tip', value: 'tip' },
               { title: '⚠️ Warning', value: 'warning' },
+              { title: '❝ Quote', value: 'quote' },
             ],
             layout: 'radio', direction: 'horizontal',
           },
           initialValue: 'info',
+        },
+        {
+          name: 'author', title: 'Quoted by (optional)', type: 'reference',
+          to: [{ type: 'author' }],
+          description: 'Credits this box to an author — shows their photo, name and role underneath',
         },
         { name: 'title', title: 'Heading', type: 'string' },
         {

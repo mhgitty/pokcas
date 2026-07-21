@@ -448,6 +448,26 @@ export async function getPaymentMethods() {
   )
 }
 
+// ─── Author lookup (for the callout / quote body block) ───────────────────────
+
+export type QuoteAuthor = {
+  _id: string
+  name?: string
+  role?: string
+  slug?: { current?: string }
+  imageUrl?: string
+}
+
+export const getAuthorById = cache(async (id: string): Promise<QuoteAuthor | null> => {
+  if (!id) return null
+  return client.fetch(
+    `*[_type == "author" && _id == $id][0] {
+      _id, name, role, slug, "imageUrl": image.asset->url
+    }`,
+    { id }
+  )
+})
+
 // ─── Provider box (body block) ────────────────────────────────────────────────
 // Resolves the payment methods / software providers shown by a providerBoxBlock.
 // Either an explicit hand-picked list (order preserved) or the top N for a market.
