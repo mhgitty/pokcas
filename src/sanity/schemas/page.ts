@@ -176,6 +176,40 @@ export const bodyField = defineField({
     },
     {
       type: 'object',
+      name: 'cashbackCalculatorBlock',
+      title: 'Cashback Calculator',
+      fields: [
+        {
+          name: 'heading', title: 'Heading', type: 'string',
+          description: 'Shown above the calculator, e.g. "Cashback calculator"',
+        },
+        {
+          name: 'currency', title: 'Currency symbol', type: 'string',
+          description: 'e.g. $, C$, A$, €, £', initialValue: '$',
+        },
+        { name: 'defaultNetLoss', title: 'Default net loss', type: 'number', initialValue: 500 },
+        {
+          name: 'defaultPercent', title: 'Default cashback (%)', type: 'number',
+          description: 'e.g. 10 for 10% cashback', initialValue: 10,
+        },
+        {
+          name: 'defaultCap', title: 'Default cashback cap', type: 'number',
+          description: 'Leave empty or 0 for no cap',
+        },
+      ],
+      preview: {
+        select: { heading: 'heading', pct: 'defaultPercent', cap: 'defaultCap' },
+        prepare({ heading, pct, cap }: any) {
+          const parts = [pct ? `${pct}%` : null, cap ? `cap ${cap}` : null].filter(Boolean)
+          return {
+            title: heading || 'Cashback Calculator',
+            subtitle: parts.length ? `Default ${parts.join(' · ')}` : 'Calculator',
+          }
+        },
+      },
+    },
+    {
+      type: 'object',
       name: 'providerBoxBlock',
       title: 'Payment Methods / Software Box',
       description: 'Shows a box of payment methods or software providers with logo + name',
