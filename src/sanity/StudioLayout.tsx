@@ -48,7 +48,10 @@ export function WideStudioLayout({ renderDefault, ...props }: { renderDefault: (
           color: #ffffff !important;
         }
       `}</style>
-      <div style={{ '--sanity-sidebar-width': '260px' } as React.CSSProperties}>
+      {/* display:contents keeps this wrapper out of the layout/height chain —
+          a plain block div here collapses the document list's scroll height,
+          which caps virtualized lists at ~14 visible rows. */}
+      <div style={{ display: 'contents', '--sanity-sidebar-width': '260px' } as React.CSSProperties}>
         {renderDefault(props)}
       </div>
     </>
