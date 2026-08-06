@@ -21,10 +21,14 @@ interface Props {
   /** Optional "see all" link shown under the list. */
   seeAllHref?: string
   seeAllLabel?: string
+  /** Cap the number shown while NOT searching. Search still covers all guides. */
+  initialCount?: number
 }
 
-export function GuidesArchive({ guides, hrefPrefix = '/casino-guides', title = 'All casino guides', intro, seeAllHref, seeAllLabel = 'See all casino guides' }: Props) {
+export function GuidesArchive({ guides, hrefPrefix = '/casino-guides', title = 'All casino guides', intro, seeAllHref, seeAllLabel = 'See all casino guides', initialCount }: Props) {
   const [query, setQuery] = useState('')
+
+  const isSearching = query.trim().length > 0
 
   const filtered = useMemo(() => {
     const list = guides ?? []
@@ -35,13 +39,18 @@ export function GuidesArchive({ guides, hrefPrefix = '/casino-guides', title = '
     )
   }, [guides, query])
 
+  const visible = useMemo(
+    () => (!isSearching && initialCount ? filtered.slice(0, initialCount) : filtered),
+    [filtered, isSearching, initialCount]
+  )
+
   if (!guides?.length) return null
 
   return (
     <div className="section">
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', marginBottom: '18px' }}>
         <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: 700, color: 'var(--text)', margin: 0 }}>
-          {title} <span style={{ color: 'var(--text-faint)', fontWeight: 500 }}>({filtered.length})</span>
+          {title} <span style={{ color: 'var(--text-faint)', fontWeight: 500 }}>({visible.length})</span>
         </h2>
 
         <div style={{ position: 'relative', flex: '1 1 240px', maxWidth: '340px' }}>
@@ -78,7 +87,7 @@ export function GuidesArchive({ guides, hrefPrefix = '/casino-guides', title = '
         </div>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '18px' }}>
-          {filtered.map((g) => {
+          {visible.map((g) => {
             const href = `${hrefPrefix}/${g.slug}/`
             return (
               <Link key={g._id} href={href} style={{
@@ -113,7 +122,7 @@ export function GuidesArchive({ guides, hrefPrefix = '/casino-guides', title = '
         </div>
       )}
 
-      {seeAllHref && (
+      {seeAllHref && !isSearching && filtered.length > visible.length && (
         <div style={{ textAlign: 'center', marginTop: '22px' }}>
           <Link href={seeAllHref} style={{
             display: 'inline-flex', alignItems: 'center', gap: '6px',

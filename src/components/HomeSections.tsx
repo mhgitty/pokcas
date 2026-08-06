@@ -468,11 +468,12 @@ export async function HomeSections({ sections, market }: { sections: AnySection[
             return (
               <CasinoReviewsArchive
                 key={section._key}
-                casinos={all.slice(0, max)}
+                casinos={all}
+                initialCount={max}
                 hrefPrefix={reviewBase}
                 title={sec.title || 'Casino reviews'}
                 intro={sec.intro ? <RichIntro value={sec.intro} /> : undefined}
-                seeAllHref={all.length > max ? listBase : undefined}
+                seeAllHref={listBase}
               />
             )
           }
@@ -485,11 +486,12 @@ export async function HomeSections({ sections, market }: { sections: AnySection[
             return (
               <GuidesArchive
                 key={section._key}
-                guides={all.slice(0, gmax)}
+                guides={all}
+                initialCount={gmax}
                 hrefPrefix={guideBase}
                 title={sec.title || 'Casino guides'}
                 intro={sec.intro ? <RichIntro value={sec.intro} /> : undefined}
-                seeAllHref={all.length > gmax ? `${guideBase}/` : undefined}
+                seeAllHref={`${guideBase}/`}
               />
             )
           }

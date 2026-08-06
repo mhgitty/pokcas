@@ -24,6 +24,8 @@ interface Props {
   /** Optional "see all" link shown under the list. */
   seeAllHref?: string
   seeAllLabel?: string
+  /** Cap the number shown while NOT searching. Search still covers all casinos. */
+  initialCount?: number
 }
 
 function ScoreBadge({ score }: { score: number }) {
@@ -39,9 +41,12 @@ function ScoreBadge({ score }: { score: number }) {
   )
 }
 
-export function CasinoReviewsArchive({ casinos, hrefPrefix = '/review', title = 'All casino reviews', intro, seeAllHref, seeAllLabel = 'See all reviews' }: Props) {
+export function CasinoReviewsArchive({ casinos, hrefPrefix = '/review', title = 'All casino reviews', intro, seeAllHref, seeAllLabel = 'See all reviews', initialCount }: Props) {
   const [query, setQuery] = useState('')
 
+  const isSearching = query.trim().length > 0
+
+  // Search always runs over the full list of casinos.
   const filtered = useMemo(() => {
     const list = casinos ?? []
     const q = query.trim().toLowerCase()
@@ -51,13 +56,19 @@ export function CasinoReviewsArchive({ casinos, hrefPrefix = '/review', title = 
     )
   }, [casinos, query])
 
+  // While not searching, only show up to `initialCount`. When searching, show all matches.
+  const visible = useMemo(
+    () => (!isSearching && initialCount ? filtered.slice(0, initialCount) : filtered),
+    [filtered, isSearching, initialCount]
+  )
+
   if (!casinos?.length) return null
 
   return (
     <div className="section">
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', marginBottom: '18px' }}>
         <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: 700, color: 'var(--text)', margin: 0 }}>
-          {title} <span style={{ color: 'var(--text-faint)', fontWeight: 500 }}>({filtered.length})</span>
+          {title} <span style={{ color: 'var(--text-faint)', fontWeight: 500 }}>({visible.length})</span>
         </h2>
 
         {/* Search */}
@@ -102,7 +113,7 @@ export function CasinoReviewsArchive({ casinos, hrefPrefix = '/review', title = 
         </div>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '18px' }}>
-          {filtered.map((c) => {
+          {visible.map((c) => {
             const href = `${hrefPrefix}/${c.slug.current}/`
             return (
               <div key={c._id} style={{
@@ -170,7 +181,7 @@ export function CasinoReviewsArchive({ casinos, hrefPrefix = '/review', title = 
         </div>
       )}
 
-      {seeAllHref && (
+      {seeAllHref && !isSearching && filtered.length > visible.length && (
         <div style={{ textAlign: 'center', marginTop: '22px' }}>
           <Link href={seeAllHref} style={{
             display: 'inline-flex', alignItems: 'center', gap: '6px',
