@@ -65,25 +65,21 @@ export function SoftwareHero({
     <div style={{
       background: 'var(--bg-hero)',
       borderBottom: '1px solid var(--border)',
-      padding: '40px 15px 36px',
+      padding: '16px 15px 36px',
     }}>
       <div style={{ maxWidth: '1250px', margin: '0 auto' }}>
 
         {/* Card */}
-        <div style={{
+        <div className={`sw-hero-card${logo?.url ? '' : ' sw-hero-card--no-logo'}`} style={{
           background: 'var(--bg-card)',
           border: '1px solid var(--border)',
           borderRadius: '16px',
           padding: '32px',
-          display: 'flex',
-          gap: '32px',
-          alignItems: 'flex-start',
-          flexWrap: 'wrap',
         }}>
 
           {/* Logo */}
           {logo?.url && (
-            <div style={{
+            <div className="sw-hero-logo" style={{
               width: '100px',
               height: '100px',
               background: '#fff',
@@ -106,9 +102,8 @@ export function SoftwareHero({
             </div>
           )}
 
-          {/* Info */}
-          <div style={{ flex: 1, minWidth: '240px' }}>
-
+          {/* Heading block — eyebrow + H1 (sits beside the logo) */}
+          <div className="sw-hero-head">
             {/* Eyebrow */}
             <div style={{
               display: 'inline-flex', alignItems: 'center', gap: '6px',
@@ -129,27 +124,29 @@ export function SoftwareHero({
               color: 'var(--text)',
               letterSpacing: '-0.03em',
               lineHeight: 1.1,
-              marginBottom: intro?.length ? '16px' : activeStats.length > 0 ? '24px' : '0',
+              margin: 0,
             }}>
               {title}
             </h1>
-
-            {/* Intro */}
-            {intro && intro.length > 0 && (
-              <div style={{ marginBottom: activeStats.length > 0 ? '24px' : '0', color: 'var(--text-muted)', fontSize: '15px', lineHeight: 1.7 }}>
-                <PortableTextRenderer value={intro} />
-              </div>
-            )}
-
-            {/* Stats — 3-column grid so 6 boxes sit in 2 rows */}
-            {activeStats.length > 0 && (
-              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                {activeStats.map((stat) => (
-                  <StatBox key={stat.label} label={stat.label} value={stat.value!} />
-                ))}
-              </div>
-            )}
           </div>
+
+          {/* Body — intro + stats */}
+          {(intro?.length || activeStats.length > 0) && (
+            <div className="sw-hero-body">
+              {intro && intro.length > 0 && (
+                <div style={{ marginBottom: activeStats.length > 0 ? '20px' : '0', color: 'var(--text-muted)', fontSize: '15px', lineHeight: 1.7 }}>
+                  <PortableTextRenderer value={intro} />
+                </div>
+              )}
+              {activeStats.length > 0 && (
+                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                  {activeStats.map((stat) => (
+                    <StatBox key={stat.label} label={stat.label} value={stat.value!} />
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
         </div>
       </div>
