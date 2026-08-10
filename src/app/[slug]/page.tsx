@@ -105,8 +105,8 @@ export default async function SlugPage({ params }: Props) {
         headline: post.title,
         description: post.excerpt || '',
         url: canonical,
-        datePublished: post.publishedAt,
-        dateModified: post.lastUpdated || post.publishedAt,
+        datePublished: post.datePublished || post.publishedAt,
+        dateModified: post.dateModified || post.lastUpdated || post.publishedAt,
         inLanguage: 'en-GB',
         author: author
           ? {

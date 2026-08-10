@@ -25,7 +25,7 @@ export const postType = defineType({
     { ...bodyField, group: 'content' } as any,
     defineField({ name: 'readingTime', title: 'Reading time (minutes)', type: 'number', group: 'content' }),
     defineField({ name: 'publishedAt', title: 'Published date', type: 'datetime', group: 'content' }),
-    defineField({ name: 'lastUpdated', title: 'Last updated', type: 'datetime', group: 'content' }),
+    defineField({ name: 'lastUpdated', title: 'Last updated', type: 'datetime', group: 'content', readOnly: true, hidden: true, description: 'Automatic — the hero and structured data now use the real publish time. This field is no longer used.' }),
     defineField({ name: 'metaTitle', title: 'Meta title', type: 'string', group: 'seo' }),
     defineField({ name: 'metaDescription', title: 'Meta description', type: 'text', rows: 3, group: 'seo' }),
     defineField({

@@ -73,6 +73,8 @@ export default async function DynamicPage({ params }: Props) {
         name: page.title,
         description: page.intro || '',
         inLanguage: 'en-GB',
+        ...(page.datePublished ? { datePublished: page.datePublished } : {}),
+        ...(page.dateModified ? { dateModified: page.dateModified } : {}),
         publisher: { '@type': 'Organization', name: 'Pokcas', url: BASE },
       },
     ],

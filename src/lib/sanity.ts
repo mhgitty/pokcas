@@ -92,7 +92,10 @@ export async function getPosts(limit = 20, categorySlug?: string) {
 export async function getPostBySlug(slug: string) {
   return client.fetch(
     `*[_type == "post" && slug.current == $slug][0] {
-      _id, title, slug, excerpt, publishedAt, lastUpdated, readingTime,
+      _id, title, slug, excerpt, publishedAt, readingTime,
+      "lastUpdated": _updatedAt,
+      "dateModified": _updatedAt,
+      "datePublished": coalesce(publishedAt, _createdAt),
       "body": body[] {
         ...,
         _type == "casinoKortBlock" => {
@@ -203,7 +206,10 @@ const PAGE_FIELDS = `
   "a4Slug": parent->parent->parent->parent->slug.current,
   "a4Title": parent->parent->parent->parent->title,
   "featuredImage": featuredImage { "url": asset->url, alt },
-  lastUpdated, hideAuthor,
+  "lastUpdated": _updatedAt,
+  "dateModified": _updatedAt,
+  "datePublished": coalesce(publishedAt, _createdAt),
+  hideAuthor,
   "author": author-> {
     name, slug, bio, linkedin, x, facebook,
     "imageUrl": image.asset->url

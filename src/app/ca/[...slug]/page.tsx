@@ -92,6 +92,8 @@ export default async function CaSlugPage({ params }: Props) {
         url: canonical,
         name: replaceDateVars(page.title),
         inLanguage: 'en-CA',
+        ...(page.datePublished ? { datePublished: page.datePublished } : {}),
+        ...(page.dateModified ? { dateModified: page.dateModified } : {}),
         publisher: { '@type': 'Organization', name: 'Pokcas', url: BASE },
       },
     ],

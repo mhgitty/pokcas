@@ -750,7 +750,9 @@ export const pageType = defineType({
       title: 'Last updated',
       type: 'date',
       group: 'content',
-      description: 'Shown below the author name in hero',
+      readOnly: true,
+      hidden: true,
+      description: 'Automatic — the hero and structured data now use the real publish time. This field is no longer used.',
     }),
     defineField({
       name: 'hideAuthor',
