@@ -891,3 +891,40 @@ footer {
   .sw-hero-card .sw-hero-logo { width: 84px !important; height: 84px !important; }
   .sw-hero-card .sw-hero-logo img { max-width: 60px !important; max-height: 60px !important; }
 }
+
+/* ── CTA button hover effect (affiliate action buttons) ────────────────────── */
+/* Applies to every affiliate CTA (rel="...sponsored") site-wide. No size change:
+   a glossy diagonal shine sweeps across, plus a subtle brightness + green glow. */
+a[rel~="sponsored"] {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition: box-shadow 0.25s ease, filter 0.25s ease !important;
+}
+a[rel~="sponsored"]::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.5) 50%, transparent 100%);
+  transform: skewX(-20deg);
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+}
+a[rel~="sponsored"]:hover {
+  filter: brightness(1.07) saturate(1.05);
+  box-shadow: 0 6px 22px rgba(26,122,60,0.38);
+}
+a[rel~="sponsored"]:hover::after {
+  animation: ctaShine 0.7s ease forwards;
+}
+@keyframes ctaShine {
+  0%   { left: -80%; opacity: 1; }
+  100% { left: 130%; opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  a[rel~="sponsored"]:hover::after { animation: none; }
+}
