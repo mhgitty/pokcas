@@ -13,8 +13,28 @@ interface HowToBlockProps {
 export function HowToBlock({ value }: HowToBlockProps) {
   if (!value?.items?.length) return null
 
+  // Emit HowTo structured data from the steps we already collect.
+  const steps = value.items.filter((s) => s?.title || s?.body)
+  const howToSchema = steps.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: value.title || 'How to',
+    step: steps.map((s, i) => ({
+      '@type': 'HowToStep',
+      position: i + 1,
+      ...(s.title ? { name: s.title } : {}),
+      text: s.body || s.title,
+    })),
+  } : null
+
   return (
     <div style={{ margin: '32px 0' }}>
+      {howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
+        />
+      )}
       {value.title && (
         <h2 style={{
           fontFamily: 'var(--font-display)',
