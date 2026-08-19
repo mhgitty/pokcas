@@ -8,9 +8,13 @@ const apiVersion = '2026-04-22'
 const publishedClient = createClient({ projectId, dataset, apiVersion, useCdn: true })
 const publishedNoCdnClient = createClient({ projectId, dataset, apiVersion, useCdn: false })
 
-// Draft (preview) client — reads unpublished drafts. Only active when a read
-// token is set AND Next.js Draft Mode is enabled for the request.
-const readToken = process.env.SANITY_API_READ_TOKEN
+// Draft (preview) client — reads unpublished drafts. Only active when a token
+// is set AND Next.js Draft Mode is enabled for the request. Falls back to the
+// write token (which also has read access) so preview works without needing a
+// separate dedicated read token. This token is server-only (never NEXT_PUBLIC),
+// so it is never exposed to the browser.
+const readToken =
+  process.env.SANITY_API_READ_TOKEN || process.env.SANITY_WRITE_TOKEN
 const draftClient = readToken
   ? createClient({ projectId, dataset, apiVersion, useCdn: false, token: readToken, perspective: 'drafts' })
   : null
