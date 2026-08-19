@@ -31,4 +31,19 @@ export const comparisonTableFields = [
     description: 'Vælg en skabelon. Ændringer i skabelonen slår igennem på alle sider der bruger den.',
     hidden: ({ document }: any) => !document?.showComparisonTable,
   }),
+  defineField({
+    name: 'heroCompareButton',
+    title: 'Vis "hop til liste"-knap i hero',
+    type: 'boolean',
+    initialValue: false,
+    description: 'Viser en knap i hero-sektionen, lige under teksten, der scroller ned til sammenligningslisten.',
+    hidden: ({ document }: any) => !document?.showComparisonTable,
+  }),
+  defineField({
+    name: 'heroCompareButtonText',
+    title: 'Knaptekst',
+    type: 'string',
+    description: 'Teksten på hero-knappen. Lad stå tom for standard: "View all bonuses".',
+    hidden: ({ document }: any) => !document?.showComparisonTable || !document?.heroCompareButton,
+  }),
 ]

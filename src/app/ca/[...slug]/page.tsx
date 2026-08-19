@@ -99,6 +99,14 @@ export default async function CaSlugPage({ params }: Props) {
     ],
   }
 
+  const bodyTypes = new Set((((page as any).body as any[]) || []).map((b: any) => b?._type))
+  const heroButtons: { text: string; targetId: string; variant?: 'solid' | 'outline' }[] = []
+  if ((page as any).showComparisonTable && (page as any).comparisonTable && (page as any).heroCompareButton)
+    heroButtons.push({ text: (page as any).heroCompareButtonText || 'View all bonuses', targetId: 'comparison-list', variant: 'solid' })
+  if (bodyTypes.has('prosConsBlock')) heroButtons.push({ text: 'Pros & Cons', targetId: 'pros-cons', variant: 'outline' })
+  if (bodyTypes.has('howToBlock'))    heroButtons.push({ text: 'How-to',      targetId: 'how-to',    variant: 'outline' })
+  if (bodyTypes.has('faqBlock'))      heroButtons.push({ text: 'FAQ',         targetId: 'faq',       variant: 'outline' })
+
   return (
     <>
       <JsonLd data={jsonLd} />
@@ -109,12 +117,13 @@ export default async function CaSlugPage({ params }: Props) {
         author={author}
         factChecker={factChecker}
         updatedAt={(page as any).lastUpdated ?? null}
+        buttons={heroButtons}
         breadcrumbs={breadcrumbs}
       />
 
       {/* Comparison table — configured per page in Sanity Studio */}
       {(page as any).showComparisonTable && (page as any).comparisonTable && (
-        <div className="section" style={{ paddingBottom: page.body ? '0' : undefined }}>
+        <div id="comparison-list" className="section" style={{ paddingBottom: page.body ? '0' : undefined, scrollMarginTop: '80px' }}>
           {(page as any).comparisonTableTitle && (
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: 700, color: 'var(--text)', marginBottom: '20px' }}>
               {replaceDateVars((page as any).comparisonTableTitle)}

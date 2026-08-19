@@ -29,6 +29,22 @@ type Post = {
 export function PortableTextRenderer({ value, posts }: { value: any[]; posts?: Post[] }) {
   const pid = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? ''
 
+  // First occurrence _key of each block type — used to give hero "Quick links"
+  // buttons a single, stable scroll target (avoids duplicate ids).
+  const firstKeyByType: Record<string, string> = {}
+  for (const b of value || []) {
+    if (b?._type && b?._key && !(b._type in firstKeyByType)) firstKeyByType[b._type] = b._key
+  }
+  const anchorFor: Record<string, string> = {
+    prosConsBlock: 'pros-cons',
+    howToBlock: 'how-to',
+    faqBlock: 'faq',
+  }
+  const withAnchor = (type: string, key: string, node: any) =>
+    key && firstKeyByType[type] === key && anchorFor[type]
+      ? <div id={anchorFor[type]} style={{ scrollMarginTop: '80px' }}>{node}</div>
+      : node
+
   const components = {
     block: {
       h2: ({ children, value: v }: any) => {
@@ -152,8 +168,8 @@ export function PortableTextRenderer({ value, posts }: { value: any[]; posts?: P
       },
       dropdownBlock: ({ value }: any) => <DropdownBlock value={value} />,
       calloutBlock: ({ value }: any) => <CalloutBlock value={value} />,
-      faqBlock: ({ value }: any) => <FaqBlock value={value} />,
-      prosConsBlock: ({ value }: any) => <ProsConsBlock value={value} />,
+      faqBlock: ({ value }: any) => withAnchor('faqBlock', value._key, <FaqBlock value={value} />),
+      prosConsBlock: ({ value }: any) => withAnchor('prosConsBlock', value._key, <ProsConsBlock value={value} />),
       wageringCalculatorBlock: ({ value }: any) => <WageringCalculator value={value} />,
       providerBoxBlock: ({ value }: any) => <ProviderBox value={value} />,
       cashbackCalculatorBlock: ({ value }: any) => <CashbackCalculator value={value} />,
@@ -161,7 +177,7 @@ export function PortableTextRenderer({ value, posts }: { value: any[]; posts?: P
       tableBlock: ({ value }: any) => <TableBlock value={value} />,
       casinoKortBlock: ({ value }: any) => <CasinoKort value={value} />,
       bonusKortBlock: ({ value }: any) => <BonusKort value={value} />,
-      howToBlock: ({ value }: any) => <HowToBlock value={value} />,
+      howToBlock: ({ value }: any) => withAnchor('howToBlock', value._key, <HowToBlock value={value} />),
       latestPostsBlock: ({ value: blockValue }: any) =>
         posts ? <LatestPostsBlock value={blockValue} posts={posts} /> : null,
       image: ({ value }: any) => {

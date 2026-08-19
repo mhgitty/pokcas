@@ -138,6 +138,7 @@ export async function getPostBySlug(slug: string) {
 // We expand the reference inline so the frontend gets the same data shape.
 const COMPARISON_TABLE_FRAGMENT = `
   showComparisonTable, comparisonTableTitle,
+  heroCompareButton, heroCompareButtonText,
   "comparisonTable": comparisonTemplate-> {
     tableType,
     bonuses[]-> {

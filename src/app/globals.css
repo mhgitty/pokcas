@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Smooth in-page anchor scrolling (hero "jump to list" button, TOC, etc.) */
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+.hero-compare-btn { transition: filter 0.2s ease, box-shadow 0.2s ease; }
+.hero-compare-btn:hover {
+  filter: brightness(1.07);
+  box-shadow: 0 6px 20px rgba(26,122,60,0.38);
+}
+
 /* ─── Variables ──────────────────────────────────────────────────────────── */
 :root {
   --font-display: var(--font-figtree), sans-serif;
