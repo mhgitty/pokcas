@@ -19,6 +19,7 @@ const isSlugUniquePerMarket: SlugIsUniqueValidator = async (slug, context) => {
 import { TableBlockInput } from '../components/TableBlockInput'
 import { FaqBlockInput } from '../components/FaqBlockInput'
 import { ProsConsBlockInput } from '../components/ProsConsBlockInput'
+import { HeadingSelectInput } from '../components/HeadingSelectInput'
 import { comparisonTableFields } from './comparisonTable'
 
 // Minimal rich-text field for intro/lead text — supports inline formatting + links only
@@ -728,6 +729,34 @@ export const pageType = defineType({
     { ...introField, title: 'Intro', group: 'content' } as any,
     ...comparisonTableFields.map(f => ({ ...f, group: 'content' })) as any,
     { ...bodyField, group: 'content' } as any,
+    defineField({
+      name: 'heroQuickLinks',
+      title: 'Custom quick links (hero)',
+      type: 'array',
+      group: 'content',
+      description: 'Extra hero buttons that scroll to an H2 heading in the body of this page.',
+      of: [{
+        type: 'object',
+        name: 'heroQuickLink',
+        fields: [
+          defineField({ name: 'label', title: 'Button text', type: 'string', validation: (r: any) => r.required() }),
+          defineField({
+            name: 'headingText',
+            title: 'Target H2 heading',
+            type: 'string',
+            components: { input: HeadingSelectInput },
+            description: 'Pick an H2 from the body above. The button scrolls there.',
+            validation: (r: any) => r.required(),
+          }),
+        ],
+        preview: {
+          select: { title: 'label', subtitle: 'headingText' },
+          prepare({ title, subtitle }: any) {
+            return { title: title || 'Quick link', subtitle: subtitle ? `→ ${subtitle}` : undefined }
+          },
+        },
+      }],
+    }),
     ...relatedPagesFields.map((f) => ({ ...f, group: 'content' })),
     defineField({
       name: 'author',

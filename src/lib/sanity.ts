@@ -13,8 +13,11 @@ const publishedNoCdnClient = createClient({ projectId, dataset, apiVersion, useC
 // write token (which also has read access) so preview works without needing a
 // separate dedicated read token. This token is server-only (never NEXT_PUBLIC),
 // so it is never exposed to the browser.
+// Prefer the write token for the draft client: it reliably has permission to
+// read draft (unpublished) documents, whereas a "Viewer"-role read token often
+// does NOT — which silently breaks preview of never-published pages.
 const readToken =
-  process.env.SANITY_API_READ_TOKEN || process.env.SANITY_WRITE_TOKEN
+  process.env.SANITY_WRITE_TOKEN || process.env.SANITY_API_READ_TOKEN
 const draftClient = readToken
   ? createClient({ projectId, dataset, apiVersion, useCdn: false, token: readToken, perspective: 'drafts' })
   : null
@@ -214,6 +217,7 @@ const PAGE_FIELDS = `
   "lastUpdated": _updatedAt,
   "dateModified": _updatedAt,
   "datePublished": coalesce(publishedAt, _createdAt),
+  "heroQuickLinks": heroQuickLinks[] { label, headingText },
   hideAuthor,
   "author": author-> {
     name, slug, bio, linkedin, x, facebook,

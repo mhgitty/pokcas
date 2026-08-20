@@ -13,6 +13,7 @@ import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
+import { headingId } from '@/lib/headingId'
 
 export const revalidate = 3600
 
@@ -87,6 +88,9 @@ export default async function DynamicPage({ params }: Props) {
   if (bodyTypes.has('prosConsBlock')) heroButtons.push({ text: 'Pros & Cons', targetId: 'pros-cons', variant: 'outline' })
   if (bodyTypes.has('howToBlock'))    heroButtons.push({ text: 'How-to',      targetId: 'how-to',    variant: 'outline' })
   if (bodyTypes.has('faqBlock'))      heroButtons.push({ text: 'FAQ',         targetId: 'faq',       variant: 'outline' })
+  for (const ql of (((page as any).heroQuickLinks as any[]) || [])) {
+    if (ql?.label && ql?.headingText) heroButtons.push({ text: ql.label, targetId: headingId(replaceDateVars(ql.headingText)), variant: 'outline' })
+  }
 
   return (
     <>
