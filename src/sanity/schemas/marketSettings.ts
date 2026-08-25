@@ -1,5 +1,14 @@
 import { defineField, defineType } from 'sanity'
 
+// Restricts a reference picker to documents in the same market as the settings
+// document being edited (the CA menu only shows CA docs, AU only shows AU).
+const sameMarketFilter = {
+  filter: ({ document }: any) => ({
+    filter: 'market == $market',
+    params: { market: (document?.market as string) || 'global' },
+  }),
+}
+
 const linkFields = [
   defineField({ name: 'label', title: 'Label', type: 'string', validation: (r) => r.required() }),
   defineField({
@@ -7,28 +16,32 @@ const linkFields = [
     title: 'Page (select from CMS)',
     type: 'reference',
     to: [{ type: 'page' }],
-    description: 'Select a page — URL is auto-filled',
+    options: sameMarketFilter,
+    description: 'Select a page — only pages in this market are shown',
   }),
   defineField({
     name: 'bookmakerRef',
     title: 'Casino (select from CMS)',
     type: 'reference',
     to: [{ type: 'bookmaker' }],
-    description: 'Select a casino — URL is auto-filled',
+    options: sameMarketFilter,
+    description: 'Select a casino — only casinos in this market are shown',
   }),
   defineField({
     name: 'softwareRef',
     title: 'Software provider (select from CMS)',
     type: 'reference',
     to: [{ type: 'software' }],
-    description: 'Select a software provider — URL is auto-filled',
+    options: sameMarketFilter,
+    description: 'Select a software provider — only providers in this market are shown',
   }),
   defineField({
     name: 'paymentMethodRef',
     title: 'Payment method (select from CMS)',
     type: 'reference',
     to: [{ type: 'paymentMethod' }],
-    description: 'Select a payment method — URL is auto-filled',
+    options: sameMarketFilter,
+    description: 'Select a payment method — only methods in this market are shown',
   }),
   defineField({
     name: 'postRef',
@@ -42,7 +55,8 @@ const linkFields = [
     title: 'Casino guide (select from CMS)',
     type: 'reference',
     to: [{ type: 'casinoGuide' }],
-    description: 'Select a casino guide — URL is auto-filled',
+    options: sameMarketFilter,
+    description: 'Select a casino guide — only guides in this market are shown',
   }),
   defineField({
     name: 'url',
