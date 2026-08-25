@@ -3,10 +3,15 @@ import { defineField, defineType } from 'sanity'
 // Restricts a reference picker to documents in the same market as the settings
 // document being edited (the CA menu only shows CA docs, AU only shows AU).
 const sameMarketFilter = {
-  filter: ({ document }: any) => ({
-    filter: 'market == $market',
-    params: { market: (document?.market as string) || 'global' },
-  }),
+  filter: ({ document }: any) => {
+    // The settings singletons have fixed ids (ca-settings / au-settings); derive
+    // the market from the id when the (read-only) market field isn't populated.
+    const id = ((document?._id as string) || '').replace(/^drafts\./, '')
+    const market =
+      (document?.market as string) ||
+      (id.startsWith('au') ? 'au' : id.startsWith('ca') ? 'ca' : 'global')
+    return { filter: 'market == $market', params: { market } }
+  },
 }
 
 const linkFields = [
