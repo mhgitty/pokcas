@@ -24,6 +24,12 @@ export async function GET(req: NextRequest) {
   if (!process.env.REVALIDATE_SECRET || secret !== process.env.REVALIDATE_SECRET) {
     return new Response('Invalid secret', { status: 401 })
   }
+
+  // If ?id= is supplied, run the actual flatten on that document and report the
+  // result — same code path the webhook uses. Lets us trigger/verify manually.
+  const id = req.nextUrl.searchParams.get('id')
+  if (id) return await normalizeDoc(id)
+
   return NextResponse.json({
     ok: true,
     runtime: 'nodejs',
@@ -33,6 +39,29 @@ export async function GET(req: NextRequest) {
     hasProjectId: !!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
     sanityOrTokenEnvNames: Object.keys(process.env).filter((k) => /SANITY|TOKEN/i.test(k)).sort(),
   })
+}
+
+async function normalizeDoc(id: string) {
+  const token = process.env.SANITY_WRITE_TOKEN
+  if (!token) return NextResponse.json({ ok: false, error: 'SANITY_WRITE_TOKEN not set' }, { status: 500 })
+  const client = createClient({ projectId, dataset, apiVersion: '2026-04-22', useCdn: false, token, perspective: 'raw' })
+  const doc = await client.fetch<Record<string, any> | null>(`*[_id == $id][0]`, { id })
+  if (!doc) return NextResponse.json({ ok: false, error: 'document not found', id }, { status: 404 })
+
+  const patch: Record<string, Block[]> = {}
+  const report: Record<string, string> = {}
+  for (const field of PORTABLE_TEXT_FIELDS) {
+    const { changed, out, bad } = flatten(doc[field])
+    if (changed && bad === 0) {
+      patch[field] = out
+      report[field] = `flattened to ${out.length} blocks`
+    } else if (changed && bad > 0) {
+      report[field] = `skipped — ${bad} blocks still missing _type/_key`
+    }
+  }
+  if (Object.keys(patch).length === 0) return NextResponse.json({ ok: true, id, changed: false })
+  await client.patch(id).set(patch).commit()
+  return NextResponse.json({ ok: true, id, changed: true, report })
 }
 
 type Block = Record<string, any>
@@ -61,11 +90,6 @@ export async function POST(req: NextRequest) {
   if (!process.env.REVALIDATE_SECRET || secret !== process.env.REVALIDATE_SECRET) {
     return new Response('Invalid secret', { status: 401 })
   }
-  const token = process.env.SANITY_WRITE_TOKEN
-  if (!token) {
-    return NextResponse.json({ ok: false, error: 'SANITY_WRITE_TOKEN not set' }, { status: 500 })
-  }
-
   let payload: any = {}
   try {
     payload = await req.json()
@@ -73,31 +97,15 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: 'invalid JSON body' }, { status: 400 })
   }
 
-  const id: string | undefined = payload?._id || payload?.documentId || payload?.ids?.[0]
-  if (!id) return NextResponse.json({ ok: false, error: 'no document _id in payload' }, { status: 400 })
-
-  // raw perspective so we can read+fix drafts as well as published docs
-  const client = createClient({ projectId, dataset, apiVersion: '2026-04-22', useCdn: false, token, perspective: 'raw' })
-
-  const doc = await client.fetch<Record<string, any> | null>(`*[_id == $id][0]`, { id })
-  if (!doc) return NextResponse.json({ ok: false, error: 'document not found', id }, { status: 404 })
-
-  const patch: Record<string, Block[]> = {}
-  const report: Record<string, string> = {}
-  for (const field of PORTABLE_TEXT_FIELDS) {
-    const { changed, out, bad } = flatten(doc[field])
-    if (changed && bad === 0) {
-      patch[field] = out
-      report[field] = `flattened to ${out.length} blocks`
-    } else if (changed && bad > 0) {
-      report[field] = `skipped — ${bad} blocks still missing _type/_key`
-    }
+  // Sanity webhook payload shapes vary by projection — accept the common ones.
+  const id: string | undefined =
+    payload?._id || payload?.documentId || payload?.ids?.[0] || payload?.result?._id
+  if (!id) {
+    return NextResponse.json(
+      { ok: false, error: 'no document _id in payload', payloadKeys: Object.keys(payload || {}) },
+      { status: 400 }
+    )
   }
 
-  if (Object.keys(patch).length === 0) {
-    return NextResponse.json({ ok: true, id, changed: false })
-  }
-
-  await client.patch(id).set(patch).commit()
-  return NextResponse.json({ ok: true, id, changed: true, report })
+  return await normalizeDoc(id)
 }
