@@ -9,12 +9,31 @@ import { NextResponse, type NextRequest } from 'next/server'
 // create/update, so it repairs the doc within seconds — before an editor opens it.
 
 export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET!
-const token = process.env.SANITY_WRITE_TOKEN
 
 const PORTABLE_TEXT_FIELDS = ['body', 'intro']
+
+// Diagnostic: GET /api/normalize-blocks/?secret=... reports which env vars the
+// live deployment actually has (names only, never values), to catch a missing
+// var, a naming typo, or a wrong-environment scope.
+export async function GET(req: NextRequest) {
+  const secret = req.nextUrl.searchParams.get('secret')
+  if (!process.env.REVALIDATE_SECRET || secret !== process.env.REVALIDATE_SECRET) {
+    return new Response('Invalid secret', { status: 401 })
+  }
+  return NextResponse.json({
+    ok: true,
+    runtime: 'nodejs',
+    hasWriteToken: !!process.env.SANITY_WRITE_TOKEN,
+    hasReadToken: !!process.env.SANITY_API_READ_TOKEN,
+    hasRevalidateSecret: !!process.env.REVALIDATE_SECRET,
+    hasProjectId: !!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+    sanityOrTokenEnvNames: Object.keys(process.env).filter((k) => /SANITY|TOKEN/i.test(k)).sort(),
+  })
+}
 
 type Block = Record<string, any>
 
@@ -42,6 +61,7 @@ export async function POST(req: NextRequest) {
   if (!process.env.REVALIDATE_SECRET || secret !== process.env.REVALIDATE_SECRET) {
     return new Response('Invalid secret', { status: 401 })
   }
+  const token = process.env.SANITY_WRITE_TOKEN
   if (!token) {
     return NextResponse.json({ ok: false, error: 'SANITY_WRITE_TOKEN not set' }, { status: 500 })
   }
