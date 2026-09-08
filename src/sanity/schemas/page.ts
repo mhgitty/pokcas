@@ -653,6 +653,20 @@ export const bodyField = defineField({
           initialValue: 'How It Works',
         },
         {
+          name: 'intro',
+          title: 'Intro (optional)',
+          type: 'text',
+          rows: 3,
+          description: 'Short text shown under the title, above the steps',
+        },
+        {
+          name: 'totalMinutes',
+          title: 'Time to complete (minutes, optional)',
+          type: 'number',
+          description: 'Shown as a "≈ X min" badge and added to the HowTo structured data',
+          validation: (r: any) => r.min(1).max(1000),
+        },
+        {
           name: 'items',
           title: 'Steps',
           type: 'array',
