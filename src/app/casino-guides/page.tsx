@@ -13,7 +13,7 @@ import { getPageBySlug, getCasinoGuides, getSiteSettings } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
-import { compareButtonList } from '@/lib/heroButtons'
+import { heroButtonsFor } from '@/lib/heroButtons'
 
 export const revalidate = 3600
 
@@ -61,7 +61,7 @@ export default async function CasinoGuidesPage() {
       <HreflangLinks docId={(page as any)?._id} />
       <Navbar />
       <HeroSection
-        buttons={compareButtonList(page)}
+        buttons={heroButtonsFor(page)}
         title={title}
         intro={intro}
         author={author}

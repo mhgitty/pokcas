@@ -11,7 +11,7 @@ import { getPageByPathAu, getPageBySlugAu, getBookmarkersAu, getSiteSettings } f
 import { replaceDateVars } from '@/lib/dateVars'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
-import { compareButtonList } from '@/lib/heroButtons'
+import { heroButtonsFor } from '@/lib/heroButtons'
 
 export const revalidate = 3600
 
@@ -66,7 +66,7 @@ export default async function AuReviewsPage() {
       <JsonLd data={jsonLd} />
       <HreflangLinks docId={(page as any)?._id} />
       <HeroSection
-        buttons={compareButtonList(page)}
+        buttons={heroButtonsFor(page)}
         title={title}
         intro={intro}
         author={author}

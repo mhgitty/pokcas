@@ -13,7 +13,7 @@ import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
-import { compareButtonList } from '@/lib/heroButtons'
+import { heroButtonsFor } from '@/lib/heroButtons'
 
 export const revalidate = 3600
 
@@ -82,7 +82,7 @@ export default async function CasinoGuidePage({ params }: Props) {
       <HreflangLinks docId={(guide as any)._id} />
       <Navbar />
       <HeroSection
-        buttons={compareButtonList(guide)}
+        buttons={heroButtonsFor(guide)}
         title={guide.title}
         intro={(guide as any).intro ?? undefined}
         author={author}

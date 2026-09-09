@@ -15,7 +15,7 @@ import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
-import { compareButtonList } from '@/lib/heroButtons'
+import { heroButtonsFor } from '@/lib/heroButtons'
 
 export const revalidate = 3600
 
@@ -73,7 +73,7 @@ export default async function CaPaymentMethodsIndexPage() {
       <HreflangLinks docId={(page as any)?._id} />
 
       <HeroSection
-        buttons={compareButtonList(page)}
+        buttons={heroButtonsFor(page)}
         title={page.title}
         intro={page.intro ?? undefined}
         author={author}

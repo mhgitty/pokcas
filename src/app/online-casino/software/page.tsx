@@ -14,7 +14,7 @@ import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
-import { compareButtonList } from '@/lib/heroButtons'
+import { heroButtonsFor } from '@/lib/heroButtons'
 
 export const revalidate = 3600
 
@@ -68,7 +68,7 @@ export default async function SoftwareIndexPage() {
       <Navbar />
 
       <HeroSection
-        buttons={compareButtonList(page)}
+        buttons={heroButtonsFor(page)}
         title={page.title}
         intro={page.intro}
         author={author}

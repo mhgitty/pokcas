@@ -11,7 +11,7 @@ import { MobileToc } from '@/components/MobileToc'
 import { getPageBySlug, getSiteSettings } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
 import type { Metadata } from 'next'
-import { compareButtonList } from '@/lib/heroButtons'
+import { heroButtonsFor } from '@/lib/heroButtons'
 
 export const revalidate = 3600
 
@@ -59,7 +59,7 @@ export default async function BettingSiderPage() {
       <>
         <Navbar />
         <HeroSection
-        buttons={compareButtonList(page)}
+        buttons={heroButtonsFor(page)}
         title="Casino Reviews"
         intro="Overview of all casino reviews."
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Casino Reviews' }]}
