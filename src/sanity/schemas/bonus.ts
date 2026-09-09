@@ -1,5 +1,5 @@
 import { defineField, defineType } from 'sanity'
-import { bodyField, relatedPagesFields } from './page'
+import { bodyField, relatedPagesFields, slugUniquePerMarket } from './page'
 
 export const bonusType = defineType({
   name: 'bonus',
@@ -25,7 +25,7 @@ export const bonusType = defineType({
       title: 'Slug',
       type: 'slug',
       group: 'info',
-      options: { source: 'title' },
+      options: { source: 'title', isUnique: slugUniquePerMarket('bonus') },
       validation: (r) => r.required(),
     }),
     defineField({

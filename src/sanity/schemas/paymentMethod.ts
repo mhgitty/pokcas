@@ -1,5 +1,5 @@
 import { defineField, defineType } from 'sanity'
-import { bodyField, relatedPagesFields } from './page'
+import { bodyField, relatedPagesFields, slugUniquePerMarket } from './page'
 import { comparisonTableFields } from './comparisonTable'
 
 export const paymentMethodType = defineType({
@@ -23,7 +23,7 @@ export const paymentMethodType = defineType({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: { source: 'name' },
+      options: { source: 'name', isUnique: slugUniquePerMarket('paymentMethod') },
       validation: (r) => r.required(),
     }),
     defineField({

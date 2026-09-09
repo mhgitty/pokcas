@@ -1,5 +1,5 @@
 import { defineField, defineType } from 'sanity'
-import { introField, bodyField, relatedPagesFields } from './page'
+import { introField, bodyField, relatedPagesFields, slugUniquePerMarket } from './page'
 import { comparisonTableFields } from './comparisonTable'
 
 /**
@@ -18,7 +18,7 @@ export const casinoGuideType = defineType({
     defineField({ name: 'title', title: 'Title (H1)', type: 'string', group: 'content', validation: (r) => r.required() }),
     defineField({
       name: 'slug', title: 'Slug', type: 'slug', group: 'content',
-      options: { source: 'title' },
+      options: { source: 'title', isUnique: slugUniquePerMarket('casinoGuide') },
       description: 'Used in URL: /casino-guides/[slug]',
       validation: (r) => r.required(),
     }),

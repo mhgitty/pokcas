@@ -1,5 +1,22 @@
-import { defineField, defineType } from 'sanity'
+import { defineField, defineType, type SlugIsUniqueValidator } from 'sanity'
 import { bodyField, relatedPagesFields } from './page'
+
+/**
+ * Slug uniqueness scoped per market, so the same casino can have a review in
+ * each market — e.g. /magius/ in CA and /magius/ in AU both exist.
+ */
+const isBookmakerSlugUniquePerMarket: SlugIsUniqueValidator = async (slug, context) => {
+  const { document, getClient } = context
+  const client = getClient({ apiVersion: '2026-04-22' })
+  const market = (document as any)?.market || 'global'
+  const docId = (document as any)?._id?.replace(/^drafts\./, '') ?? ''
+
+  const existingId = await client.fetch<string | null>(
+    `*[_type == "bookmaker" && slug.current == $slug && market == $market && _id != $id && !(_id in path("drafts.**"))][0]._id`,
+    { slug, market, id: docId }
+  )
+  return existingId === null
+}
 
 export const bookmakerType = defineType({
   name: 'bookmaker',
@@ -31,8 +48,8 @@ export const bookmakerType = defineType({
       title: 'Slug',
       type: 'slug',
       group: 'info',
-      options: { source: 'name' },
-      description: 'Used in URL: /review/[slug]',
+      options: { source: 'name', isUnique: isBookmakerSlugUniquePerMarket },
+      description: 'Used in URL: /review/[slug]. The same slug can exist once per market.',
       validation: (r) => r.required(),
     }),
     defineField({

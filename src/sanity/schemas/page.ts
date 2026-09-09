@@ -16,6 +16,25 @@ const isSlugUniquePerMarket: SlugIsUniqueValidator = async (slug, context) => {
   )
   return existingId === null
 }
+
+/**
+ * Reusable per-market slug uniqueness for any market-scoped document type,
+ * so the same slug can exist once per market (e.g. a "paypal" payment method
+ * in both CA and AU).
+ */
+export function slugUniquePerMarket(docType: string): SlugIsUniqueValidator {
+  return async (slug, context) => {
+    const { document, getClient } = context
+    const client = getClient({ apiVersion: '2026-04-22' })
+    const market = (document as any)?.market || 'global'
+    const docId = (document as any)?._id?.replace(/^drafts\./, '') ?? ''
+    const existingId = await client.fetch<string | null>(
+      `*[_type == $t && slug.current == $slug && market == $market && _id != $id && !(_id in path("drafts.**"))][0]._id`,
+      { t: docType, slug, market, id: docId }
+    )
+    return existingId === null
+  }
+}
 import { TableBlockInput } from '../components/TableBlockInput'
 import { FaqBlockInput } from '../components/FaqBlockInput'
 import { ProsConsBlockInput } from '../components/ProsConsBlockInput'

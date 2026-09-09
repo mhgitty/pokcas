@@ -1,5 +1,5 @@
 import { defineField, defineType } from 'sanity'
-import { bodyField, relatedPagesFields } from './page'
+import { bodyField, relatedPagesFields, slugUniquePerMarket } from './page'
 import { comparisonTableFields } from './comparisonTable'
 
 export const softwareType = defineType({
@@ -33,7 +33,7 @@ export const softwareType = defineType({
       title: 'Slug',
       type: 'slug',
       group: 'general',
-      options: { source: 'name' },
+      options: { source: 'name', isUnique: slugUniquePerMarket('software') },
       validation: (r) => r.required(),
     }),
     defineField({

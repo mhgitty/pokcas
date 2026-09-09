@@ -1,5 +1,5 @@
 import { defineField, defineType } from 'sanity'
-import { bodyField } from './page'
+import { bodyField, slugUniquePerMarket } from './page'
 
 export const casinoGameType = defineType({
   name: 'casinoGame',
@@ -30,7 +30,7 @@ export const casinoGameType = defineType({
       title: 'Slug',
       type: 'slug',
       group: 'general',
-      options: { source: 'name' },
+      options: { source: 'name', isUnique: slugUniquePerMarket('casinoGame') },
       validation: (r) => r.required(),
     }),
     defineField({
