@@ -11,7 +11,7 @@ import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
-import { ComparisonJumpButton } from '@/components/ComparisonJumpButton'
+import { compareButtonList } from '@/lib/heroButtons'
 
 export const revalidate = 3600
 
@@ -79,6 +79,7 @@ export default async function AuBonusPage() {
       <HreflangHead script={hreflangScript} />
       <JsonLd data={jsonLd} />
       <HeroSection
+        buttons={compareButtonList(page)}
         title={page.title}
         intro={(page as any).intro ?? undefined}
         author={author}
@@ -86,7 +87,6 @@ export default async function AuBonusPage() {
         updatedAt={(page as any).lastUpdated ?? null}
         breadcrumbs={breadcrumbs}
       />
-      <ComparisonJumpButton data={page} />
       {(page as any).showComparisonTable && (page as any).comparisonTable && (
         <div className="section" style={{ paddingBottom: page.body ? '0' : undefined }}>
           {(page as any).comparisonTableTitle && (

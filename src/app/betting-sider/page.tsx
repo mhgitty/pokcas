@@ -11,7 +11,7 @@ import { MobileToc } from '@/components/MobileToc'
 import { getPageBySlug, getSiteSettings } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
 import type { Metadata } from 'next'
-import { ComparisonJumpButton } from '@/components/ComparisonJumpButton'
+import { compareButtonList } from '@/lib/heroButtons'
 
 export const revalidate = 3600
 
@@ -59,6 +59,7 @@ export default async function BettingSiderPage() {
       <>
         <Navbar />
         <HeroSection
+        buttons={compareButtonList(page)}
         title="Casino Reviews"
         intro="Overview of all casino reviews."
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Casino Reviews' }]}
@@ -86,8 +87,6 @@ export default async function BettingSiderPage() {
         factChecker={(page as any).factChecker ?? null}
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: page.title }]}
       />
-
-      <ComparisonJumpButton data={page} />
 
       {page.showComparisonTable && page.comparisonTable && (
         <div className="section" style={{ paddingBottom: page.body ? '0' : undefined }}>

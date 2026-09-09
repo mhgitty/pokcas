@@ -11,7 +11,7 @@ import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
-import { ComparisonJumpButton } from '@/components/ComparisonJumpButton'
+import { compareButtonList } from '@/lib/heroButtons'
 
 export const revalidate = 3600
 
@@ -79,6 +79,7 @@ export default async function AuCasinoGuidePage({ params }: Props) {
       <JsonLd data={jsonLd} />
       <HreflangLinks docId={(guide as any)._id} />
       <HeroSection
+        buttons={compareButtonList(guide)}
         title={guide.title}
         intro={(guide as any).intro ?? undefined}
         author={author}
@@ -86,8 +87,6 @@ export default async function AuCasinoGuidePage({ params }: Props) {
         updatedAt={(guide as any).lastUpdated ?? null}
         breadcrumbs={breadcrumbs}
       />
-
-      <ComparisonJumpButton data={guide} />
 
       {(guide as any).showComparisonTable && (guide as any).comparisonTable && (
         <div className="section" style={{ paddingBottom: guide.body ? '0' : undefined }}>

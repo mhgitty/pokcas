@@ -11,7 +11,7 @@ import { getPageBySlugCa, getCasinoGuides, getSiteSettings } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
-import { ComparisonJumpButton } from '@/components/ComparisonJumpButton'
+import { compareButtonList } from '@/lib/heroButtons'
 
 export const revalidate = 3600
 
@@ -58,6 +58,7 @@ export default async function CaCasinoGuidesPage() {
       <JsonLd data={jsonLd} />
       <HreflangLinks docId={(page as any)?._id} />
       <HeroSection
+        buttons={compareButtonList(page)}
         title={title}
         intro={intro}
         author={author}
@@ -65,8 +66,6 @@ export default async function CaCasinoGuidesPage() {
         factChecker={(page as any)?.factChecker ?? null}
         breadcrumbs={[{ label: 'Home', href: '/ca/' }, { label: 'Casino guides' }]}
       />
-
-      <ComparisonJumpButton data={page} />
 
       {(page as any)?.showComparisonTable && (page as any)?.comparisonTable && (
         <div className="section" style={{ paddingBottom: '0' }}>

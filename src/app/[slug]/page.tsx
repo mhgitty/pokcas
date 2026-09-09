@@ -16,7 +16,7 @@ import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
-import { ComparisonJumpButton } from '@/components/ComparisonJumpButton'
+import { compareButtonList } from '@/lib/heroButtons'
 
 export const revalidate = 3600
 
@@ -213,6 +213,7 @@ export default async function SlugPage({ params }: Props) {
       <HreflangLinks docId={(page as any)._id} />
       <Navbar />
       <HeroSection
+        buttons={compareButtonList(page)}
         title={page.title}
         intro={page.intro}
         author={author}
@@ -226,8 +227,6 @@ export default async function SlugPage({ params }: Props) {
           { label: page.title },
         ]}
       />
-
-      <ComparisonJumpButton data={page} />
 
       {page.showComparisonTable && page.comparisonTable && (
         <div className="section" style={{ paddingBottom: page.body ? '0' : undefined }}>

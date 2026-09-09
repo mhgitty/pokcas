@@ -11,7 +11,7 @@ import { getPageByPathAu, getPageBySlugAu, getBookmarkersAu, getSiteSettings } f
 import { replaceDateVars } from '@/lib/dateVars'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
-import { ComparisonJumpButton } from '@/components/ComparisonJumpButton'
+import { compareButtonList } from '@/lib/heroButtons'
 
 export const revalidate = 3600
 
@@ -66,6 +66,7 @@ export default async function AuReviewsPage() {
       <JsonLd data={jsonLd} />
       <HreflangLinks docId={(page as any)?._id} />
       <HeroSection
+        buttons={compareButtonList(page)}
         title={title}
         intro={intro}
         author={author}
@@ -75,7 +76,6 @@ export default async function AuReviewsPage() {
       />
 
       {/* Comparison table — configured on the CMS page in Sanity Studio */}
-      <ComparisonJumpButton data={page} />
       {(page as any)?.showComparisonTable && (page as any)?.comparisonTable && (
         <div className="section" style={{ paddingBottom: page?.body ? '0' : undefined }}>
           {(page as any)?.comparisonTableTitle && (
