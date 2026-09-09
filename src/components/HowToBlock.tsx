@@ -1,6 +1,40 @@
+import { PortableText } from '@portabletext/react'
+
 interface HowToItem {
   title?: string
-  body?: string
+  body?: string | any[]
+}
+
+// Plain-text extraction from a Portable Text array (or a plain string) for
+// use in the HowTo structured data.
+function toPlainText(body?: string | any[]): string {
+  if (!body) return ''
+  if (typeof body === 'string') return body
+  return body
+    .map((blk) => (blk?.children || []).map((c: any) => c?.text || '').join(''))
+    .join(' ')
+    .trim()
+}
+
+const stepBodyComponents = {
+  block: {
+    normal: ({ children }: any) => (
+      <p style={{ fontSize: '15px', color: 'var(--text-muted)', lineHeight: 1.7, margin: 0 }}>{children}</p>
+    ),
+  },
+  marks: {
+    strong: ({ children }: any) => <strong style={{ fontWeight: 600, color: 'var(--text)' }}>{children}</strong>,
+    em: ({ children }: any) => <em>{children}</em>,
+    link: ({ value, children }: any) => {
+      const rel = ['noopener', 'noreferrer', value?.nofollow ? 'nofollow' : ''].filter(Boolean).join(' ')
+      return (
+        <a href={value?.href} target={value?.blank ? '_blank' : undefined} rel={rel}
+          style={{ color: 'var(--green)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>
+          {children}
+        </a>
+      )
+    },
+  },
 }
 
 interface HowToBlockProps {
@@ -29,7 +63,7 @@ export function HowToBlock({ value }: HowToBlockProps) {
       '@type': 'HowToStep',
       position: i + 1,
       ...(s.title ? { name: s.title } : {}),
-      text: s.body || s.title,
+      text: toPlainText(s.body) || s.title,
     })),
   } : null
 
@@ -129,16 +163,16 @@ export function HowToBlock({ value }: HowToBlockProps) {
             )}
 
             {/* Body (spans under the title, indented past the badge) */}
-            {item.body && (
-              <p style={{
-                gridColumn: '2',
-                fontSize: '15px',
-                color: 'var(--text-muted)',
-                lineHeight: 1.7,
-                margin: 0,
-              }}>
-                {item.body}
-              </p>
+            {item.body && (Array.isArray(item.body) ? item.body.length > 0 : true) && (
+              <div style={{ gridColumn: '2' }}>
+                {Array.isArray(item.body) ? (
+                  <PortableText value={item.body} components={stepBodyComponents} />
+                ) : (
+                  <p style={{ fontSize: '15px', color: 'var(--text-muted)', lineHeight: 1.7, margin: 0 }}>
+                    {item.body}
+                  </p>
+                )}
+              </div>
             )}
           </div>
         ))}

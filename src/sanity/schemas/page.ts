@@ -695,10 +695,32 @@ export const bodyField = defineField({
             title: 'Step',
             fields: [
               { name: 'title', title: 'Step title', type: 'string' },
-              { name: 'body',  title: 'Body text',  type: 'text', rows: 3 },
+              {
+                name: 'body', title: 'Body text', type: 'array',
+                of: [{
+                  type: 'block',
+                  styles: [{ title: 'Normal', value: 'normal' }],
+                  lists: [],
+                  marks: {
+                    decorators: [
+                      { title: 'Bold', value: 'strong' },
+                      { title: 'Italic', value: 'em' },
+                    ],
+                    annotations: [{
+                      name: 'link', type: 'object', title: 'Link',
+                      fields: [
+                        { name: 'href', type: 'url', title: 'URL',
+                          validation: (r: any) => r.uri({ scheme: ['http', 'https', 'mailto', 'tel'], allowRelative: true }) },
+                        { name: 'blank', type: 'boolean', title: 'Open in new tab', initialValue: false },
+                        { name: 'nofollow', type: 'boolean', title: 'Nofollow', initialValue: false },
+                      ],
+                    }],
+                  },
+                }],
+              },
             ],
             preview: {
-              select: { title: 'title', subtitle: 'body' },
+              select: { title: 'title' },
             },
           }],
         },
