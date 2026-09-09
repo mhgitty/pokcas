@@ -11,6 +11,7 @@ import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
+import { ComparisonJumpButton } from '@/components/ComparisonJumpButton'
 
 export const revalidate = 3600
 
@@ -85,6 +86,7 @@ export default async function CaBonusPage() {
         updatedAt={(page as any).lastUpdated ?? null}
         breadcrumbs={breadcrumbs}
       />
+      <ComparisonJumpButton data={page} />
       {(page as any).showComparisonTable && (page as any).comparisonTable && (
         <div className="section" style={{ paddingBottom: page.body ? '0' : undefined }}>
           {(page as any).comparisonTableTitle && (

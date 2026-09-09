@@ -11,6 +11,7 @@ import { MobileToc } from '@/components/MobileToc'
 import { getPageBySlug, getSiteSettings } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
 import type { Metadata } from 'next'
+import { ComparisonJumpButton } from '@/components/ComparisonJumpButton'
 
 export const revalidate = 3600
 
@@ -85,6 +86,8 @@ export default async function BettingSiderPage() {
         factChecker={(page as any).factChecker ?? null}
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: page.title }]}
       />
+
+      <ComparisonJumpButton data={page} />
 
       {page.showComparisonTable && page.comparisonTable && (
         <div className="section" style={{ paddingBottom: page.body ? '0' : undefined }}>

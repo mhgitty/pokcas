@@ -13,6 +13,7 @@ import { getPageBySlug, getCasinoGuides, getSiteSettings } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
+import { ComparisonJumpButton } from '@/components/ComparisonJumpButton'
 
 export const revalidate = 3600
 
@@ -67,6 +68,8 @@ export default async function CasinoGuidesPage() {
         factChecker={(page as any)?.factChecker ?? null}
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Casino guides' }]}
       />
+
+      <ComparisonJumpButton data={page} />
 
       {(page as any)?.showComparisonTable && (page as any)?.comparisonTable && (
         <div className="section" style={{ paddingBottom: '0' }}>

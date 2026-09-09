@@ -126,7 +126,7 @@ export default async function CaSlugPage({ params }: Props) {
 
       {/* Comparison table — configured per page in Sanity Studio */}
       {(page as any).showComparisonTable && (page as any).comparisonTable && (
-        <div id="comparison-list" className="section" style={{ paddingBottom: page.body ? '0' : undefined, scrollMarginTop: '80px' }}>
+        <div className="section" style={{ paddingBottom: page.body ? '0' : undefined }}>
           {(page as any).comparisonTableTitle && (
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: 700, color: 'var(--text)', marginBottom: '20px' }}>
               {replaceDateVars((page as any).comparisonTableTitle)}

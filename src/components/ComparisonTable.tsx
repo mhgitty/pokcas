@@ -15,20 +15,23 @@ interface ComparisonTableProps {
 export function ComparisonTable({ data }: ComparisonTableProps) {
   if (!data) return null
 
+  let inner: React.ReactNode = null
   if (data.tableType === 'bookmaker') {
     const items = data.bookmakers || []
     if (!items.length) return null
-    return <CasinoComparisonTable casinos={items} />
+    inner = <CasinoComparisonTable casinos={items} />
+  } else {
+    const items = data.bonuses || []
+    if (!items.length) return null
+    inner = (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        {items.map((bonus: any, i: number) => (
+          <BonusCard key={bonus._id} {...bonus} rank={i + 1} />
+        ))}
+      </div>
+    )
   }
 
-  // Default: bonus
-  const items = data.bonuses || []
-  if (!items.length) return null
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      {items.map((bonus: any, i: number) => (
-        <BonusCard key={bonus._id} {...bonus} rank={i + 1} />
-      ))}
-    </div>
-  )
+  // Scroll target for the hero "jump to comparison list" button, on every page.
+  return <div id="comparison-list" style={{ scrollMarginTop: '80px' }}>{inner}</div>
 }

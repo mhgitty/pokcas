@@ -13,6 +13,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
+import { ComparisonJumpButton } from '@/components/ComparisonJumpButton'
 
 export const revalidate = 3600
 
@@ -88,6 +89,7 @@ export default async function AuSoftwareSlugPage({ params }: Props) {
       />
 
       {/* Comparison table — configured on the CMS document in Sanity Studio */}
+      <ComparisonJumpButton data={provider} />
       {(provider as any).showComparisonTable && (provider as any).comparisonTable && (
         <div className="section" style={{ paddingBottom: (provider.body && provider.body.length > 0) ? '0' : undefined }}>
           {(provider as any).comparisonTableTitle && (

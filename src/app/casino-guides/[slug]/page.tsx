@@ -13,6 +13,7 @@ import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
+import { ComparisonJumpButton } from '@/components/ComparisonJumpButton'
 
 export const revalidate = 3600
 
@@ -88,6 +89,8 @@ export default async function CasinoGuidePage({ params }: Props) {
         updatedAt={(guide as any).lastUpdated ?? null}
         breadcrumbs={breadcrumbs}
       />
+
+      <ComparisonJumpButton data={guide} />
 
       {(guide as any).showComparisonTable && (guide as any).comparisonTable && (
         <div className="section" style={{ paddingBottom: guide.body ? '0' : undefined }}>

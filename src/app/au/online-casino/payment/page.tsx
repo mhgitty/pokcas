@@ -15,6 +15,7 @@ import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
+import { ComparisonJumpButton } from '@/components/ComparisonJumpButton'
 
 export const revalidate = 3600
 
@@ -91,6 +92,7 @@ export default async function AuPaymentMethodsIndexPage() {
       )}
 
       {/* Comparison table — configured on the CMS page in Sanity Studio */}
+      <ComparisonJumpButton data={page} />
       {page.showComparisonTable && page.comparisonTable && (
         <div className="section" style={{ paddingBottom: page.body ? '0' : undefined }}>
           {page.comparisonTableTitle && (

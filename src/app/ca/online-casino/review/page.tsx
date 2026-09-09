@@ -11,6 +11,7 @@ import { getPageByPathCa, getPageBySlugCa, getBookmakersCa, getSiteSettings } fr
 import { replaceDateVars } from '@/lib/dateVars'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
+import { ComparisonJumpButton } from '@/components/ComparisonJumpButton'
 
 export const revalidate = 3600
 
@@ -74,6 +75,7 @@ export default async function CaReviewsPage() {
       />
 
       {/* Comparison table — configured on the CMS page in Sanity Studio */}
+      <ComparisonJumpButton data={page} />
       {(page as any)?.showComparisonTable && (page as any)?.comparisonTable && (
         <div className="section" style={{ paddingBottom: page?.body ? '0' : undefined }}>
           {(page as any)?.comparisonTableTitle && (
