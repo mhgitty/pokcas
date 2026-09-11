@@ -739,6 +739,13 @@ export const pageType = defineType({
   name: 'page',
   title: 'Pages',
   type: 'document',
+  __experimental_search: [
+    { weight: 10, path: 'title' },
+    { weight: 6, path: 'slug.current' },
+    { weight: 3, path: 'metaTitle' },
+    { weight: 0, path: 'body' },
+    { weight: 0, path: 'intro' },
+  ],
   groups: [
     { name: 'content', title: 'Content' },
     { name: 'seo',     title: 'SEO' },

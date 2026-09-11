@@ -5,6 +5,14 @@ export const casinoGameType = defineType({
   name: 'casinoGame',
   title: 'Casino Games',
   type: 'document',
+  __experimental_search: [
+    { weight: 10, path: 'name' },
+    { weight: 8, path: 'titel' },
+    { weight: 6, path: 'slug.current' },
+    { weight: 3, path: 'metaTitle' },
+    { weight: 0, path: 'body' },
+    { weight: 0, path: 'intro' },
+  ],
   groups: [
     { name: 'general', title: '⚙️ General' },
     { name: 'content', title: '📝 Content' },

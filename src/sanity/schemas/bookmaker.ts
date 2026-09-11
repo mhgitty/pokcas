@@ -22,6 +22,13 @@ export const bookmakerType = defineType({
   name: 'bookmaker',
   title: 'Casino Reviews',
   type: 'document',
+  __experimental_search: [
+    { weight: 10, path: 'name' },
+    { weight: 8, path: 'titel' },
+    { weight: 6, path: 'slug.current' },
+    { weight: 3, path: 'metaTitle' },
+    { weight: 0, path: 'body' },
+  ],
   groups: [
     { name: 'info', title: 'Info & bonus' },
     { name: 'content', title: 'Content' },

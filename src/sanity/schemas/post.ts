@@ -5,6 +5,13 @@ export const postType = defineType({
   name: 'post',
   title: 'Blog Posts',
   type: 'document',
+  __experimental_search: [
+    { weight: 10, path: 'title' },
+    { weight: 6, path: 'slug.current' },
+    { weight: 3, path: 'metaTitle' },
+    { weight: 2, path: 'excerpt' },
+    { weight: 0, path: 'body' },
+  ],
   groups: [
     { name: 'content', title: 'Content' },
     { name: 'seo', title: 'SEO' },

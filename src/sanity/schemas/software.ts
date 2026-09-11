@@ -6,6 +6,14 @@ export const softwareType = defineType({
   name: 'software',
   title: 'Software',
   type: 'document',
+  __experimental_search: [
+    { weight: 10, path: 'name' },
+    { weight: 8, path: 'titel' },
+    { weight: 6, path: 'slug.current' },
+    { weight: 3, path: 'metaTitle' },
+    { weight: 0, path: 'body' },
+    { weight: 0, path: 'intro' },
+  ],
   groups: [
     { name: 'general',  title: '⚙️ General' },
     { name: 'stats',    title: '📊 Stats' },

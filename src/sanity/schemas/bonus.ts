@@ -5,6 +5,12 @@ export const bonusType = defineType({
   name: 'bonus',
   title: 'Bonuses',
   type: 'document',
+  __experimental_search: [
+    { weight: 10, path: 'title' },
+    { weight: 6, path: 'slug.current' },
+    { weight: 3, path: 'metaTitle' },
+    { weight: 0, path: 'body' },
+  ],
   groups: [
     { name: 'info',    title: '🎁 Bonus info' },
     { name: 'details', title: '📋 Details' },

@@ -6,6 +6,14 @@ export const paymentMethodType = defineType({
   name: 'paymentMethod',
   title: 'Payment Methods',
   type: 'document',
+  __experimental_search: [
+    { weight: 10, path: 'name' },
+    { weight: 8, path: 'titel' },
+    { weight: 6, path: 'slug.current' },
+    { weight: 3, path: 'metaTitle' },
+    { weight: 0, path: 'body' },
+    { weight: 0, path: 'intro' },
+  ],
   fields: [
     defineField({
       name: 'name',
