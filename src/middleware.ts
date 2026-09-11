@@ -41,13 +41,14 @@ async function getRedirects(): Promise<RedirectMap> {
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Skip studio, API routes, static files, and Next.js internals
+  // Skip studio, API routes, and Next.js internals. NOTE: we intentionally do
+  // NOT skip paths with file extensions, so legacy image URLs like
+  // /wp-content/uploads/2021/01/foo.jpg can be 301-redirected to real pages.
   if (
     pathname.startsWith('/studio') ||
     pathname.startsWith('/api/') ||
     pathname.startsWith('/_next/') ||
-    pathname.startsWith('/favicon') ||
-    /\.\w+$/.test(pathname)
+    pathname.startsWith('/favicon')
   ) {
     return NextResponse.next()
   }
