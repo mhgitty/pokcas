@@ -16,6 +16,11 @@ export async function POST(req: NextRequest) {
     // Also revalidate specific paths so ISR picks them up immediately.
     revalidatePath('/', 'layout')
 
+    // Keep sitemaps in sync on every publish so new pages appear immediately.
+    revalidatePath('/sitemap.xml')
+    revalidatePath('/sitemap-ca.xml')
+    revalidatePath('/sitemap-au.xml')
+
     const specific: string[] = []
 
     if (type === 'post') {
