@@ -1,6 +1,16 @@
 import { defineField, defineType } from 'sanity'
 import { bodyField, relatedPagesFields, slugUniquePerMarket } from './page'
 
+// Restrict a bookmaker reference picker to the document's own market.
+// Global docs match bookmakers with market "global" or no market set.
+function sameMarketBookmakerFilter({ document }: any) {
+  const market = document?.market || 'global'
+  if (market === 'global') {
+    return { filter: 'market == "global" || !defined(market)' }
+  }
+  return { filter: 'market == $market', params: { market } }
+}
+
 export const slotmachineType = defineType({
   name: 'slotmachine',
   title: 'Slot Machines',
@@ -83,8 +93,8 @@ export const slotmachineType = defineType({
       title: 'Where to play (casinos)',
       type: 'array',
       group: 'general',
-      description: 'Casinos where players can play this slot.',
-      of: [{ type: 'reference', to: [{ type: 'bookmaker' }] }],
+      description: 'Casinos where players can play this slot. Only casinos from this slot’s market are shown.',
+      of: [{ type: 'reference', to: [{ type: 'bookmaker' }], options: { filter: sameMarketBookmakerFilter } }],
     }),
     defineField({
       name: 'highlightCasino',
@@ -92,8 +102,9 @@ export const slotmachineType = defineType({
       type: 'reference',
       group: 'general',
       to: [{ type: 'bookmaker' }],
+      options: { filter: sameMarketBookmakerFilter },
       description:
-        'The casino shown in the pulsing gift popup on the demo. Leave empty to auto-use the top-rated casino for this market — set it here if a page starts getting a lot of traffic.',
+        'The casino shown in the pulsing gift popup on the demo. Only casinos from this slot’s market are shown. Leave empty to auto-use the top-rated casino for this market — set it here if a page starts getting a lot of traffic.',
     }),
 
     // ── Specs ──────────────────────────────────────────────────────────────────
