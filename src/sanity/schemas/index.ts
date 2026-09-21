@@ -14,6 +14,7 @@ import { paymentMethodType } from './paymentMethod'
 import { softwareType } from './software'
 import { casinoGameType } from './casinoGame'
 import { casinoGuideType } from './casinoGuide'
+import { slotmachineType } from './slotmachine'
 import { marketSettingsType } from './marketSettings'
 import { countryHomepageType } from './countryHomepage'
 
@@ -36,4 +37,5 @@ export const schemaTypes = [
   softwareType,
   casinoGameType,
   casinoGuideType,
+  slotmachineType,
 ]

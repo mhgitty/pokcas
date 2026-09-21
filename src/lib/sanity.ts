@@ -501,6 +501,8 @@ export function relatedItemHref(item: RelatedItem): string {
     }
     case 'casinoGuide':
       return `${mp}/casino-guides/${slug}/`
+    case 'slotmachine':
+      return `${mp}/online-slots/free/${slug}/`
     case 'paymentMethod':
       return `${mp}/online-casino/payment/${slug}/`
     case 'software':
@@ -1170,6 +1172,46 @@ export async function getCasinoGameBySlugCa(slug: string) {
 export async function getCasinoGameBySlugAu(slug: string) {
   return client.fetch(
     `*[_type == "casinoGame" && slug.current == $slug && market == "au"][0] { ${CASINO_GAME_FIELDS} }`,
+    { slug }
+  )
+}
+
+// ─── Slot Machines ──────────────────────────────────────────────────────────────
+
+const SLOTMACHINE_FIELDS = `
+  _id, name, titel, slug, market,
+  "logo":    logo    { "url": asset->url, alt },
+  "ogImage": ogImage { "url": asset->url, alt },
+  "provider": provider-> { name, "slug": slug.current, market },
+  rtp, volatility, maxWin, grid, paylines, mechanic, theme,
+  features, minBetPerSpin, maxBetPerSpin, hasBonusBuy, hasJackpot,
+  hitFrequencyPercent, releaseYear,
+  "intro": intro[] { ..., _type == "image" => { ..., "url": asset->url } },
+  "body":  body[]  { ..., _type == "image" => { ..., "url": asset->url } },
+  metaTitle, metaDescription,
+  "casinos": casinos[]-> {
+    _id, name, slug, usp, url, market,
+    "logo": logo { "url": asset->url, alt }
+  }
+`
+
+export async function getSlotmachineBySlug(slug: string) {
+  return client.fetch(
+    `*[_type == "slotmachine" && slug.current == $slug && (market == "global" || !defined(market))][0] { ${SLOTMACHINE_FIELDS} }`,
+    { slug }
+  )
+}
+
+export async function getSlotmachineBySlugCa(slug: string) {
+  return client.fetch(
+    `*[_type == "slotmachine" && slug.current == $slug && market == "ca"][0] { ${SLOTMACHINE_FIELDS} }`,
+    { slug }
+  )
+}
+
+export async function getSlotmachineBySlugAu(slug: string) {
+  return client.fetch(
+    `*[_type == "slotmachine" && slug.current == $slug && market == "au"][0] { ${SLOTMACHINE_FIELDS} }`,
     { slug }
   )
 }

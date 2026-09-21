@@ -57,7 +57,7 @@ export async function sitemapEntries(scope: Scope): Promise<SitemapEntry[]> {
   const includePosts = scope === 'all' || scope === 'global'
   const includeBonus = scope !== 'global' // bonuses only exist under ca/au
 
-  const [pages, bookmakers, paymentMethods, software, casinoGuides, bonusser, posts] = await Promise.all([
+  const [pages, bookmakers, paymentMethods, software, casinoGuides, slots, bonusser, posts] = await Promise.all([
     client.fetch<PageRow[]>(
       `*[_type == "page" && defined(slug.current) && ${c}] {
         slug, market, _updatedAt,
@@ -69,6 +69,7 @@ export async function sitemapEntries(scope: Scope): Promise<SitemapEntry[]> {
     client.fetch<SlugRow[]>(`*[_type == "paymentMethod" && defined(slug.current) && ${c}] { slug, market, _updatedAt }`).catch(() => []),
     client.fetch<SlugRow[]>(`*[_type == "software" && defined(slug.current) && ${c}] { slug, market, _updatedAt }`).catch(() => []),
     client.fetch<SlugRow[]>(`*[_type == "casinoGuide" && defined(slug.current) && ${c}] { slug, market, _updatedAt }`).catch(() => []),
+    client.fetch<SlugRow[]>(`*[_type == "slotmachine" && defined(slug.current) && ${c}] { slug, market, _updatedAt }`).catch(() => []),
     includeBonus
       ? client.fetch<SlugRow[]>(`*[_type == "bonus" && active == true && defined(slug.current) && ${scope === 'all' ? 'market in ["ca","au"]' : c}] { slug, market, _updatedAt }`).catch(() => [])
       : Promise.resolve([] as SlugRow[]),
@@ -90,6 +91,7 @@ export async function sitemapEntries(scope: Scope): Promise<SitemapEntry[]> {
     ...paymentMethods.map((m) => ({ url: `${BASE}${marketPrefix(m.market)}/online-casino/payment/${m.slug.current}/`, ...lastMod(m._updatedAt) })),
     ...software.map((s) => ({ url: `${BASE}${marketPrefix(s.market)}/online-casino/software/${s.slug.current}/`, ...lastMod(s._updatedAt) })),
     ...casinoGuides.map((g) => ({ url: `${BASE}${marketPrefix(g.market)}/casino-guides/${g.slug.current}/`, ...lastMod(g._updatedAt) })),
+    ...slots.map((s) => ({ url: `${BASE}${marketPrefix(s.market)}/online-slots/free/${s.slug.current}/`, ...lastMod(s._updatedAt) })),
     ...bonusser.map((b) => ({ url: `${BASE}${marketPrefix(b.market)}/online-casino/bonus/${b.slug.current}/`, ...lastMod(b._updatedAt) })),
     ...posts.map((p) => ({ url: `${BASE}/${p.slug.current}/`, ...lastMod(p.lastUpdated ?? p.publishedAt) })),
   ]

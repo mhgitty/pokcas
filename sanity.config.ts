@@ -111,6 +111,15 @@ export default defineConfig({
                           .params({ market: 'global' })
                       ),
                     S.listItem()
+                      .title('🎰 Slot Machines')
+                      .schemaType('slotmachine')
+                      .child(
+                        S.documentTypeList('slotmachine')
+                          .title('Slot Machines — Global')
+                          .filter('_type == "slotmachine" && market == $market')
+                          .params({ market: 'global' })
+                      ),
+                    S.listItem()
                       .title('📚 Casino Guides')
                       .schemaType('casinoGuide')
                       .child(
@@ -206,6 +215,15 @@ export default defineConfig({
                         S.documentTypeList('casinoGame')
                           .title('Casino Games — Canada')
                           .filter('_type == "casinoGame" && market == $market')
+                          .params({ market: 'ca' })
+                      ),
+                    S.listItem()
+                      .title('🎰 Slot Machines')
+                      .schemaType('slotmachine')
+                      .child(
+                        S.documentTypeList('slotmachine')
+                          .title('Slot Machines — Canada')
+                          .filter('_type == "slotmachine" && market == $market')
                           .params({ market: 'ca' })
                       ),
                     S.listItem()
@@ -317,6 +335,15 @@ export default defineConfig({
                           .params({ market: 'au' })
                       ),
                     S.listItem()
+                      .title('🎰 Slot Machines')
+                      .schemaType('slotmachine')
+                      .child(
+                        S.documentTypeList('slotmachine')
+                          .title('Slot Machines — Australia')
+                          .filter('_type == "slotmachine" && market == $market')
+                          .params({ market: 'au' })
+                      ),
+                    S.listItem()
                       .title('📚 Casino Guides')
                       .schemaType('casinoGuide')
                       .child(
@@ -398,7 +425,7 @@ export default defineConfig({
 
   document: {
     actions: (prev, ctx) => {
-      const PREVIEW_TYPES = ['homepage', 'post', 'page', 'bookmaker', 'bonus', 'paymentMethod', 'software', 'countryHomepage', 'casinoGame', 'casinoGuide']
+      const PREVIEW_TYPES = ['homepage', 'post', 'page', 'bookmaker', 'bonus', 'paymentMethod', 'software', 'countryHomepage', 'casinoGame', 'casinoGuide', 'slotmachine']
       if (PREVIEW_TYPES.includes(ctx.schemaType)) {
         return [previewAction, ...prev]
       }

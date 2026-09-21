@@ -938,3 +938,14 @@ a[rel~="sponsored"]:hover::after {
 @media (prefers-reduced-motion: reduce) {
   a[rel~="sponsored"]:hover::after { animation: none; }
 }
+
+/* ── Slot specs table ──────────────────────────────────────────────────────── */
+.slot-specs-grid { display: flex; flex-direction: column; }
+@media (min-width: 760px) {
+  .slot-specs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 0;
+  }
+  .slot-specs-grid > div:nth-last-child(2):nth-child(odd) { border-bottom: none !important; }
+}
