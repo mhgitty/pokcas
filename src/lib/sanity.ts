@@ -502,7 +502,7 @@ export function relatedItemHref(item: RelatedItem): string {
     case 'casinoGuide':
       return `${mp}/casino-guides/${slug}/`
     case 'slotmachine':
-      return `${mp}/online-slots/free/${slug}/`
+      return `${mp}/online-slots/${slug}/`
     case 'paymentMethod':
       return `${mp}/online-casino/payment/${slug}/`
     case 'software':
@@ -1186,6 +1186,7 @@ const SLOTMACHINE_FIELDS = `
   rtp, volatility, maxWin, grid, paylines, mechanic, theme,
   features, minBetPerSpin, maxBetPerSpin, hasBonusBuy, hasJackpot,
   hitFrequencyPercent, releaseYear,
+  demoIframe, demoIframeTitle,
   "intro": intro[] { ..., _type == "image" => { ..., "url": asset->url } },
   "body":  body[]  { ..., _type == "image" => { ..., "url": asset->url } },
   metaTitle, metaDescription,

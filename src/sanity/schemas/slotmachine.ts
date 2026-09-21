@@ -42,7 +42,7 @@ export const slotmachineType = defineType({
       type: 'slug',
       group: 'general',
       options: { source: 'name', isUnique: slugUniquePerMarket('slotmachine') },
-      description: 'Used in URL: /online-slots/free/[slug]. The same slug can exist once per market.',
+      description: 'Used in URL: /online-slots/[slug]. The same slug can exist once per market.',
       validation: (r) => r.required(),
     }),
     defineField({
@@ -124,6 +124,21 @@ export const slotmachineType = defineType({
     defineField({ name: 'releaseYear', title: 'Release year', type: 'number', group: 'specs', validation: (r) => r.min(1990).max(2100) }),
 
     // ── Content ────────────────────────────────────────────────────────────────
+    defineField({
+      name: 'demoIframeTitle',
+      title: 'Demo iframe title',
+      type: 'string',
+      group: 'content',
+      description: 'Heading shown above the game demo, e.g. "Play Book of Dead for free".',
+    }),
+    defineField({
+      name: 'demoIframe',
+      title: 'Demo iframe embed code',
+      type: 'text',
+      rows: 4,
+      group: 'content',
+      description: 'Paste the full <iframe …></iframe> embed code for the game demo. Leave empty to hide the demo.',
+    }),
     { ...bodyField, title: 'Intro', name: 'intro', group: 'content' } as any,
     { ...bodyField, group: 'content' } as any,
     ...relatedPagesFields.map((f) => ({ ...f, group: 'content' })),

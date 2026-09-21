@@ -91,7 +91,7 @@ export async function sitemapEntries(scope: Scope): Promise<SitemapEntry[]> {
     ...paymentMethods.map((m) => ({ url: `${BASE}${marketPrefix(m.market)}/online-casino/payment/${m.slug.current}/`, ...lastMod(m._updatedAt) })),
     ...software.map((s) => ({ url: `${BASE}${marketPrefix(s.market)}/online-casino/software/${s.slug.current}/`, ...lastMod(s._updatedAt) })),
     ...casinoGuides.map((g) => ({ url: `${BASE}${marketPrefix(g.market)}/casino-guides/${g.slug.current}/`, ...lastMod(g._updatedAt) })),
-    ...slots.map((s) => ({ url: `${BASE}${marketPrefix(s.market)}/online-slots/free/${s.slug.current}/`, ...lastMod(s._updatedAt) })),
+    ...slots.map((s) => ({ url: `${BASE}${marketPrefix(s.market)}/online-slots/${s.slug.current}/`, ...lastMod(s._updatedAt) })),
     ...bonusser.map((b) => ({ url: `${BASE}${marketPrefix(b.market)}/online-casino/bonus/${b.slug.current}/`, ...lastMod(b._updatedAt) })),
     ...posts.map((p) => ({ url: `${BASE}/${p.slug.current}/`, ...lastMod(p.lastUpdated ?? p.publishedAt) })),
   ]

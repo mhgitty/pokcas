@@ -949,3 +949,42 @@ a[rel~="sponsored"]:hover::after {
   }
   .slot-specs-grid > div:nth-last-child(2):nth-child(odd) { border-bottom: none !important; }
 }
+
+/* Game demo embed — make the pasted iframe responsive (16:9) and full-width */
+.slot-demo-embed {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #000;
+}
+.slot-demo-embed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  border: 0;
+  display: block;
+}
+
+/* Key features & stats — 3-column icon grid (responsive) */
+.slot-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px 24px;
+}
+@media (min-width: 560px) { .slot-stats-grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 860px) { .slot-stats-grid { grid-template-columns: 1fr 1fr 1fr; } }
+
+/* Slot page anchor buttons */
+.slot-jump-btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+.slot-jump-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--text); color: var(--bg-card);
+  font-size: 14px; font-weight: 700; padding: 11px 18px;
+  border-radius: 999px; text-decoration: none; border: 1px solid var(--text);
+  transition: opacity .15s ease;
+}
+.slot-jump-btn:hover { opacity: .85; }
+.slot-jump-btn--primary { background: var(--green); border-color: var(--green); color: #fff; }
+html { scroll-behavior: smooth; }
