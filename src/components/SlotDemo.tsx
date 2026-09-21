@@ -24,19 +24,15 @@ export function SlotDemo({ embed, title, slotName, provider, rtp, promoCasino }:
 
   return (
     <div id="free-demo" className="section" style={{ paddingBottom: 0, scrollMarginTop: '80px' }}>
-      <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(20px, 2.5vw, 26px)', fontWeight: 700, marginBottom: '16px', color: 'var(--text)' }}>
-        {heading}
-      </h2>
-
       <div style={{ border: '1px solid var(--border)', borderRadius: '16px', overflow: 'hidden', background: 'var(--bg-card)' }}>
         {/* Header bar */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', padding: '12px 16px', borderBottom: '1px solid var(--border)', background: 'var(--bg-raised)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', padding: '14px 18px', borderBottom: '1px solid var(--border)', background: 'var(--bg-raised)' }}>
           <div style={{ minWidth: 0 }}>
-            <div style={{ fontWeight: 800, fontSize: '15px', color: 'var(--text)', lineHeight: 1.2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-              {slotName}
-            </div>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 'clamp(18px, 2.4vw, 22px)', color: 'var(--text)', lineHeight: 1.25, margin: 0 }}>
+              {heading}
+            </h2>
             {provider?.name && (
-              <div style={{ fontSize: '12.5px', color: 'var(--gold)', fontWeight: 600, lineHeight: 1.2, marginTop: '2px' }}>
+              <div style={{ fontSize: '13px', color: 'var(--gold)', fontWeight: 600, lineHeight: 1.2, marginTop: '3px' }}>
                 by {provider.name}
               </div>
             )}

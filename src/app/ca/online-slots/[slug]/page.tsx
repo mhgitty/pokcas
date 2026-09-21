@@ -4,6 +4,8 @@ import { HreflangLinks } from '@/components/HreflangLinks'
 import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { SlotSpecs } from '@/components/SlotSpecs'
 import { SlotDemo } from '@/components/SlotDemo'
+import { TableOfContents } from '@/components/TableOfContents'
+import { MobileToc } from '@/components/MobileToc'
 import { RelatedPages } from '@/components/RelatedPages'
 import { getSlotmachineBySlugCa, client } from '@/lib/sanity'
 import { notFound } from 'next/navigation'
@@ -136,10 +138,19 @@ export default async function SlotCAPage({ params }: Props) {
           </div>
         )}
 
-        {hasBody && (
-          <div id="review" className="section" style={{ scrollMarginTop: '80px' }}><PortableTextRenderer value={slot.body} /></div>
-        )}
       </div>
+
+      {hasBody && (
+        <div id="review" className="article-layout" style={{ scrollMarginTop: '80px' }}>
+          <article className="article-content">
+            <MobileToc body={slot.body} />
+            <PortableTextRenderer value={slot.body} />
+          </article>
+          <aside className="toc-sidebar">
+            <TableOfContents body={slot.body} />
+          </aside>
+        </div>
+      )}
 
       <RelatedPages docId={slot?._id} />
     </>
