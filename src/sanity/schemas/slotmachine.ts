@@ -141,7 +141,7 @@ export const slotmachineType = defineType({
     defineField({ name: 'hasBonusBuy', title: 'Has bonus buy', type: 'boolean', group: 'specs', initialValue: false }),
     defineField({ name: 'hasJackpot', title: 'Has jackpot', type: 'boolean', group: 'specs', initialValue: false }),
     defineField({ name: 'hitFrequencyPercent', title: 'Hit frequency (%)', type: 'string', group: 'specs', description: 'e.g. "24%"' }),
-    defineField({ name: 'releaseYear', title: 'Release year', type: 'string', group: 'specs', description: 'e.g. "2026"' }),
+    defineField({ name: 'releaseYear', title: 'Release date', type: 'string', group: 'specs', description: 'Any format, e.g. "23/07/2026" or "2026"' }),
 
     // ── Content ────────────────────────────────────────────────────────────────
     defineField({

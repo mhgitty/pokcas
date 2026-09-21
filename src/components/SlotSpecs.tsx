@@ -74,7 +74,7 @@ export function SlotSpecs({ slot, title = 'Key features & stats' }: { slot: Slot
   const bet = [slot.minBetPerSpin, slot.maxBetPerSpin].filter(Boolean).join(' – ')
   add('bet', 'Min / Max bet', bet)
   add('target', 'Hit frequency', slot.hitFrequencyPercent)
-  if (slot.releaseYear) add('calendar', 'Release year', slot.releaseYear)
+  if (slot.releaseYear) add('calendar', 'Release date', slot.releaseYear)
   if (typeof slot.hasBonusBuy === 'boolean') add('cart', 'Bonus buy', slot.hasBonusBuy ? 'Yes' : 'No')
   if (typeof slot.hasJackpot === 'boolean') add('jackpot', 'Jackpot', slot.hasJackpot ? 'Yes' : 'No')
 
