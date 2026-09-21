@@ -20,7 +20,10 @@ interface Props {
 // editor in Sanity Studio), so we inject it as-is inside a responsive box.
 export function SlotDemo({ embed, title, slotName, provider, rtp, promoCasino }: Props) {
   if (!embed || !embed.trim()) return null
-  const heading = title || (slotName ? `Play ${slotName} for free` : 'Play the demo')
+  const titleCase = (s: string) => s.replace(/\b\w/g, (c) => c.toUpperCase())
+  const heading = title?.trim()
+    ? title
+    : slotName ? `Play ${titleCase(slotName)} Demo For Free` : 'Play The Demo'
 
   return (
     <div id="free-demo" className="section" style={{ paddingBottom: 0, scrollMarginTop: '80px' }}>
