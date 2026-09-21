@@ -18,7 +18,7 @@ interface Slot {
   hasBonusBuy?: boolean
   hasJackpot?: boolean
   hitFrequencyPercent?: string
-  releaseYear?: number
+  releaseYear?: string | number
 }
 
 // ── Minimal stroke icon set ─────────────────────────────────────────────────
