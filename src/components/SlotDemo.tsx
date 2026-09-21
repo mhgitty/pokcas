@@ -1,4 +1,10 @@
+import { SlotBonusPopup } from './SlotBonusPopup'
+
 interface Provider { name?: string }
+interface Casino {
+  _id?: string; name?: string; slug?: string; url?: string; market?: string
+  bonus?: string; logo?: { url?: string; alt?: string }
+}
 
 interface Props {
   embed?: string
@@ -6,12 +12,13 @@ interface Props {
   slotName?: string
   provider?: Provider | null
   rtp?: string
+  promoCasino?: Casino | null
 }
 
 // Renders the game demo inside a styled frame with a header bar (slot name,
 // provider, RTP badge). The embed code is trusted CMS input (pasted by an
 // editor in Sanity Studio), so we inject it as-is inside a responsive box.
-export function SlotDemo({ embed, title, slotName, provider, rtp }: Props) {
+export function SlotDemo({ embed, title, slotName, provider, rtp, promoCasino }: Props) {
   if (!embed || !embed.trim()) return null
   const heading = title || (slotName ? `Play ${slotName} for free` : 'Play the demo')
 
@@ -34,11 +41,14 @@ export function SlotDemo({ embed, title, slotName, provider, rtp }: Props) {
               </div>
             )}
           </div>
-          {rtp && (
-            <span style={{ flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(26,122,60,0.12)', color: 'var(--green)', fontWeight: 700, fontSize: '13px', padding: '6px 12px', borderRadius: '8px', border: '1px solid rgba(26,122,60,0.25)' }}>
-              RTP: {rtp}
-            </span>
-          )}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
+            {rtp && (
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(26,122,60,0.12)', color: 'var(--green)', fontWeight: 700, fontSize: '13px', padding: '6px 12px', borderRadius: '8px', border: '1px solid rgba(26,122,60,0.25)' }}>
+                RTP: {rtp}
+              </span>
+            )}
+            <SlotBonusPopup casino={promoCasino} />
+          </div>
         </div>
 
         <div className="slot-demo-embed" dangerouslySetInnerHTML={{ __html: embed }} />

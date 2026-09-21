@@ -97,7 +97,7 @@ export default async function SlotAUPage({ params }: Props) {
       </div>
 
       <div style={{ maxWidth: '860px', margin: '0 auto', padding: '0 15px' }}>
-        <SlotDemo embed={slot.demoIframe} title={slot.demoIframeTitle} slotName={slot.name} provider={slot.provider} rtp={slot.rtp} />
+        <SlotDemo embed={slot.demoIframe} title={slot.demoIframeTitle} slotName={slot.name} provider={slot.provider} rtp={slot.rtp} promoCasino={slot.promoCasino} />
 
         <div className="section" style={{ paddingTop: '20px', paddingBottom: 0 }}>
           <SlotSpecs slot={slot} />

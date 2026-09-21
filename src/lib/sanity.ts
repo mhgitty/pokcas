@@ -1187,6 +1187,21 @@ const SLOTMACHINE_FIELDS = `
   features, minBetPerSpin, maxBetPerSpin, hasBonusBuy, hasJackpot,
   hitFrequencyPercent, releaseYear,
   demoIframe, demoIframeTitle,
+  "promoCasino": coalesce(
+    highlightCasino-> {
+      _id, name, "slug": slug.current, url, market,
+      "bonus": coalesce(indbetalingsbonus, usp),
+      "logo": logo { "url": asset->url, alt }
+    },
+    *[_type == "bookmaker" && defined(slug.current) && (
+      (^.market == "global" && (market == "global" || !defined(market))) ||
+      (^.market != "global" && market == ^.market)
+    )] | order(coalesce(score, 0) desc)[0] {
+      _id, name, "slug": slug.current, url, market,
+      "bonus": coalesce(indbetalingsbonus, usp),
+      "logo": logo { "url": asset->url, alt }
+    }
+  ),
   "intro": intro[] { ..., _type == "image" => { ..., "url": asset->url } },
   "body":  body[]  { ..., _type == "image" => { ..., "url": asset->url } },
   metaTitle, metaDescription,

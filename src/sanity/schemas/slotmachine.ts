@@ -86,6 +86,15 @@ export const slotmachineType = defineType({
       description: 'Casinos where players can play this slot.',
       of: [{ type: 'reference', to: [{ type: 'bookmaker' }] }],
     }),
+    defineField({
+      name: 'highlightCasino',
+      title: 'Highlighted casino (gift popup)',
+      type: 'reference',
+      group: 'general',
+      to: [{ type: 'bookmaker' }],
+      description:
+        'The casino shown in the pulsing gift popup on the demo. Leave empty to auto-use the top-rated casino for this market — set it here if a page starts getting a lot of traffic.',
+    }),
 
     // ── Specs ──────────────────────────────────────────────────────────────────
     defineField({

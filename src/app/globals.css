@@ -988,3 +988,47 @@ a[rel~="sponsored"]:hover::after {
 .slot-jump-btn:hover { opacity: .85; }
 .slot-jump-btn--primary { background: var(--green); border-color: var(--green); color: #fff; }
 html { scroll-behavior: smooth; }
+
+/* Pulsing gift button in the demo header */
+.slot-gift-btn {
+  flex-shrink: 0;
+  width: 38px; height: 38px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 9px;
+  background: rgba(201,168,76,0.14);
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  cursor: pointer;
+  animation: slot-gift-pulse 1.8s ease-in-out infinite;
+}
+.slot-gift-btn:hover { animation-play-state: paused; background: rgba(201,168,76,0.28); }
+@keyframes slot-gift-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201,168,76,0.55); transform: scale(1); }
+  50%      { box-shadow: 0 0 0 7px rgba(201,168,76,0); transform: scale(1.08); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .slot-gift-btn { animation: none; }
+}
+
+/* Bonus promo modal */
+.slot-bonus-modal {
+  position: relative;
+  width: 100%; max-width: 620px;
+  padding: 34px 36px;
+  border-radius: 18px;
+  background:
+    radial-gradient(120% 140% at 80% 20%, rgba(120,80,180,0.35), transparent 55%),
+    radial-gradient(120% 140% at 10% 90%, rgba(60,140,90,0.28), transparent 55%),
+    #2a2d43;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.5);
+}
+.slot-bonus-close {
+  position: absolute; top: 16px; right: 16px;
+  width: 40px; height: 40px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 9px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #fff; cursor: pointer;
+}
+.slot-bonus-close:hover { background: rgba(255,255,255,0.2); }
