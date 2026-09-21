@@ -4,6 +4,7 @@ import { HreflangLinks } from '@/components/HreflangLinks'
 import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { SlotSpecs } from '@/components/SlotSpecs'
 import { SlotDemo } from '@/components/SlotDemo'
+import { HeroIntro } from '@/components/HeroIntro'
 import { TableOfContents } from '@/components/TableOfContents'
 import { MobileToc } from '@/components/MobileToc'
 import { RelatedPages } from '@/components/RelatedPages'
@@ -85,7 +86,7 @@ export default async function SlotCAPage({ params }: Props) {
           </div>
 
           {slot.intro && slot.intro.length > 0 && (
-            <div style={{ marginTop: '18px', color: 'var(--text-muted)' }}><PortableTextRenderer value={slot.intro} /></div>
+            <div style={{ marginTop: '18px', color: 'var(--text-muted)' }}><HeroIntro value={slot.intro} /></div>
           )}
 
           {(hasDemo || hasCasinos || hasBody) && (
@@ -102,7 +103,7 @@ export default async function SlotCAPage({ params }: Props) {
         <SlotDemo embed={slot.demoIframe} title={slot.demoIframeTitle} slotName={slot.name} provider={slot.provider} rtp={slot.rtp} promoCasino={slot.promoCasino} />
 
         <div className="section" style={{ paddingTop: '20px', paddingBottom: 0 }}>
-          <SlotSpecs slot={slot} />
+          <SlotSpecs slot={slot} title={`${slot.name} Slot Game Data Overview`} />
         </div>
 
         {hasCasinos && (
