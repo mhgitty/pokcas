@@ -72,8 +72,8 @@ export default async function SlotCAPage({ params }: Props) {
           ]} />
           <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginTop: '20px' }}>
             {slot.logo?.url && (
-              <div style={{ flexShrink: 0, width: '88px', height: '88px', borderRadius: '14px', overflow: 'hidden', background: 'var(--bg-card)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '6px' }}>
-                <Image src={slot.logo.url} alt={slot.logo.alt || slot.name} width={76} height={76} style={{ objectFit: 'cover', width: '100%', height: '100%', borderRadius: '10px' }} />
+              <div style={{ flexShrink: 0, width: '120px', height: '80px', borderRadius: '12px', overflow: 'hidden', background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
+                <Image src={slot.logo.url} alt={slot.logo.alt || slot.name} width={120} height={80} style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
               </div>
             )}
             <div>
