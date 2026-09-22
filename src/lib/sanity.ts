@@ -1206,8 +1206,11 @@ const SLOTMACHINE_FIELDS = `
   "body":  body[]  { ..., _type == "image" => { ..., "url": asset->url } },
   metaTitle, metaDescription,
   "casinos": casinos[]-> {
-    _id, name, slug, usp, url, market,
-    "logo": logo { "url": asset->url, alt }
+    _id, name, slug, usp, score, market,
+    indbetalingsbonus, minIndbetaling, gennemspilskrav, url, terms,
+    "logo": logo { "url": asset->url, alt },
+    "paymentMethods": paymentMethods[]-> { _id, name, "slug": slug.current, "logo": logo { "url": asset->url, alt } },
+    "software": software[]-> { _id, name, "slug": slug.current, "logo": logo { "url": asset->url, alt } }
   }
 `
 

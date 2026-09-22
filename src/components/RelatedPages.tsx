@@ -14,7 +14,7 @@ interface RelatedPagesProps {
  * under the same parent (or other entries of the same type + market).
  * Resolves its own data so page templates need no GROQ changes.
  */
-export async function RelatedPages({ docId, limit = 6 }: RelatedPagesProps) {
+export async function RelatedPages({ docId, limit = 1000 }: RelatedPagesProps) {
   if (!docId) return null
 
   let data: { title?: string; items: any[] } = { items: [] }
