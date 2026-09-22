@@ -9,7 +9,9 @@ import { HeroIntro } from '@/components/HeroIntro'
 import { TableOfContents } from '@/components/TableOfContents'
 import { MobileToc } from '@/components/MobileToc'
 import { RelatedPages } from '@/components/RelatedPages'
-import { getSlotmachineBySlugCa, client } from '@/lib/sanity'
+import { CmsPageView } from '@/components/CmsPageView'
+import { getSlotmachineBySlugCa, getPageByPathCa, getSiteSettings, getHreflangScript, client } from '@/lib/sanity'
+import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -31,7 +33,16 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const slot = await getSlotmachineBySlugCa(slug).catch(() => null)
-  if (!slot) return {}
+  if (!slot) {
+    // Fall back to a real CMS page living at /online-slots/<slug>/
+    const page = await getPageByPathCa(['online-slots', slug]).catch(() => null)
+    if (!page) return {}
+    const title = replaceDateVars(page.metaTitle || page.title)
+    const description = replaceDateVars(page.metaDescription || page.intro || '')
+    const canonical = `${BASE}/ca/online-slots/${slug}/`
+    const ogUrl = (page as any).ogImage?.url || (page as any).featuredImage?.url || `${BASE}/og.png`
+    return { title, description, alternates: { canonical }, openGraph: { title, description, url: canonical, type: 'article', images: [{ url: ogUrl }] }, twitter: { card: 'summary_large_image', images: [ogUrl] } }
+  }
   const title = slot.metaTitle || `${slot.name} slot${slot.provider?.name ? ` by ${slot.provider.name}` : ''} — review & where to play`
   const description = slot.metaDescription || `${slot.name}${slot.rtp ? ` — RTP ${slot.rtp}` : ''}. Review, specs and casinos where you can play.`
   const canonical = `${BASE}${PATH}/${slug}/`
@@ -42,7 +53,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function SlotCAPage({ params }: Props) {
   const { slug } = await params
   const slot = await getSlotmachineBySlugCa(slug).catch(() => null)
-  if (!slot) notFound()
+  if (!slot) {
+    // No slot with this slug — fall back to a CMS page at /online-slots/<slug>/
+    const page = await getPageByPathCa(['online-slots', slug]).catch(() => null)
+    if (!page) notFound()
+    const [settings, hreflangScript] = await Promise.all([
+      getSiteSettings().catch(() => null),
+      getHreflangScript((page as any)._id).catch(() => null),
+    ])
+    return (
+      <>
+        <CmsPageView
+          page={page}
+          settings={settings}
+          hreflangScript={hreflangScript}
+          slug={['online-slots', slug]}
+          homeHref="/ca/"
+          lang="en-CA"
+          canonical={`${BASE}/ca/online-slots/${slug}/`}
+        />
+      </>
+    )
+  }
 
   const canonical = `${BASE}${PATH}/${slug}/`
   const h1 = slot.titel || slot.name
