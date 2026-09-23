@@ -1167,3 +1167,10 @@ html { scroll-behavior: smooth; }
 .slot-pager button:disabled { opacity: 0.45; cursor: default; }
 .slot-pager button:not(:disabled):hover { border-color: var(--green); color: var(--green); }
 .slot-pager span { font-size: 14px; color: var(--text-muted); }
+
+.slot-loadmore-btn {
+  padding: 12px 28px; border-radius: 10px;
+  background: var(--green); color: #fff; border: 1px solid var(--green);
+  font-size: 15px; font-weight: 800; cursor: pointer; transition: background .15s ease;
+}
+.slot-loadmore-btn:hover { background: var(--green-dark); border-color: var(--green-dark); }

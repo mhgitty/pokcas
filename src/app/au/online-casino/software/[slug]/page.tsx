@@ -6,7 +6,8 @@ import { SoftwareHero } from '@/components/SoftwareHero'
 import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { TableOfContents } from '@/components/TableOfContents'
 import { MobileToc } from '@/components/MobileToc'
-import { getSoftwareBySlugAu, client } from '@/lib/sanity'
+import { getSoftwareBySlugAu, getSlotsByProvider, client } from '@/lib/sanity'
+import { ProviderSlots } from '@/components/ProviderSlots'
 import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -43,6 +44,7 @@ export default async function AuSoftwareSlugPage({ params }: Props) {
   const { slug } = await params
   const provider = await getSoftwareBySlugAu(slug).catch(() => null)
   if (!provider) notFound()
+  const providerSlots = await getSlotsByProvider((provider as any)._id)
 
   const canonical = `${BASE}/au/online-casino/software/${slug}/`
 
@@ -113,6 +115,9 @@ export default async function AuSoftwareSlugPage({ params }: Props) {
           </aside>
         </div>
       )}
+
+      {/* Slots by this provider */}
+      <ProviderSlots slots={providerSlots as any} basePath="/au/online-slots" providerName={provider.name} flag="🇦🇺" />
 
       {/* Casino list */}
       {provider.casinos && provider.casinos.length > 0 && (

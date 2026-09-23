@@ -6,7 +6,8 @@ import { SoftwareHero } from '@/components/SoftwareHero'
 import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { TableOfContents } from '@/components/TableOfContents'
 import { MobileToc } from '@/components/MobileToc'
-import { getSoftwareBySlug, client } from '@/lib/sanity'
+import { getSoftwareBySlug, getSlotsByProvider, client } from '@/lib/sanity'
+import { ProviderSlots } from '@/components/ProviderSlots'
 import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -44,6 +45,7 @@ export default async function SoftwareSlugPage({ params }: Props) {
   const provider = await getSoftwareBySlug(slug).catch(() => null)
   if (!provider) notFound()
 
+  const providerSlots = await getSlotsByProvider((provider as any)._id)
   const canonical = `${BASE}/online-casino/software/${slug}/`
 
   const jsonLd = {
@@ -111,6 +113,9 @@ export default async function SoftwareSlugPage({ params }: Props) {
           </aside>
         </div>
       )}
+
+      {/* Slots by this provider */}
+      <ProviderSlots slots={providerSlots as any} basePath="/online-slots" providerName={provider.name} flag="🌍" />
 
       {/* Casino list */}
       {provider.casinos && provider.casinos.length > 0 && (

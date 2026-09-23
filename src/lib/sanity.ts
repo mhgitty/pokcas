@@ -1253,6 +1253,17 @@ export async function getSlotmachinesForArchive(market: 'global' | 'ca' | 'au') 
   ).catch(() => [])
 }
 
+// Slots whose provider reference points to a given software document.
+export async function getSlotsByProvider(providerId: string) {
+  if (!providerId) return []
+  return client.fetch(
+    `*[_type == "slotmachine" && provider._ref == $id && defined(slug.current)] | order(name asc) {
+      _id, name, "slug": slug.current, market, "logo": logo.asset->url, rtp
+    }`,
+    { id: providerId }
+  ).catch(() => [])
+}
+
 // The editor-picked slot IDs (in order) to show first in the archive.
 export async function getArchiveFeaturedSlotIds(market: 'global' | 'ca' | 'au'): Promise<string[]> {
   const cond = market === 'global'
