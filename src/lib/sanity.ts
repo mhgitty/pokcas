@@ -1253,6 +1253,16 @@ export async function getSlotmachinesForArchive(market: 'global' | 'ca' | 'au') 
   ).catch(() => [])
 }
 
+// The editor-picked slot IDs (in order) to show first in the archive.
+export async function getArchiveFeaturedSlotIds(market: 'global' | 'ca' | 'au'): Promise<string[]> {
+  const cond = market === 'global'
+    ? '(market == "global" || !defined(market))'
+    : `market == "${market}"`
+  return client.fetch<string[]>(
+    `*[_type == "page" && slug.current == "online-slots" && ${cond}][0].featuredSlots[]._ref`
+  ).then((r) => r ?? []).catch(() => [])
+}
+
 // ─── Casino Guides ──────────────────────────────────────────────────────────────
 
 export async function getCasinoGuideBySlug(slug: string) {

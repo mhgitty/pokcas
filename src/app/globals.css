@@ -74,6 +74,10 @@ h1, h2, h3, h4, h5, h6 {
   align-items: start;
 }
 .article-content { min-width: 0; }
+/* Keep the first visible body element flush with the top of the TOC sidebar
+   (MobileToc is the hidden first child on desktop, so also target what follows it). */
+.article-content > :first-child,
+.article-content > .mobile-toc + * { margin-top: 0 !important; padding-top: 0 !important; }
 .toc-sidebar {
   position: sticky;
   top: 72px;

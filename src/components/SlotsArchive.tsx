@@ -46,8 +46,9 @@ const RTP_BUCKETS = [
   { label: 'Under 95%', test: (n: number | null) => n != null && n < 95 },
 ]
 
-type SortKey = 'name-asc' | 'name-desc' | 'rtp-desc' | 'rtp-asc' | 'year-desc' | 'year-asc'
+type SortKey = 'recommended' | 'name-asc' | 'name-desc' | 'rtp-desc' | 'rtp-asc' | 'year-desc' | 'year-asc'
 const SORTS: { key: SortKey; label: string }[] = [
+  { key: 'recommended', label: 'Recommended' },
   { key: 'name-asc', label: 'Name (A–Z)' },
   { key: 'name-desc', label: 'Name (Z–A)' },
   { key: 'rtp-desc', label: 'RTP (high → low)' },
@@ -109,9 +110,14 @@ function RtpBadge({ rtp }: { rtp?: string }) {
   return <span className="slot-card-rtp" style={{ color, borderColor: color }}>RTP: {rtp}</span>
 }
 
-export function SlotsArchive({ slots, basePath, flag = '🌍' }: { slots: ArchiveSlot[]; basePath: string; flag?: string }) {
+export function SlotsArchive({ slots, basePath, flag = '🌍', featuredIds = [] }: { slots: ArchiveSlot[]; basePath: string; flag?: string; featuredIds?: string[] }) {
+  const featuredRank = useMemo(() => {
+    const m = new Map<string, number>()
+    featuredIds.forEach((id, i) => m.set(id, i))
+    return m
+  }, [featuredIds])
   const [search, setSearch] = useState('')
-  const [sort, setSort] = useState<SortKey>('name-asc')
+  const [sort, setSort] = useState<SortKey>('recommended')
   const [showFilters, setShowFilters] = useState(false)
   const [showSort, setShowSort] = useState(false)
   const [page, setPage] = useState(1)
@@ -164,6 +170,12 @@ export function SlotsArchive({ slots, basePath, flag = '🌍' }: { slots: Archiv
     })
     list = [...list].sort((a, b) => {
       switch (sort) {
+        case 'recommended': {
+          const ra = featuredRank.has(a._id) ? featuredRank.get(a._id)! : Infinity
+          const rb = featuredRank.has(b._id) ? featuredRank.get(b._id)! : Infinity
+          if (ra !== rb) return ra - rb
+          return a.name.localeCompare(b.name)
+        }
         case 'name-desc': return b.name.localeCompare(a.name)
         case 'rtp-desc': return (rtpNum(b.rtp) ?? -1) - (rtpNum(a.rtp) ?? -1)
         case 'rtp-asc': return (rtpNum(a.rtp) ?? 999) - (rtpNum(b.rtp) ?? 999)
@@ -173,7 +185,7 @@ export function SlotsArchive({ slots, basePath, flag = '🌍' }: { slots: Archiv
       }
     })
     return list
-  }, [slots, search, sort, fProviders, fVolatility, fTypes, fFeatures, fThemes, fReels, fPaylines, fRtp])
+  }, [slots, search, sort, featuredRank, fProviders, fVolatility, fTypes, fFeatures, fThemes, fReels, fPaylines, fRtp])
 
   useEffect(() => { setPage(1) }, [search, sort, fProviders, fVolatility, fTypes, fFeatures, fThemes, fReels, fPaylines, fRtp])
 

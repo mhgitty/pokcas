@@ -1,7 +1,7 @@
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { CmsPageView } from '@/components/CmsPageView'
 import { SlotsArchive } from '@/components/SlotsArchive'
-import { getSlotmachinesForArchive, getPageByPathAu, getSiteSettings, getHreflangScript } from '@/lib/sanity'
+import { getSlotmachinesForArchive, getArchiveFeaturedSlotIds, getPageByPathAu, getSiteSettings, getHreflangScript } from '@/lib/sanity'
 import type { Metadata } from 'next'
 
 export const revalidate = 3600
@@ -21,14 +21,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function SlotsArchivePage() {
-  const [slots, page] = await Promise.all([
+  const [slots, featuredIds, page] = await Promise.all([
     getSlotmachinesForArchive(MARKET),
+    getArchiveFeaturedSlotIds(MARKET),
     getPageByPathAu(['online-slots']).catch(() => null),
   ])
 
   const archive = (
     <div style={{ maxWidth: '1250px', margin: '0 auto', padding: '26px 15px 8px' }}>
-      <SlotsArchive slots={slots as any} basePath={PATH} flag={FLAG} />
+      <SlotsArchive slots={slots as any} basePath={PATH} flag={FLAG} featuredIds={featuredIds} />
     </div>
   )
 

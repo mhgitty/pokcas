@@ -853,6 +853,26 @@ export const pageType = defineType({
       initialValue: false,
       description: 'When enabled, the author bar and author card are not shown on this page (e.g. About us, Privacy Policy)',
     }),
+    defineField({
+      name: 'featuredSlots',
+      title: '⭐ Featured slots (archive top)',
+      type: 'array',
+      group: 'content',
+      hidden: ({ document }) => (document?.slug as any)?.current !== 'online-slots',
+      validation: (r) => r.max(4),
+      description: 'Only on the “online-slots” page: pick up to 4 slots to show first (in this order) in the slots archive.',
+      of: [{
+        type: 'reference',
+        to: [{ type: 'slotmachine' }],
+        options: {
+          filter: ({ document }: any) => {
+            const market = document?.market || 'global'
+            if (market === 'global') return { filter: 'market == "global" || !defined(market)' }
+            return { filter: 'market == $market', params: { market } }
+          },
+        },
+      }],
+    }),
     defineField({ name: 'metaTitle', title: 'Meta title', type: 'string', group: 'seo' }),
     defineField({ name: 'metaDescription', title: 'Meta description', type: 'text', rows: 3, group: 'seo' }),
     defineField({
