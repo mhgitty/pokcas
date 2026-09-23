@@ -1235,6 +1235,24 @@ export async function getSlotmachineBySlugAu(slug: string) {
   )
 }
 
+// ─── Slot archive (listing + filters) ─────────────────────────────────────────
+const SLOT_ARCHIVE_FIELDS = `
+  _id, name, "slug": slug.current, market,
+  "logo": logo.asset->url,
+  "provider": provider->name,
+  rtp, volatility, grid, paylines, mechanic, theme, features,
+  minBetPerSpin, maxBetPerSpin, hasBonusBuy, hasJackpot, releaseYear
+`
+
+export async function getSlotmachinesForArchive(market: 'global' | 'ca' | 'au') {
+  const cond = market === 'global'
+    ? '(market == "global" || !defined(market))'
+    : `market == "${market}"`
+  return client.fetch(
+    `*[_type == "slotmachine" && defined(slug.current) && ${cond}] | order(name asc) { ${SLOT_ARCHIVE_FIELDS} }`
+  ).catch(() => [])
+}
+
 // ─── Casino Guides ──────────────────────────────────────────────────────────────
 
 export async function getCasinoGuideBySlug(slug: string) {
