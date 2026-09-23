@@ -24,6 +24,8 @@ interface Props {
   lang: string
   /** Canonical URL of the page. */
   canonical: string
+  /** Optional content rendered right after the hero (e.g. a slots archive). */
+  afterHero?: React.ReactNode
 }
 
 /**
@@ -31,7 +33,7 @@ interface Props {
  * Extracted so specific routes (e.g. /online-slots/[slug]) can fall back to a
  * real CMS page living at the same path when no more-specific record matches.
  */
-export function CmsPageView({ page, settings, hreflangScript, slug, homeHref, lang, canonical }: Props) {
+export function CmsPageView({ page, settings, hreflangScript, slug, homeHref, lang, canonical, afterHero }: Props) {
   const hideAuthor = page.hideAuthor ?? false
   const author = hideAuthor ? null : (page.author ?? settings?.defaultAuthor ?? null)
   const factChecker = hideAuthor ? null : (page.factChecker ?? null)
@@ -95,6 +97,8 @@ export function CmsPageView({ page, settings, hreflangScript, slug, homeHref, la
         buttons={heroButtons}
         breadcrumbs={breadcrumbs}
       />
+
+      {afterHero}
 
       {page.showComparisonTable && page.comparisonTable && (
         <div className="section" style={{ paddingBottom: page.body ? '0' : undefined }}>
