@@ -90,6 +90,9 @@ export default async function CaSoftwareSlugPage({ params }: Props) {
         intro={provider.intro}
       />
 
+      {/* Slots by this provider */}
+      <ProviderSlots slots={providerSlots as any} basePath="/ca/online-slots" providerName={provider.name} flag="🇨🇦" />
+
       {/* Comparison table — configured on the CMS document in Sanity Studio */}
       <ComparisonJumpButton data={provider} />
       {(provider as any).showComparisonTable && (provider as any).comparisonTable && (
@@ -115,9 +118,6 @@ export default async function CaSoftwareSlugPage({ params }: Props) {
           </aside>
         </div>
       )}
-
-      {/* Slots by this provider */}
-      <ProviderSlots slots={providerSlots as any} basePath="/ca/online-slots" providerName={provider.name} flag="🇨🇦" />
 
       {/* Casino list */}
       {provider.casinos && provider.casinos.length > 0 && (
