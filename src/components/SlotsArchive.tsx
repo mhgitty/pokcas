@@ -110,7 +110,10 @@ function RtpBadge({ rtp }: { rtp?: string }) {
   return <span className="slot-card-rtp" style={{ color, borderColor: color }}>RTP: {rtp}</span>
 }
 
-export function SlotsArchive({ slots, basePath, flag = '🌍', featuredIds = [] }: { slots: ArchiveSlot[]; basePath: string; flag?: string; featuredIds?: string[] }) {
+export function SlotsArchive({ slots, basePath, flag = '🌍', featuredIds = [], hideProviders = false, mode = 'paginate', loadStep = 6, title }: {
+  slots: ArchiveSlot[]; basePath: string; flag?: string; featuredIds?: string[]
+  hideProviders?: boolean; mode?: 'paginate' | 'loadmore'; loadStep?: number; title?: string
+}) {
   const featuredRank = useMemo(() => {
     const m = new Map<string, number>()
     featuredIds.forEach((id, i) => m.set(id, i))
@@ -121,6 +124,7 @@ export function SlotsArchive({ slots, basePath, flag = '🌍', featuredIds = [] 
   const [showFilters, setShowFilters] = useState(false)
   const [showSort, setShowSort] = useState(false)
   const [page, setPage] = useState(1)
+  const [loadCount, setLoadCount] = useState(loadStep)
   const sortRef = useRef<HTMLDivElement>(null)
 
   const [fProviders, setFProviders] = useState<Set<string>>(new Set())
@@ -187,23 +191,27 @@ export function SlotsArchive({ slots, basePath, flag = '🌍', featuredIds = [] 
     return list
   }, [slots, search, sort, featuredRank, fProviders, fVolatility, fTypes, fFeatures, fThemes, fReels, fPaylines, fRtp])
 
-  useEffect(() => { setPage(1) }, [search, sort, fProviders, fVolatility, fTypes, fFeatures, fThemes, fReels, fPaylines, fRtp])
+  useEffect(() => { setPage(1); setLoadCount(loadStep) }, [search, sort, loadStep, fProviders, fVolatility, fTypes, fFeatures, fThemes, fReels, fPaylines, fRtp])
 
   const total = filtered.length
   const pages = Math.max(1, Math.ceil(total / PER_PAGE))
   const cur = Math.min(page, pages)
-  const start = (cur - 1) * PER_PAGE
-  const shown = filtered.slice(start, start + PER_PAGE)
+  const start = mode === 'loadmore' ? 0 : (cur - 1) * PER_PAGE
+  const end = mode === 'loadmore' ? Math.min(loadCount, total) : Math.min(start + PER_PAGE, total)
+  const shown = filtered.slice(start, end)
 
   const activeCount = fProviders.size + fVolatility.size + fTypes.size + fFeatures.size + fThemes.size + fReels.size + fPaylines.size + fRtp.size
   const clearAll = () => { setFProviders(new Set()); setFVolatility(new Set()); setFTypes(new Set()); setFFeatures(new Set()); setFThemes(new Set()); setFReels(new Set()); setFPaylines(new Set()); setFRtp(new Set()) }
 
   return (
     <div>
+      {title && (
+        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(20px, 2.5vw, 26px)', fontWeight: 700, color: 'var(--text)', margin: '0 0 16px' }}>{title}</h2>
+      )}
       {/* Header */}
       <div className="slot-archive-head">
         <div style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text-muted)' }}>
-          Showing {total === 0 ? 0 : start + 1}–{Math.min(start + PER_PAGE, total)} of {total} slots
+          Showing {total === 0 ? 0 : start + 1}–{end} of {total} slots
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div className="slot-search">
@@ -235,7 +243,7 @@ export function SlotsArchive({ slots, basePath, flag = '🌍', featuredIds = [] 
       {showFilters && (
         <div className="slot-filter-panel">
           <div className="slot-filter-grid">
-            <FilterDropdown label="Providers" icon={IconEl(<rect x="4" y="4" width="16" height="16" rx="2" />)} options={opts.providers} selected={fProviders} onChange={setFProviders} />
+            {!hideProviders && <FilterDropdown label="Providers" icon={IconEl(<rect x="4" y="4" width="16" height="16" rx="2" />)} options={opts.providers} selected={fProviders} onChange={setFProviders} />}
             <FilterDropdown label="RTP" icon={IconEl(<><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M8 15l8-8" /></>)} options={RTP_BUCKETS.map((b) => b.label)} selected={fRtp} onChange={setFRtp} />
             <FilterDropdown label="Volatility" icon={IconEl(<><path d="M3 3v18h18" /><path d="M7 14l3-4 3 3 4-6" /></>)} options={opts.volatility} selected={fVolatility} onChange={setFVolatility} />
             <FilterDropdown label="Types" icon={IconEl(<rect x="3" y="6" width="18" height="12" rx="2" />)} options={opts.types} selected={fTypes} onChange={setFTypes} />
@@ -276,14 +284,20 @@ export function SlotsArchive({ slots, basePath, flag = '🌍', featuredIds = [] 
         </div>
       )}
 
-      {/* Pagination */}
-      {pages > 1 && (
-        <div className="slot-pager">
-          <button type="button" disabled={cur === 1} onClick={() => setPage(cur - 1)}>Prev</button>
-          <span>Page {cur} of {pages}</span>
-          <button type="button" disabled={cur === pages} onClick={() => setPage(cur + 1)}>Next</button>
-        </div>
-      )}
+      {/* Pagination / load more */}
+      {mode === 'loadmore'
+        ? end < total && (
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '26px' }}>
+              <button type="button" onClick={() => setLoadCount((c) => c + loadStep)} className="slot-loadmore-btn">Load more slots</button>
+            </div>
+          )
+        : pages > 1 && (
+            <div className="slot-pager">
+              <button type="button" disabled={cur === 1} onClick={() => setPage(cur - 1)}>Prev</button>
+              <span>Page {cur} of {pages}</span>
+              <button type="button" disabled={cur === pages} onClick={() => setPage(cur + 1)}>Next</button>
+            </div>
+          )}
     </div>
   )
 }

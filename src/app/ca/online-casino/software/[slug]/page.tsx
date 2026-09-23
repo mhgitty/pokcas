@@ -7,7 +7,7 @@ import { PortableTextRenderer } from '@/components/PortableTextRenderer'
 import { TableOfContents } from '@/components/TableOfContents'
 import { MobileToc } from '@/components/MobileToc'
 import { getSoftwareBySlugCa, getSlotsByProvider, client } from '@/lib/sanity'
-import { ProviderSlots } from '@/components/ProviderSlots'
+import { SlotsArchive } from '@/components/SlotsArchive'
 import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -91,7 +91,11 @@ export default async function CaSoftwareSlugPage({ params }: Props) {
       />
 
       {/* Slots by this provider */}
-      <ProviderSlots slots={providerSlots as any} basePath="/ca/online-slots" providerName={provider.name} flag="🇨🇦" />
+      {providerSlots.length > 0 && (
+        <div className="section">
+          <SlotsArchive slots={providerSlots as any} basePath="/ca/online-slots" flag="🇨🇦" hideProviders mode="loadmore" loadStep={6} title={`${provider.name} slots`} />
+        </div>
+      )}
 
       {/* Comparison table — configured on the CMS document in Sanity Studio */}
       <ComparisonJumpButton data={provider} />

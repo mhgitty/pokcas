@@ -1257,9 +1257,7 @@ export async function getSlotmachinesForArchive(market: 'global' | 'ca' | 'au') 
 export async function getSlotsByProvider(providerId: string) {
   if (!providerId) return []
   return client.fetch(
-    `*[_type == "slotmachine" && provider._ref == $id && defined(slug.current)] | order(name asc) {
-      _id, name, "slug": slug.current, market, "logo": logo.asset->url, rtp
-    }`,
+    `*[_type == "slotmachine" && provider._ref == $id && defined(slug.current)] | order(name asc) { ${SLOT_ARCHIVE_FIELDS} }`,
     { id: providerId }
   ).catch(() => [])
 }
