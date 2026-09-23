@@ -137,8 +137,7 @@ export default async function SlotPage({ params }: Props) {
         </div>
       </div>
 
-      <div style={{ maxWidth: '1250px', margin: '0 auto', padding: '0 15px' }}>
-        <SlotDemo embed={slot.demoIframe} title={slot.demoIframeTitle} slotName={slot.name} provider={slot.provider} rtp={slot.rtp} promoCasino={slot.promoCasino} />
+      <SlotDemo embed={slot.demoIframe} title={slot.demoIframeTitle} slotName={slot.name} provider={slot.provider} rtp={slot.rtp} promoCasino={slot.promoCasino} />
 
         <div className="section" style={{ paddingTop: '20px', paddingBottom: 0 }}>
           <SlotSpecs slot={slot} title={`${slot.name} Slot Game Data Overview`} />
@@ -152,7 +151,6 @@ export default async function SlotPage({ params }: Props) {
             <CasinoComparisonTable casinos={slot.casinos} currency="$" />
           </div>
         )}
-      </div>
 
       {hasBody && (
         <div id="review" className="article-layout" style={{ scrollMarginTop: '80px' }}>
