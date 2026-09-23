@@ -10,7 +10,8 @@ import { TableOfContents } from '@/components/TableOfContents'
 import { MobileToc } from '@/components/MobileToc'
 import { RelatedPages } from '@/components/RelatedPages'
 import { CmsPageView } from '@/components/CmsPageView'
-import { getSlotmachineBySlugCa, getPageByPathCa, getSiteSettings, getHreflangScript, client } from '@/lib/sanity'
+import { SlotsArchive } from '@/components/SlotsArchive'
+import { getSlotmachineBySlugCa, getPageByPathCa, getSiteSettings, getHreflangScript, getSlotmachinesForArchive, getArchiveFeaturedSlotIds, client } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -20,6 +21,8 @@ import type { Metadata } from 'next'
 export const revalidate = 3600
 const BASE = 'https://pokcas.com'
 const PATH = '/ca/online-slots'
+const ARCHIVE_MARKET = 'ca' as const
+const FLAG = '🇨🇦'
 
 interface Props { params: Promise<{ slug: string }> }
 
@@ -57,10 +60,17 @@ export default async function SlotCAPage({ params }: Props) {
     // No slot with this slug — fall back to a CMS page at /online-slots/<slug>/
     const page = await getPageByPathCa(['online-slots', slug]).catch(() => null)
     if (!page) notFound()
-    const [settings, hreflangScript] = await Promise.all([
+    const [settings, hreflangScript, archiveSlots, featuredIds] = await Promise.all([
       getSiteSettings().catch(() => null),
       getHreflangScript((page as any)._id).catch(() => null),
+      getSlotmachinesForArchive(ARCHIVE_MARKET),
+      getArchiveFeaturedSlotIds(ARCHIVE_MARKET),
     ])
+    const archive = (
+      <div style={{ maxWidth: '1250px', margin: '0 auto', padding: '26px 15px 8px' }}>
+        <SlotsArchive slots={archiveSlots as any} basePath={PATH} flag={FLAG} featuredIds={featuredIds} />
+      </div>
+    )
     return (
       <>
         <CmsPageView
@@ -71,6 +81,7 @@ export default async function SlotCAPage({ params }: Props) {
           homeHref="/ca/"
           lang="en-CA"
           canonical={`${BASE}/ca/online-slots/${slug}/`}
+          afterHero={archive}
         />
       </>
     )
