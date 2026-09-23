@@ -46,9 +46,20 @@ export function BonusCard({
       position: 'relative',
     }}>
 
+      {typeof rank === 'number' && rank > 0 && (
+        <span style={{
+          position: 'absolute', top: '10px', left: '10px', zIndex: 3,
+          width: '30px', height: '30px', borderRadius: '50%',
+          background: rank === 1 ? '#E0A400' : 'var(--green)', color: '#fff',
+          fontWeight: 800, fontSize: '14px',
+          display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+          border: '2px solid #fff', boxShadow: '0 2px 6px rgba(0,0,0,0.25)',
+        }}>{rank}</span>
+      )}
+
       {rank === 1 && (
         <div style={{
-          position: 'absolute', top: 0, left: '20px',
+          position: 'absolute', top: 0, left: '52px',
           background: 'var(--green-dark)', color: '#fff',
           fontSize: '10.5px', fontWeight: 700, letterSpacing: '0.5px',
           padding: '3px 12px', borderRadius: '0 0 8px 8px',
