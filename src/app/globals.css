@@ -1025,6 +1025,27 @@ html { scroll-behavior: smooth; }
   .slot-gift-btn { animation: none; }
 }
 
+/* Fullscreen button in the demo header */
+.slot-fs-btn {
+  flex-shrink: 0;
+  width: 38px; height: 38px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 9px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.slot-fs-btn:hover { color: var(--text); border-color: var(--green); }
+
+/* When the demo frame is fullscreen, fill the screen and center the game */
+.slot-demo-embed:fullscreen {
+  width: 100vw; height: 100vh; aspect-ratio: auto; background: #000;
+}
+.slot-demo-embed:-webkit-full-screen {
+  width: 100vw; height: 100vh; background: #000;
+}
+
 /* Bonus promo modal */
 .slot-bonus-modal {
   position: relative;
