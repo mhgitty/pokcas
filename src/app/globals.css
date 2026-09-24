@@ -1050,6 +1050,28 @@ html { scroll-behavior: smooth; }
   width: 100vw; height: 100vh; background: #000;
 }
 
+/* CSS fallback fullscreen for devices without element Fullscreen API (iOS) */
+.slot-demo-fixed {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  aspect-ratio: auto !important;
+  z-index: 9999 !important;
+  background: #000 !important;
+  border-radius: 0 !important;
+}
+.slot-fs-exit {
+  position: fixed; top: 12px; right: 12px; z-index: 10001;
+  width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.6); color: #fff;
+  border: 1px solid rgba(255,255,255,0.35);
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.slot-fs-exit:hover { background: rgba(0,0,0,0.8); }
+
 /* Bonus promo modal */
 .slot-bonus-modal {
   position: relative;
