@@ -4,7 +4,7 @@ import { Footer } from '@/components/Footer'
 import { JsonLd } from '@/components/JsonLd'
 import { Icon } from '@/components/Icon'
 import { RichIntro } from '@/components/RichIntro'
-import { getPosts, getHomepage, getBookmakers, getHreflangScript } from '@/lib/sanity'
+import { getPosts, getHomepage, getHreflangScript } from '@/lib/sanity'
 import { HreflangHead } from '@/components/HreflangHead'
 import { replaceDateVars } from '@/lib/dateVars'
 import type { Metadata } from 'next'
@@ -27,10 +27,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const [posts, hp, bookmakers] = await Promise.all([
+  const [posts, hp] = await Promise.all([
     getPosts(20).catch(() => []),
     getHomepage().catch(() => null),
-    getBookmakers().catch(() => []),
   ])
 
   const heroHeading = replaceDateVars(hp?.heroHeading || 'Find the Best Online Casino Bonuses')
@@ -85,7 +84,6 @@ export default async function HomePage() {
   const hreflangScript = await getHreflangScript('homepage').catch(() => null)
 
   const postList = posts as any[]
-  const topBookmakers = (bookmakers as any[]).slice(0, 4)
 
   // Group posts by category for Featured section
   const categoryMap: Record<string, { name: string; slug: string; posts: any[] }> = {}
@@ -123,6 +121,28 @@ export default async function HomePage() {
           <p className="hero-subtext">
             {typeof heroIntro === 'string' ? replaceDateVars(heroIntro) : <RichIntro value={heroIntro} />}
           </p>
+
+          <div className="hero-markets">
+            <span className="hero-markets-label">Choose your country</span>
+            <div className="hero-markets-row">
+              <a href="/ca/" className="hero-market-card">
+                <span className="hero-market-flag">🇨🇦</span>
+                <span className="hero-market-text">
+                  <strong>Canada</strong>
+                  <span>Best casinos &amp; bonuses in Canada</span>
+                </span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+              </a>
+              <a href="/au/" className="hero-market-card">
+                <span className="hero-market-flag">🇦🇺</span>
+                <span className="hero-market-text">
+                  <strong>Australia</strong>
+                  <span>Best casinos &amp; bonuses in Australia</span>
+                </span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+              </a>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -276,193 +296,6 @@ export default async function HomePage() {
                   textDecoration: 'none',
                   background: 'transparent',
                 }}>View all articles</a>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* ── 2. CASINO RANKINGS SECTION ──────────────────────────────────── */}
-        {topBookmakers.length > 0 && (
-          <section style={{ marginTop: '48px' }}>
-            <div style={{
-              border: '1px solid var(--border)',
-              borderRadius: '12px',
-              background: 'var(--bg-card)',
-              padding: '28px',
-            }}>
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '32px',
-              }}
-                className="rankings-grid"
-              >
-                {/* Table 1 */}
-                <div>
-                  <h2 style={{
-                    fontFamily: 'var(--font-display)',
-                    fontSize: '18px',
-                    fontWeight: 700,
-                    color: 'var(--text)',
-                    marginBottom: '16px',
-                  }}>{casinoReviewsTitle}</h2>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    {topBookmakers.map((bm: any, i: number) => (
-                      <div key={bm._id} style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '12px',
-                        padding: '10px 14px',
-                        border: '1px solid var(--border)',
-                        borderRadius: '8px',
-                        background: 'var(--bg)',
-                      }}>
-                        <span style={{
-                          fontFamily: 'var(--font-display)',
-                          fontWeight: 700,
-                          fontSize: '16px',
-                          color: 'var(--text-muted, #888)',
-                          minWidth: '20px',
-                          textAlign: 'center',
-                        }}>{i + 1}</span>
-                        {bm.logo?.url ? (
-                          <div style={{ position: 'relative', width: '48px', height: '32px', borderRadius: '4px', overflow: 'hidden', flexShrink: 0 }}>
-                            <Image
-                              src={bm.logo.url}
-                              alt={bm.logo.alt ?? bm.name ?? ''}
-                              fill
-                              style={{ objectFit: 'contain' }}
-                              sizes="48px"
-                            />
-                          </div>
-                        ) : (
-                          <div style={{ width: '48px', height: '32px', background: 'var(--border)', borderRadius: '4px', flexShrink: 0 }} />
-                        )}
-                        <span style={{ flex: 1, fontSize: '12px', fontWeight: 600, color: 'var(--text)', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '140px' }}>{bm.name}</span>
-                        <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
-                          {bm.url && (
-                            <a href={bm.url} target="_blank" rel="nofollow noopener noreferrer sponsored" style={{
-                              display: 'inline-block',
-                              padding: '5px 10px',
-                              background: 'var(--green)',
-                              color: '#fff',
-                              fontSize: '11px',
-                              fontWeight: 600,
-                              borderRadius: '6px',
-                              textDecoration: 'none',
-                              whiteSpace: 'nowrap',
-                            }}>Sign Up</a>
-                          )}
-                          {bm.slug?.current && (
-                            <a href={`/review/${bm.slug.current}/`} style={{
-                              display: 'inline-block',
-                              padding: '5px 10px',
-                              border: '1px solid var(--green)',
-                              color: 'var(--green)',
-                              fontSize: '11px',
-                              fontWeight: 600,
-                              borderRadius: '6px',
-                              textDecoration: 'none',
-                              whiteSpace: 'nowrap',
-                              background: 'transparent',
-                            }}>Review</a>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Table 2 */}
-                <div>
-                  <h2 style={{
-                    fontFamily: 'var(--font-display)',
-                    fontSize: '18px',
-                    fontWeight: 700,
-                    color: 'var(--text)',
-                    marginBottom: '16px',
-                  }}>{topRatedTitle}</h2>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    {topBookmakers.map((bm: any, i: number) => (
-                      <div key={bm._id + '-2'} style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '12px',
-                        padding: '10px 14px',
-                        border: '1px solid var(--border)',
-                        borderRadius: '8px',
-                        background: 'var(--bg)',
-                      }}>
-                        <span style={{
-                          fontFamily: 'var(--font-display)',
-                          fontWeight: 700,
-                          fontSize: '16px',
-                          color: 'var(--text-muted, #888)',
-                          minWidth: '20px',
-                          textAlign: 'center',
-                        }}>{i + 1}</span>
-                        {bm.logo?.url ? (
-                          <div style={{ position: 'relative', width: '48px', height: '32px', borderRadius: '4px', overflow: 'hidden', flexShrink: 0 }}>
-                            <Image
-                              src={bm.logo.url}
-                              alt={bm.logo.alt ?? bm.name ?? ''}
-                              fill
-                              style={{ objectFit: 'contain' }}
-                              sizes="48px"
-                            />
-                          </div>
-                        ) : (
-                          <div style={{ width: '48px', height: '32px', background: 'var(--border)', borderRadius: '4px', flexShrink: 0 }} />
-                        )}
-                        <span style={{ flex: 1, fontSize: '12px', fontWeight: 600, color: 'var(--text)', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '140px' }}>{bm.name}</span>
-                        <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
-                          {bm.url && (
-                            <a href={bm.url} target="_blank" rel="nofollow noopener noreferrer sponsored" style={{
-                              display: 'inline-block',
-                              padding: '5px 10px',
-                              background: 'var(--green)',
-                              color: '#fff',
-                              fontSize: '11px',
-                              fontWeight: 600,
-                              borderRadius: '6px',
-                              textDecoration: 'none',
-                              whiteSpace: 'nowrap',
-                            }}>Sign Up</a>
-                          )}
-                          {bm.slug?.current && (
-                            <a href={`/review/${bm.slug.current}/`} style={{
-                              display: 'inline-block',
-                              padding: '5px 10px',
-                              border: '1px solid var(--green)',
-                              color: 'var(--green)',
-                              fontSize: '11px',
-                              fontWeight: 600,
-                              borderRadius: '6px',
-                              textDecoration: 'none',
-                              whiteSpace: 'nowrap',
-                              background: 'transparent',
-                            }}>Review</a>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* View all reviews button */}
-              <div style={{ textAlign: 'center', marginTop: '28px' }}>
-                <a href="/review/" style={{
-                  display: 'inline-block',
-                  padding: '10px 28px',
-                  border: '1px solid var(--border)',
-                  borderRadius: '8px',
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  color: 'var(--text)',
-                  textDecoration: 'none',
-                  background: 'transparent',
-                }}>View all casino reviews</a>
               </div>
             </div>
           </section>
