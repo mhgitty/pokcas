@@ -85,24 +85,6 @@ export default async function HomePage() {
 
   const postList = posts as any[]
 
-  // Group posts by category for Featured section
-  const categoryMap: Record<string, { name: string; slug: string; posts: any[] }> = {}
-  for (const post of postList) {
-    const catName = post.category?.name
-    if (!catName) continue
-    if (!categoryMap[catName]) {
-      categoryMap[catName] = {
-        name: catName,
-        slug: post.category?.slug?.current ?? '',
-        posts: [],
-      }
-    }
-    if (categoryMap[catName].posts.length < 4) {
-      categoryMap[catName].posts.push(post)
-    }
-  }
-  const featuredCategories = Object.values(categoryMap).filter(c => c.posts.length > 0).slice(0, 4)
-
   const featuredPost = postList[0] ?? null
   const sidebarPosts = postList.slice(1, 5)
 
@@ -300,82 +282,6 @@ export default async function HomePage() {
             </div>
           </section>
         )}
-
-        {/* ── 3. FEATURED BY CATEGORY ─────────────────────────────────────── */}
-        {featuredCategories.length > 0 && (
-          <section style={{ marginTop: '48px' }}>
-            <div style={{
-              border: '1px solid var(--border)',
-              borderRadius: '12px',
-              background: 'var(--bg-card)',
-              padding: '28px',
-            }}>
-              <h2 style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: '22px',
-                fontWeight: 700,
-                color: 'var(--text)',
-                marginBottom: '28px',
-              }}>{featuredSectionTitle}</h2>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '36px' }}>
-                {featuredCategories.map(cat => (
-                  <div key={cat.slug}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-                      <h3 style={{
-                        fontFamily: 'var(--font-display)',
-                        fontSize: '16px',
-                        fontWeight: 700,
-                        color: 'var(--text)',
-                        margin: 0,
-                      }}>{cat.name}</h3>
-                      <a href={`/news/${cat.slug}/`} style={{
-                        fontSize: '13px',
-                        color: 'var(--green)',
-                        textDecoration: 'none',
-                        fontWeight: 500,
-                      }}>See All →</a>
-                    </div>
-                    <div style={{
-                      display: 'grid',
-                      gridTemplateColumns: 'repeat(4, 1fr)',
-                      gap: '16px',
-                    }}
-                      className="featured-cat-grid"
-                    >
-                      {cat.posts.map((post: any) => (
-                        <a key={post._id} href={`/${post.slug?.current ?? ''}/`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                          <div>
-                            {post.featuredImage?.url && (
-                              <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', borderRadius: '8px', overflow: 'hidden', marginBottom: '10px' }}>
-                                <Image
-                                  src={post.featuredImage.url}
-                                  alt={post.featuredImage.alt ?? post.title ?? ''}
-                                  fill
-                                  style={{ objectFit: 'cover' }}
-                                  sizes="(max-width: 768px) 50vw, 220px"
-                                />
-                              </div>
-                            )}
-                            <p style={{
-                              fontFamily: 'var(--font-display)',
-                              fontSize: '13px',
-                              fontWeight: 600,
-                              color: 'var(--text)',
-                              lineHeight: 1.35,
-                              margin: 0,
-                            }}>{post.title}</p>
-                          </div>
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-
 
         {/* ── 4. TRUST SECTION ────────────────────────────────────────────── */}
         <section style={{ marginTop: '48px', marginBottom: '64px' }}>
