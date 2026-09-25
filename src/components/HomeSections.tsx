@@ -8,7 +8,7 @@ import {
   getBookmakersCa, getBookmarkersAu,
   getPaymentMethodsCa, getPaymentMethodsAu,
   getSoftwareProvidersCa, getSoftwareProvidersAu,
-  getCasinoGuides,
+  getCasinoGuides, getSlotsForHome,
 } from '@/lib/sanity'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -23,8 +23,9 @@ interface SectionSoftware       extends SectionBase { _type: 'sectionSoftware'; 
 interface SectionCtaBanner      extends SectionBase { _type: 'sectionCtaBanner';      icon?: string; title: string; body?: string; buttonLabel?: string; buttonUrl?: string; style?: string }
 interface SectionHighlights     extends SectionBase { _type: 'sectionHighlights';     title?: string; intro?: string; items?: { _key: string; title: string; bullets?: string[] }[] }
 interface SectionGameTypes      extends SectionBase { _type: 'sectionGameTypes';      title?: string; items?: { _key: string; title: string; description?: string; icon?: string; href?: string }[] }
+interface SectionSlots          extends SectionBase { _type: 'sectionSlots';          title?: string; intro?: any[]; count?: number }
 
-type AnySection = SectionCasinoList | SectionReviewsArchive | SectionGuidesArchive | SectionPaymentMethods | SectionSoftware | SectionCtaBanner | SectionHighlights | SectionGameTypes
+type AnySection = SectionCasinoList | SectionReviewsArchive | SectionGuidesArchive | SectionPaymentMethods | SectionSoftware | SectionSlots | SectionCtaBanner | SectionHighlights | SectionGameTypes
 
 // ── Casino list ───────────────────────────────────────────────────────────────
 
@@ -409,6 +410,66 @@ function ProviderCardsSection({
   )
 }
 
+// ── Slots grid ─────────────────────────────────────────────────────────────────
+
+function SlotRtpBadge({ rtp }: { rtp?: string }) {
+  if (!rtp) return null
+  const n = parseFloat(String(rtp).replace(/[^\d.]/g, ''))
+  if (!Number.isFinite(n)) return null
+  const color = n >= 96 ? 'var(--green)' : n >= 94 ? 'var(--gold)' : '#dc2626'
+  return <span className="slot-card-rtp" style={{ color, borderColor: color }}>RTP: {rtp}</span>
+}
+
+function SlotsSection({ section, slots, basePath, flag }: {
+  section: SectionSlots; slots: any[]; basePath: string; flag: string
+}) {
+  const count = section.count ?? 8
+  const visible = slots.slice(0, count)
+  const seeAllHref = `${basePath}/`
+  return (
+    <div className="section">
+      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '16px', marginBottom: section.intro ? '12px' : '20px', flexWrap: 'wrap' }}>
+        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 700, color: 'var(--text)', margin: 0 }}>
+          {section.title || 'Popular slots'}
+        </h2>
+        <Link href={seeAllHref} style={{ fontSize: '13px', fontWeight: 600, color: 'var(--green)', textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
+          See all slots →
+        </Link>
+      </div>
+      {section.intro && section.intro.length > 0 && (
+        <p style={{ fontSize: '14px', color: 'var(--text-muted)', lineHeight: 1.7, margin: '0 0 20px' }}>
+          <RichIntro value={section.intro} />
+        </p>
+      )}
+      <div className="slot-card-grid">
+        {visible.map((s: any, i: number) => (
+          <Link key={s._id} href={`${basePath}/${s.slug}/`} className={`slot-card${i >= 4 ? ' provider-card--desktop-only' : ''}`}>
+            <div className="slot-card-thumb">
+              {s.logo
+                // eslint-disable-next-line @next/next/no-img-element
+                ? <img src={s.logo} alt={s.name} loading="lazy" />
+                : <span style={{ color: 'var(--text-faint)', fontSize: '13px', fontWeight: 700 }}>{s.name}</span>}
+            </div>
+            <div className="slot-card-body">
+              <div className="slot-card-name">{s.name}</div>
+              {s.provider && <div className="slot-card-prov">by {s.provider}</div>}
+              <div className="slot-card-meta">
+                <span className="slot-card-rank">{flag}</span>
+                <SlotRtpBadge rtp={s.rtp} />
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
+      <div style={{ textAlign: 'center', marginTop: '20px' }}>
+        <Link href={seeAllHref} style={{ display: 'inline-block', border: '1px solid var(--border)', borderRadius: '8px', padding: '10px 24px', fontSize: '14px', fontWeight: 600, color: 'var(--text)', textDecoration: 'none' }}>
+          See all slots
+        </Link>
+      </div>
+    </div>
+  )
+}
+
 // ── Main export ───────────────────────────────────────────────────────────────
 
 export async function HomeSections({ sections, market }: { sections: AnySection[]; market: 'ca' | 'au' }) {
@@ -420,8 +481,10 @@ export async function HomeSections({ sections, market }: { sections: AnySection[
   const needsSoftware   = sections.some(s => s._type === 'sectionSoftware')
   const needsReviews    = sections.some(s => s._type === 'sectionReviewsArchive')
   const needsGuides     = sections.some(s => s._type === 'sectionGuidesArchive')
+  const needsSlots      = sections.some(s => s._type === 'sectionSlots')
+  const slotsLimit      = Math.max(0, ...sections.filter(s => s._type === 'sectionSlots').map(s => (s as SectionSlots).count ?? 8))
 
-  const [bookmakers, payments, software, reviewCasinos, guides] = await Promise.all([
+  const [bookmakers, payments, software, reviewCasinos, guides, slots] = await Promise.all([
     needsBookmakers
       ? (market === 'ca' ? getBookmakersCa() : getBookmarkersAu()).catch(() => [])
       : Promise.resolve([]),
@@ -437,6 +500,9 @@ export async function HomeSections({ sections, market }: { sections: AnySection[
     needsGuides
       ? getCasinoGuides(market).catch(() => [])
       : Promise.resolve([]),
+    needsSlots
+      ? getSlotsForHome(market, slotsLimit).catch(() => [])
+      : Promise.resolve([]),
   ])
 
   const reviewBase = market === 'ca' ? '/ca/online-casino/review' : '/au/online-casino/review'
@@ -444,6 +510,8 @@ export async function HomeSections({ sections, market }: { sections: AnySection[
   const payBase    = market === 'ca' ? '/ca/online-casino/payment' : '/au/online-casino/payment'
   const softBase   = market === 'ca' ? '/ca/online-casino/software' : '/au/online-casino/software'
   const guideBase  = market === 'ca' ? '/ca/casino-guides' : '/au/casino-guides'
+  const slotBase   = market === 'ca' ? '/ca/online-slots' : '/au/online-slots'
+  const flag       = market === 'ca' ? '🇨🇦' : '🇦🇺'
 
   return (
     <>
@@ -519,6 +587,17 @@ export async function HomeSections({ sections, market }: { sections: AnySection[
                 seeAllLabel="See all software providers"
                 seeAllHref={`${softBase}/`}
                 casinoLabel="casinos"
+              />
+            ) : null
+
+          case 'sectionSlots':
+            return (slots as any[]).length > 0 ? (
+              <SlotsSection
+                key={section._key}
+                section={section as SectionSlots}
+                slots={slots as any[]}
+                basePath={slotBase}
+                flag={flag}
               />
             ) : null
 

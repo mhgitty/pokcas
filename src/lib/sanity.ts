@@ -1253,6 +1253,18 @@ export async function getSlotmachinesForArchive(market: 'global' | 'ca' | 'au') 
   ).catch(() => [])
 }
 
+// A limited set of slots for a homepage "Slots" section.
+export async function getSlotsForHome(market: 'global' | 'ca' | 'au', limit = 12) {
+  const cond = market === 'global'
+    ? '(market == "global" || !defined(market))'
+    : `market == "${market}"`
+  return client.fetch(
+    `*[_type == "slotmachine" && defined(slug.current) && ${cond}] | order(name asc)[0...${Math.max(1, Math.min(24, limit))}] {
+      _id, name, "slug": slug.current, "logo": logo.asset->url, "provider": provider->name, rtp
+    }`
+  ).catch(() => [])
+}
+
 // Slots whose provider reference points to a given software document.
 export async function getSlotsByProvider(providerId: string) {
   if (!providerId) return []

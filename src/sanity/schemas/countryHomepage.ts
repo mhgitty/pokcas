@@ -83,6 +83,21 @@ const sectionSoftware = {
   preview: { select: { title: 'title' }, prepare: ({ title }: any) => ({ title: `🎮 ${title || 'Software Providers'}` }) },
 }
 
+const sectionSlots = {
+  type: 'object' as const,
+  name: 'sectionSlots',
+  title: '🎰 Slots Grid',
+  fields: [
+    defineField({ name: 'title', title: 'Section title', type: 'string', initialValue: 'Popular slots' }),
+    sectionIntroField,
+    defineField({
+      name: 'count', title: 'Number of slots to show', type: 'number', initialValue: 8,
+      validation: (r: any) => r.min(1).max(24),
+    }),
+  ],
+  preview: { select: { title: 'title' }, prepare: ({ title }: any) => ({ title: `🎰 ${title || 'Slots'}` }) },
+}
+
 const sectionCtaBanner = {
   type: 'object' as const,
   name: 'sectionCtaBanner',
@@ -230,6 +245,7 @@ export const countryHomepageType = defineType({
         sectionGuidesArchive,
         sectionPaymentMethods,
         sectionSoftware,
+        sectionSlots,
         sectionCtaBanner,
         sectionHighlights,
         sectionGameTypes,
