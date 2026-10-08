@@ -16,6 +16,7 @@ export const redirectType = defineType({
           { title: '🌍 Global  →  /go/[code]', value: 'global' },
           { title: '🇨🇦 Canada  →  /ca/go/[code]', value: 'ca' },
           { title: '🇦🇺 Australia  →  /au/go/[code]', value: 'au' },
+          { title: '🇬🇧 United Kingdom  →  /uk/go/[code]', value: 'uk' },
         ],
         layout: 'radio',
       },

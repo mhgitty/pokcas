@@ -7,6 +7,7 @@ export default function robots(): MetadataRoute.Robots {
       'https://pokcas.com/sitemap.xml',
       'https://pokcas.com/sitemap-ca.xml',
       'https://pokcas.com/sitemap-au.xml',
+      'https://pokcas.com/sitemap-uk.xml',
     ],
   }
 }

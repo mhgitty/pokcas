@@ -8,6 +8,7 @@ const BASE = 'https://pokcas.com'
 function marketPrefix(market: string | undefined): string {
   if (market === 'ca') return '/ca'
   if (market === 'au') return '/au'
+  if (market === 'uk') return '/uk'
   return ''
 }
 
@@ -51,7 +52,7 @@ export const previewAction: DocumentActionComponent = (
       url = `${BASE}/`
       break
     case 'countryHomepage':
-      url = doc?.market === 'ca' ? `${BASE}/ca/` : doc?.market === 'au' ? `${BASE}/au/` : `${BASE}/`
+      url = doc?.market === 'ca' ? `${BASE}/ca/` : doc?.market === 'au' ? `${BASE}/au/` : doc?.market === 'uk' ? `${BASE}/uk/` : `${BASE}/`
       break
     case 'post':
       url = slug ? `${BASE}/${slug}/` : `${BASE}/`

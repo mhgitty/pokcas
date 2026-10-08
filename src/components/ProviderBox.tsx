@@ -11,7 +11,7 @@ interface ProviderBoxProps {
 }
 
 function hrefFor(item: ProviderBoxItem, market?: string): string {
-  const mp = market === 'ca' ? '/ca' : market === 'au' ? '/au' : ''
+  const mp = market === 'ca' ? '/ca' : market === 'au' ? '/au' : market === 'uk' ? '/uk' : ''
   const segment = item._type === 'software' ? 'software' : 'payment'
   const slug = item.slug?.current
   if (!slug) return `${mp}/online-casino/${segment}/`

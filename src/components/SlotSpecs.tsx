@@ -53,7 +53,7 @@ export function SlotSpecs({ slot, title = 'Key features & stats' }: { slot: Slot
 
   // Provider — reference; render as a link to the provider page when possible.
   if (slot.provider?.name) {
-    const mp = slot.provider.market === 'ca' ? '/ca' : slot.provider.market === 'au' ? '/au' : ''
+    const mp = slot.provider.market === 'ca' ? '/ca' : slot.provider.market === 'au' ? '/au' : slot.provider.market === 'uk' ? '/uk' : ''
     const href = slot.provider.slug ? `${mp}/online-casino/software/${slot.provider.slug}/` : null
     stats.push({
       icon: 'provider',

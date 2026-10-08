@@ -356,6 +356,7 @@ export const bodyField = defineField({
               { title: 'Global', value: 'global' },
               { title: 'Canada', value: 'ca' },
               { title: 'Australia', value: 'au' },
+              { title: 'United Kingdom', value: 'uk' },
             ],
           },
           initialValue: 'global',
@@ -763,6 +764,7 @@ export const pageType = defineType({
           { title: '🌍 Global', value: 'global' },
           { title: '🇨🇦 Canada', value: 'ca' },
           { title: '🇦🇺 Australia', value: 'au' },
+          { title: '🇬🇧 United Kingdom', value: 'uk' },
         ],
         layout: 'radio',
       },
@@ -892,7 +894,7 @@ export const pageType = defineType({
       market: 'market',
     },
     prepare({ title, slug, a1, a2, a3, a4, market }: any) {
-      const prefix = market === 'ca' ? '/ca' : market === 'au' ? '/au' : ''
+      const prefix = market === 'ca' ? '/ca' : market === 'au' ? '/au' : market === 'uk' ? '/uk' : ''
       const parts = [a4, a3, a2, a1, slug].filter(Boolean)
       return { title: title || '(untitled)', subtitle: `${prefix}/${parts.join('/')}/` }
     },

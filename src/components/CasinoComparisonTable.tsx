@@ -193,7 +193,7 @@ function RankCircle({ rank }: { rank: number }) {
 function CasinoRow({ casino, currency, rank }: { casino: Casino; currency: string; rank: number }) {
   // Review URL follows the casino's market: CA/AU live under /{market}/online-casino/review/,
   // global casinos under /review/.
-  const mp = casino.market === 'ca' ? '/ca' : casino.market === 'au' ? '/au' : ''
+  const mp = casino.market === 'ca' ? '/ca' : casino.market === 'au' ? '/au' : casino.market === 'uk' ? '/uk' : ''
   const reviewHref = mp
     ? `${mp}/online-casino/review/${casino.slug.current}/`
     : `/review/${casino.slug.current}/`

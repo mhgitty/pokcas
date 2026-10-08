@@ -187,6 +187,7 @@ export const marketSettingsType = defineType({
         list: [
           { title: '🇨🇦 Canada', value: 'ca' },
           { title: '🇦🇺 Australia', value: 'au' },
+          { title: '🇬🇧 United Kingdom', value: 'uk' },
         ],
       },
     }),

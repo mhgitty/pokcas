@@ -29,7 +29,7 @@ export function SlotBonusPopup({ casino }: { casino?: Casino | null }) {
 
   if (!casino?.name) return null
 
-  const mp = casino.market === 'ca' ? '/ca' : casino.market === 'au' ? '/au' : ''
+  const mp = casino.market === 'ca' ? '/ca' : casino.market === 'au' ? '/au' : casino.market === 'uk' ? '/uk' : ''
   const reviewHref = casino.slug ? (mp ? `${mp}/online-casino/review/${casino.slug}/` : `/review/${casino.slug}/`) : null
   const cta = casino.url || reviewHref || '#'
   const external = !!casino.url

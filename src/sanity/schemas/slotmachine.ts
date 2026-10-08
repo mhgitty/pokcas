@@ -65,6 +65,7 @@ export const slotmachineType = defineType({
           { title: '🌍 Global', value: 'global' },
           { title: '🇨🇦 Canada', value: 'ca' },
           { title: '🇦🇺 Australia', value: 'au' },
+          { title: '🇬🇧 United Kingdom', value: 'uk' },
         ],
         layout: 'radio',
       },

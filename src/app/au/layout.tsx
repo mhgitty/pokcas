@@ -17,7 +17,7 @@ function resolveUrl(item: {
   if (item.paymentMethodSlug) return `/au/online-casino/payment/${item.paymentMethodSlug}/`
   if (item.postSlug) return `/${item.postSlug}/`
   if (item.casinoGuideSlug) {
-    const gp = item.casinoGuideMarket === 'ca' ? '/ca' : item.casinoGuideMarket === 'au' ? '/au' : ''
+    const gp = item.casinoGuideMarket === 'ca' ? '/ca' : item.casinoGuideMarket === 'au' ? '/au' : item.casinoGuideMarket === 'uk' ? '/uk' : ''
     return `${gp}/casino-guides/${item.casinoGuideSlug}/`
   }
   return item.url || '/'

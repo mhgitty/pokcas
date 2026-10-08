@@ -2,12 +2,13 @@ import { client } from '@/lib/sanity'
 
 const BASE = 'https://pokcas.com'
 
-export type Scope = 'all' | 'global' | 'ca' | 'au'
+export type Scope = 'all' | 'global' | 'ca' | 'au' | 'uk'
 export type SitemapEntry = { url: string; lastModified?: Date }
 
 function marketPrefix(market?: string) {
   if (market === 'ca') return '/ca'
   if (market === 'au') return '/au'
+  if (market === 'uk') return '/uk'
   return ''
 }
 
@@ -31,6 +32,7 @@ function indexPages(scope: Scope): SitemapEntry[] {
   const wantGlobal = scope === 'all' || scope === 'global'
   const wantCa = scope === 'all' || scope === 'ca'
   const wantAu = scope === 'all' || scope === 'au'
+  const wantUk = scope === 'all' || scope === 'uk'
   if (wantGlobal) out.push(
     { url: `${BASE}/` },
     { url: `${BASE}/review/` },
@@ -38,7 +40,7 @@ function indexPages(scope: Scope): SitemapEntry[] {
     { url: `${BASE}/online-casino/software/` },
     { url: `${BASE}/casino-guides/` },
   )
-  for (const [want, mp] of [[wantCa, '/ca'], [wantAu, '/au']] as const) {
+  for (const [want, mp] of [[wantCa, '/ca'], [wantAu, '/au'], [wantUk, '/uk']] as const) {
     if (!want) continue
     out.push(
       { url: `${BASE}${mp}/` },
@@ -71,7 +73,7 @@ export async function sitemapEntries(scope: Scope): Promise<SitemapEntry[]> {
     client.fetch<SlugRow[]>(`*[_type == "casinoGuide" && defined(slug.current) && ${c}] { slug, market, _updatedAt }`).catch(() => []),
     client.fetch<SlugRow[]>(`*[_type == "slotmachine" && defined(slug.current) && ${c}] { slug, market, _updatedAt }`).catch(() => []),
     includeBonus
-      ? client.fetch<SlugRow[]>(`*[_type == "bonus" && active == true && defined(slug.current) && ${scope === 'all' ? 'market in ["ca","au"]' : c}] { slug, market, _updatedAt }`).catch(() => [])
+      ? client.fetch<SlugRow[]>(`*[_type == "bonus" && active == true && defined(slug.current) && ${scope === 'all' ? 'market in ["ca","au","uk"]' : c}] { slug, market, _updatedAt }`).catch(() => [])
       : Promise.resolve([] as SlugRow[]),
     includePosts
       ? client.fetch<PostRow[]>(`*[_type == "post" && defined(slug.current) && defined(publishedAt)] | order(publishedAt desc) { slug, publishedAt, lastUpdated }`).catch(() => [])

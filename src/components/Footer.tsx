@@ -9,7 +9,7 @@ function resolveUrl(item: {
   bookmakerSlug?: string; softwareSlug?: string; paymentMethodSlug?: string; postSlug?: string;
   casinoGuideSlug?: string; casinoGuideMarket?: string;
 }, market?: string): string {
-  const mp = market === 'ca' ? '/ca' : market === 'au' ? '/au' : ''
+  const mp = market === 'ca' ? '/ca' : market === 'au' ? '/au' : market === 'uk' ? '/uk' : ''
   if (item.pageSlug) {
     // Use the page's own market to determine prefix.
     // 'global' pages always resolve without a market prefix regardless of which footer they appear in.
@@ -25,7 +25,7 @@ function resolveUrl(item: {
   if (item.paymentMethodSlug) return `${mp}/online-casino/payment/${item.paymentMethodSlug}/`
   if (item.postSlug) return `/${item.postSlug}/`
   if (item.casinoGuideSlug) {
-    const gp = item.casinoGuideMarket === 'ca' ? '/ca' : item.casinoGuideMarket === 'au' ? '/au' : ''
+    const gp = item.casinoGuideMarket === 'ca' ? '/ca' : item.casinoGuideMarket === 'au' ? '/au' : item.casinoGuideMarket === 'uk' ? '/uk' : ''
     return `${gp}/casino-guides/${item.casinoGuideSlug}/`
   }
   return item.url || '/'

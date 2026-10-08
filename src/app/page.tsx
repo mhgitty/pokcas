@@ -123,6 +123,14 @@ export default async function HomePage() {
                 </span>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
               </a>
+              <a href="/uk/" className="hero-market-card">
+                <span className="hero-market-flag">🇬🇧</span>
+                <span className="hero-market-text">
+                  <strong>United Kingdom</strong>
+                  <span>Best casinos &amp; bonuses in the UK</span>
+                </span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+              </a>
             </div>
           </div>
         </div>

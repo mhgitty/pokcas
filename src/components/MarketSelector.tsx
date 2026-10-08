@@ -9,6 +9,7 @@ const MARKETS = [
   { code: 'global', label: 'Global',    prefix: '' },
   { code: 'ca',     label: 'Canada',    prefix: '/ca' },
   { code: 'au',     label: 'Australia', prefix: '/au' },
+  { code: 'uk',     label: 'United Kingdom', prefix: '/uk' },
 ]
 
 // ── Inline SVGs (no external dep) ─────────────────────────────────────────────
@@ -63,6 +64,7 @@ function MarketIcon({ code, size = 15 }: { code: string; size?: number }) {
   if (code === 'global') return <GlobeIcon size={size} />
   if (code === 'ca')     return <span style={{ fontSize: size - 1, lineHeight: 1 }}>🇨🇦</span>
   if (code === 'au')     return <span style={{ fontSize: size - 1, lineHeight: 1 }}>🇦🇺</span>
+  if (code === 'uk')     return <span style={{ fontSize: size - 1, lineHeight: 1 }}>🇬🇧</span>
   return <GlobeIcon size={size} />
 }
 

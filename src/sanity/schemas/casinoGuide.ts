@@ -36,6 +36,7 @@ export const casinoGuideType = defineType({
           { title: '🌍 Global', value: 'global' },
           { title: '🇨🇦 Canada', value: 'ca' },
           { title: '🇦🇺 Australia', value: 'au' },
+          { title: '🇬🇧 United Kingdom', value: 'uk' },
         ],
         layout: 'radio',
       },
@@ -61,7 +62,7 @@ export const casinoGuideType = defineType({
   preview: {
     select: { title: 'title', slug: 'slug.current', market: 'market' },
     prepare({ title, slug, market }: any) {
-      const prefix = market === 'ca' ? '/ca' : market === 'au' ? '/au' : ''
+      const prefix = market === 'ca' ? '/ca' : market === 'au' ? '/au' : market === 'uk' ? '/uk' : ''
       const flag = market === 'ca' ? '🇨🇦' : market === 'au' ? '🇦🇺' : '🌍'
       return { title: title || '(untitled)', subtitle: `${flag} ${prefix}/casino-guides/${slug || ''}/` }
     },

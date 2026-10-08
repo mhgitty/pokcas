@@ -21,6 +21,7 @@ export default defineConfig({
     { id: 'page-global', title: '📄 Page (Global)',    schemaType: 'page', value: { market: 'global' } },
     { id: 'page-ca',     title: '📄 Page (Canada)',    schemaType: 'page', value: { market: 'ca' } },
     { id: 'page-au',     title: '📄 Page (Australia)', schemaType: 'page', value: { market: 'au' } },
+    { id: 'page-uk',     title: '📄 Page (United Kingdom)', schemaType: 'page', value: { market: 'uk' } },
   ],
 
   plugins: [
@@ -369,6 +370,123 @@ export default defineConfig({
                           .title('Redirects — Australia (/au/go/...)')
                           .filter('_type == "redirect" && market == $market')
                           .params({ market: 'au' })
+                      ),
+                  ])
+              ),
+
+            // ── 🇬🇧 United Kingdom ───────────────────────────────────────────────────
+            S.listItem()
+              .title('🇬🇧 United Kingdom')
+              .child(
+                S.list()
+                  .title('🇬🇧 United Kingdom')
+                  .items([
+                    S.listItem()
+                      .title('🏠 Homepage')
+                      .id('uk-homepage')
+                      .child(
+                        S.document()
+                          .schemaType('countryHomepage')
+                          .documentId('uk-homepage')
+                      ),
+                    S.listItem()
+                      .title('⚙️ Menu Settings')
+                      .id('uk-settings')
+                      .child(
+                        S.document()
+                          .schemaType('marketSettings')
+                          .documentId('uk-settings')
+                      ),
+                    S.divider(),
+                    S.listItem()
+                      .title('🎰 Casino Reviews')
+                      .schemaType('bookmaker')
+                      .child(
+                        S.documentTypeList('bookmaker')
+                          .title('Casino Reviews — United Kingdom')
+                          .filter('_type == "bookmaker" && market == $market')
+                          .params({ market: 'uk' })
+                      ),
+                    S.listItem()
+                      .title('🎁 Bonuses')
+                      .schemaType('bonus')
+                      .child(
+                        S.documentTypeList('bonus')
+                          .title('Bonuses — United Kingdom')
+                          .filter('_type == "bonus" && market == $market')
+                          .params({ market: 'uk' })
+                      ),
+                    S.listItem()
+                      .title('📄 Pages')
+                      .schemaType('page')
+                      .child(
+                        S.documentTypeList('page')
+                          .title('Pages — United Kingdom')
+                          .filter('_type == "page" && market == $market')
+                          .params({ market: 'uk' })
+                      ),
+                    S.listItem()
+                      .title('💳 Payment Methods')
+                      .schemaType('paymentMethod')
+                      .child(
+                        S.documentTypeList('paymentMethod')
+                          .title('Payment Methods — United Kingdom')
+                          .filter('_type == "paymentMethod" && market == $market')
+                          .params({ market: 'uk' })
+                      ),
+                    S.listItem()
+                      .title('🎮 Software')
+                      .schemaType('software')
+                      .child(
+                        S.documentTypeList('software')
+                          .title('Software — United Kingdom')
+                          .filter('_type == "software" && market == $market')
+                          .params({ market: 'uk' })
+                      ),
+                    S.listItem()
+                      .title('🎲 Casino Games')
+                      .schemaType('casinoGame')
+                      .child(
+                        S.documentTypeList('casinoGame')
+                          .title('Casino Games — United Kingdom')
+                          .filter('_type == "casinoGame" && market == $market')
+                          .params({ market: 'uk' })
+                      ),
+                    S.listItem()
+                      .title('🎰 Slot Machines')
+                      .schemaType('slotmachine')
+                      .child(
+                        S.documentTypeList('slotmachine')
+                          .title('Slot Machines — United Kingdom')
+                          .filter('_type == "slotmachine" && market == $market')
+                          .params({ market: 'uk' })
+                      ),
+                    S.listItem()
+                      .title('📚 Casino Guides')
+                      .schemaType('casinoGuide')
+                      .child(
+                        S.documentTypeList('casinoGuide')
+                          .title('Casino Guides — United Kingdom')
+                          .filter('_type == "casinoGuide" && market == $market')
+                          .params({ market: 'uk' })
+                      ),
+                    S.listItem()
+                      .title('📊 Comparison Templates')
+                      .schemaType('comparisonTableTemplate')
+                      .child(
+                        S.documentTypeList('comparisonTableTemplate')
+                          .title('Comparison Templates — United Kingdom')
+                          .filter('_type == "comparisonTableTemplate" && market == $market')
+                          .params({ market: 'uk' })
+                      ),
+                    S.listItem()
+                      .title('🔗 Redirects')
+                      .schemaType('redirect')
+                      .child(
+                        S.documentTypeList('redirect')
+                          .title('Redirects — United Kingdom (/uk/go/...)')
+                          .filter('_type == "redirect" && market == $market')
+                          .params({ market: 'uk' })
                       ),
                   ])
               ),

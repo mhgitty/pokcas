@@ -5,9 +5,9 @@ import { RichIntro } from '@/components/RichIntro'
 import { CasinoReviewsArchive } from '@/components/CasinoReviewsArchive'
 import { GuidesArchive } from '@/components/GuidesArchive'
 import {
-  getBookmakersCa, getBookmarkersAu,
-  getPaymentMethodsCa, getPaymentMethodsAu,
-  getSoftwareProvidersCa, getSoftwareProvidersAu,
+  getBookmakersCa, getBookmarkersAu, getBookmakersUk,
+  getPaymentMethodsCa, getPaymentMethodsAu, getPaymentMethodsUk,
+  getSoftwareProvidersCa, getSoftwareProvidersAu, getSoftwareProvidersUk,
   getCasinoGuides, getSlotsForHome,
 } from '@/lib/sanity'
 
@@ -472,7 +472,7 @@ function SlotsSection({ section, slots, basePath, flag }: {
 
 // ── Main export ───────────────────────────────────────────────────────────────
 
-export async function HomeSections({ sections, market }: { sections: AnySection[]; market: 'ca' | 'au' }) {
+export async function HomeSections({ sections, market }: { sections: AnySection[]; market: 'ca' | 'au' | 'uk' }) {
   if (!sections || sections.length === 0) return null
 
   // Pre-fetch data for data-driven sections
@@ -486,16 +486,16 @@ export async function HomeSections({ sections, market }: { sections: AnySection[
 
   const [bookmakers, payments, software, reviewCasinos, guides, slots] = await Promise.all([
     needsBookmakers
-      ? (market === 'ca' ? getBookmakersCa() : getBookmarkersAu()).catch(() => [])
+      ? (market === 'ca' ? getBookmakersCa() : market === 'au' ? getBookmarkersAu() : getBookmakersUk()).catch(() => [])
       : Promise.resolve([]),
     needsPayments
-      ? (market === 'ca' ? getPaymentMethodsCa() : getPaymentMethodsAu()).catch(() => [])
+      ? (market === 'ca' ? getPaymentMethodsCa() : market === 'au' ? getPaymentMethodsAu() : getPaymentMethodsUk()).catch(() => [])
       : Promise.resolve([]),
     needsSoftware
-      ? (market === 'ca' ? getSoftwareProvidersCa() : getSoftwareProvidersAu()).catch(() => [])
+      ? (market === 'ca' ? getSoftwareProvidersCa() : market === 'au' ? getSoftwareProvidersAu() : getSoftwareProvidersUk()).catch(() => [])
       : Promise.resolve([]),
     needsReviews
-      ? (market === 'ca' ? getBookmakersCa() : getBookmarkersAu()).catch(() => [])
+      ? (market === 'ca' ? getBookmakersCa() : market === 'au' ? getBookmarkersAu() : getBookmakersUk()).catch(() => [])
       : Promise.resolve([]),
     needsGuides
       ? getCasinoGuides(market).catch(() => [])
@@ -505,13 +505,13 @@ export async function HomeSections({ sections, market }: { sections: AnySection[
       : Promise.resolve([]),
   ])
 
-  const reviewBase = market === 'ca' ? '/ca/online-casino/review' : '/au/online-casino/review'
-  const listBase   = market === 'ca' ? '/ca/online-casino/review/' : '/au/online-casino/review/'
-  const payBase    = market === 'ca' ? '/ca/online-casino/payment' : '/au/online-casino/payment'
-  const softBase   = market === 'ca' ? '/ca/online-casino/software' : '/au/online-casino/software'
-  const guideBase  = market === 'ca' ? '/ca/casino-guides' : '/au/casino-guides'
-  const slotBase   = market === 'ca' ? '/ca/online-slots' : '/au/online-slots'
-  const flag       = market === 'ca' ? '🇨🇦' : '🇦🇺'
+  const reviewBase = `/${market}/online-casino/review`
+  const listBase   = `/${market}/online-casino/review/`
+  const payBase    = `/${market}/online-casino/payment`
+  const softBase   = `/${market}/online-casino/software`
+  const guideBase  = `/${market}/casino-guides`
+  const slotBase   = `/${market}/online-slots`
+  const flag       = market === 'ca' ? '🇨🇦' : market === 'au' ? '🇦🇺' : '🇬🇧'
 
   return (
     <>

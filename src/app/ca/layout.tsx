@@ -8,7 +8,7 @@ function resolveUrl(item: {
   casinoGuideSlug?: string; casinoGuideMarket?: string;
 }): string {
   if (item.pageSlug) {
-    const prefix = item.pageMarket === 'ca' ? '/ca' : item.pageMarket === 'au' ? '/au' : ''
+    const prefix = item.pageMarket === 'ca' ? '/ca' : item.pageMarket === 'au' ? '/au' : item.pageMarket === 'uk' ? '/uk' : ''
     const segments = [item.pageParent4Slug, item.pageParent3Slug, item.pageParent2Slug, item.pageParentSlug, item.pageSlug].filter(Boolean)
     return `${prefix}/${segments.join('/')}/`
   }
@@ -17,7 +17,7 @@ function resolveUrl(item: {
   if (item.paymentMethodSlug) return `/ca/online-casino/payment/${item.paymentMethodSlug}/`
   if (item.postSlug) return `/${item.postSlug}/`
   if (item.casinoGuideSlug) {
-    const gp = item.casinoGuideMarket === 'ca' ? '/ca' : item.casinoGuideMarket === 'au' ? '/au' : ''
+    const gp = item.casinoGuideMarket === 'ca' ? '/ca' : item.casinoGuideMarket === 'au' ? '/au' : item.casinoGuideMarket === 'uk' ? '/uk' : ''
     return `${gp}/casino-guides/${item.casinoGuideSlug}/`
   }
   return item.url || '/'

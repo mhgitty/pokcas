@@ -491,7 +491,7 @@ const RELATED_PROJECTION = `
 
 /** Builds the public URL for a related item, based on its own type + market. */
 export function relatedItemHref(item: RelatedItem): string {
-  const mp = item.market === 'ca' ? '/ca' : item.market === 'au' ? '/au' : ''
+  const mp = item.market === 'ca' ? '/ca' : item.market === 'au' ? '/au' : item.market === 'uk' ? '/uk' : ''
   const slug = item.slug?.current
   if (!slug) return '/'
   switch (item._type) {
@@ -773,7 +773,7 @@ export async function getAuthorPaths() {
 
 // ─── Market settings & country homepage ──────────────────────────────────────
 
-export async function getMarketSettings(market: 'ca' | 'au') {
+export async function getMarketSettings(market: 'ca' | 'au' | 'uk') {
   return client.fetch(
     `*[_type == "marketSettings" && _id == $id][0] {
       market, footerTagline, footerNote, footerDisclaimer, socialLinks,
@@ -822,7 +822,7 @@ export async function getMarketSettings(market: 'ca' | 'au') {
   )
 }
 
-export async function getCountryHomepage(market: 'ca' | 'au') {
+export async function getCountryHomepage(market: 'ca' | 'au' | 'uk') {
   return client.fetch(
     `*[_type == "countryHomepage" && _id == $id][0] {
       market, heroHeading, intro,
@@ -1244,7 +1244,7 @@ const SLOT_ARCHIVE_FIELDS = `
   minBetPerSpin, maxBetPerSpin, hasBonusBuy, hasJackpot, releaseYear
 `
 
-export async function getSlotmachinesForArchive(market: 'global' | 'ca' | 'au') {
+export async function getSlotmachinesForArchive(market: 'global' | 'ca' | 'au' | 'uk') {
   const cond = market === 'global'
     ? '(market == "global" || !defined(market))'
     : `market == "${market}"`
@@ -1254,7 +1254,7 @@ export async function getSlotmachinesForArchive(market: 'global' | 'ca' | 'au') 
 }
 
 // A limited set of slots for a homepage "Slots" section.
-export async function getSlotsForHome(market: 'global' | 'ca' | 'au', limit = 12) {
+export async function getSlotsForHome(market: 'global' | 'ca' | 'au' | 'uk', limit = 12) {
   const cond = market === 'global'
     ? '(market == "global" || !defined(market))'
     : `market == "${market}"`
@@ -1275,7 +1275,7 @@ export async function getSlotsByProvider(providerId: string) {
 }
 
 // The editor-picked slot IDs (in order) to show first in the archive.
-export async function getArchiveFeaturedSlotIds(market: 'global' | 'ca' | 'au'): Promise<string[]> {
+export async function getArchiveFeaturedSlotIds(market: 'global' | 'ca' | 'au' | 'uk'): Promise<string[]> {
   const cond = market === 'global'
     ? '(market == "global" || !defined(market))'
     : `market == "${market}"`
@@ -1308,12 +1308,175 @@ export async function getCasinoGuideBySlugAu(slug: string) {
 }
 
 /** List of guides for the archive grid (light projection). */
-export async function getCasinoGuides(market: 'global' | 'ca' | 'au') {
+export async function getCasinoGuides(market: 'global' | 'ca' | 'au' | 'uk') {
   return client.fetch(
     `*[_type == "casinoGuide" && market == $market && defined(slug.current)] | order(title asc) {
       _id, title, "slug": slug.current, metaDescription, lastUpdated,
       "featuredImage": featuredImage { "url": asset->url, alt }
     }`,
     { market }
+  )
+}
+
+
+// ─── UK fetchers (mirror of CA) ───────────────────────────────────────────────
+export async function getBookmakersUk() {
+  return clientNoCdn.fetch(
+    `*[_type == "bookmaker" && market == "uk"] | order(score desc, name asc) {
+      _id, name, slug, usp, score,
+      indbetalingsbonus, minIndbetaling,
+      gennemspilskrav, url, terms,
+      "logo": logo { "url": asset->url, alt }
+    }`
+  )
+}
+
+export async function getBookmakerBySlugUk(slug: string) {
+  return clientNoCdn.fetch(
+    `*[_type == "bookmaker" && slug.current == $slug && market == "uk"][0] {
+      _id, titel, name, slug, usp, score,
+      indbetalingsbonus, minIndbetaling, gennemspilskrav,
+      url, terms, lanceringsdato, license, body,
+      "logo": logo { "url": asset->url, alt },
+      "ogImage": ogImage { "url": asset->url, alt },
+      metaTitle, metaDescription,
+      "paymentMethods": paymentMethods[]-> {
+        _id, name, slug,
+        "logo": logo { "url": asset->url, alt }
+      },
+      "software": software[]-> {
+        _id, name, slug,
+        "logo": logo { "url": asset->url, alt }
+      }
+    }`,
+    { slug }
+  )
+}
+
+export async function getBonusesUk(limit = 50) {
+  return client.fetch(
+    `*[_type == "bonus" && active == true && market == "uk"] | order(_createdAt desc) [0...$limit] {
+      _id, title, slug,
+      oddsBonusTitel, minimumOdds, minimumIndbetaling, gennemspilskrav,
+      offerUrl, terms, casinoNavn,
+      "casinoLogo":    casinoLogo    { "url": asset->url, alt },
+      "kampagneBillede": kampagneBillede { "url": asset->url, alt },
+      "bookmaker": bookmaker-> { name, slug }
+    }`,
+    { limit }
+  )
+}
+
+export async function getBonusBySlugUk(slug: string) {
+  return client.fetch(
+    `*[_type == "bonus" && slug.current == $slug && market == "uk"][0] {
+      _id, title, slug, body, metaTitle, metaDescription,
+      minimumOdds, minimumIndbetaling, gennemspilskrav,
+      maksGevinst, bonuskode, spinVaerdi,
+      offerUrl, terms, casinoNavn,
+      "casinoLogo":      casinoLogo      { "url": asset->url, alt },
+      "kampagneBillede": kampagneBillede { "url": asset->url, alt },
+      "ogImage":         ogImage         { "url": asset->url, alt },
+      "bookmaker": bookmaker-> {
+        name, slug,
+        "logo": logo { "url": asset->url, alt }
+      }
+    }`,
+    { slug }
+  )
+}
+
+export async function getPaymentMethodsUk() {
+  return client.fetch(
+    `*[_type == "paymentMethod" && market == "uk"] | order(name asc) {
+      _id, name, slug, paymentCategory,
+      transactionFees, withdrawalTime, eligibleForBonuses,
+      "casinoCount": count(*[_type == "bookmaker" && market == "uk" && references(^._id)]),
+      "logo": logo { "url": asset->url, alt }
+    }`
+  )
+}
+
+export async function getPaymentMethodBySlugUk(slug: string) {
+  return client.fetch(
+    `*[_type == "paymentMethod" && slug.current == $slug && market == "uk"][0] {
+      _id, name, titel, slug, withdrawalTime,
+      ${COMPARISON_TABLE_FRAGMENT},
+      paymentCategory, transactionFees, eligibleForBonuses,
+      metaTitle, metaDescription,
+      "intro": intro[] { ..., _type == "image" => { ..., "url": asset->url } },
+      "body": body[] { ..., _type == "image" => { ..., "url": asset->url } },
+      "logo": logo { "url": asset->url, alt },
+      "casinos": *[_type == "bookmaker" && market == "uk" && references(^._id)] | order(score desc) {
+        _id, name, slug, score, usp, url,
+        "logo": logo { "url": asset->url, alt }
+      }
+    }`,
+    { slug }
+  )
+}
+
+export async function getSoftwareProvidersUk() {
+  return client.fetch(
+    `*[_type == "software" && market == "uk"] | order(name asc) {
+      _id, name, slug, rtp, amountOfSlots, gameCategories,
+      "casinoCount": count(*[_type == "bookmaker" && market == "uk" && references(^._id)]),
+      "logo": logo { "url": asset->url, alt }
+    }`
+  )
+}
+
+export async function getSoftwareBySlugUk(slug: string) {
+  return client.fetch(
+    `*[_type == "software" && slug.current == $slug && market == "uk"][0] {
+      _id, name, titel, slug, metaTitle, metaDescription,
+      ${COMPARISON_TABLE_FRAGMENT},
+      rtp, amountOfSlots, licenses, gameCategories, highestRtpSlot, bonusBuys,
+      "intro": intro[] { ..., _type == "image" => { ..., "url": asset->url } },
+      "body": body[] { ..., _type == "image" => { ..., "url": asset->url } },
+      "logo": logo { "url": asset->url, alt },
+      "casinos": casinos[]-> {
+        _id, name, slug, score, usp, url,
+        "logo": logo { "url": asset->url, alt }
+      }
+    }`,
+    { slug }
+  )
+}
+
+export async function getPageBySlugUk(slug: string) {
+  return client.fetch(
+    `*[_type == "page" && slug.current == $slug && market == "uk" && !defined(parent)][0] { ${PAGE_FIELDS} }`,
+    { slug }
+  )
+}
+
+export async function getPageByPathUk(segments: string[]) {
+  if (segments.length === 1) return getPageBySlugUk(segments[0])
+  const { conditions, params } = buildAncestorFilter(segments)
+  return client.fetch(
+    `*[_type == "page" && ${conditions} && market == "uk"][0] { ${PAGE_FIELDS} }`,
+    params
+  )
+}
+
+export async function getCasinoGameBySlugUk(slug: string) {
+  return client.fetch(
+    `*[_type == "casinoGame" && slug.current == $slug && market == "uk"][0] { ${CASINO_GAME_FIELDS} }`,
+    { slug }
+  )
+}
+
+export async function getSlotmachineBySlugUk(slug: string) {
+  return client.fetch(
+    `*[_type == "slotmachine" && slug.current == $slug && market == "uk"][0] { ${SLOTMACHINE_FIELDS} }`,
+    { slug }
+  )
+}
+
+export async function getCasinoGuideBySlugUk(slug: string) {
+  return client.fetch(
+    `*[_type == "casinoGuide" && slug.current == $slug && market == "uk"][0] { ${PAGE_FIELDS} }`,
+    { slug }
   )
 }
