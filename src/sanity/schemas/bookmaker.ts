@@ -1,6 +1,14 @@
 import { defineField, defineType, type SlugIsUniqueValidator } from 'sanity'
 import { bodyField, relatedPagesFields } from './page'
 
+// Restrict a reference picker to documents of the same market as this casino.
+// Global casinos match targets with market "global" or no market set.
+function sameMarketFilter({ document }: any) {
+  const market = document?.market || 'global'
+  if (market === 'global') return { filter: 'market == "global" || !defined(market)' }
+  return { filter: 'market == $market', params: { market } }
+}
+
 /**
  * Slug uniqueness scoped per market, so the same casino can have a review in
  * each market — e.g. /magius/ in CA and /magius/ in AU both exist.
@@ -164,16 +172,16 @@ export const bookmakerType = defineType({
       title: 'Payment Methods',
       type: 'array',
       group: 'content',
-      of: [{ type: 'reference', to: [{ type: 'paymentMethod' }] }],
-      description: 'Payment methods accepted by this casino',
+      of: [{ type: 'reference', to: [{ type: 'paymentMethod' }], options: { filter: sameMarketFilter } }],
+      description: 'Payment methods accepted by this casino. Only payment methods from this casino’s market are shown.',
     }),
     defineField({
       name: 'software',
       title: 'Software Providers',
       type: 'array',
       group: 'content',
-      of: [{ type: 'reference', to: [{ type: 'software' }] }],
-      description: 'Game software providers used by this casino',
+      of: [{ type: 'reference', to: [{ type: 'software' }], options: { filter: sameMarketFilter } }],
+      description: 'Game software providers used by this casino. Only providers from this casino’s market are shown.',
     }),
 
     // ── SEO ───────────────────────────────────────────────────────────────────
