@@ -4,8 +4,9 @@ import { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 
 /**
- * Appends `placement=<current-path>` to outbound redirect links (href containing
- * "/r/"), so the destination knows which page the click came from.
+ * Appends `placement=<current-path>` to outbound redirect links (the /go/ and
+ * /<market>/go/ redirect paths), so the destination knows which page the click
+ * came from.
  * Skips links that point directly to bandstrack.com. Each link is only tagged
  * once. Runs after hydration and re-runs on every client-side navigation.
  */
@@ -15,7 +16,7 @@ export function PlacementLinks() {
   useEffect(() => {
     const apply = () => {
       const placement = encodeURIComponent(window.location.pathname)
-      document.querySelectorAll<HTMLAnchorElement>('a[href*="/r/"]').forEach((link) => {
+      document.querySelectorAll<HTMLAnchorElement>('a[href*="/go/"]').forEach((link) => {
         if (link.href.includes('bandstrack.com')) return
         if (link.dataset.placementTagged) return
         const sep = link.href.includes('?') ? '&' : '?'
