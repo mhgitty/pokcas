@@ -4,6 +4,7 @@ import { draftMode } from 'next/headers'
 import { AdminBar } from '@/components/AdminBar'
 import { PreviewBanner } from '@/components/PreviewBanner'
 import { GoogleAnalytics } from '@/components/GoogleAnalytics'
+import { PlacementLinks } from '@/components/PlacementLinks'
 import './globals.css'
 
 const figtree = Figtree({
@@ -53,6 +54,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {isPreview && <PreviewBanner />}
         <AdminBar />
         {children}
+        <PlacementLinks />
         <GoogleAnalytics />
       </body>
     </html>
