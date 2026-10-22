@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity'
+import { RedirectUrlInput } from '../components/RedirectUrlInput'
 
 export const redirectType = defineType({
   name: 'redirect',
@@ -33,9 +34,17 @@ export const redirectType = defineType({
       name: 'code',
       title: 'Kode (URL)',
       type: 'slug',
-      description: 'The code used in the URL. Global: /go/[code]  •  CA: /ca/go/[code]  •  AU: /au/go/[code]',
+      description: 'The code used in the URL. Global: /go/[code]  •  CA: /ca/go/[code]  •  AU: /au/go/[code]  •  UK: /uk/go/[code]',
       options: { source: 'title' },
       validation: (r) => r.required(),
+    }),
+    defineField({
+      name: 'finishedUrl',
+      title: 'Finished URL',
+      type: 'string',
+      description: 'The link to use on the site. Updates automatically from Market and Code.',
+      readOnly: true,
+      components: { input: RedirectUrlInput },
     }),
     defineField({
       name: 'destination',
@@ -62,7 +71,7 @@ export const redirectType = defineType({
   preview: {
     select: { title: 'title', code: 'code.current', active: 'active', destination: 'destination', market: 'market' },
     prepare({ title, code, active, destination, market }: any) {
-      const prefix = market === 'ca' ? '/ca/go' : market === 'au' ? '/au/go' : '/go'
+      const prefix = market && market !== 'global' ? `/${market}/go` : '/go'
       return {
         title: `${active === false ? '⏸ ' : ''}${title}`,
         subtitle: `${prefix}/${code} → ${destination}`,
