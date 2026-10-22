@@ -1374,3 +1374,37 @@ a.cb-member:hover { border-color: var(--green); transform: translateY(-2px); }
 @media (prefers-reduced-motion: reduce) {
   .cb-tl-card, .cb-step, .cb-feature, .cb-member, .cb-contact-email { transition: none; }
 }
+
+/* ─── Author opinion block ─────────────────────────────────────────────── */
+.op { position: relative; overflow: hidden; margin: 32px 0; padding: 26px 28px 22px; border-radius: 16px; background: linear-gradient(160deg, #FFFFFF 0%, #F3FAF4 100%); border: 1px solid var(--border); box-shadow: 0 10px 30px -18px rgba(26,122,60,.35); }
+.op::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--green), var(--gold)); }
+.op-mark { position: absolute; right: 18px; top: -34px; font-family: Georgia, 'Times New Roman', serif; font-size: 190px; line-height: 1; color: transparent; -webkit-text-stroke: 2px rgba(26,122,60,.14); pointer-events: none; user-select: none; }
+.op-head { position: relative; display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
+.op-avatar { position: relative; flex: 0 0 64px; width: 64px; height: 64px; padding: 3px; border-radius: 50%; background: linear-gradient(135deg, var(--green), var(--gold)); }
+.op-avatar img, .op-initial { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--bg-card); background: var(--bg-card); font-size: 24px; font-weight: 800; color: var(--green); }
+.op-badge { position: absolute; right: -2px; bottom: -2px; display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: var(--green); color: #fff; border: 2px solid var(--bg-card); }
+.op-who { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.op-kicker { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .12em; color: var(--green); }
+.op-name { font-size: 18px; font-weight: 800; color: var(--text); text-decoration: none; }
+a.op-name:hover { color: var(--green); }
+.op-role { font-size: 13px; color: var(--text-faint); }
+.article-content .op-title, .op-title { position: relative; margin: 0 0 10px; padding: 0; font-size: clamp(17px, 2vw, 20px); font-weight: 800; color: var(--text); line-height: 1.3; }
+.op-body { position: relative; padding-left: 18px; border-left: 3px solid; border-image: linear-gradient(180deg, var(--green), var(--gold)) 1; }
+.op-body p { margin: 0 0 12px; font-size: 15.5px; line-height: 1.7; color: var(--text-muted); }
+.op-body p:first-child { font-size: 16.5px; color: var(--text); }
+.op-body p:last-child { margin-bottom: 0; }
+.op-body a { color: var(--green); font-weight: 600; }
+.op-sign { position: relative; display: flex; align-items: center; gap: 12px; margin-top: 20px; }
+.op-sign-line { width: 28px; height: 2px; background: var(--green); border-radius: 2px; }
+.op-sign-name { font-style: italic; font-weight: 600; color: var(--text); font-size: 14px; }
+.op-sign-link { margin-left: auto; font-size: 13px; font-weight: 700; color: var(--green); text-decoration: none; white-space: nowrap; }
+.op-sign-link:hover { text-decoration: underline; }
+@media (max-width: 760px) {
+  .op { padding: 20px 18px 18px; margin: 24px 0; }
+  .op-mark { font-size: 140px; top: -26px; right: 10px; }
+  .op-avatar { flex-basis: 54px; width: 54px; height: 54px; }
+  .op-name { font-size: 16px; }
+  .op-body { padding-left: 14px; }
+  .op-body p { font-size: 15px; }
+  .op-body p:first-child { font-size: 15.5px; }
+}

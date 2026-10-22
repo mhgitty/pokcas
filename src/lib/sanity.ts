@@ -361,7 +361,7 @@ export const getSiteSettings = cache(async () => {
       "logoUrl": logo.asset->url,
       "logoWhiteUrl": logoWhite.asset->url,
       "defaultAuthor": defaultAuthor-> {
-        name, slug, bio, linkedin, x, facebook,
+        name, role, slug, bio, linkedin, x, facebook,
         "imageUrl": image.asset->url
       },
       ${headerNavProjection(false)},
