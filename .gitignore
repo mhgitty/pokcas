@@ -16,6 +16,9 @@
 .env.test.local
 .env.production.local
 
+# Content backups written by migration scripts
+scripts/backups/
+
 # vercel
 .vercel
 

@@ -15,6 +15,7 @@ import { CasinoKort } from './CasinoKort'
 import { BonusKort } from './BonusKort'
 import { HowToBlock } from './HowToBlock'
 import { DropdownBlock } from './DropdownBlock'
+import { StatsBlock, TimelineBlock, StepCardsBlock, FeatureCardsBlock, TeamBlock, ContactCardBlock } from './ContentBlocks'
 
 type Post = {
   _id: string
@@ -178,6 +179,12 @@ export function PortableTextRenderer({ value, posts }: { value: any[]; posts?: P
       casinoKortBlock: ({ value }: any) => <CasinoKort value={value} />,
       bonusKortBlock: ({ value }: any) => <BonusKort value={value} />,
       howToBlock: ({ value }: any) => withAnchor('howToBlock', value._key, <HowToBlock value={value} />),
+      statsBlock: ({ value }: any) => <StatsBlock value={value} />,
+      timelineBlock: ({ value }: any) => <TimelineBlock value={value} />,
+      stepCardsBlock: ({ value }: any) => <StepCardsBlock value={value} />,
+      featureCardsBlock: ({ value }: any) => <FeatureCardsBlock value={value} />,
+      teamBlock: ({ value }: any) => <TeamBlock value={value} />,
+      contactCardBlock: ({ value }: any) => <ContactCardBlock value={value} />,
       latestPostsBlock: ({ value: blockValue }: any) =>
         posts ? <LatestPostsBlock value={blockValue} posts={posts} /> : null,
       image: ({ value }: any) => {

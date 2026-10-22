@@ -733,6 +733,179 @@ export const bodyField = defineField({
         },
       },
     },
+
+    // ── Visual content blocks ────────────────────────────────────────────────
+    {
+      type: 'object',
+      name: 'statsBlock',
+      title: '📈 Stats strip',
+      fields: [
+        { name: 'title', title: 'Heading (optional)', type: 'string' },
+        {
+          name: 'items', title: 'Stats', type: 'array',
+          validation: (r: any) => r.max(6),
+          of: [{
+            type: 'object', name: 'statItem', title: 'Stat',
+            fields: [
+              { name: 'value', title: 'Big number / value', type: 'string', description: 'e.g. "2017", "5", "7+"', validation: (r: any) => r.required() },
+              { name: 'label', title: 'Caption', type: 'string', description: 'Short text under the number', validation: (r: any) => r.required() },
+            ],
+            preview: { select: { title: 'value', subtitle: 'label' } },
+          }],
+        },
+      ],
+      preview: {
+        select: { title: 'title', items: 'items' },
+        prepare({ title, items }: any) {
+          return { title: title || '📈 Stats strip', subtitle: (items || []).map((i: any) => `${i.value} ${i.label}`).join(' · ') }
+        },
+      },
+    },
+    {
+      type: 'object',
+      name: 'timelineBlock',
+      title: '🕒 Timeline',
+      fields: [
+        { name: 'title', title: 'Heading (optional)', type: 'string' },
+        {
+          name: 'items', title: 'Milestones', type: 'array',
+          of: [{
+            type: 'object', name: 'timelineItem', title: 'Milestone',
+            fields: [
+              { name: 'label', title: 'Label', type: 'string', description: 'e.g. a year, or "Today"' },
+              { name: 'title', title: 'Title', type: 'string', validation: (r: any) => r.required() },
+              { name: 'text', title: 'Text', type: 'text', rows: 3 },
+              { name: 'linkLabel', title: 'Link text (optional)', type: 'string' },
+              { name: 'href', title: 'Link URL (optional)', type: 'string', description: 'e.g. /poker-hands/' },
+            ],
+            preview: { select: { title: 'title', subtitle: 'label' } },
+          }],
+        },
+      ],
+      preview: {
+        select: { title: 'title', items: 'items' },
+        prepare({ title, items }: any) {
+          return { title: title || '🕒 Timeline', subtitle: `${(items || []).length} milestones` }
+        },
+      },
+    },
+    {
+      type: 'object',
+      name: 'stepCardsBlock',
+      title: '🔢 Numbered step cards',
+      fields: [
+        { name: 'title', title: 'Heading (optional)', type: 'string' },
+        { name: 'intro', title: 'Intro (optional)', type: 'text', rows: 2 },
+        {
+          name: 'columns', title: 'Columns (wide screens)', type: 'number', initialValue: 2,
+          options: { list: [1, 2, 3], layout: 'radio', direction: 'horizontal' },
+        },
+        {
+          name: 'items', title: 'Steps', type: 'array',
+          of: [{
+            type: 'object', name: 'stepCardItem', title: 'Step',
+            fields: [
+              { name: 'title', title: 'Title', type: 'string', validation: (r: any) => r.required() },
+              { name: 'text', title: 'Text', type: 'text', rows: 3 },
+            ],
+            preview: { select: { title: 'title', subtitle: 'text' } },
+          }],
+        },
+      ],
+      preview: {
+        select: { title: 'title', items: 'items' },
+        prepare({ title, items }: any) {
+          return { title: title || '🔢 Step cards', subtitle: `${(items || []).length} steps` }
+        },
+      },
+    },
+    {
+      type: 'object',
+      name: 'featureCardsBlock',
+      title: '✨ Icon feature cards',
+      fields: [
+        { name: 'title', title: 'Heading (optional)', type: 'string' },
+        { name: 'intro', title: 'Intro (optional)', type: 'text', rows: 2 },
+        {
+          name: 'columns', title: 'Columns (wide screens)', type: 'number', initialValue: 3,
+          options: { list: [2, 3], layout: 'radio', direction: 'horizontal' },
+        },
+        {
+          name: 'items', title: 'Cards', type: 'array',
+          of: [{
+            type: 'object', name: 'featureCardItem', title: 'Card',
+            fields: [
+              { name: 'icon', title: 'Icon (emoji)', type: 'string', description: 'One emoji, e.g. ⚖️ 🔎 🇬🇧' },
+              { name: 'eyebrow', title: 'Small label (optional)', type: 'string', description: 'Shown above the title, e.g. a regulator name' },
+              { name: 'title', title: 'Title', type: 'string', validation: (r: any) => r.required() },
+              { name: 'text', title: 'Text', type: 'text', rows: 3 },
+              { name: 'href', title: 'Link (optional)', type: 'string', description: 'Makes the whole card clickable, e.g. /uk/' },
+            ],
+            preview: {
+              select: { title: 'title', subtitle: 'eyebrow', icon: 'icon' },
+              prepare({ title, subtitle, icon }: any) { return { title: `${icon ? icon + ' ' : ''}${title || ''}`, subtitle } },
+            },
+          }],
+        },
+      ],
+      preview: {
+        select: { title: 'title', items: 'items' },
+        prepare({ title, items }: any) {
+          return { title: title || '✨ Feature cards', subtitle: (items || []).map((i: any) => `${i.icon || ''} ${i.title || ''}`.trim()).join(' · ') }
+        },
+      },
+    },
+    {
+      type: 'object',
+      name: 'teamBlock',
+      title: '👥 Team cards',
+      fields: [
+        { name: 'title', title: 'Heading (optional)', type: 'string' },
+        {
+          name: 'members', title: 'Team members', type: 'array',
+          of: [{
+            type: 'object', name: 'teamMember', title: 'Member',
+            fields: [
+              { name: 'author', title: 'Author', type: 'reference', to: [{ type: 'author' }], validation: (r: any) => r.required() },
+              { name: 'role', title: 'Role (optional override)', type: 'string', description: 'Leave empty to use the role from the author profile' },
+              { name: 'blurb', title: 'Short blurb (optional)', type: 'text', rows: 3 },
+            ],
+            preview: { select: { title: 'author.name', subtitle: 'role', media: 'author.image' } },
+          }],
+        },
+      ],
+      preview: {
+        select: { title: 'title', members: 'members' },
+        prepare({ title, members }: any) {
+          return { title: title || '👥 Team cards', subtitle: `${(members || []).length} members` }
+        },
+      },
+    },
+    {
+      type: 'object',
+      name: 'contactCardBlock',
+      title: '✉️ Contact card',
+      fields: [
+        { name: 'title', title: 'Heading', type: 'string', initialValue: 'Get in touch' },
+        { name: 'text', title: 'Text', type: 'text', rows: 3 },
+        { name: 'email', title: 'Email address', type: 'string' },
+        {
+          name: 'links', title: 'Links (e.g. social profiles)', type: 'array',
+          of: [{
+            type: 'object', name: 'contactLink', title: 'Link',
+            fields: [
+              { name: 'label', title: 'Label', type: 'string', validation: (r: any) => r.required() },
+              { name: 'url', title: 'URL', type: 'url', validation: (r: any) => r.required() },
+            ],
+            preview: { select: { title: 'label', subtitle: 'url' } },
+          }],
+        },
+      ],
+      preview: {
+        select: { title: 'title', email: 'email' },
+        prepare({ title, email }: any) { return { title: `✉️ ${title || 'Contact card'}`, subtitle: email } },
+      },
+    },
   ],
 })
 

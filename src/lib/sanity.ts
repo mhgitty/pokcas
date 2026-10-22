@@ -203,6 +203,13 @@ const PAGE_FIELDS = `
         "offerUrl": offerUrl,
         "terms": terms,
       }
+    },
+    _type == "teamBlock" => {
+      ...,
+      "members": members[] {
+        _key, role, blurb,
+        "author": author-> { name, role, "slug": slug.current, "imageUrl": image.asset->url }
+      }
     }
   },
   "a1Slug": parent->slug.current,
