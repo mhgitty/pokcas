@@ -1408,3 +1408,27 @@ a.op-name:hover { color: var(--green); }
   .op-body p { font-size: 15px; }
   .op-body p:first-child { font-size: 15.5px; }
 }
+
+/* ─── Quote box (calloutBlock variant "quote") ─────────────────────────── */
+.qb { position: relative; margin: 32px 0; padding: 30px 30px 24px 34px; border-radius: 18px; background: radial-gradient(120% 140% at 100% 0%, rgba(201,168,76,.10) 0%, rgba(201,168,76,0) 55%), linear-gradient(180deg, #FFFFFF 0%, #F6FBF7 100%); border: 1px solid var(--border); box-shadow: 0 1px 2px rgba(17,24,39,.04), 0 14px 32px -22px rgba(26,122,60,.45); overflow: hidden; }
+.qb::before { content: ''; position: absolute; left: 0; top: 18px; bottom: 18px; width: 4px; border-radius: 0 4px 4px 0; background: linear-gradient(180deg, var(--green), var(--gold)); }
+.qb-icon { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; margin-bottom: 14px; border-radius: 12px; background: var(--green); color: #fff; box-shadow: 0 6px 14px -6px rgba(26,122,60,.7); transform: rotate(-4deg); }
+.qb-title { margin-bottom: 8px; font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--green); }
+.article-content .qb-text, .qb-text { margin: 0; padding: 0; border: 0; background: none; font-style: normal; }
+.qb-text p { margin: 0 0 10px; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(17px, 2vw, 19.5px); line-height: 1.6; color: var(--text); }
+.qb-text p:last-child { margin-bottom: 0; }
+.qb-text ul, .qb-text ol { margin: 6px 0 10px; padding-left: 22px; font-size: 15.5px; line-height: 1.65; color: var(--text-muted); }
+.qb-text strong { color: var(--green-dark); }
+.qb-text a { color: var(--green); }
+.qb-by { display: flex; align-items: center; gap: 12px; margin-top: 20px; padding-top: 16px; border-top: 1px dashed var(--border); }
+.qb-avatar { flex: 0 0 44px; width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 0 0 2px var(--gold); }
+.qb-initial { display: inline-flex; align-items: center; justify-content: center; background: var(--green); color: #fff; font-weight: 800; font-size: 18px; }
+.qb-who { display: flex; flex-direction: column; line-height: 1.3; min-width: 0; }
+.qb-name { font-size: 14.5px; font-weight: 800; color: var(--text); text-decoration: none; }
+.qb-name::before { content: '— '; color: var(--gold); }
+a.qb-name:hover { color: var(--green); }
+.qb-role { font-size: 12.5px; color: var(--text-faint); }
+@media (max-width: 760px) {
+  .qb { padding: 24px 18px 20px 24px; margin: 24px 0; border-radius: 14px; }
+  .qb-icon { width: 34px; height: 34px; margin-bottom: 10px; }
+}

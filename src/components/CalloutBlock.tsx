@@ -51,6 +51,15 @@ const richTextComponents = {
   },
 }
 
+const quoteComponents = {
+  block: { normal: ({ children }: any) => <p>{children}</p> },
+  list: {
+    bullet: ({ children }: any) => <ul>{children}</ul>,
+    number: ({ children }: any) => <ol>{children}</ol>,
+  },
+  marks: richTextComponents.marks,
+}
+
 export async function CalloutBlock({ value }: CalloutBlockProps) {
   const { variant = 'info', title, body, author } = value
   const s = styles[variant] ?? styles.info
@@ -64,6 +73,41 @@ export async function CalloutBlock({ value }: CalloutBlockProps) {
     } catch {
       person = null
     }
+  }
+
+  if (isQuote) {
+    const href = person?.slug?.current ? `/author/${person.slug.current}/` : undefined
+    return (
+      <figure className="qb">
+        <span className="qb-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <path d="M9.6 6C6.5 7.3 4.5 10 4.5 13.4V18h6v-6H7.6c.2-1.9 1.3-3.3 3.1-4.2L9.6 6zm9 0c-3.1 1.3-5.1 4-5.1 7.4V18h6v-6h-2.9c.2-1.9 1.3-3.3 3.1-4.2L18.6 6z" />
+          </svg>
+        </span>
+        {title && <div className="qb-title">{title}</div>}
+        {body && (
+          <blockquote className="qb-text">
+            {Array.isArray(body)
+              ? <PortableText value={body} components={quoteComponents} />
+              : <p>{body}</p>}
+          </blockquote>
+        )}
+        {person?.name && (
+          <figcaption className="qb-by">
+            {person.imageUrl
+              // eslint-disable-next-line @next/next/no-img-element
+              ? <img className="qb-avatar" src={`${person.imageUrl}?w=96&h=96&fit=crop&auto=format`} alt={person.name} loading="lazy" width={44} height={44} />
+              : <span className="qb-avatar qb-initial">{person.name.charAt(0).toUpperCase()}</span>}
+            <span className="qb-who">
+              {href
+                ? <Link href={href} className="qb-name">{person.name}</Link>
+                : <span className="qb-name">{person.name}</span>}
+              {person.role && <span className="qb-role">{person.role}</span>}
+            </span>
+          </figcaption>
+        )}
+      </figure>
+    )
   }
 
   return (
