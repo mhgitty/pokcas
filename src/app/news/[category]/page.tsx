@@ -5,6 +5,7 @@ import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import { finalizeMeta, pageOgImages } from '@/lib/og'
 
 export const revalidate = 3600
 
@@ -17,7 +18,7 @@ export async function generateStaticParams() {
   return categories.map((c: any) => ({ category: c.slug.current }))
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+async function buildMetadata({ params }: Props): Promise<Metadata> {
   const { category } = await params
   const categories = await getCategories().catch(() => [])
   const cat = categories.find((c: any) => c.slug.current === category)
@@ -129,4 +130,8 @@ export default async function CategoryArchivePage({ params }: Props) {
       `}</style>
     </>
   )
+}
+
+export async function generateMetadata(props: any): Promise<Metadata> {
+  return finalizeMeta(await buildMetadata(props))
 }

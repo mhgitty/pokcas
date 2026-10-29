@@ -19,6 +19,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
+import { finalizeMeta, pageOgImages } from '@/lib/og'
 
 export const revalidate = 3600
 const BASE = 'https://pokcas.com'
@@ -35,7 +36,7 @@ export async function generateStaticParams() {
   return slots.map((s) => ({ slug: s.slug.current }))
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+async function buildMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const slot = await getSlotmachineBySlug(slug).catch(() => null)
   if (!slot) {
@@ -179,4 +180,8 @@ export default async function SlotPage({ params }: Props) {
       <Footer />
     </>
   )
+}
+
+export async function generateMetadata(props: any): Promise<Metadata> {
+  return finalizeMeta(await buildMetadata(props))
 }

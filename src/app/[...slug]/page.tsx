@@ -14,6 +14,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
 import { headingId } from '@/lib/headingId'
+import { finalizeMeta, pageOgImages } from '@/lib/og'
 
 export const revalidate = 3600
 
@@ -25,7 +26,7 @@ function buildPath(segments: string[]) {
   return '/' + segments.join('/') + '/'
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+async function buildMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const page = await getPageByPath(slug).catch(() => null)
   if (!page) return {}
@@ -149,4 +150,8 @@ export default async function DynamicPage({ params }: Props) {
 
     </>
   )
+}
+
+export async function generateMetadata(props: any): Promise<Metadata> {
+  return finalizeMeta(await buildMetadata(props))
 }

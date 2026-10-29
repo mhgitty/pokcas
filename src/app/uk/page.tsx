@@ -8,13 +8,14 @@ import { HreflangHead } from '@/components/HreflangHead'
 import { replaceDateVars } from '@/lib/dateVars'
 import { AuthorBio } from '@/components/AuthorBio'
 import type { Metadata } from 'next'
+import { finalizeMeta, pageOgImages } from '@/lib/og'
 
 export const revalidate = 3600
 
 const BASE = 'https://pokcas.com'
 const CANONICAL = `${BASE}/uk/`
 
-export async function generateMetadata(): Promise<Metadata> {
+async function buildMetadata(): Promise<Metadata> {
   const hp = await getCountryHomepage('uk').catch(() => null)
   const title = replaceDateVars(hp?.metaTitle || hp?.heroHeading || 'Best Online Casinos United Kingdom')
   const description = replaceDateVars(hp?.metaDescription || hp?.intro || 'Find the best online casinos and bonuses for UK players.')
@@ -89,4 +90,8 @@ export default async function CaHomePage() {
       )}
     </>
   )
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  return finalizeMeta(await buildMetadata())
 }

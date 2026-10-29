@@ -14,6 +14,7 @@ import { AuthorBio } from '@/components/AuthorBio'
 import { ScoreMeter } from '@/components/ScoreMeter'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
+import { finalizeMeta, pageOgImages } from '@/lib/og'
 
 export const revalidate = 3600
 
@@ -28,7 +29,7 @@ export async function generateStaticParams() {
   return bookmakers.map((b) => ({ slug: b.slug.current }))
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+async function buildMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const bm = await getBookmakerBySlugUk(slug).catch(() => null)
   if (!bm) return {}
@@ -213,4 +214,8 @@ export default async function CaReviewSlugPage({ params }: Props) {
 
     </>
   )
+}
+
+export async function generateMetadata(props: any): Promise<Metadata> {
+  return finalizeMeta(await buildMetadata(props))
 }

@@ -9,6 +9,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
+import { finalizeMeta, pageOgImages } from '@/lib/og'
 
 export const revalidate = 3600
 const BASE = 'https://pokcas.com'
@@ -20,7 +21,7 @@ export async function generateStaticParams() {
   return paths.map((a) => ({ slug: a.slug.current }))
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+async function buildMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const author = await getAuthorBySlug(slug).catch(() => null)
   if (!author) return {}
@@ -30,7 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description,
     alternates: { canonical: `${BASE}/author/${slug}/` },
-    openGraph: { title, description, url: `${BASE}/author/${slug}/` },
+    openGraph: { title, description, url: `${BASE}/author/${slug}/`, type: "profile", ...((author as any).imageUrl ? { images: [{ url: (author as any).imageUrl }] } : {}) },
   }
 }
 
@@ -271,4 +272,8 @@ export default async function AuthorPage({ params }: Props) {
       `}</style>
     </>
   )
+}
+
+export async function generateMetadata(props: any): Promise<Metadata> {
+  return finalizeMeta(await buildMetadata(props))
 }

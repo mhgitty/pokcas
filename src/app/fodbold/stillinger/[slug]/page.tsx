@@ -10,6 +10,7 @@ import { getLigaStillingerBySlug, getLigaStillingerPaths, getSiteSettings } from
 import { replaceDateVars } from '@/lib/dateVars'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import { finalizeMeta, pageOgImages } from '@/lib/og'
 
 export const revalidate = 3600
 
@@ -23,14 +24,14 @@ export async function generateStaticParams() {
   return paths.map((p) => ({ slug: p.slug.current }))
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+async function buildMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const page = await getLigaStillingerBySlug(slug).catch(() => null)
   if (!page) return {}
   const title = replaceDateVars(page.metaTitle || page.title)
   const description = replaceDateVars(page.metaDescription || `Se ${page.leagueName} stillinger – opdateret live.`)
   const canonical = `${BASE}/fodbold/stillinger/${slug}/`
-  return { title, description, alternates: { canonical } }
+  return { title, description, alternates: { canonical }, openGraph: { images: pageOgImages(page) } }
 }
 
 // ─── Sportsmonks helpers ──────────────────────────────────────────────────────
@@ -391,4 +392,8 @@ function Td({ children, style }: { children?: React.ReactNode; style?: React.CSS
       {children}
     </td>
   )
+}
+
+export async function generateMetadata(props: any): Promise<Metadata> {
+  return finalizeMeta(await buildMetadata(props))
 }

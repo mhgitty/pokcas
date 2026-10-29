@@ -3,6 +3,7 @@ import { CmsPageView } from '@/components/CmsPageView'
 import { SlotsArchive } from '@/components/SlotsArchive'
 import { getSlotmachinesForArchive, getArchiveFeaturedSlotIds, getPageByPathAu, getSiteSettings, getHreflangScript } from '@/lib/sanity'
 import type { Metadata } from 'next'
+import { finalizeMeta, pageOgImages } from '@/lib/og'
 
 export const revalidate = 3600
 const BASE = 'https://pokcas.com'
@@ -12,12 +13,12 @@ const HOME = '/au/'
 const LANG = 'en-AU'
 const FLAG = '🇦🇺'
 
-export async function generateMetadata(): Promise<Metadata> {
+async function buildMetadata(): Promise<Metadata> {
   const page = await getPageByPathAu(['online-slots']).catch(() => null)
   const title = (page as any)?.metaTitle || (page as any)?.title || 'Online Slots'
   const description = (page as any)?.metaDescription || 'Browse, search and filter online slots by provider, RTP, volatility, features and more.'
   const canonical = `${BASE}${PATH}/`
-  return { title, description, alternates: { canonical }, openGraph: { title, description, url: canonical } }
+  return { title, description, alternates: { canonical }, openGraph: { title, description, url: canonical, images: pageOgImages(page) } }
 }
 
 export default async function SlotsArchivePage() {
@@ -68,4 +69,8 @@ export default async function SlotsArchivePage() {
       {archive}
     </>
   )
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  return finalizeMeta(await buildMetadata())
 }

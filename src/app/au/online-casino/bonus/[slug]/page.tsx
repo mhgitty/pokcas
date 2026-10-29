@@ -14,6 +14,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
 import { heroButtonsFor } from '@/lib/heroButtons'
+import { finalizeMeta, pageOgImages } from '@/lib/og'
 
 export const revalidate = 3600
 
@@ -28,7 +29,7 @@ export async function generateStaticParams() {
   return bonuses.map((b) => ({ slug: b.slug.current }))
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+async function buildMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const canonical = `${BASE}/au/online-casino/bonus/${slug}/`
 
@@ -37,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (page) {
     const title = replaceDateVars(page.metaTitle || page.title)
     const description = replaceDateVars(page.metaDescription || page.intro || '')
-    const ogImg = (page as any).ogImage
+    const ogImg = (page as any).ogImage?.url ? (page as any).ogImage : (page as any).featuredImage
     return {
       title, description,
       alternates: { canonical },
@@ -202,4 +203,8 @@ export default async function AuBonusSlugPage({ params }: Props) {
 
     </>
   )
+}
+
+export async function generateMetadata(props: any): Promise<Metadata> {
+  return finalizeMeta(await buildMetadata(props))
 }

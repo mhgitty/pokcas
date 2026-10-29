@@ -4,12 +4,13 @@ import { PostCard } from '@/components/PostCard'
 import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
 import type { Metadata } from 'next'
+import { finalizeMeta } from '@/lib/og'
 
 export const revalidate = 3600
 
 const BASE = 'https://pokcas.com'
 
-export const metadata: Metadata = {
+export const metadata: Metadata = finalizeMeta({
   title: 'News & Guides — Pokcas',
   description: 'Browse all casino guides, bonus tips and news from the Pokcas team.',
   alternates: { canonical: `${BASE}/news/` },
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
     description: 'Browse all casino guides, bonus tips and news from the Pokcas team.',
     url: `${BASE}/news/`,
   },
-}
+})
 
 // How many posts to show per category on the index
 const PREVIEW_COUNT = 4

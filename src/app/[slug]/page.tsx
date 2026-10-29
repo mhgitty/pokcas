@@ -17,6 +17,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
 import { heroButtonsFor } from '@/lib/heroButtons'
+import { finalizeMeta, pageOgImages } from '@/lib/og'
 
 export const revalidate = 3600
 
@@ -40,7 +41,7 @@ export async function generateStaticParams() {
   return Array.from(slugs).map((slug) => ({ slug }))
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+async function buildMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
 
   const post = await getPostBySlug(slug).catch(() => null)
@@ -72,7 +73,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const title = replaceDateVars(page.metaTitle || page.title)
     const description = replaceDateVars(page.metaDescription || page.intro || '')
     const canonical = `${BASE}/${slug}/`
-    return { title, description, alternates: { canonical }, openGraph: { title, description, url: canonical } }
+    return { title, description, alternates: { canonical }, openGraph: { title, description, url: canonical, images: pageOgImages(page) } }
   }
 
   return {}
@@ -262,4 +263,8 @@ export default async function SlugPage({ params }: Props) {
 
     </>
   )
+}
+
+export async function generateMetadata(props: any): Promise<Metadata> {
+  return finalizeMeta(await buildMetadata(props))
 }

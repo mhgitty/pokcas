@@ -15,6 +15,7 @@ import Image from 'next/image'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
 import { ComparisonJumpButton } from '@/components/ComparisonJumpButton'
+import { finalizeMeta, pageOgImages } from '@/lib/og'
 
 export const revalidate = 3600
 
@@ -29,7 +30,7 @@ export async function generateStaticParams() {
   return providers.map((p) => ({ slug: p.slug.current }))
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+async function buildMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const provider = await getSoftwareBySlug(slug).catch(() => null)
   if (!provider) return {}
@@ -166,4 +167,8 @@ export default async function SoftwareSlugPage({ params }: Props) {
 
     </>
   )
+}
+
+export async function generateMetadata(props: any): Promise<Metadata> {
+  return finalizeMeta(await buildMetadata(props))
 }

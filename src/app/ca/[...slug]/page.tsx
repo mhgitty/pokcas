@@ -12,6 +12,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
 import { headingId } from '@/lib/headingId'
+import { finalizeMeta, pageOgImages } from '@/lib/og'
 
 export const revalidate = 3600
 
@@ -39,7 +40,7 @@ export async function generateStaticParams() {
   })
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+async function buildMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const page = await getPageByPathCa(slug).catch(() => null)
   if (!page) return {}
@@ -159,4 +160,8 @@ export default async function CaSlugPage({ params }: Props) {
 
     </>
   )
+}
+
+export async function generateMetadata(props: any): Promise<Metadata> {
+  return finalizeMeta(await buildMetadata(props))
 }

@@ -19,6 +19,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
 import { heroButtonsFor } from '@/lib/heroButtons'
+import { finalizeMeta, pageOgImages } from '@/lib/og'
 
 export const revalidate = 3600
 
@@ -26,12 +27,12 @@ const BASE = 'https://pokcas.com'
 const SLUG = ['online-casino', 'payment']
 const CANONICAL = `${BASE}/online-casino/payment/`
 
-export async function generateMetadata(): Promise<Metadata> {
+async function buildMetadata(): Promise<Metadata> {
   const page = await getPageByPath(SLUG).catch(() => null)
   if (!page) return {}
   const title = replaceDateVars(page.metaTitle || page.title)
   const description = replaceDateVars(page.metaDescription || page.intro || '')
-  return { title, description, alternates: { canonical: CANONICAL } }
+  return { title, description, alternates: { canonical: CANONICAL }, openGraph: { images: pageOgImages(page) } }
 }
 
 export default async function PaymentMethodsIndexPage() {
@@ -130,4 +131,8 @@ export default async function PaymentMethodsIndexPage() {
 
     </>
   )
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  return finalizeMeta(await buildMetadata())
 }

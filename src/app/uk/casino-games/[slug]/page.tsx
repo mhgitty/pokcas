@@ -8,6 +8,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
+import { finalizeMeta, pageOgImages } from '@/lib/og'
 
 export const revalidate = 3600
 
@@ -22,7 +23,7 @@ export async function generateStaticParams() {
   return games.map((g) => ({ slug: g.slug.current }))
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+async function buildMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const game = await getCasinoGameBySlugUk(slug).catch(() => null)
   if (!game) return {}
@@ -141,4 +142,8 @@ export default async function CaCasinoGamePage({ params }: Props) {
 
     </>
   )
+}
+
+export async function generateMetadata(props: any): Promise<Metadata> {
+  return finalizeMeta(await buildMetadata(props))
 }

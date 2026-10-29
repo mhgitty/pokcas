@@ -12,6 +12,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
 import { heroButtonsFor } from '@/lib/heroButtons'
+import { finalizeMeta, pageOgImages } from '@/lib/og'
 
 export const revalidate = 3600
 
@@ -26,7 +27,7 @@ export async function generateStaticParams() {
   return guides.map((g) => ({ slug: g.slug.current }))
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+async function buildMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const guide = await getCasinoGuideBySlugCa(slug).catch(() => null)
   if (!guide) return {}
@@ -120,4 +121,8 @@ export default async function CaCasinoGuidePage({ params }: Props) {
 
     </>
   )
+}
+
+export async function generateMetadata(props: any): Promise<Metadata> {
+  return finalizeMeta(await buildMetadata(props))
 }

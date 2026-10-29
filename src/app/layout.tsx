@@ -24,12 +24,10 @@ export const metadata: Metadata = {
   },
   description: 'Find the best online casinos and casino bonuses. We test, review and compare all the top casinos.',
   keywords: ['casino bonus', 'online casino', 'free spins', 'welcome bonus', 'casino review', 'best casino'],
-  alternates: { canonical: BASE + '/' },
   openGraph: {
     siteName: 'Pokcas.com',
     locale: 'en_US',
     type: 'website',
-    url: BASE + '/',
     title: 'Pokcas — Your International Casino Guide',
     description: 'Find the best online casinos and casino bonuses.',
     images: [{ url: `${BASE}/og.png`, width: 1200, height: 630, alt: 'Pokcas.com' }],

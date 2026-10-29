@@ -12,17 +12,18 @@ import { getPageBySlug, getSiteSettings } from '@/lib/sanity'
 import { replaceDateVars } from '@/lib/dateVars'
 import type { Metadata } from 'next'
 import { heroButtonsFor } from '@/lib/heroButtons'
+import { finalizeMeta, pageOgImages } from '@/lib/og'
 
 export const revalidate = 3600
 
 const BASE = 'https://pokcas.com'
 const CANONICAL = `${BASE}/betting-sider/`
 
-export async function generateMetadata(): Promise<Metadata> {
+async function buildMetadata(): Promise<Metadata> {
   const page = await getPageBySlug('betting-sider').catch(() => null)
   const title = replaceDateVars(page?.metaTitle || page?.title || 'Best Casino Reviews')
   const description = replaceDateVars(page?.metaDescription || page?.intro || 'Compare the best online casinos.')
-  return { title, description, alternates: { canonical: CANONICAL } }
+  return { title, description, alternates: { canonical: CANONICAL }, openGraph: { images: pageOgImages(page) } }
 }
 
 export default async function BettingSiderPage() {
@@ -120,4 +121,8 @@ export default async function BettingSiderPage() {
       <Footer />
     </>
   )
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  return finalizeMeta(await buildMetadata())
 }

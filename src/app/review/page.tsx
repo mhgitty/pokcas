@@ -13,13 +13,14 @@ import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
+import { finalizeMeta, pageOgImages } from '@/lib/og'
 
 export const revalidate = 3600
 
 const BASE = 'https://pokcas.com'
 const CANONICAL = `${BASE}/online-casino/review/`
 
-export async function generateMetadata(): Promise<Metadata> {
+async function buildMetadata(): Promise<Metadata> {
   const page = await getPageBySlug('review').catch(() => null)
   const title = replaceDateVars(page?.metaTitle || page?.title || 'Best Online Casino Reviews')
   const description = replaceDateVars(page?.metaDescription || page?.intro || 'Compare the best online casinos. Expert reviews, bonus info and ratings.')
@@ -209,4 +210,8 @@ export default async function ReviewPage() {
 
     </>
   )
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  return finalizeMeta(await buildMetadata())
 }

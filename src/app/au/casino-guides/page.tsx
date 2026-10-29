@@ -12,17 +12,18 @@ import { replaceDateVars } from '@/lib/dateVars'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
 import { heroButtonsFor } from '@/lib/heroButtons'
+import { finalizeMeta, pageOgImages } from '@/lib/og'
 
 export const revalidate = 3600
 
 const BASE = 'https://pokcas.com'
 const CANONICAL = `${BASE}/au/casino-guides/`
 
-export async function generateMetadata(): Promise<Metadata> {
+async function buildMetadata(): Promise<Metadata> {
   const page = await getPageBySlugAu('casino-guides').catch(() => null)
   const title = replaceDateVars(page?.metaTitle || page?.title || 'Casino Guides')
   const description = replaceDateVars(page?.metaDescription || page?.intro || 'Casino guides and how-tos for Australian players.')
-  return { title, description, alternates: { canonical: CANONICAL } }
+  return { title, description, alternates: { canonical: CANONICAL }, openGraph: { images: pageOgImages(page) } }
 }
 
 export default async function AuCasinoGuidesPage() {
@@ -101,4 +102,8 @@ export default async function AuCasinoGuidesPage() {
 
     </>
   )
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  return finalizeMeta(await buildMetadata())
 }

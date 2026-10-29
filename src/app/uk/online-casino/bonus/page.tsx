@@ -12,18 +12,19 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
 import { heroButtonsFor } from '@/lib/heroButtons'
+import { finalizeMeta, pageOgImages } from '@/lib/og'
 
 export const revalidate = 3600
 
 const BASE = 'https://pokcas.com'
 const CANONICAL = `${BASE}/uk/online-casino/bonus/`
 
-export async function generateMetadata(): Promise<Metadata> {
+async function buildMetadata(): Promise<Metadata> {
   const page = await getPageByPathUk(['online-casino', 'bonus']).catch(() => null)
   if (!page) return {}
   const title = replaceDateVars(page.metaTitle || page.title)
   const description = replaceDateVars(page.metaDescription || page.intro || '')
-  const ogImg = (page as any).ogImage
+  const ogImg = (page as any).ogImage?.url ? (page as any).ogImage : (page as any).featuredImage
   return {
     title,
     description,
@@ -117,4 +118,8 @@ export default async function CaBonusPage() {
 
     </>
   )
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  return finalizeMeta(await buildMetadata())
 }

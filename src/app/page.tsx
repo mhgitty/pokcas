@@ -8,12 +8,13 @@ import { getPosts, getHomepage, getHreflangScript } from '@/lib/sanity'
 import { HreflangHead } from '@/components/HreflangHead'
 import { replaceDateVars } from '@/lib/dateVars'
 import type { Metadata } from 'next'
+import { finalizeMeta, pageOgImages } from '@/lib/og'
 
 export const revalidate = 3600
 
 const BASE = 'https://pokcas.com'
 
-export async function generateMetadata(): Promise<Metadata> {
+async function buildMetadata(): Promise<Metadata> {
   const hp = await getHomepage().catch(() => null)
   const title = replaceDateVars(hp?.metaTitle || 'Best Online Casino Bonuses — Compare Top Offers')
   const description = replaceDateVars(hp?.metaDescription || 'Your independent international guide to online casino bonuses. We compare and review all the top casinos.')
@@ -344,4 +345,8 @@ export default async function HomePage() {
       `}</style>
     </>
   )
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  return finalizeMeta(await buildMetadata())
 }

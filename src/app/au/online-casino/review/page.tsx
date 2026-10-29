@@ -12,18 +12,19 @@ import { replaceDateVars } from '@/lib/dateVars'
 import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
 import { heroButtonsFor } from '@/lib/heroButtons'
+import { finalizeMeta, pageOgImages } from '@/lib/og'
 
 export const revalidate = 3600
 
 const BASE = 'https://pokcas.com'
 const CANONICAL = `${BASE}/au/online-casino/review/`
 
-export async function generateMetadata(): Promise<Metadata> {
+async function buildMetadata(): Promise<Metadata> {
   const page = (await getPageByPathAu(['online-casino', 'review']).catch(() => null))
     || (await getPageBySlugAu('au-reviews').catch(() => null))
   const title = replaceDateVars(page?.metaTitle || page?.title || 'Best Online Casinos Australia')
   const description = replaceDateVars(page?.metaDescription || page?.intro || 'Compare the best online casinos in Australia. Expert reviews, bonus info and ratings.')
-  return { title, description, alternates: { canonical: CANONICAL } }
+  return { title, description, alternates: { canonical: CANONICAL }, openGraph: { images: pageOgImages(page) } }
 }
 
 export default async function AuReviewsPage() {
@@ -111,4 +112,8 @@ export default async function AuReviewsPage() {
 
     </>
   )
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  return finalizeMeta(await buildMetadata())
 }
