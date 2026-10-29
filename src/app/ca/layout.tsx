@@ -1,5 +1,6 @@
 import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
+import { NewsletterPopup } from '@/components/NewsletterPopup'
 import { getMarketSettings, getSiteSettings } from '@/lib/sanity'
 
 function resolveUrl(item: {
@@ -52,6 +53,7 @@ export default async function CaLayout({ children }: { children: React.ReactNode
       <Navbar navItems={navItems} logoHref="/ca/" />
       {children}
       <Footer tagline={tagline} columns={columns} note={note} disclaimer={disclaimer} socialLinks={ms?.socialLinks ?? gs?.socialLinks} market="ca" />
+      <NewsletterPopup market="ca" />
     </>
   )
 }
