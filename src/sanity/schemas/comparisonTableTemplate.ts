@@ -103,7 +103,7 @@ export const comparisonTableTemplateType = defineType({
         ? (bonuses || []).length
         : (bookmakers || []).length
       const label = tableType === 'bonus' ? 'bonusser' : 'bookmakers'
-      const flag = market === 'ca' ? '🇨🇦' : market === 'au' ? '🇦🇺' : '🌍'
+      const flag = market === 'ca' ? '🇨🇦' : market === 'au' ? '🇦🇺' : market === 'uk' ? '🇬🇧' : '🌍'
       return { title, subtitle: `${flag} ${count} ${label}` }
     },
   },

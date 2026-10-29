@@ -9,7 +9,7 @@ const sameMarketFilter = {
     const id = ((document?._id as string) || '').replace(/^drafts\./, '')
     const market =
       (document?.market as string) ||
-      (id.startsWith('au') ? 'au' : id.startsWith('ca') ? 'ca' : 'global')
+      (id.startsWith('au') ? 'au' : id.startsWith('ca') ? 'ca' : id.startsWith('uk') ? 'uk' : 'global')
     return { filter: 'market == $market', params: { market } }
   },
 }

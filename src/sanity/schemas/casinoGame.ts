@@ -107,7 +107,7 @@ export const casinoGameType = defineType({
   preview: {
     select: { title: 'name', subtitle: 'market', media: 'ogImage' },
     prepare({ title, subtitle, media }: any) {
-      const flag = subtitle === 'ca' ? '🇨🇦' : subtitle === 'au' ? '🇦🇺' : '🌍'
+      const flag = subtitle === 'ca' ? '🇨🇦' : subtitle === 'au' ? '🇦🇺' : subtitle === 'uk' ? '🇬🇧' : '🌍'
       return { title, subtitle: flag, media }
     },
   },

@@ -171,7 +171,7 @@ export const slotmachineType = defineType({
   preview: {
     select: { title: 'name', subtitle: 'provider.name', market: 'market', media: 'logo' },
     prepare({ title, subtitle, market, media }: any) {
-      const flag = market === 'ca' ? '🇨🇦' : market === 'au' ? '🇦🇺' : '🌍'
+      const flag = market === 'ca' ? '🇨🇦' : market === 'au' ? '🇦🇺' : market === 'uk' ? '🇬🇧' : '🌍'
       return { title, subtitle: `${flag}${subtitle ? ' · ' + subtitle : ''}`, media }
     },
   },
