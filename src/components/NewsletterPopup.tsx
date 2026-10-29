@@ -55,10 +55,9 @@ export function NewsletterPopup({ market }: { market: NewsletterMarket }) {
 
   useEffect(() => {
     if (!open) return
-    const t = window.setTimeout(() => inputRef.current?.focus(), 250)
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') close() }
     document.addEventListener('keydown', onKey)
-    return () => { window.clearTimeout(t); document.removeEventListener('keydown', onKey) }
+    return () => document.removeEventListener('keydown', onKey)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open])
 
@@ -109,27 +108,29 @@ export function NewsletterPopup({ market }: { market: NewsletterMarket }) {
   if (!enabled || !open) return null
 
   return (
-    <div className="nl-overlay" role="presentation" onMouseDown={(e) => { if (e.target === e.currentTarget) close() }}>
-      <div className="nl-modal" role="dialog" aria-modal="true" aria-labelledby="nl-title">
-        <button type="button" className="nl-close" aria-label="Close" onClick={close}>✕</button>
-        <div className="nl-top">
-          <span className="nl-gift" aria-hidden="true">🎁</span>
+    <aside className="nl-flyout" role="dialog" aria-labelledby="nl-title">
+      <button type="button" className="nl-close" aria-label="Close" onClick={close}>✕</button>
+      <div className="nl-top">
+        <span className="nl-gift" aria-hidden="true">🎁</span>
+        <div className="nl-top-text">
           <span className="nl-kicker">{cfg.kicker}</span>
           <h2 id="nl-title" className="nl-title">{cfg.headline}</h2>
-          <p className="nl-sub">{cfg.sub}</p>
         </div>
+      </div>
 
-        {status === 'done' ? (
-          <div className="nl-done">
-            <span className="nl-done-icon" aria-hidden="true">✓</span>
-            <p>{cfg.success}</p>
-            <button type="button" className="nl-btn" onClick={close}>Back to Pokcas</button>
-          </div>
-        ) : (
-          <form className="nl-form" onSubmit={submit} noValidate>
-            <ul className="nl-perks">
-              {cfg.perks.map((p) => <li key={p}>{p}</li>)}
-            </ul>
+      {status === 'done' ? (
+        <div className="nl-done">
+          <span className="nl-done-icon" aria-hidden="true">✓</span>
+          <p>{cfg.success}</p>
+          <button type="button" className="nl-skip" onClick={close}>Close</button>
+        </div>
+      ) : (
+        <form className="nl-form" onSubmit={submit} noValidate>
+          <p className="nl-sub">{cfg.sub}</p>
+          <ul className="nl-perks">
+            {cfg.perks.map((p) => <li key={p}>{p}</li>)}
+          </ul>
+          <div className="nl-row">
             <input
               ref={inputRef}
               type="email"
@@ -141,21 +142,20 @@ export function NewsletterPopup({ market }: { market: NewsletterMarket }) {
               onChange={(e) => setEmail(e.target.value)}
               aria-label="Email address"
             />
-            <label className="nl-consent">
-              <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} />
-              <span>
-                I am {cfg.age} and agree to receive casino offers from Pokcas by email. Unsubscribe anytime.
-                See our <a href="/privacy-policy/" target="_blank" rel="noopener">privacy policy</a>.
-              </span>
-            </label>
-            {error && <p className="nl-error" role="alert">{error}</p>}
-            <button type="submit" className="nl-btn" disabled={status === 'loading'}>
-              {status === 'loading' ? 'Sending…' : cfg.button}
-            </button>
-            <button type="button" className="nl-skip" onClick={close}>No thanks</button>
-          </form>
-        )}
-      </div>
-    </div>
+          </div>
+          <label className="nl-consent">
+            <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} />
+            <span>
+              I am {cfg.age} and agree to receive casino offers from Pokcas by email. Unsubscribe anytime.
+              See our <a href="/privacy-policy/" target="_blank" rel="noopener">privacy policy</a>.
+            </span>
+          </label>
+          {error && <p className="nl-error" role="alert">{error}</p>}
+          <button type="submit" className="nl-btn" disabled={status === 'loading'}>
+            {status === 'loading' ? 'Sending…' : cfg.button}
+          </button>
+        </form>
+      )}
+    </aside>
   )
 }

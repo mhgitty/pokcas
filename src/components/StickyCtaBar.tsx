@@ -30,7 +30,7 @@ export function StickyCtaBar({ url, name, logoUrl, logoAlt, bonus, terms }: Stic
       {/* Invisible sentinel placed at the bottom of the hero */}
       <div ref={sentinelRef} style={{ height: 0 }} />
 
-      <div style={{
+      <div data-sticky-cta={visible ? 'on' : 'off'} style={{
         position: 'fixed', bottom: 0, left: 0, right: 0,
         zIndex: 50,
         transform: visible ? 'translateY(0)' : 'translateY(100%)',
