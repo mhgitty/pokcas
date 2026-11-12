@@ -1,5 +1,6 @@
 import { SlotBonusPopup } from './SlotBonusPopup'
 import { SlotFullscreenButton } from './SlotFullscreenButton'
+import { SlotsLaunchFrame } from './SlotsLaunchFrame'
 
 interface Provider { name?: string }
 interface Casino {
@@ -21,6 +22,8 @@ interface Props {
 // editor in Sanity Studio), so we inject it as-is inside a responsive box.
 export function SlotDemo({ embed, title, slotName, provider, rtp, promoCasino }: Props) {
   if (!embed || !embed.trim()) return null
+  // SlotsLaunch embeds are signed per visitor (the links expire), so they are loaded through our own API route
+  const slotsLaunchId = embed.match(/slotslaunch\.com\/(?:iframe|game\/embed)\/(\d+)/)?.[1] ?? null
   const titleCase = (s: string) => s.replace(/\b\w/g, (c) => c.toUpperCase())
   const heading = title?.trim()
     ? title
@@ -52,7 +55,13 @@ export function SlotDemo({ embed, title, slotName, provider, rtp, promoCasino }:
           </div>
         </div>
 
-        <div id="slot-demo-frame" className="slot-demo-embed" dangerouslySetInnerHTML={{ __html: embed }} />
+        {slotsLaunchId ? (
+          <div id="slot-demo-frame" className="slot-demo-embed">
+            <SlotsLaunchFrame gameId={slotsLaunchId} title={heading} />
+          </div>
+        ) : (
+          <div id="slot-demo-frame" className="slot-demo-embed" dangerouslySetInnerHTML={{ __html: embed }} />
+        )}
       </div>
     </div>
   )
