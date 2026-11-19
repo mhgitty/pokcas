@@ -9,9 +9,9 @@ export const dynamic = 'force-dynamic'
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   if (!/^\d+$/.test(id)) return NextResponse.json({ error: 'Unknown game' }, { status: 400 })
-  const key = process.env.SLOTSLAUNCH_API_KEY
-  const secret = process.env.SLOTSLAUNCH_API_SECRET
-  const domain = (process.env.SLOTSLAUNCH_DOMAIN || req.headers.get('x-forwarded-host') || req.headers.get('host') || '')
+  const key = process.env.SLOTSLAUNCH_API_KEY?.trim().replace(/^['"]|['"]$/g, '')
+  const secret = process.env.SLOTSLAUNCH_API_SECRET?.trim().replace(/^['"]|['"]$/g, '')
+  const domain = (process.env.SLOTSLAUNCH_DOMAIN?.trim() || req.headers.get('x-forwarded-host') || req.headers.get('host') || '')
     .replace(/^https?:\/\//, '')
     .replace(/^www\./, '')
     .replace(/[:/].*$/, '')
