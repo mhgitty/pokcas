@@ -16,6 +16,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     .replace(/^www\./, '')
     .replace(/[:/].*$/, '')
   let url = `https://slotslaunch.com/iframe/${id}`
+  if (!key || !secret) console.error('[slot-demo] SLOTSLAUNCH_API_KEY / SLOTSLAUNCH_API_SECRET missing: SlotsLaunch will reject this embed')
   if (key && secret) {
     const exp = Math.floor(Date.now() / 1000) + 3600
     const sig = createHmac('sha256', secret).update(`${id}\n${exp}\n${domain}`).digest('hex')
