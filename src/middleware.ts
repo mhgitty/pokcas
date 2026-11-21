@@ -48,7 +48,8 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith('/studio') ||
     pathname.startsWith('/api/') ||
     pathname.startsWith('/_next/') ||
-    pathname.startsWith('/favicon')
+    pathname.startsWith('/favicon') ||
+    pathname.startsWith('/games/')
   ) {
     return NextResponse.next()
   }

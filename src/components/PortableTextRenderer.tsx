@@ -16,6 +16,7 @@ import { BonusKort } from './BonusKort'
 import { HowToBlock } from './HowToBlock'
 import { DropdownBlock } from './DropdownBlock'
 import { AuthorOpinionBlock } from './AuthorOpinionBlock'
+import { GameEmbed } from './GameEmbed'
 import { StatsBlock, TimelineBlock, StepCardsBlock, FeatureCardsBlock, TeamBlock, ContactCardBlock } from './ContentBlocks'
 
 type Post = {
@@ -187,6 +188,7 @@ export function PortableTextRenderer({ value, posts }: { value: any[]; posts?: P
       teamBlock: ({ value }: any) => <TeamBlock value={value} />,
       contactCardBlock: ({ value }: any) => <ContactCardBlock value={value} />,
       authorOpinionBlock: ({ value }: any) => <AuthorOpinionBlock value={value} />,
+      gameEmbedBlock: ({ value }: any) => <GameEmbed game={value?.game} />,
       latestPostsBlock: ({ value: blockValue }: any) =>
         posts ? <LatestPostsBlock value={blockValue} posts={posts} /> : null,
       image: ({ value }: any) => {

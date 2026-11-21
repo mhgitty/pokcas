@@ -908,6 +908,22 @@ export const bodyField = defineField({
     },
     {
       type: 'object',
+      name: 'gameEmbedBlock',
+      title: '🎲 Game (self-hosted)',
+      fields: [
+        {
+          name: 'game', title: 'Game', type: 'string', initialValue: 'roulette',
+          options: { list: [{ title: '🎡 Pokcas Roulette', value: 'roulette' }], layout: 'radio' },
+          validation: (r: any) => r.required(),
+        },
+      ],
+      preview: {
+        select: { game: 'game' },
+        prepare({ game }: any) { return { title: '🎲 Game embed', subtitle: game || 'roulette' } },
+      },
+    },
+    {
+      type: 'object',
       name: 'authorOpinionBlock',
       title: '🗣️ Author opinion',
       fields: [

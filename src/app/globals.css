@@ -1468,3 +1468,11 @@ body:has([data-sticky-cta="on"]) .nl-flyout { bottom: 96px; }
   body:has([data-sticky-cta="on"]) .nl-flyout { bottom: 84px; }
   .nl-sub { display: none; }
 }
+
+/* ─── Self-hosted game embed (e.g. roulette simulator) ─────────────────── */
+.game-embed { position: relative; width: 100%; margin: 24px 0; border-radius: 16px; overflow: hidden; background: #0B1F14; box-shadow: 0 14px 40px -22px rgba(0,0,0,.6); }
+.game-embed iframe { display: block; width: 100%; border: 0; transition: height .2s ease; }
+.game-embed:fullscreen, .game-embed:-webkit-full-screen { margin: 0; border-radius: 0; width: 100vw; height: 100vh; }
+.game-embed:fullscreen iframe, .game-embed:-webkit-full-screen iframe { height: 100% !important; }
+.game-embed-fixed { position: fixed !important; inset: 0; z-index: 10000; margin: 0; border-radius: 0; height: 100vh; height: 100dvh; }
+.game-embed-exit { position: absolute; top: 10px; right: 10px; z-index: 2; width: 36px; height: 36px; border: 0; border-radius: 50%; background: rgba(0,0,0,.55); color: #fff; font-size: 16px; cursor: pointer; }
