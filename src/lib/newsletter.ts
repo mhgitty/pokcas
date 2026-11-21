@@ -1,11 +1,12 @@
-// Newsletter popup config (CA + AU).
+// Newsletter flyout config (CA + AU + UK). Leads go to Inboxroad via /api/newsletter;
+// CA/AU are also added to Klaviyo (welcome email flows).
 // KLAVIYO_* ids are public identifiers (not secrets) and are written by
 // scripts/klaviyo/setup.mjs. The popup stays hidden until they are filled in.
 // Keep the offers in sync with scripts/klaviyo/emails.mjs (welcome emails).
 
 export const KLAVIYO_COMPANY_ID = 'SdSptg'
 
-export type NewsletterMarket = 'ca' | 'au'
+export type NewsletterMarket = 'ca' | 'au' | 'uk'
 
 export const NEWSLETTER: Record<NewsletterMarket, {
   listId: string
@@ -35,6 +36,16 @@ export const NEWSLETTER: Record<NewsletterMarket, {
     perks: ['A$10 no deposit bonus at Fair Go Casino', '20 no deposit free spins at Ripper Casino', 'No spam. Unsubscribe anytime'],
     button: 'Send me the bonuses',
     success: 'Check your inbox! Your A$10 free bonus and 20 free spins are on the way.',
+    age: '18+',
+  },
+  uk: {
+    listId: '', // no Klaviyo list for UK; leads go to Inboxroad (Pokcas UK) only
+    kicker: 'For UK players',
+    headline: 'Get the Best UK Casino Offers First',
+    sub: 'Join the Pokcas newsletter for hand-picked UK casino bonuses and new offers, straight to your inbox.',
+    perks: ['Hand-picked bonuses from UK-licensed casinos', 'New offers before anyone else', 'No spam. Unsubscribe anytime'],
+    button: 'Sign me up',
+    success: "You're in! Watch your inbox for our best UK casino offers.",
     age: '18+',
   },
 }

@@ -15,7 +15,7 @@ function storageSet(key: string, value: string) {
 
 export function NewsletterPopup({ market }: { market: NewsletterMarket }) {
   const cfg = NEWSLETTER[market]
-  const enabled = Boolean(KLAVIYO_COMPANY_ID && cfg.listId)
+  const enabled = Boolean(cfg)
   const key = `pokcas_nl_${market}`
 
   const [open, setOpen] = useState(false)
@@ -23,6 +23,7 @@ export function NewsletterPopup({ market }: { market: NewsletterMarket }) {
   const [consent, setConsent] = useState(false)
   const [status, setStatus] = useState<'idle' | 'loading' | 'done' | 'error'>('idle')
   const [error, setError] = useState('')
+  const [honeypot, setHoneypot] = useState('')
   const shown = useRef(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -73,29 +74,38 @@ export function NewsletterPopup({ market }: { market: NewsletterMarket }) {
     if (!consent) { setError(`Please confirm you are ${cfg.age} and agree to receive emails.`); return }
     setStatus('loading')
     try {
-      const res = await fetch(`https://a.klaviyo.com/client/subscriptions/?company_id=${KLAVIYO_COMPANY_ID}`, {
+      // Primary: Inboxroad (server-side, key stays on the server)
+      const res = await fetch('/api/newsletter/', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/vnd.api+json', revision: '2024-10-15' },
-        body: JSON.stringify({
-          data: {
-            type: 'subscription',
-            attributes: {
-              custom_source: `Pokcas popup ${market.toUpperCase()}`,
-              profile: {
-                data: {
-                  type: 'profile',
-                  attributes: {
-                    email: email.trim(),
-                    properties: { pokcas_market: market, signup_page: window.location.pathname },
-                    subscriptions: { email: { marketing: { consent: 'SUBSCRIBED' } } },
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim(), market, consent, website: honeypot }),
+      })
+      // Secondary (best effort): Klaviyo list that triggers the welcome email flow
+      if (res.ok && KLAVIYO_COMPANY_ID && cfg.listId) {
+        fetch(`https://a.klaviyo.com/client/subscriptions/?company_id=${KLAVIYO_COMPANY_ID}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/vnd.api+json', revision: '2024-10-15' },
+          body: JSON.stringify({
+            data: {
+              type: 'subscription',
+              attributes: {
+                custom_source: `Pokcas popup ${market.toUpperCase()}`,
+                profile: {
+                  data: {
+                    type: 'profile',
+                    attributes: {
+                      email: email.trim(),
+                      properties: { pokcas_market: market, signup_page: window.location.pathname },
+                      subscriptions: { email: { marketing: { consent: 'SUBSCRIBED' } } },
+                    },
                   },
                 },
               },
+              relationships: { list: { data: { type: 'list', id: cfg.listId } } },
             },
-            relationships: { list: { data: { type: 'list', id: cfg.listId } } },
-          },
-        }),
-      })
+          }),
+        }).catch(() => {})
+      }
       if (!res.ok) throw new Error(String(res.status))
       setStatus('done')
       storageSet(key, 'subscribed')
@@ -141,6 +151,16 @@ export function NewsletterPopup({ market }: { market: NewsletterMarket }) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               aria-label="Email address"
+            />
+            <input
+              type="text"
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+              value={honeypot}
+              onChange={(e) => setHoneypot(e.target.value)}
+              aria-hidden="true"
+              style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, opacity: 0 }}
             />
           </div>
           <label className="nl-consent">
