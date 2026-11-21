@@ -15,6 +15,7 @@ import type { Metadata } from 'next'
 import { RelatedPages } from '@/components/RelatedPages'
 import { headingId } from '@/lib/headingId'
 import { finalizeMeta, pageOgImages } from '@/lib/og'
+import { LeadGames, splitLeadGames } from '@/components/LeadGames'
 
 export const revalidate = 3600
 
@@ -127,17 +128,19 @@ export default async function DynamicPage({ params }: Props) {
         </div>
       )}
 
-      {page.body && (
+      <LeadGames games={splitLeadGames(page.body).games} />
+
+      {splitLeadGames(page.body).rest?.length ? (
         <div className="article-layout">
           <article className="article-content">
-            <MobileToc body={page.body} />
-            <PortableTextRenderer value={page.body} />
+            <MobileToc body={splitLeadGames(page.body).rest} />
+            <PortableTextRenderer value={splitLeadGames(page.body).rest} />
           </article>
           <aside className="toc-sidebar">
-            <TableOfContents body={page.body} />
+            <TableOfContents body={splitLeadGames(page.body).rest} />
           </aside>
         </div>
-      )}
+      ) : null}
 
       {author && (
         <div className="section" style={{ paddingTop: '0' }}>

@@ -2,6 +2,7 @@ import { HeroSection } from '@/components/HeroSection'
 import { AuthorBio } from '@/components/AuthorBio'
 import { ComparisonTable } from '@/components/ComparisonTable'
 import { PortableTextRenderer } from '@/components/PortableTextRenderer'
+import { LeadGames, splitLeadGames } from '@/components/LeadGames'
 import { TableOfContents } from '@/components/TableOfContents'
 import { MobileToc } from '@/components/MobileToc'
 import { JsonLd } from '@/components/JsonLd'
@@ -73,6 +74,7 @@ export function CmsPageView({ page, settings, hreflangScript, slug, homeHref, la
     ],
   }
 
+  const lead = splitLeadGames(page.body)
   const bodyTypes = new Set(((page.body as any[]) || []).map((b: any) => b?._type))
   const heroButtons: { text: string; targetId: string; variant?: 'solid' | 'outline' }[] = []
   if (page.showComparisonTable && page.comparisonTable && page.heroCompareButton)
@@ -111,17 +113,19 @@ export function CmsPageView({ page, settings, hreflangScript, slug, homeHref, la
         </div>
       )}
 
-      {page.body && (
+      <LeadGames games={lead.games} />
+
+      {lead.rest?.length ? (
         <div className="article-layout">
           <article className="article-content">
-            <MobileToc body={page.body} />
-            <PortableTextRenderer value={page.body} />
+            <MobileToc body={lead.rest} />
+            <PortableTextRenderer value={lead.rest} />
           </article>
           <aside className="toc-sidebar">
-            <TableOfContents body={page.body} />
+            <TableOfContents body={lead.rest} />
           </aside>
         </div>
-      )}
+      ) : null}
 
       {author && (
         <div className="section" style={{ paddingTop: '0' }}>

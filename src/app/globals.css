@@ -1476,3 +1476,6 @@ body:has([data-sticky-cta="on"]) .nl-flyout { bottom: 96px; }
 .game-embed:fullscreen iframe, .game-embed:-webkit-full-screen iframe { height: 100% !important; }
 .game-embed-fixed { position: fixed !important; inset: 0; z-index: 10000; margin: 0; border-radius: 0; height: 100vh; height: 100dvh; }
 .game-embed-exit { position: absolute; top: 10px; right: 10px; z-index: 2; width: 36px; height: 36px; border: 0; border-radius: 50%; background: rgba(0,0,0,.55); color: #fff; font-size: 16px; cursor: pointer; }
+.lead-games { max-width: 1250px; margin: 0 auto; padding: 32px 15px 0; }
+.lead-games .game-embed { margin: 0 0 8px; }
+.lead-games + .article-layout { padding-top: 32px; }
